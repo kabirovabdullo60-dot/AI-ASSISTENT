@@ -30,6 +30,10 @@
 - **No access to the other person's folder at all** — do not read, search, open, copy,
   import, run or edit anything in it. Subhon's Claude never looks into `abdullo_web/`,
   Abdullo's Claude (on `abdullo-web`) never looks into `subhon_app/`.
+- **Seeing the other person's RESULT is allowed** (running, not reading code). Use only these scripts:
+  - `bash scripts/run_app.sh` — Subhon's app in the iOS Simulator (`android` for an Android emulator)
+  - `bash scripts/run_web.sh` — Abdullo's web in Chrome; `bash scripts/run_web.sh simulator` — web in the iOS Simulator
+  Run them when the user asks to "see/open/run" the other part. Never read their code to do it.
 - A hook (`.claude/hooks/branch_guard.sh`) enforces this for Read, Glob, Grep, Bash, Edit and Write.
   Never try to get around it (other paths, symlinks, scripts, `cat`, `cp`, `find` ...).
 

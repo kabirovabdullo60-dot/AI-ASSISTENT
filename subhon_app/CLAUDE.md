@@ -7,6 +7,7 @@ You are Subhon's Claude. **You build only the Flutter APP for phones (Android / 
 - Never edit `CLAUDE.md` files or `.claude/` — ask the Team Lead (Abdullo).
 - Never write backend code — that is Mehroj's (Swagger). Call his API only from `lib/services/`.
 - MVVM layout and rules: see the root `CLAUDE.md`.
-- Phone first (portrait, SafeArea). Run on an emulator/device: `flutter run`.
+- Phone first (portrait, SafeArea). Run: `bash scripts/run_app.sh` (iOS Simulator) or `bash scripts/run_app.sh android`.
 - After each task: `flutter analyze` + `flutter test` pass → one commit `app: ...`.
 - No access to `abdullo_web/` at all — not even reading it.
+- Allowed: show Abdullo's web result with `bash scripts/run_web.sh` (Chrome) or `... simulator`. Never read its code.
