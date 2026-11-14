@@ -1,47 +1,53 @@
 # AI Business Assistant — rules for Claude (read first, always)
 
 ## Team
-| Person | Role | Branch | Folder Claude may edit |
+| Person | Role | Folder | Branch |
 |---|---|---|---|
-| **Abdullo** (Team Lead) | Flutter **Web** | `abdullo-web` | `lib/web/`, `test/web/`, `web/` |
-| **Subhon** | Flutter **App** (Android/iOS) | `subhon-app` | `lib/app/`, `test/app/`, `android/`, `ios/` |
-| **Mehroj** | Backend + Swagger | — (not in this repo) | nothing here |
+| **Abdullo** (Team Lead) | Flutter **Web** | `abdullo_web/` | `abdullo-web` |
+| **Subhon** | Flutter **mobile App** (Android/iOS) | `subhon_app/` | `subhon-app` |
+| **Mehroj** | Backend + Swagger | no folder in this repo | — |
 
-## Step 0 — find out who you work for
-Before ANY change run `git branch --show-current` and follow the matching rule:
-- `abdullo-web*` → you are **Abdullo's Claude**. You build **only the WEB**. See `lib/web/CLAUDE.md`.
-- `subhon-app*` → you are **Subhon's Claude**. You build **only the mobile APP**. See `lib/app/CLAUDE.md`.
-- `main` → Team Lead (Abdullo) only: shared files (`lib/main.dart`, `lib/core/`, `CLAUDE.md`, `.claude/`, `.gitignore`), merges.
-- anything else → do not edit; ask the user to switch to their branch.
+## Step 0 — who are you working for?
+1. If the user says who they are ("man Subhon hastam", "I am Subhon", "man Abdullo") — that decides.
+2. Otherwise use `git branch --show-current`: `subhon-app*` → Subhon, `abdullo-web*` → Abdullo.
+3. If still unknown, ask: "Shumo kī hasted — Abdullo (web) yo Subhon (app)?" and do nothing until answered.
 
-If the user asks for work that belongs to another person (e.g. app screens on `abdullo-web`,
-web pages on `subhon-app`, or backend code anywhere) **refuse** and say whose job it is.
-Never write backend/server code — that is Mehroj's. Use his Swagger as the API contract.
-`pubspec.yaml` / `pubspec.lock` may be changed on both branches (only to add packages).
-A hook in `.claude/hooks/branch_guard.sh` also blocks edits outside the allowed folders.
-Do not bypass it with Bash (`sed`, `echo >`, `mv`, `rm` ...) on files outside your folder.
+### Subhon → mobile APP only
+- Work only inside `subhon_app/`, on branch `subhon-app`. Rules: `subhon_app/CLAUDE.md`.
+- **Never build web.** Never touch `abdullo_web/`. If asked for web: refuse —
+  "Web kori Abdullo ast. Man tanho app-i telefon mesozam."
 
-## Architecture — MVVM (provider + ChangeNotifier)
-Each side (`lib/web/`, `lib/app/`) has the same layout:
+### Abdullo → WEB only
+- Work only inside `abdullo_web/`, on branch `abdullo-web`. Rules: `abdullo_web/CLAUDE.md`.
+- **Never build the mobile app.** Never touch `subhon_app/`. If asked for the app: refuse —
+  "App kori Subhon ast. Man tanho web mesozam."
+
+### Everyone
+- Never write backend/server code — that is Mehroj's. His Swagger is the API contract.
+- If the user's identity and the current branch don't match (e.g. Subhon on `abdullo-web`),
+  stop and tell them to run `git switch subhon-app` (or `abdullo-web`) first.
+- `CLAUDE.md` files, `.claude/` and the root `.gitignore` change only on `main` (Team Lead).
+- A hook (`.claude/hooks/branch_guard.sh`) blocks Edit/Write outside the allowed folder.
+  Do not bypass it with Bash (`sed`, `echo >`, `mv`, `rm`, `cp` ...).
+
+## Architecture — MVVM (provider + ChangeNotifier), same in both projects
 ```
-models/      plain data classes, fromJson/toJson (match Swagger DTOs)
-services/    API calls via core/network/api_client.dart, return models
-viewmodels/  ChangeNotifier: state (isLoading, error, data) + actions; calls services
-views/       screens; read state with context.watch<VM>(), call VM methods
-widgets/     small reusable UI pieces for this side only
+lib/
+  main.dart     app root, MultiProvider registers ViewModels
+  core/         api_client.dart, api_constants.dart (base URL from Mehroj)
+  models/       data classes, fromJson/toJson matching Swagger DTOs
+  services/     API calls through ApiClient, return models
+  viewmodels/   ChangeNotifier: isLoading, error, data + actions; call services
+  views/        screens; context.watch<VM>(), call VM methods
+  widgets/      small reusable UI pieces
 ```
-Rules:
 - View → ViewModel → Service → ApiClient. A View never calls a Service or `http` directly.
-- ViewModels never import `material.dart` widgets or use `BuildContext`.
-- Register ViewModels in `web_app.dart` / `mobile_app.dart` (`MultiProvider`).
-- File names `snake_case`, one class per file; suffixes `_model`, `_service`, `_view_model`, `_view`.
-- Web code never imports from `lib/app/`, app code never imports from `lib/web/`. Both may import `lib/core/`.
-- Need something new in `lib/core/`? Tell the user to ask the Team Lead (done on `main`).
+- ViewModels never use `BuildContext` or widgets.
+- `snake_case` files, one class per file, suffixes `_model`, `_service`, `_view_model`, `_view`.
 
 ## Commits — one task = one commit
-After every finished task:
+After every finished task, inside your project folder:
 1. `flutter analyze` and `flutter test` must pass.
-2. `git add` only the files of that task (never secrets, never build output).
-3. Make **one** commit with a prefix: `web: ...` (Abdullo) or `app: ...` (Subhon) or `core: ...` (main).
-   Example: `web: add login page with LoginViewModel`.
+2. `git add` only that task's files (never secrets or build output).
+3. **One** commit: `web: ...` (Abdullo) or `app: ...` (Subhon). Example: `app: add login screen`.
 Do not push, merge or switch branches unless the user asks.
