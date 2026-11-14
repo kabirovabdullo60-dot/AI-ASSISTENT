@@ -27,8 +27,11 @@
 - If the user's identity and the current branch don't match (e.g. Subhon on `abdullo-web`),
   stop and tell them to run `git switch subhon-app` (or `abdullo-web`) first.
 - `CLAUDE.md` files, `.claude/` and the root `.gitignore` change only on `main` (Team Lead).
-- A hook (`.claude/hooks/branch_guard.sh`) blocks Edit/Write outside the allowed folder.
-  Do not bypass it with Bash (`sed`, `echo >`, `mv`, `rm`, `cp` ...).
+- **No access to the other person's folder at all** — do not read, search, open, copy,
+  import, run or edit anything in it. Subhon's Claude never looks into `abdullo_web/`,
+  Abdullo's Claude (on `abdullo-web`) never looks into `subhon_app/`.
+- A hook (`.claude/hooks/branch_guard.sh`) enforces this for Read, Glob, Grep, Bash, Edit and Write.
+  Never try to get around it (other paths, symlinks, scripts, `cat`, `cp`, `find` ...).
 
 ## Architecture — MVVM (provider + ChangeNotifier), same in both projects
 ```
