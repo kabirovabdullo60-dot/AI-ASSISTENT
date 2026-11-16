@@ -15,3 +15,16 @@ You are Abdullo's Claude. **You build only the Flutter WEB site.**
 - Check: `bash scripts/run_web.sh` (Chrome, resize the window) and `bash scripts/run_web.sh simulator` (phone).
 - After each task: `flutter analyze` + `flutter test` pass → one commit `web: ...`.
 - No access to `subhon_app/` at all — not even reading it.
+
+## Flutter / Dart skills (in `.claude/skills/`) + `dart-flutter` plugin
+Use these official skills instead of guessing. If a skill conflicts with the MVVM rules in the root
+`CLAUDE.md`, the root `CLAUDE.md` wins.
+- New screen / ViewModel / service → `flutter-apply-architecture-best-practices`
+- API calls to Mehroj's backend → `flutter-use-http-package`; models from Swagger → `flutter-implement-json-serialization`
+- Navigation between pages → `flutter-setup-declarative-routing`
+- Tests → `flutter-add-widget-test`, `dart-add-unit-test`, `dart-generate-test-mocks`
+- Overflow / layout errors → `flutter-fix-layout-issues`; runtime errors → `dart-fix-runtime-errors`
+- Before every commit → `dart-run-static-analysis`
+- Package version conflicts → `dart-resolve-package-conflicts`
+- Multiple languages (tj / ru / en) → `flutter-setup-localization`
+- **Every page** → `flutter-build-responsive-layout` (mobile / tablet / desktop widths)

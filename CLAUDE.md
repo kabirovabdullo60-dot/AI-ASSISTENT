@@ -58,3 +58,10 @@ After every finished task, inside your project folder:
 2. `git add` only that task's files (never secrets or build output).
 3. **One** commit: `web: ...` (Abdullo) or `app: ...` (Subhon). Example: `app: add login screen`.
 Do not push, merge or switch branches unless the user asks.
+
+## Skills & plugin (both projects)
+`abdullo_web/.claude/skills/` and `subhon_app/.claude/skills/` hold the official Flutter/Dart skills
+(from `flutter/agent-plugins` and `dart-lang/skills`). Each project's `.claude/settings.json` also enables
+the `dart-flutter` plugin (skills + Dart MCP server). When a project is opened the first time, Claude Code
+asks to trust the marketplace — answer yes. Manual install, if needed:
+`claude plugin marketplace add flutter/agent-plugins` then `claude plugin install dart-flutter@dart-flutter`.
