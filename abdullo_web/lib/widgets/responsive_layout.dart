@@ -4,12 +4,7 @@ import '../core/responsive/breakpoints.dart';
 
 /// Picks a builder by the available width. `tablet` falls back to `desktop`.
 class ResponsiveLayout extends StatelessWidget {
-  const ResponsiveLayout({
-    super.key,
-    required this.mobile,
-    this.tablet,
-    required this.desktop,
-  });
+  const ResponsiveLayout({super.key, required this.mobile, this.tablet, required this.desktop});
 
   final WidgetBuilder mobile;
   final WidgetBuilder? tablet;

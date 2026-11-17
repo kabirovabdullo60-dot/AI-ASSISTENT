@@ -17,16 +17,16 @@ class ApiException implements Exception {
 /// Endpoints and payloads must follow Mehroj's Swagger contract.
 class ApiClient {
   ApiClient({http.Client? client, String? baseUrl})
-      : _client = client ?? http.Client(),
-        _baseUrl = baseUrl ?? ApiConstants.baseUrl;
+    : _client = client ?? http.Client(),
+      _baseUrl = baseUrl ?? ApiConstants.baseUrl;
 
   final http.Client _client;
   final String _baseUrl;
 
   Map<String, String> _headers(String? token) => {
-        'Content-Type': 'application/json',
-        if (token != null) 'Authorization': 'Bearer $token',
-      };
+    'Content-Type': 'application/json',
+    if (token != null) 'Authorization': 'Bearer $token',
+  };
 
   Future<dynamic> get(String path, {String? token}) async {
     final res = await _client
@@ -37,8 +37,7 @@ class ApiClient {
 
   Future<dynamic> post(String path, Object? body, {String? token}) async {
     final res = await _client
-        .post(Uri.parse('$_baseUrl$path'),
-            headers: _headers(token), body: jsonEncode(body))
+        .post(Uri.parse('$_baseUrl$path'), headers: _headers(token), body: jsonEncode(body))
         .timeout(ApiConstants.timeout);
     return _handle(res);
   }
