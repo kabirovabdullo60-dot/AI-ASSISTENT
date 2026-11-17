@@ -1,69 +1,95 @@
 import '../core/constants/api_constants.dart';
-import '../core/network/api_client.dart';
+import '../core/utils/format.dart';
+import '../core/utils/json.dart';
 import '../models/chat_message_model.dart';
+import 'base_service.dart';
+import 'mock/mock_database.dart';
 
-class AssistantService {
-  AssistantService({
-    ApiClient? client,
-    this.useMock = ApiConstants.useMock,
-    this.mockDelay = const Duration(milliseconds: 700),
-  }) : _client = client ?? ApiClient();
-
-  final ApiClient _client;
-  final bool useMock;
-  final Duration mockDelay;
+class AssistantService extends BaseService {
+  AssistantService({super.client, super.useMock});
 
   /// Sends the whole conversation, returns the assistant's reply.
-  Future<ChatMessageModel> sendMessage(List<ChatMessageModel> history) async {
-    if (useMock) {
-      await Future<void>.delayed(mockDelay);
+  Future<ChatMessageModel> sendMessage(List<ChatMessageModel> history) => mockOr(
+    mock: (db) {
       final last = history.lastWhere((m) => m.isUser, orElse: () => history.last);
-      return ChatMessageModel(role: ChatRole.assistant, text: mockReply(last.text), time: DateTime.now());
-    }
-    final json = await _client.post(ApiConstants.assistantChatPath, {
-      'messages': history.map((m) => m.toJson()).toList(),
-    });
-    return ChatMessageModel.fromJson(json as Map<String, dynamic>);
-  }
+      return ChatMessageModel(role: ChatRole.assistant, text: mockReply(last.text, db), time: DateTime.now());
+    },
+    api: () async => ChatMessageModel.fromJson(
+      asJsonMap(
+        await client.post(ApiConstants.assistantChat, {'messages': history.map((m) => m.toJson()).toList()}),
+      ),
+    ),
+  );
 
-  /// Simple keyword answers (en / tj / ru) for demo mode.
-  static String mockReply(String question) {
+  /// Keyword answers (en / tj / ru) built from the demo data.
+  static String mockReply(String question, MockDatabase db) {
     final q = question.toLowerCase();
     bool has(List<String> words) => words.any(q.contains);
+    final o = db.overview();
+    String tjs(double v) => '${formatAmount(v)} TJS';
+    final ranked = List.of(db.stores)..sort((a, b) => b.monthlySales.compareTo(a.monthlySales));
 
-    if (has(['report', 'hisobot', 'ҳисобот', 'отчет', 'отчёт', 'analy'])) {
-      return 'Report for the last 6 months: total revenue 232,450 TJS, average 38,742 TJS a month, '
-          'best month November (48,250 TJS). Trend: steady growth. '
-          'Main risk: delivery costs rising faster than orders.';
+    if (has(['report', 'hisobot', 'ҳисобот', 'отчет', 'отчёт', 'analy', 'tahlil'])) {
+      return 'Report: this month ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)} vs last month), '
+          'average ${tjs(o.averageDaily)} a day, gross margin ${o.grossMargin}%. '
+          'Best store: ${ranked.first.name}. Unpaid salaries: ${tjs(o.unpaidSalaries)} '
+          '(${o.pendingPayrolls} people). Trend: steady growth.';
     }
-    if (has(['sale', 'revenue', 'savdo', 'furush', 'фурӯш', 'продаж', 'выручк'])) {
-      return 'Revenue this month is 48,250 TJS, up 12.4% from October. '
-          'Sales grew 3 months in a row (Sep 39,900 → Oct 43,000 → Nov 48,250). '
-          'Keep your best-selling products in stock for December.';
+    if (has(['salar', 'payroll', 'maosh', 'моаш', 'зарплат', 'unpaid'])) {
+      return 'Unpaid salaries: ${tjs(o.unpaidSalaries)} for ${o.pendingPayrolls} employees '
+          '(${o.payrollCycle} cycle). Open the Salaries page to pay them.';
     }
-    if (has(['expense', 'cost', 'xaroj', 'харoҷ', 'хароҷ', 'расход', 'cut'])) {
-      return 'Expenses are 31,780 TJS (+4.1%). The biggest items: rent 35%, salaries 30%, delivery 22%. '
-          'Grouping deliveries by area could save about 1,500 TJS a month.';
+    if (has(['sale', 'revenue', 'savdo', 'фурӯш', 'furush', 'продаж', 'выручк'])) {
+      return "Today's sales are ${tjs(o.todaySales)} (${formatPercent(o.todayChange)} vs yesterday). "
+          'This week ${tjs(o.weeklySales)} — target ${tjs(o.weeklyTarget)}. '
+          'This month ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)}).';
     }
-    if (has(['profit', 'foida', 'фоида', 'прибыл', 'margin'])) {
-      return 'Profit is 16,470 TJS (+18.2%), a 34% margin. '
-          'Profit grows faster than revenue, so your costs are under control.';
+    if (has([
+      'expense',
+      'cost',
+      'xaroj',
+      'хароҷ',
+      'расход',
+      'cut',
+      'profit',
+      'foida',
+      'фоида',
+      'прибыл',
+      'margin',
+    ])) {
+      return 'Gross margin is ${o.grossMargin}%. Payroll is the biggest cost line, then rent and delivery. '
+          'The two smallest stores (${ranked[ranked.length - 2].name}, ${ranked.last.name}) bring under 2% of sales — '
+          'check whether their rent pays off.';
     }
-    if (has(['customer', 'client', 'mijoz', 'мизоҷ', 'клиент'])) {
-      return 'You have 312 active customers (+6.8%). 41 of them have not bought in 60 days. '
-          'Send them a short message with a 10% discount to bring them back.';
+    if (has(['store', 'magoza', 'мағоза', 'магазин', 'branch'])) {
+      final top = ranked.take(3).toList();
+      return 'Top stores this month:\n'
+          '${[for (var i = 0; i < top.length; i++) '${i + 1}. ${top[i].name} — ${tjs(top[i].monthlySales)}'].join('\n')}';
     }
-    if (has(['marketing', 'reklama', 'реклам', 'idea', 'ғоя', 'идея', 'grow'])) {
+    if (has(['staff', 'employee', 'kormand', 'корманд', 'сотрудник', 'shift'])) {
+      return 'You have ${o.totalStaff} staff, ${o.staffOnShift} on shift today.';
+    }
+    if (has([
+      'marketing',
+      'reklama',
+      'реклам',
+      'idea',
+      'ғоя',
+      'идея',
+      'grow',
+      'customer',
+      'mijoz',
+      'клиент',
+    ])) {
       return 'Three ideas for next month:\n'
-          '1. Instagram/Telegram posts with real customer photos, 3 times a week.\n'
-          '2. "Bring a friend" — both get 5% off.\n'
-          '3. A December holiday bundle of your top 3 products.';
+          '1. Move a promo stand from ${ranked.first.name} to ${ranked[3].name} for a week.\n'
+          '2. ${o.onlineShare}% already pay by card/QR — give 3% cashback on QR payments.\n'
+          '3. A holiday bundle of your top 3 products in all stores.';
     }
     if (has(['salom', 'hello', 'hi', 'привет', 'салом'])) {
-      return 'Salom! I am your business assistant. Ask me about sales, expenses, profit, '
-          'customers or marketing ideas.';
+      return 'Salom! I am your business assistant. Ask me about sales, stores, staff, salaries or reports.';
     }
-    return 'I can help with sales, expenses, profit, customers, reports and marketing ideas. '
-        'Try: "How are my sales this month?"';
+    return 'I can help with sales, stores, staff, salaries, reports and marketing ideas. '
+        'Try: "Sales today" or "Top stores".';
   }
 }

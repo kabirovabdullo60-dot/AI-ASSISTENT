@@ -8,7 +8,7 @@ class AssistantViewModel extends ChangeNotifier {
 
   final AssistantService _service;
 
-  static const suggestions = ['Sales this month', 'Cut expenses', 'Marketing ideas', 'Customer growth'];
+  static const suggestions = ['Sales today', 'Top stores', 'Unpaid salaries', 'Marketing ideas'];
 
   final List<ChatMessageModel> _messages = [];
   bool _isSending = false;

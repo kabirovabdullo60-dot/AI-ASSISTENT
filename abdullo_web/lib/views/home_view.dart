@@ -1,113 +1,146 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/navigation/app_section.dart';
+import '../core/theme/app_colors.dart';
 import '../viewmodels/home_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
+import '../widgets/app_sidebar.dart';
 import '../widgets/responsive_layout.dart';
+import 'app_top_bar_view.dart';
 import 'assistant_view.dart';
 import 'dashboard_view.dart';
+import 'employees_view.dart';
+import 'profile_view.dart';
 import 'reports_view.dart';
+import 'salaries_view.dart';
+import 'sales_view.dart';
 import 'settings_view.dart';
+import 'stores_view.dart';
 
-class _Section {
-  const _Section(this.label, this.icon, this.selectedIcon);
-  final String label;
-  final IconData icon;
-  final IconData selectedIcon;
-}
-
-const _sections = [
-  _Section('Dashboard', Icons.dashboard_outlined, Icons.dashboard),
-  _Section('Assistant', Icons.smart_toy_outlined, Icons.smart_toy),
-  _Section('Reports', Icons.bar_chart_outlined, Icons.bar_chart),
-  _Section('Settings', Icons.settings_outlined, Icons.settings),
-];
-
-/// App shell: bottom bar on mobile, side rail on tablet/desktop.
+/// App shell. Desktop: wide navy sidebar. Tablet: compact sidebar. Phone: bottom bar + "More".
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
-  Widget _page(int index) => switch (index) {
-    0 => const DashboardView(),
-    1 => const AssistantView(),
-    2 => const ReportsView(),
-    _ => const SettingsView(),
+  Widget _page(AppSection section) => switch (section) {
+    AppSection.dashboard => const DashboardView(),
+    AppSection.stores => const StoresView(),
+    AppSection.sales => const SalesView(),
+    AppSection.employees => const EmployeesView(),
+    AppSection.salaries => const SalariesView(),
+    AppSection.reports => const ReportsView(),
+    AppSection.assistant => const AssistantView(),
+    AppSection.profile => const ProfileView(),
+    AppSection.settings => const SettingsView(),
   };
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<HomeViewModel>();
-    final title = context.select<SettingsViewModel, String>((s) => s.businessName);
-    final body = KeyedSubtree(key: ValueKey(vm.selectedIndex), child: _page(vm.selectedIndex));
+    final home = context.watch<HomeViewModel>();
+    final brand = context.select<SettingsViewModel, String>((s) => s.businessName);
+    final page = KeyedSubtree(key: ValueKey(home.section), child: _page(home.section));
+
+    Widget wide(bool extended) => Scaffold(
+      body: Row(
+        children: [
+          AppSidebar(selected: home.section, onSelect: home.select, extended: extended, brandName: brand),
+          Expanded(
+            child: Column(
+              children: [
+                const AppTopBarView(),
+                Expanded(child: page),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
 
     return ResponsiveLayout(
       mobile: (_) => Scaffold(
-        appBar: AppBar(title: _AppTitle(title)),
-        body: SafeArea(child: body),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: vm.selectedIndex,
-          onDestinationSelected: vm.select,
-          destinations: [
-            for (final s in _sections)
-              NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: s.label),
+        appBar: AppBar(
+          titleSpacing: 16,
+          title: Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(color: AppColors.orange, borderRadius: BorderRadius.circular(8)),
+                child: const Icon(Icons.auto_awesome, color: Colors.white, size: 16),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  brand,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+        ),
+        body: Column(
+          children: [
+            const AppTopBarView(compact: true),
+            Expanded(child: page),
+          ],
+        ),
+        bottomNavigationBar: _MobileNavBar(section: home.section, onSelect: home.select),
+      ),
+      tablet: (_) => wide(false),
+      desktop: (_) => wide(true),
+    );
+  }
+}
+
+class _MobileNavBar extends StatelessWidget {
+  const _MobileNavBar({required this.section, required this.onSelect});
+
+  final AppSection section;
+  final ValueChanged<AppSection> onSelect;
+
+  static const _moreIndex = 4;
+
+  void _openMore(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            for (final s in AppSection.values)
+              if (!AppSection.mobileBar.contains(s))
+                ListTile(
+                  key: Key('more-${s.name}'),
+                  leading: Icon(s == section ? s.selectedIcon : s.icon),
+                  title: Text(s.label),
+                  selected: s == section,
+                  selectedColor: AppColors.orange,
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    onSelect(s);
+                  },
+                ),
           ],
         ),
       ),
-      tablet: (_) => _WideScaffold(vm: vm, title: title, extended: false, body: body),
-      desktop: (_) => _WideScaffold(vm: vm, title: title, extended: true, body: body),
     );
   }
-}
-
-class _AppTitle extends StatelessWidget {
-  const _AppTitle(this.businessName);
-
-  final String businessName;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.auto_awesome, color: Theme.of(context).colorScheme.primary),
-        const SizedBox(width: 8),
-        Expanded(child: Text(businessName, maxLines: 1, overflow: TextOverflow.ellipsis)),
+    final index = AppSection.mobileBar.indexOf(section);
+    return NavigationBar(
+      selectedIndex: index < 0 ? _moreIndex : index,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      onDestinationSelected: (i) => i == _moreIndex ? _openMore(context) : onSelect(AppSection.mobileBar[i]),
+      destinations: [
+        for (final s in AppSection.mobileBar)
+          NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: s.label),
+        const NavigationDestination(icon: Icon(Icons.more_horiz), label: 'More'),
       ],
-    );
-  }
-}
-
-class _WideScaffold extends StatelessWidget {
-  const _WideScaffold({required this.vm, required this.title, required this.extended, required this.body});
-
-  final HomeViewModel vm;
-  final String title;
-  final bool extended;
-  final Widget body;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: _AppTitle('$title · AI Business Assistant')),
-      body: Row(
-        children: [
-          NavigationRail(
-            extended: extended,
-            labelType: extended ? null : NavigationRailLabelType.all,
-            selectedIndex: vm.selectedIndex,
-            onDestinationSelected: vm.select,
-            destinations: [
-              for (final s in _sections)
-                NavigationRailDestination(
-                  icon: Icon(s.icon),
-                  selectedIcon: Icon(s.selectedIcon),
-                  label: Text(s.label),
-                ),
-            ],
-          ),
-          const VerticalDivider(width: 1),
-          Expanded(child: body),
-        ],
-      ),
     );
   }
 }

@@ -1,62 +1,71 @@
-import 'package:flutter/foundation.dart';
-
-import '../models/dashboard_model.dart';
-import '../models/sales_point_model.dart';
+import '../models/activity_model.dart';
+import '../models/chart_point_model.dart';
+import '../models/overview_model.dart';
 import '../services/dashboard_service.dart';
+import 'base_view_model.dart';
 
-class DashboardViewModel extends ChangeNotifier {
+enum ChartRange { weekly, monthly }
+
+class DashboardViewModel extends BaseViewModel {
   DashboardViewModel(this._service);
 
   final DashboardService _service;
 
-  bool _isLoading = false;
-  String? _error;
-  DashboardModel? _data;
-  bool _disposed = false;
+  OverviewModel? _overview;
+  List<ActivityModel> _activity = const [];
+  String? _storeId;
+  ChartRange _range = ChartRange.monthly;
+  ActivityType? _activityFilter;
 
-  bool get isLoading => _isLoading;
-  String? get error => _error;
-  DashboardModel? get data => _data;
+  OverviewModel? get overview => _overview;
+  String? get selectedStoreId => _storeId;
+  ChartRange get range => _range;
+  ActivityType? get activityFilter => _activityFilter;
 
-  List<SalesPointModel> get sales => _data?.sales ?? const [];
-
-  double get totalSales => sales.fold(0, (sum, p) => sum + p.value);
-
-  double get averageSales => sales.isEmpty ? 0 : totalSales / sales.length;
-
-  SalesPointModel? get bestMonth => sales.isEmpty ? null : sales.reduce((a, b) => b.value > a.value ? b : a);
-
-  /// Percent change of month [index] vs the month before. `null` for the first one.
-  double? changeAt(int index) {
-    if (index <= 0 || index >= sales.length) return null;
-    final prev = sales[index - 1].value;
-    if (prev == 0) return null;
-    return (sales[index].value - prev) / prev * 100;
+  List<ChartPointModel> get chartPoints {
+    final all = _overview?.dailyRevenue ?? const <ChartPointModel>[];
+    return _range == ChartRange.weekly && all.length > 7 ? all.sublist(all.length - 7) : all;
   }
 
-  Future<void> load() async {
-    if (_isLoading) return;
-    _isLoading = true;
-    _error = null;
-    _notify();
-    try {
-      _data = await _service.fetchDashboard();
-    } catch (e) {
-      _error = 'Could not load the dashboard. Check the connection and try again.';
-      debugPrint('DashboardViewModel.load: $e');
-    } finally {
-      _isLoading = false;
-      _notify();
+  /// Index of the best day in [chartPoints], -1 if empty.
+  int get peakIndex {
+    final points = chartPoints;
+    var best = -1;
+    for (var i = 0; i < points.length; i++) {
+      if (best < 0 || points[i].revenue > points[best].revenue) best = i;
     }
+    return best;
   }
 
-  void _notify() {
-    if (!_disposed) notifyListeners();
+  List<ActivityModel> activity(String query) => _activity
+      .where((a) => _activityFilter == null || a.type == _activityFilter)
+      .where((a) => query.isEmpty || a.searchText.contains(query))
+      .toList();
+
+  Future<void> load() => runTask(() async {
+    final (overview, activity) = await (
+      _service.fetchOverview(storeId: _storeId),
+      _service.fetchActivity(),
+    ).wait;
+    _overview = overview;
+    _activity = activity;
+  }, errorMessage: 'Could not load the dashboard. Check the connection and try again.');
+
+  /// `null` = all stores.
+  Future<void> selectStore(String? storeId) async {
+    if (storeId == _storeId) return;
+    _storeId = storeId;
+    await load();
   }
 
-  @override
-  void dispose() {
-    _disposed = true;
-    super.dispose();
+  void setRange(ChartRange range) {
+    if (range == _range) return;
+    _range = range;
+    notifySafe();
+  }
+
+  void setActivityFilter(ActivityType? type) {
+    _activityFilter = type;
+    notifySafe();
   }
 }

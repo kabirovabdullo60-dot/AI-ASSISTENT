@@ -1,35 +1,65 @@
 import 'package:flutter/material.dart';
 
-/// A titled card used to group content on a page.
+import '../core/theme/app_colors.dart';
+
+/// White card with a title, optional badge, subtitle and trailing actions.
 class SectionCard extends StatelessWidget {
-  const SectionCard({super.key, required this.title, required this.child, this.trailing});
+  const SectionCard({
+    super.key,
+    required this.title,
+    required this.child,
+    this.subtitle,
+    this.badge,
+    this.trailing,
+    this.padding = const EdgeInsets.all(20),
+  });
 
   final String title;
-  final Widget child;
+  final String? subtitle;
+  final Widget? badge;
   final Widget? trailing;
+  final Widget child;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Card(
-      elevation: 0,
-      color: theme.colorScheme.surfaceContainerLow,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: padding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(
+                            title,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.ink,
+                            ),
+                          ),
+                          ?badge,
+                        ],
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 4),
+                        Text(subtitle!, style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted)),
+                      ],
+                    ],
                   ),
                 ),
-                ?trailing,
+                if (trailing != null) ...[const SizedBox(width: 8), trailing!],
               ],
             ),
             const SizedBox(height: 16),

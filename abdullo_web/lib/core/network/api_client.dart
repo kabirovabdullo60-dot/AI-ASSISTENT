@@ -13,8 +13,7 @@ class ApiException implements Exception {
   String toString() => 'ApiException($statusCode): $message';
 }
 
-/// Thin HTTP wrapper shared by web and app services.
-/// Endpoints and payloads must follow Mehroj's Swagger contract.
+/// Thin HTTP wrapper. Endpoints and payloads must follow Mehroj's Swagger contract.
 class ApiClient {
   ApiClient({http.Client? client, String? baseUrl})
     : _client = client ?? http.Client(),
@@ -23,27 +22,34 @@ class ApiClient {
   final http.Client _client;
   final String _baseUrl;
 
-  Map<String, String> _headers(String? token) => {
+  /// Set after login once the backend has auth.
+  String? token;
+
+  Map<String, String> get _headers => {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
     if (token != null) 'Authorization': 'Bearer $token',
   };
 
-  Future<dynamic> get(String path, {String? token}) async {
-    final res = await _client
-        .get(Uri.parse('$_baseUrl$path'), headers: _headers(token))
-        .timeout(ApiConstants.timeout);
+  Uri _uri(String path, Map<String, String>? query) {
+    final uri = Uri.parse('$_baseUrl$path');
+    return query == null || query.isEmpty ? uri : uri.replace(queryParameters: query);
+  }
+
+  Future<dynamic> get(String path, {Map<String, String>? query}) async {
+    final res = await _client.get(_uri(path, query), headers: _headers).timeout(ApiConstants.timeout);
     return _handle(res);
   }
 
-  Future<dynamic> post(String path, Object? body, {String? token}) async {
+  Future<dynamic> post(String path, [Object? body]) async {
     final res = await _client
-        .post(Uri.parse('$_baseUrl$path'), headers: _headers(token), body: jsonEncode(body))
+        .post(_uri(path, null), headers: _headers, body: body == null ? null : jsonEncode(body))
         .timeout(ApiConstants.timeout);
     return _handle(res);
   }
 
   dynamic _handle(http.Response res) {
-    final data = res.body.isEmpty ? null : jsonDecode(res.body);
+    final data = res.body.isEmpty ? null : jsonDecode(utf8.decode(res.bodyBytes));
     if (res.statusCode >= 200 && res.statusCode < 300) return data;
     throw ApiException(res.statusCode, res.body);
   }

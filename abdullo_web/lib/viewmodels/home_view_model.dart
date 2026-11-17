@@ -1,14 +1,25 @@
 import 'package:flutter/foundation.dart';
 
-/// Which section of the web is open (Dashboard, Assistant, Reports, Settings).
+import '../core/navigation/app_section.dart';
+
+/// Open page + the global search text from the top bar.
 class HomeViewModel extends ChangeNotifier {
-  int _selectedIndex = 0;
+  AppSection _section = AppSection.dashboard;
+  String _query = '';
 
-  int get selectedIndex => _selectedIndex;
+  AppSection get section => _section;
+  String get query => _query;
 
-  void select(int index) {
-    if (index == _selectedIndex) return;
-    _selectedIndex = index;
+  void select(AppSection section) {
+    if (section == _section) return;
+    _section = section;
+    notifyListeners();
+  }
+
+  void setQuery(String value) {
+    final q = value.trim().toLowerCase();
+    if (q == _query) return;
+    _query = q;
     notifyListeners();
   }
 }
