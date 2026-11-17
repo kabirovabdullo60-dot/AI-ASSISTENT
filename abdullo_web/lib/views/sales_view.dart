@@ -7,8 +7,9 @@ import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
 import '../models/sale_model.dart';
+import '../viewmodels/auth_view_model.dart';
+import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/home_view_model.dart';
-import '../viewmodels/profile_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
@@ -22,9 +23,10 @@ import '../widgets/pill_tabs.dart';
 import '../widgets/section_card.dart';
 import '../widgets/sparkline.dart';
 import '../widgets/status_badge.dart';
+import 'record_sale_dialog.dart';
 import 'sale_entry_form_view.dart';
 
-/// "Sales & Daily Entries" from the Figma.
+/// "Sales & Daily Entries" — /api/sales (+ daily / weekly / monthly reports).
 class SalesView extends StatelessWidget {
   const SalesView({super.key});
 
@@ -58,7 +60,9 @@ class SalesView extends StatelessWidget {
           ],
           LayoutBuilder(
             builder: (context, c) {
-              const form = _FormCard();
+              const form = Card(
+                child: Padding(padding: EdgeInsets.all(20), child: SaleEntryFormView()),
+              );
               final right = _EntriesColumn(vm: vm, currency: cur);
               if (c.maxWidth < 1000) {
                 return Column(
@@ -162,7 +166,7 @@ class _SuccessBanner extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: tr.successPrefix,
-                      style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
+                      style: const TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
                     ),
                     TextSpan(text: tr.saleSavedMessage('${formatAmount(sale.amount)} TJS', sale.storeName)),
                   ],
@@ -182,22 +186,13 @@ class _SuccessBanner extends StatelessWidget {
   }
 }
 
-class _FormCard extends StatelessWidget {
-  const _FormCard();
-
-  @override
-  Widget build(BuildContext context) => const Card(
-    child: Padding(padding: EdgeInsets.all(20), child: SaleEntryFormView()),
-  );
-}
-
 class _ClerkCard extends StatelessWidget {
   const _ClerkCard();
 
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
-    final p = context.watch<ProfileViewModel>().profile;
+    final user = context.watch<AuthViewModel>().user;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -209,9 +204,11 @@ class _ClerkCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(tr.sessionClerk, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
+                  Text(tr.sessionClerk, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
                   Text(
-                    p == null ? '…' : '${p.name} · ${p.role}',
+                    user == null ? '…' : '${user.fullName} · ${user.email}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
                   ),
                 ],
@@ -232,21 +229,22 @@ class _EntriesColumn extends StatelessWidget {
   final Currency currency;
 
   void _export(BuildContext context, List<SaleModel> rows) {
-    final csv = StringBuffer('Date,Store,Amount TJS,Registered By,Split,Notes,Reference\n');
+    final csv = StringBuffer('Date,Store,Amount TJS,Description,Id\n');
     for (final s in rows) {
-      csv.writeln(
-        '${s.date.toIso8601String()},"${s.storeName}",${s.amount},"${s.registeredBy}",${s.split.label},"${s.notes}",${s.reference}',
-      );
+      csv.writeln('${isoDayText(s.saleDate)},"${s.storeName}",${s.amount},"${s.description ?? ''}",${s.id}');
     }
     Clipboard.setData(ClipboardData(text: csv.toString()));
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.rowsCopied(rows.length))));
   }
 
+  static String isoDayText(DateTime d) =>
+      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
   Future<void> _pickRange(BuildContext context) async {
     final now = DateTime.now();
     final range = await showDateRangePicker(
       context: context,
-      firstDate: now.subtract(const Duration(days: 365)),
+      firstDate: DateTime(2000),
       lastDate: now,
       initialDateRange: DateTimeRange(
         start: vm.customFrom ?? now.subtract(const Duration(days: 6)),
@@ -256,20 +254,51 @@ class _EntriesColumn extends StatelessWidget {
     if (range != null) vm.setCustomRange(range.start, range.end);
   }
 
+  Future<void> _delete(BuildContext context, SaleModel sale) async {
+    final tr = context.l10n;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(tr.deleteSaleTitle),
+        content: Text(tr.deleteSaleBody(currency.format(sale.amount), sale.storeName, formatDate(sale.saleDate))),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr.cancel)),
+          FilledButton(
+            key: const Key('confirm-delete-sale'),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.red),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(tr.delete),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+    final dashboard = context.read<DashboardViewModel>();
+    final stores = context.read<StoresViewModel>();
+    final error = await vm.deleteSale(sale);
+    if (error == null) {
+      dashboard.load();
+      stores.load();
+    }
+    if (context.mounted) showResult(context, error, success: tr.saleDeleted);
+  }
+
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final stores = context.watch<StoresViewModel>();
     final query = context.select<HomeViewModel, String>((h) => h.query);
     final rows = vm.filtered(query);
-    final page = vm.pageItems(rows);
     final change = vm.changeVsPrevious();
     final minutes = DateTime.now().difference(vm.updatedAt).inMinutes;
-    final hourly = vm.hourlyToday;
-    final peakHour = hourly.indexOf(hourly.reduce((a, b) => a > b ? a : b));
+    final week = vm.last7Days;
+    var peak = 0;
+    for (var i = 1; i < week.length; i++) {
+      if (week[i].revenue > week[peak].revenue) peak = i;
+    }
     final active = stores.activeCount;
-    final synced = vm.storesSyncedToday.clamp(0, active == 0 ? 1 : active);
-    final ratio = active == 0 ? 0.0 : synced / active;
+    final reported = vm.storesReportedToday.clamp(0, active == 0 ? 0 : active);
+    final ratio = active == 0 ? 0.0 : reported / active;
 
     return Column(
       children: [
@@ -284,7 +313,7 @@ class _EntriesColumn extends StatelessWidget {
                   runSpacing: 10,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Text(tr.storeLabel, style: TextStyle(fontWeight: FontWeight.w600)),
+                    Text(tr.storeLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
                     DropdownChip<String>(
                       key: const Key('sales-store-filter'),
                       label: stores.nameOf(vm.storeFilter) ?? tr.allStores,
@@ -299,9 +328,9 @@ class _EntriesColumn extends StatelessWidget {
                         onChanged: vm.setQuery,
                         style: const TextStyle(fontSize: 13),
                         decoration: InputDecoration(
-                          hintText: tr.searchReceipt,
-                          prefixIcon: Icon(Icons.search, size: 18),
-                          contentPadding: EdgeInsets.symmetric(vertical: 10),
+                          hintText: tr.searchEntries,
+                          prefixIcon: const Icon(Icons.search, size: 18),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 10),
                         ),
                       ),
                     ),
@@ -360,7 +389,7 @@ class _EntriesColumn extends StatelessWidget {
                   children: [
                     Text(
                       tr.activeFilterVolume,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 11,
                         letterSpacing: 0.6,
                         fontWeight: FontWeight.w600,
@@ -373,11 +402,11 @@ class _EntriesColumn extends StatelessWidget {
                         children: [
                           TextSpan(text: tr.filteredTotal),
                           TextSpan(
-                            text: currency.format(vm.filteredTotal(query)),
+                            text: currency.format(vm.filteredTotal),
                             style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
                           ),
                           TextSpan(
-                            text: tr.acrossEntries(rows.length),
+                            text: tr.acrossEntries(vm.entryCount),
                             style: const TextStyle(color: AppColors.muted),
                           ),
                         ],
@@ -402,13 +431,14 @@ class _EntriesColumn extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
+                if (vm.isLoading) const LinearProgressIndicator(minHeight: 2),
                 AppTable(
                   key: const Key('sales-table'),
-                  columns: [tr.colDateTime, tr.colStoreName, tr.colSalesAmount, tr.colRegisteredBy, tr.colNotesMethod],
+                  columns: [tr.colDateTime, tr.colStoreName, tr.colSalesAmount, tr.colNotesMethod, ''],
                   numeric: const {2},
                   empty: tr.noEntries,
                   rows: [
-                    for (final s in page)
+                    for (final s in rows)
                       [
                         Row(
                           mainAxisSize: MainAxisSize.min,
@@ -416,15 +446,21 @@ class _EntriesColumn extends StatelessWidget {
                             Icon(
                               Icons.circle,
                               size: 8,
-                              color: isSameDay(s.date, DateTime.now()) ? AppColors.green : AppColors.barGray,
+                              color: isSameDay(s.saleDate, DateTime.now()) ? AppColors.green : AppColors.barGray,
                             ),
                             const SizedBox(width: 8),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(formatRelativeDay(s.date), style: const TextStyle(fontWeight: FontWeight.w600)),
-                                Text(formatTime(s.date), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                                Text(
+                                  formatRelativeDay(s.saleDate),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  s.createdAt == null ? formatDate(s.saleDate) : formatTime(s.createdAt!.toLocal()),
+                                  style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                ),
                               ],
                             ),
                           ],
@@ -444,36 +480,43 @@ class _EntriesColumn extends StatelessWidget {
                             ],
                           ),
                         ),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 240),
+                          child: Text(
+                            s.description ?? '—',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: AppColors.muted),
+                          ),
+                        ),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundColor: AppColors.surfaceSoft,
-                              child: Text(
-                                initials(s.registeredBy.replaceAll('.', ' ')),
-                                style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w700),
-                              ),
+                            IconButton(
+                              key: Key('edit-sale-${s.id}'),
+                              tooltip: tr.edit,
+                              visualDensity: VisualDensity.compact,
+                              onPressed: () => RecordSaleDialog.show(context, sale: s),
+                              icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
                             ),
-                            const SizedBox(width: 6),
-                            Text(s.registeredBy),
+                            IconButton(
+                              key: Key('delete-sale-${s.id}'),
+                              tooltip: tr.delete,
+                              visualDensity: VisualDensity.compact,
+                              onPressed: () => _delete(context, s),
+                              icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
+                            ),
                           ],
                         ),
-                        s.notes.contains('POS') || s.notes.contains('Card')
-                            ? StatusBadge(s.notes, tone: BadgeTone.info, icon: Icons.credit_card)
-                            : Text(
-                                s.notes.isEmpty ? tr.split(s.split) : s.notes,
-                                style: const TextStyle(color: AppColors.muted),
-                              ),
                       ],
                   ],
                 ),
                 const Divider(height: 20),
                 Pager(
                   page: vm.page,
-                  pageCount: vm.pageCount(rows.length),
+                  pageCount: vm.pageCount,
                   pageSize: SalesViewModel.pageSize,
-                  itemCount: rows.length,
+                  itemCount: vm.entryCount,
                   onPage: vm.goToPage,
                 ),
               ],
@@ -483,20 +526,19 @@ class _EntriesColumn extends StatelessWidget {
         const SizedBox(height: 16),
         LayoutBuilder(
           builder: (context, c) {
-            final hourlyCard = SectionCard(
-              title: tr.hourlyVelocity,
-              trailing: Text(
-                tr.peakLabel(
-                  '${(peakHour + 8).toString().padLeft(2, '0')}:00',
-                  '${formatCompact(currency.fromTjs(hourly[peakHour]))} ${currency.code}',
-                ),
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
-              ),
-              child: Sparkline(values: hourly),
+            final weekCard = SectionCard(
+              title: tr.salesLast7,
+              trailing: week.isEmpty || week[peak].revenue == 0
+                  ? null
+                  : Text(
+                      tr.peakLabel(formatWeekday(week[peak].date), currency.format(week[peak].revenue)),
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
+                    ),
+              child: Sparkline(values: [for (final p in week) p.revenue]),
             );
-            final reconCard = SectionCard(
-              title: tr.reconciliation,
+            final reportedCard = SectionCard(
+              title: tr.storesReported,
               child: Row(
                 children: [
                   Expanded(
@@ -504,11 +546,11 @@ class _EntriesColumn extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${(ratio * 100).toStringAsFixed(1)}%',
+                          '${(ratio * 100).toStringAsFixed(0)}%',
                           style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
                         ),
                         Text(
-                          tr.storesSynced(synced, active),
+                          tr.storesReportedValue(reported, active),
                           style: const TextStyle(fontSize: 12, color: AppColors.green, fontWeight: FontWeight.w600),
                         ),
                       ],
@@ -527,13 +569,13 @@ class _EntriesColumn extends StatelessWidget {
                 ],
               ),
             );
-            if (c.maxWidth < 620) return Column(children: [hourlyCard, const SizedBox(height: 16), reconCard]);
+            if (c.maxWidth < 620) return Column(children: [weekCard, const SizedBox(height: 16), reportedCard]);
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: hourlyCard),
+                Expanded(child: weekCard),
                 const SizedBox(width: 16),
-                Expanded(child: reconCard),
+                Expanded(child: reportedCard),
               ],
             );
           },

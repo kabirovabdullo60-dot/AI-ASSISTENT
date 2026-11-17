@@ -1158,4 +1158,418 @@ class AppLocalizationsTg extends AppLocalizations {
   String chartCashflow(String amount) {
     return 'Гардиши пул: $amount';
   }
+
+  @override
+  String get loading => 'Бор шуда истодааст…';
+
+  @override
+  String get loginTitle => 'Хуш омадед';
+
+  @override
+  String get loginSubtitle =>
+      'Барои идоракунии мағозаҳо, фурӯш ва музд ворид шавед.';
+
+  @override
+  String get registerTitle => 'Аккаунти тиҷоратӣ созед';
+
+  @override
+  String get registerSubtitle =>
+      'Як аккаунт = як тиҷорат. Мағоза ва кормандонро пас аз сабт илова мекунед.';
+
+  @override
+  String get emailLabel => 'Почтаи электронӣ';
+
+  @override
+  String get password => 'Парол';
+
+  @override
+  String get fullName => 'Ному насаб';
+
+  @override
+  String get phoneOptional => 'Телефон (ихтиёрӣ)';
+
+  @override
+  String get businessNameOptional => 'Номи тиҷорат (ихтиёрӣ)';
+
+  @override
+  String get signIn => 'Ворид шудан';
+
+  @override
+  String get createAccount => 'Сохтани аккаунт';
+
+  @override
+  String get noAccount => 'Аккаунт надоред? Созед';
+
+  @override
+  String get haveAccount => 'Аккаунт доред? Ворид шавед';
+
+  @override
+  String get invalidEmail => 'Почтаи дурустро ворид кунед';
+
+  @override
+  String get invalidPhone => 'Телефон: 7–15 рақам, мас. +992901234567';
+
+  @override
+  String get errInvalidCredentials => 'Почта ё парол нодуруст аст.';
+
+  @override
+  String get errEmailTaken => 'Аккаунт бо ин почта аллакай ҳаст.';
+
+  @override
+  String get errAccountDisabled => 'Ин аккаунт хомӯш карда шудааст.';
+
+  @override
+  String get errAccountLocked =>
+      'Кӯшишҳои нодуруст зиёд шуданд. Баъдтар кӯшиш кунед.';
+
+  @override
+  String get errSessionEnded => 'Сессия ба охир расид. Аз нав ворид шавед.';
+
+  @override
+  String get errPermission => 'Шумо барои ин амал иҷозат надоред.';
+
+  @override
+  String get errNotFound => 'Ёфт нашуд — шояд нест карда шудааст.';
+
+  @override
+  String get errConflict => 'Ин бо маълумоти мавҷуда мухолиф аст.';
+
+  @override
+  String errValidation(String fields) {
+    return 'Майдонҳо нодурустанд: $fields';
+  }
+
+  @override
+  String get errValidationShort => 'Майдонҳоро санҷед.';
+
+  @override
+  String get errNetwork =>
+      'Бо сервер пайвастшавӣ нест. Интернетро санҷед ва аз нав кӯшиш кунед.';
+
+  @override
+  String get errRateLimited => 'Дархостҳо зиёданд. Каме сабр кунед.';
+
+  @override
+  String get errServer => 'Хатои сервер. Баъдтар кӯшиш кунед.';
+
+  @override
+  String get errStoreNameTaken => 'Мағоза бо ин ном аллакай ҳаст.';
+
+  @override
+  String get errStoreHasEmployees =>
+      'Дар мағоза кормандони фаъол ҳастанд. Аввал онҳоро интиқол диҳед ё хомӯш кунед.';
+
+  @override
+  String get errAlreadyPaid => 'Музди ин моҳ аллакай пурра пардохт шудааст.';
+
+  @override
+  String get errExceedsRemaining => 'Маблағ аз боқимондаи ин моҳ зиёд аст.';
+
+  @override
+  String get errNotEmployed => 'Корманд дар ин моҳ кор накардааст.';
+
+  @override
+  String get errFutureDate => 'Сана наметавонад дар оянда бошад.';
+
+  @override
+  String get errFuturePeriod =>
+      'Музди моҳи ояндаро пардохт кардан мумкин нест.';
+
+  @override
+  String get errEmploymentDates => 'Санаҳои кор нодурустанд.';
+
+  @override
+  String get errDateRange => 'Давра нодуруст аст.';
+
+  @override
+  String get errPasswordWeak => 'Парол хеле сода аст.';
+
+  @override
+  String get errCurrentPassword => 'Пароли ҳозира нодуруст аст.';
+
+  @override
+  String get errAvatarType => 'Акс бояд JPEG, PNG ё WebP бошад.';
+
+  @override
+  String get errAvatarSize => 'Акс хеле калон аст.';
+
+  @override
+  String errUnknown(String code) {
+    return 'Хатогӣ рӯй дод ($code).';
+  }
+
+  @override
+  String get description => 'Тавсиф';
+
+  @override
+  String get storeDescriptionHint => 'мас. мағозаи асосӣ · 8 касса';
+
+  @override
+  String get editSale => 'Таҳрири фурӯш';
+
+  @override
+  String get deleteSaleTitle => 'Ин фурӯшро нест кунем?';
+
+  @override
+  String deleteSaleBody(String amount, String store, String date) {
+    return '$amount ($store, $date) аз ҳисобот нест мешавад.';
+  }
+
+  @override
+  String get saleUpdated => 'Фурӯш таҳрир шуд';
+
+  @override
+  String get saleDeleted => 'Фурӯш нест карда шуд';
+
+  @override
+  String get colActionsShort => '';
+
+  @override
+  String get addEmployee => 'Илова кардани корманд';
+
+  @override
+  String get editEmployee => 'Таҳрири корманд';
+
+  @override
+  String get position => 'Вазифа';
+
+  @override
+  String get monthlySalary => 'Маоши моҳона (TJS)';
+
+  @override
+  String get hiredAt => 'Санаи қабул';
+
+  @override
+  String get terminatedAt => 'Санаи рафтан (ихтиёрӣ)';
+
+  @override
+  String get employeeActive => 'Корманд фаъол аст';
+
+  @override
+  String get deleteEmployeeTitle => 'Кормандро нест кунем?';
+
+  @override
+  String deleteEmployeeBody(String name) {
+    return '«$name» пинҳон мешавад. Таърихи музд мемонад.';
+  }
+
+  @override
+  String employeeSaved(String name) {
+    return '«$name» нигоҳ дошта шуд';
+  }
+
+  @override
+  String employeeDeleted(String name) {
+    return '«$name» нест карда шуд';
+  }
+
+  @override
+  String hiredThisMonth(int count) {
+    return '$count нафар дар ин моҳ қабул шуд';
+  }
+
+  @override
+  String get averageSalary => 'Маоши миёна';
+
+  @override
+  String get byPosition => 'Аз рӯи вазифа';
+
+  @override
+  String get selectStoreFirst => 'Аввал мағоза илова кунед';
+
+  @override
+  String get paymentDate => 'Санаи пардохт';
+
+  @override
+  String get noteOptional => 'Қайд (ихтиёрӣ)';
+
+  @override
+  String get paymentCancelled => 'Пардохт бекор карда шуд';
+
+  @override
+  String get cancelPayment => 'Бекор кардани пардохт';
+
+  @override
+  String get cancelPaymentTitle => 'Ин пардохтро бекор кунем?';
+
+  @override
+  String workedDays(int count) {
+    return '$count рӯз';
+  }
+
+  @override
+  String payFor(String month) {
+    return 'Пардохт барои $month';
+  }
+
+  @override
+  String owedAllMonths(String amount) {
+    return 'Қарз дар ҳамаи моҳҳо: $amount';
+  }
+
+  @override
+  String get months => 'Моҳҳо';
+
+  @override
+  String get payments => 'Пардохтҳо';
+
+  @override
+  String get noPaymentsYet => 'Ҳоло пардохт нест';
+
+  @override
+  String salesCount(int count) {
+    return '$count фурӯш';
+  }
+
+  @override
+  String chartSales(int count) {
+    return 'Фурӯш: $count';
+  }
+
+  @override
+  String get averageSale => 'Фурӯши миёна';
+
+  @override
+  String get salesThisMonth => 'Фурӯш дар ин моҳ';
+
+  @override
+  String get unpaidAllMonths => 'Пардохтнашуда (ҳамаи моҳҳо)';
+
+  @override
+  String ofTotal(int count) {
+    return 'аз $count';
+  }
+
+  @override
+  String ofDue(String amount) {
+    return 'аз $amount';
+  }
+
+  @override
+  String topStore(String name) {
+    return 'Беҳтарин мағоза: $name';
+  }
+
+  @override
+  String get noSalesThisMonth => 'Дар ин моҳ ҳоло фурӯш нест';
+
+  @override
+  String get recentlyUpdated => 'Мағозаҳои охирин тағйирёфта';
+
+  @override
+  String get salesShare => 'Ҳиссаи фурӯш дар ин моҳ';
+
+  @override
+  String updatedOn(String date) {
+    return 'Тағйир: $date';
+  }
+
+  @override
+  String get storeComparisonTitle => 'Муқоисаи мағозаҳо — ин моҳ';
+
+  @override
+  String payrollYearTitle(String year) {
+    return 'Музди меҳнат дар $year';
+  }
+
+  @override
+  String get colDue => 'Ҳисобшуда';
+
+  @override
+  String get colPaid => 'Пардохтшуда';
+
+  @override
+  String get colRemainingShort => 'Боқимонда';
+
+  @override
+  String get colChange => 'Тағйир';
+
+  @override
+  String get colSales => 'Фурӯш';
+
+  @override
+  String get colMonth => 'Моҳ';
+
+  @override
+  String get colEmployees => 'Кормандон';
+
+  @override
+  String get prevYear => 'Соли гузашта';
+
+  @override
+  String get nextYear => 'Соли оянда';
+
+  @override
+  String get editProfile => 'Таҳрири профил';
+
+  @override
+  String get saveChanges => 'Нигоҳ доштан';
+
+  @override
+  String get profileSaved => 'Профил нигоҳ дошта шуд';
+
+  @override
+  String get changePassword => 'Иваз кардани парол';
+
+  @override
+  String get currentPassword => 'Пароли ҳозира';
+
+  @override
+  String get newPassword => 'Пароли нав';
+
+  @override
+  String get passwordChanged => 'Парол иваз шуд';
+
+  @override
+  String get changePhoto => 'Иваз кардани акс';
+
+  @override
+  String get photoUpdated => 'Акс нав шуд';
+
+  @override
+  String get apiServer => 'Сервер';
+
+  @override
+  String get apiOnline => 'API пайваст аст';
+
+  @override
+  String get apiOffline => 'API дастрас нест';
+
+  @override
+  String get openDocs => 'Ҳуҷҷатҳои API (Swagger)';
+
+  @override
+  String signedInAs(String email) {
+    return 'Шумо ҳамчун $email ворид шудед';
+  }
+
+  @override
+  String get salesLast7 => 'Фурӯш — 7 рӯзи охир';
+
+  @override
+  String get storesReported => 'Мағозаҳо бо фурӯши имрӯза';
+
+  @override
+  String storesReportedValue(int count, int total) {
+    return '$count аз $total мағоза';
+  }
+
+  @override
+  String get assistantNote =>
+      'Ҷавобҳо аз рақамҳои воқеии шумо сохта мешаванд. AI-и пурраро пас аз илова шудан дар сервер пайваст мекунем.';
+
+  @override
+  String get staffInStore => 'Кормандон';
+
+  @override
+  String get createdLabel => 'Сохта шуд:';
+
+  @override
+  String get addressLabel => 'Суроға:';
+
+  @override
+  String get searchEntries => 'Ҷустуҷӯ аз рӯи мағоза ё тавсиф…';
+
+  @override
+  String get today2 => 'Имрӯз';
 }

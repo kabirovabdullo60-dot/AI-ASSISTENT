@@ -5,7 +5,7 @@ import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../viewmodels/home_view_model.dart';
-import '../viewmodels/settings_view_model.dart';
+import '../viewmodels/auth_view_model.dart';
 import '../widgets/app_sidebar.dart';
 import '../widgets/responsive_layout.dart';
 import 'app_top_bar_view.dart';
@@ -38,7 +38,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final home = context.watch<HomeViewModel>();
-    final brand = context.select<SettingsViewModel, String>((s) => s.businessName);
+    final brand = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? 'Apex Suite');
     final page = KeyedSubtree(key: ValueKey(home.section), child: _page(home.section));
 
     Widget wide(bool extended) => Scaffold(

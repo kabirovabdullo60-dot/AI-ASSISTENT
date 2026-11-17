@@ -1,25 +1,26 @@
 import 'package:flutter/foundation.dart';
 
 import '../core/l10n/app_language.dart';
+import '../core/network/api_client.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
 import '../services/preferences_service.dart';
 
+/// Language + display currency (the business name lives in the profile on the server).
 class SettingsViewModel extends ChangeNotifier {
-  SettingsViewModel(this._prefs, {String? systemLanguage}) {
+  // ignore: prefer_initializing_formals
+  SettingsViewModel(this._prefs, {String? systemLanguage, ApiClient? api}) : _api = api {
     _apply(AppLanguage.fromCode(systemLanguage));
   }
 
   final PreferencesService _prefs;
-  String _businessName = 'Apex Suite';
+  final ApiClient? _api;
   Currency _currency = Currency.tjs;
   late AppLanguage _language;
 
-  String get businessName => _businessName;
   Currency get currency => _currency;
   AppLanguage get language => _language;
 
-  /// Loads the language the user picked last time.
   Future<void> load() async {
     final saved = await _prefs.loadLanguage();
     if (saved != null && saved != _language.name) {
@@ -38,13 +39,7 @@ class SettingsViewModel extends ChangeNotifier {
   void _apply(AppLanguage language) {
     _language = language;
     setFormatLanguage(language.name);
-  }
-
-  void setBusinessName(String name) {
-    final value = name.trim().isEmpty ? 'Apex Suite' : name.trim();
-    if (value == _businessName) return;
-    _businessName = value;
-    notifyListeners();
+    _api?.language = language.name;
   }
 
   void setCurrency(Currency currency) {

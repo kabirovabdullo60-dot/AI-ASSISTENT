@@ -1,42 +1,57 @@
 import '../core/utils/json.dart';
+import 'store_model.dart' show cleanPhone;
 
-/// GET /employees
+/// EmployeeOut — GET /api/employees.
 class EmployeeModel {
   const EmployeeModel({
     required this.id,
-    required this.name,
-    required this.role,
+    required this.fullName,
+    this.phone,
+    required this.position,
+    required this.storeId,
     required this.storeName,
-    required this.shift,
-    required this.isOnShift,
     required this.monthlySalary,
+    required this.hiredAt,
+    this.terminatedAt,
+    this.isActive = true,
+    this.monthsWorked = 0,
   });
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) => EmployeeModel(
     id: asString(json['id']),
-    name: asString(json['name']),
-    role: asString(json['role']),
+    fullName: asString(json['fullName']),
+    phone: json['phone'] == null ? null : asString(json['phone']),
+    position: asString(json['position']),
+    storeId: asString(json['storeId']),
     storeName: asString(json['storeName']),
-    shift: asString(json['shift']),
-    isOnShift: asBool(json['isOnShift']),
     monthlySalary: asDouble(json['monthlySalary']),
+    hiredAt: asDay(json['hiredAt']),
+    terminatedAt: asDayOrNull(json['terminatedAt']),
+    isActive: asString(json['status'], 'ACTIVE') == 'ACTIVE',
+    monthsWorked: asInt(json['monthsWorked']),
   );
 
   final String id;
-  final String name;
-  final String role;
+  final String fullName;
+  final String? phone;
+  final String position;
+  final String storeId;
   final String storeName;
-  final String shift;
-  final bool isOnShift;
   final double monthlySalary;
+  final DateTime hiredAt;
+  final DateTime? terminatedAt;
+  final bool isActive;
+  final int monthsWorked;
 
+  /// Body for POST /api/employees and PUT /api/employees/{id}.
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'role': role,
-    'storeName': storeName,
-    'shift': shift,
-    'isOnShift': isOnShift,
-    'monthlySalary': monthlySalary,
+    'fullName': fullName.trim(),
+    'phone': cleanPhone(phone),
+    'position': position.trim(),
+    'storeId': storeId,
+    'monthlySalary': money(monthlySalary),
+    'hiredAt': isoDay(hiredAt),
+    'terminatedAt': terminatedAt == null ? null : isoDay(terminatedAt!),
+    'status': isActive ? 'ACTIVE' : 'INACTIVE',
   };
 }

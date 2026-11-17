@@ -1175,4 +1175,419 @@ class AppLocalizationsEn extends AppLocalizations {
   String chartCashflow(String amount) {
     return 'Cashflow: $amount';
   }
+
+  @override
+  String get loading => 'Loading…';
+
+  @override
+  String get loginTitle => 'Welcome back';
+
+  @override
+  String get loginSubtitle =>
+      'Sign in to manage your stores, sales and payroll.';
+
+  @override
+  String get registerTitle => 'Create your business account';
+
+  @override
+  String get registerSubtitle =>
+      'One account = one business. You can add stores and staff after signing up.';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get fullName => 'Full name';
+
+  @override
+  String get phoneOptional => 'Phone (optional)';
+
+  @override
+  String get businessNameOptional => 'Business name (optional)';
+
+  @override
+  String get signIn => 'Sign in';
+
+  @override
+  String get createAccount => 'Create account';
+
+  @override
+  String get noAccount => 'Don\'t have an account? Create one';
+
+  @override
+  String get haveAccount => 'Already have an account? Sign in';
+
+  @override
+  String get invalidEmail => 'Enter a valid email';
+
+  @override
+  String get invalidPhone => 'Phone: 7–15 digits, e.g. +992901234567';
+
+  @override
+  String get errInvalidCredentials => 'Incorrect email or password.';
+
+  @override
+  String get errEmailTaken => 'An account with this email already exists.';
+
+  @override
+  String get errAccountDisabled => 'This account has been disabled.';
+
+  @override
+  String get errAccountLocked => 'Too many failed attempts. Try again later.';
+
+  @override
+  String get errSessionEnded => 'Your session has ended. Please sign in again.';
+
+  @override
+  String get errPermission => 'You do not have permission to do this.';
+
+  @override
+  String get errNotFound => 'Not found — it may have been deleted.';
+
+  @override
+  String get errConflict => 'This conflicts with existing data.';
+
+  @override
+  String errValidation(String fields) {
+    return 'Some fields are not valid: $fields';
+  }
+
+  @override
+  String get errValidationShort => 'Please check the fields.';
+
+  @override
+  String get errNetwork =>
+      'No connection to the server. Check the internet and try again.';
+
+  @override
+  String get errRateLimited =>
+      'Too many requests. Wait a moment and try again.';
+
+  @override
+  String get errServer => 'Server error. Try again later.';
+
+  @override
+  String get errStoreNameTaken => 'A store with this name already exists.';
+
+  @override
+  String get errStoreHasEmployees =>
+      'The store still has active employees. Move or deactivate them first.';
+
+  @override
+  String get errAlreadyPaid =>
+      'The salary for this month is already fully paid.';
+
+  @override
+  String get errExceedsRemaining =>
+      'The amount is larger than what remains for this month.';
+
+  @override
+  String get errNotEmployed => 'The employee did not work in this month.';
+
+  @override
+  String get errFutureDate => 'The date cannot be in the future.';
+
+  @override
+  String get errFuturePeriod => 'Salary can\'t be paid for a future month.';
+
+  @override
+  String get errEmploymentDates => 'The employment dates are invalid.';
+
+  @override
+  String get errDateRange => 'The date range is invalid.';
+
+  @override
+  String get errPasswordWeak => 'The password is too weak.';
+
+  @override
+  String get errCurrentPassword => 'The current password is incorrect.';
+
+  @override
+  String get errAvatarType => 'The photo must be JPEG, PNG or WebP.';
+
+  @override
+  String get errAvatarSize => 'The photo is too large.';
+
+  @override
+  String errUnknown(String code) {
+    return 'Something went wrong ($code).';
+  }
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get storeDescriptionHint => 'e.g. Flagship · 8 counters';
+
+  @override
+  String get editSale => 'Edit sale';
+
+  @override
+  String get deleteSaleTitle => 'Delete this sale?';
+
+  @override
+  String deleteSaleBody(String amount, String store, String date) {
+    return '$amount for $store on $date will be removed from reports.';
+  }
+
+  @override
+  String get saleUpdated => 'Sale updated';
+
+  @override
+  String get saleDeleted => 'Sale deleted';
+
+  @override
+  String get colActionsShort => '';
+
+  @override
+  String get addEmployee => 'Add employee';
+
+  @override
+  String get editEmployee => 'Edit employee';
+
+  @override
+  String get position => 'Position';
+
+  @override
+  String get monthlySalary => 'Monthly salary (TJS)';
+
+  @override
+  String get hiredAt => 'Hired on';
+
+  @override
+  String get terminatedAt => 'Left on (optional)';
+
+  @override
+  String get employeeActive => 'Employee is active';
+
+  @override
+  String get deleteEmployeeTitle => 'Delete employee?';
+
+  @override
+  String deleteEmployeeBody(String name) {
+    return '\"$name\" will be hidden. Salary history stays.';
+  }
+
+  @override
+  String employeeSaved(String name) {
+    return '$name saved';
+  }
+
+  @override
+  String employeeDeleted(String name) {
+    return '$name deleted';
+  }
+
+  @override
+  String hiredThisMonth(int count) {
+    return '$count hired this month';
+  }
+
+  @override
+  String get averageSalary => 'Average salary';
+
+  @override
+  String get byPosition => 'By position';
+
+  @override
+  String get selectStoreFirst => 'Add a store first';
+
+  @override
+  String get paymentDate => 'Payment date';
+
+  @override
+  String get noteOptional => 'Note (optional)';
+
+  @override
+  String get paymentCancelled => 'Payment cancelled';
+
+  @override
+  String get cancelPayment => 'Cancel payment';
+
+  @override
+  String get cancelPaymentTitle => 'Cancel this payment?';
+
+  @override
+  String workedDays(int count) {
+    return '$count days';
+  }
+
+  @override
+  String payFor(String month) {
+    return 'Payment for $month';
+  }
+
+  @override
+  String owedAllMonths(String amount) {
+    return 'Owed for all months: $amount';
+  }
+
+  @override
+  String get months => 'Months';
+
+  @override
+  String get payments => 'Payments';
+
+  @override
+  String get noPaymentsYet => 'No payments yet';
+
+  @override
+  String salesCount(int count) {
+    return '$count sales';
+  }
+
+  @override
+  String chartSales(int count) {
+    return 'Sales: $count';
+  }
+
+  @override
+  String get averageSale => 'Average sale';
+
+  @override
+  String get salesThisMonth => 'Sales this month';
+
+  @override
+  String get unpaidAllMonths => 'Unpaid (all months)';
+
+  @override
+  String ofTotal(int count) {
+    return 'of $count total';
+  }
+
+  @override
+  String ofDue(String amount) {
+    return 'of $amount due';
+  }
+
+  @override
+  String topStore(String name) {
+    return 'Top store: $name';
+  }
+
+  @override
+  String get noSalesThisMonth => 'No sales this month yet';
+
+  @override
+  String get recentlyUpdated => 'Recently updated stores';
+
+  @override
+  String get salesShare => 'Sales share this month';
+
+  @override
+  String updatedOn(String date) {
+    return 'Updated $date';
+  }
+
+  @override
+  String get storeComparisonTitle => 'Store comparison — this month';
+
+  @override
+  String payrollYearTitle(String year) {
+    return 'Payroll $year';
+  }
+
+  @override
+  String get colDue => 'Due';
+
+  @override
+  String get colPaid => 'Paid';
+
+  @override
+  String get colRemainingShort => 'Remaining';
+
+  @override
+  String get colChange => 'Change';
+
+  @override
+  String get colSales => 'Sales';
+
+  @override
+  String get colMonth => 'Month';
+
+  @override
+  String get colEmployees => 'Employees';
+
+  @override
+  String get prevYear => 'Previous year';
+
+  @override
+  String get nextYear => 'Next year';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get profileSaved => 'Profile saved';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get passwordChanged => 'Password changed';
+
+  @override
+  String get changePhoto => 'Change photo';
+
+  @override
+  String get photoUpdated => 'Photo updated';
+
+  @override
+  String get apiServer => 'Server';
+
+  @override
+  String get apiOnline => 'API connected';
+
+  @override
+  String get apiOffline => 'API offline';
+
+  @override
+  String get openDocs => 'API docs (Swagger)';
+
+  @override
+  String signedInAs(String email) {
+    return 'Signed in as $email';
+  }
+
+  @override
+  String get salesLast7 => 'Sales — last 7 days';
+
+  @override
+  String get storesReported => 'Stores with sales today';
+
+  @override
+  String storesReportedValue(int count, int total) {
+    return '$count of $total stores';
+  }
+
+  @override
+  String get assistantNote =>
+      'Answers use your real numbers. A full AI model can be connected when the backend adds it.';
+
+  @override
+  String get staffInStore => 'Staff';
+
+  @override
+  String get createdLabel => 'Created:';
+
+  @override
+  String get addressLabel => 'Address:';
+
+  @override
+  String get searchEntries => 'Search store or description…';
+
+  @override
+  String get today2 => 'Today';
 }

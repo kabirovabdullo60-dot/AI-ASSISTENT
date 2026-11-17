@@ -8,11 +8,12 @@ import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
-import '../models/disbursement_model.dart';
+import '../models/payment_model.dart';
 import '../models/payroll_model.dart';
 import '../viewmodels/home_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
+import '../viewmodels/stores_view_model.dart';
 import '../widgets/app_table.dart';
 import '../widgets/async_content.dart';
 import '../widgets/card_grid.dart';
@@ -32,10 +33,10 @@ class SalariesView extends StatelessWidget {
   const SalariesView({super.key});
 
   void _export(BuildContext context, PayrollViewModel vm) {
-    final csv = StringBuffer('Employee,Role,Store,Tenure months,Salary,Disbursed,Remaining,Status\n');
+    final csv = StringBuffer('Employee,Position,Store,Worked days,Due,Paid,Remaining,Status\n');
     for (final p in vm.items) {
       csv.writeln(
-        '"${p.employeeName}","${p.role}","${p.storeName}",${p.tenureMonths},${p.salary},${p.disbursed},${p.remaining},${p.status.label}',
+        '"${p.employeeName}","${p.role}","${p.storeName}",${p.workedDays},${p.salary},${p.disbursed},${p.remaining},${p.status.name.toUpperCase()}',
       );
     }
     Clipboard.setData(ClipboardData(text: csv.toString()));
@@ -236,12 +237,12 @@ class SalariesView extends StatelessWidget {
           Text(p.storeName),
         ],
       ),
-      StatusBadge(context.l10n.tenure(p.tenureMonths), tone: BadgeTone.info),
+      StatusBadge(context.l10n.workedDays(p.workedDays), tone: BadgeTone.info),
       money(p.salary),
       money(p.disbursed, color: p.status == PayStatus.paid ? AppColors.green : null),
       money(p.remaining, color: p.remaining > 0 ? AppColors.red : AppColors.muted),
       StatusBadge(context.l10n.payStatus(p.status), tone: tone, dot: true),
-      p.remaining > 0 && vm.isCurrentMonth
+      p.remaining > 0 && !vm.isFutureMonth
           ? FilledButton.icon(
               key: Key('pay-${p.id}'),
               style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
@@ -267,6 +268,7 @@ class _Filters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
+    final stores = context.watch<StoresViewModel>();
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -314,10 +316,10 @@ class _Filters extends StatelessWidget {
                 DropdownChip<String>(
                   key: const Key('payroll-store-filter'),
                   icon: Icons.storefront_outlined,
-                  label: vm.storeFilter ?? tr.allStoresCount(vm.storeNames.length),
+                  label: stores.nameOf(vm.storeFilter) ?? tr.allStoresCount(stores.stores.length),
                   value: vm.storeFilter ?? '',
                   onSelected: (s) => vm.setStoreFilter(s.isEmpty ? null : s),
-                  items: [('', tr.allStores), for (final s in vm.storeNames) (s, s)],
+                  items: [('', tr.allStores), for (final s in stores.ranked) (s.id, s.name)],
                 ),
                 SizedBox(
                   width: 280,
@@ -421,7 +423,7 @@ class _BudgetCard extends StatelessWidget {
 class _DisbursementsCard extends StatelessWidget {
   const _DisbursementsCard({required this.items, required this.currency});
 
-  final List<DisbursementModel> items;
+  final List<PaymentModel> items;
   final Currency currency;
 
   @override
@@ -452,10 +454,10 @@ class _DisbursementsCard extends StatelessWidget {
                       child: Row(
                         children: [
                           IconBox(
-                            d.method.startsWith('Bank') ? Icons.account_balance_outlined : Icons.payments_outlined,
+                            Icons.payments_outlined,
                             size: 30,
-                            color: d.part.isEmpty ? AppColors.green : AppColors.orange,
-                            background: d.part.isEmpty ? AppColors.greenSoft : AppColors.orangeSoft,
+                            color: d.status == PayStatus.paid ? AppColors.green : AppColors.orange,
+                            background: d.status == PayStatus.paid ? AppColors.greenSoft : AppColors.orangeSoft,
                           ),
                           const SizedBox(width: 10),
                           Expanded(
@@ -469,7 +471,7 @@ class _DisbursementsCard extends StatelessWidget {
                                   style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
                                 ),
                                 Text(
-                                  '${d.part.isEmpty ? tr.paymentMethod(d.method) : d.part} • ${d.reference}',
+                                  '${tr.payStatus(d.status)} • ${formatMonthYear(DateTime(d.year, d.month))}${(d.note ?? '').isEmpty ? '' : ' • ${d.note}'}',
                                   maxLines: 2,
                                   style: const TextStyle(fontSize: 11, color: AppColors.muted),
                                 ),
@@ -485,7 +487,7 @@ class _DisbursementsCard extends StatelessWidget {
                                 style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
                               ),
                               Text(
-                                '${formatRelativeDay(d.time)}, ${formatTime(d.time)}',
+                                formatRelativeDay(d.paymentDate),
                                 style: const TextStyle(fontSize: 11, color: AppColors.muted),
                               ),
                             ],

@@ -1,28 +1,39 @@
-import '../models/activity_model.dart';
+import '../core/utils/format.dart';
+import '../models/employees_report_model.dart';
+import '../models/sales_report_model.dart';
 import '../models/store_model.dart';
+import '../services/reports_service.dart';
+import '../services/sales_service.dart';
 import '../services/store_service.dart';
 import 'base_view_model.dart';
 
 enum StoreStatusFilter { all, active, inactive }
 
-enum StoreSort {
-  revenue('Highest Revenue'),
-  today("Today's Sales"),
-  name('Name A–Z');
+enum StoreSort { revenue, today, name }
 
-  const StoreSort(this.label);
-  final String label;
-}
-
-/// One row of "Regional Sales Distribution".
-typedef RegionShare = ({String region, int stores, int inactive, double sales, double share});
+/// Sales numbers of one store (from the reports).
+typedef StoreStats = ({
+  double today,
+  double week,
+  double month,
+  double? monthChange,
+  double share,
+  int rank,
+  int staff,
+});
 
 class StoresViewModel extends BaseViewModel {
-  StoresViewModel(this._service);
+  StoresViewModel(this._stores, this._sales, this._reports);
 
-  final StoreService _service;
-  List<StoreModel> _stores = const [];
-  List<ActivityModel> _log = const [];
+  final StoreService _stores;
+  final SalesService _sales;
+  final ReportsService _reports;
+
+  List<StoreModel> _list = const [];
+  SalesReportModel? _today;
+  SalesReportModel? _week;
+  SalesReportModel? _month;
+  EmployeesReportModel? _staff;
   bool _loaded = false;
   bool _isSaving = false;
   StoreStatusFilter _status = StoreStatusFilter.all;
@@ -30,53 +41,61 @@ class StoresViewModel extends BaseViewModel {
   bool _gridView = true;
   String _query = '';
 
-  List<StoreModel> get stores => _stores;
-  List<ActivityModel> get operationsLog => _log;
+  List<StoreModel> get stores => _list;
   bool get hasData => _loaded;
   bool get isSaving => _isSaving;
   StoreStatusFilter get statusFilter => _status;
   StoreSort get sort => _sort;
   bool get gridView => _gridView;
 
-  Iterable<StoreModel> get _active => _stores.where((s) => s.isActive);
-  int get activeCount => _active.length;
-  int get inactiveCount => _stores.length - activeCount;
-  double get operatingRatio => _stores.isEmpty ? 0 : activeCount / _stores.length;
-  double get totalSales => _stores.fold(0, (sum, s) => sum + s.monthlySales);
-  double get todayTotal => _stores.fold(0, (sum, s) => sum + s.todaySales);
-  int get workforce => _stores.fold(0, (sum, s) => sum + s.staffCount);
-  int get staffedBranches => _stores.where((s) => s.staffCount > 0).length;
+  int get activeCount => _list.where((s) => s.isActive).length;
+  int get inactiveCount => _list.length - activeCount;
+  double get operatingRatio => _list.isEmpty ? 0 : activeCount / _list.length;
+  double get todayTotal => _today?.totalAmount ?? 0;
+  double? get todayChange => _today?.changePercent;
+  double get monthTotal => _month?.totalAmount ?? 0;
+  double? get monthChange => _month?.changePercent;
+  int get workforce => _staff?.activeEmployees ?? 0;
+  int get staffedBranches => _staff?.byStore.where((r) => r.active > 0).length ?? 0;
 
-  /// Highest monthly sales first.
-  List<StoreModel> get ranked => List.of(_stores)..sort((a, b) => b.monthlySales.compareTo(a.monthlySales));
+  /// Stores of this month's comparison (share of sales), biggest first.
+  List<StoreSalesModel> get shares =>
+      List.of(_month?.stores ?? const <StoreSalesModel>[])..sort((a, b) => b.totalAmount.compareTo(a.totalAmount));
 
-  List<StoreModel> top(int n) => ranked.take(n).toList();
+  /// Recently created / changed stores (newest first).
+  List<StoreModel> get recentlyUpdated => (List.of(
+    _list,
+  )..sort((a, b) => (b.updatedAt ?? DateTime(2000)).compareTo(a.updatedAt ?? DateTime(2000)))).take(5).toList();
 
-  /// Share of all monthly sales, 0..1.
-  double shareOf(StoreModel store) => totalSales == 0 ? 0 : store.monthlySales / totalSales;
-
-  /// 1-based rank by monthly sales.
-  int rankOf(StoreModel store) => ranked.indexWhere((s) => s.id == store.id) + 1;
-
-  String? nameOf(String? id) {
-    for (final s in _stores) {
-      if (s.id == id) return s.name;
-    }
-    return null;
+  StoreStats statsOf(StoreModel s) {
+    final m = _month?.storeById(s.id);
+    return (
+      today: _today?.storeById(s.id)?.totalAmount ?? 0,
+      week: _week?.storeById(s.id)?.totalAmount ?? 0,
+      month: m?.totalAmount ?? 0,
+      monthChange: m?.changePercent,
+      share: (m?.sharePercent ?? 0) / 100,
+      rank: m?.rank ?? 0,
+      staff: _staff?.activeInStore(s.id) ?? 0,
+    );
   }
 
+  /// Highest monthly sales first.
+  List<StoreModel> get ranked => List.of(_list)..sort((a, b) => statsOf(b).month.compareTo(statsOf(a).month));
+
+  String? nameOf(String? id) => byId(id ?? '')?.name;
+
   StoreModel? byId(String id) {
-    for (final s in _stores) {
+    for (final s in _list) {
       if (s.id == id) return s;
     }
     return null;
   }
 
-  /// Stores after status filter, page search, top-bar search and sort.
   List<StoreModel> visible([String globalQuery = '']) {
     bool matches(StoreModel s, String q) =>
-        q.isEmpty || '${s.name} ${s.city} ${s.address} ${s.phone} ${s.type}'.toLowerCase().contains(q);
-    final list = _stores
+        q.isEmpty || '${s.name} ${s.address ?? ''} ${s.phone ?? ''} ${s.description ?? ''}'.toLowerCase().contains(q);
+    final list = _list
         .where(
           (s) => switch (_status) {
             StoreStatusFilter.all => true,
@@ -88,34 +107,13 @@ class StoresViewModel extends BaseViewModel {
         .toList();
     switch (_sort) {
       case StoreSort.revenue:
-        list.sort((a, b) => b.monthlySales.compareTo(a.monthlySales));
+        list.sort((a, b) => statsOf(b).month.compareTo(statsOf(a).month));
       case StoreSort.today:
-        list.sort((a, b) => b.todaySales.compareTo(a.todaySales));
+        list.sort((a, b) => statsOf(b).today.compareTo(statsOf(a).today));
       case StoreSort.name:
-        list.sort((a, b) => a.name.compareTo(b.name));
+        list.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     }
     return list;
-  }
-
-  List<StoreModel> filtered(String query) => visible(query);
-
-  List<RegionShare> get regions {
-    final map = <String, List<StoreModel>>{};
-    for (final s in _stores) {
-      map.putIfAbsent(s.region.isEmpty ? 'Other' : s.region, () => []).add(s);
-    }
-    final rows = [
-      for (final e in map.entries)
-        (
-          region: e.key,
-          stores: e.value.length,
-          inactive: e.value.where((s) => !s.isActive).length,
-          sales: e.value.fold<double>(0, (sum, s) => sum + s.monthlySales),
-          share: totalSales == 0 ? 0.0 : e.value.fold<double>(0, (sum, s) => sum + s.monthlySales) / totalSales,
-        ),
-    ];
-    rows.sort((a, b) => b.sales.compareTo(a.sales));
-    return rows;
   }
 
   void setStatusFilter(StoreStatusFilter v) {
@@ -139,39 +137,37 @@ class StoresViewModel extends BaseViewModel {
   }
 
   Future<void> load() => runTask(() async {
-    final (stores, log) = await (_service.fetchStores(), _service.fetchOperationsLog()).wait;
-    _stores = stores;
-    _log = log;
+    final now = DateTime.now();
+    final (stores, today, week, month, staff) = await (
+      _stores.fetchAll(),
+      _sales.daily(),
+      _sales.weekly(),
+      _reports.storeComparison(startDate: DateTime(now.year, now.month), endDate: dateOnly(now)),
+      _reports.employees(),
+    ).wait;
+    _list = stores;
+    _today = today;
+    _week = week;
+    _month = month;
+    _staff = staff;
     _loaded = true;
-  }, errorMessage: 'Could not load stores.');
+  });
 
-  /// Creates a store when [isNew], otherwise updates it. Returns `true` on success.
-  Future<bool> save(StoreModel store, {required bool isNew}) async {
-    if (_isSaving) return false;
+  /// Creates ([isNew]) or updates a store. Returns `null` or the error code.
+  Future<String?> save(StoreModel store, {required bool isNew}) async {
     _isSaving = true;
     notifySafe();
-    try {
-      final saved = isNew ? await _service.createStore(store) : await _service.updateStore(store);
-      _stores = isNew ? [..._stores, saved] : [for (final s in _stores) s.id == saved.id ? saved : s];
-      _log = await _service.fetchOperationsLog();
-      return true;
-    } catch (_) {
-      return false;
-    } finally {
-      _isSaving = false;
-      notifySafe();
-    }
+    final error = await runAction(() async {
+      final saved = isNew ? await _stores.create(store) : await _stores.update(store);
+      _list = isNew ? [..._list, saved] : [for (final s in _list) s.id == saved.id ? saved : s];
+    });
+    _isSaving = false;
+    notifySafe();
+    return error;
   }
 
-  Future<bool> delete(String id) async {
-    try {
-      await _service.deleteStore(id);
-      _stores = _stores.where((s) => s.id != id).toList();
-      _log = await _service.fetchOperationsLog();
-      notifySafe();
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
+  Future<String?> delete(String id) => runAction(() async {
+    await _stores.delete(id);
+    _list = _list.where((s) => s.id != id).toList();
+  });
 }

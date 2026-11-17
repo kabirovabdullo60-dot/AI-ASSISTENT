@@ -22,3 +22,22 @@ Map<String, dynamic> asJsonMap(Object? v) {
   final inner = v['data'];
   return inner is Map ? Map<String, dynamic>.from(inner) : Map<String, dynamic>.from(v);
 }
+
+/// Date-only "2026-11-17" (business calendar, no time zone shift).
+DateTime asDay(Object? v) {
+  final s = '${v ?? ''}';
+  final d = DateTime.tryParse(s.length >= 10 ? s.substring(0, 10) : s);
+  return d == null ? DateTime.now() : DateTime(d.year, d.month, d.day);
+}
+
+DateTime? asDayOrNull(Object? v) => v == null ? null : asDay(v);
+
+/// 2026-11-17 → "2026-11-17"
+String isoDay(DateTime d) =>
+    '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+/// Money is sent to the backend as a decimal string: 1250.5 → "1250.50".
+String money(double v) => v.toStringAsFixed(2);
+
+/// Nullable number (e.g. `changePercent` is null when there is nothing to compare).
+double? asDoubleOrNull(Object? v) => v == null ? null : asDouble(v);

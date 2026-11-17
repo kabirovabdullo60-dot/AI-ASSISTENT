@@ -1,26 +1,25 @@
 import '../core/utils/format.dart';
+import '../models/chart_point_model.dart';
+import '../models/page_model.dart';
 import '../models/sale_model.dart';
+import '../models/sales_report_model.dart';
 import '../services/sales_service.dart';
 import 'base_view_model.dart';
 
-enum SalesRange {
-  today('Today'),
-  week('This Week'),
-  month('This Month'),
-  custom('Custom Range');
+enum SalesRange { today, week, month, custom }
 
-  const SalesRange(this.label);
-  final String label;
-}
-
+/// Sales page. The list is paged on the server (`?page=&limit=`).
 class SalesViewModel extends BaseViewModel {
   SalesViewModel(this._service);
 
   static const pageSize = 6;
 
   final SalesService _service;
-  List<SaleModel> _sales = const [];
-  bool _loaded = false;
+  PageModel<SaleModel>? _page;
+  double? _previousTotal;
+  SalesReportModel? _today;
+  SalesReportModel? _week;
+  SalesReportModel? _month;
   bool _isSaving = false;
   SaleModel? _lastSaved;
   String? _storeId;
@@ -28,118 +27,129 @@ class SalesViewModel extends BaseViewModel {
   DateTime? _customFrom;
   DateTime? _customTo;
   String _query = '';
-  int _page = 0;
+  int _pageIndex = 0;
   DateTime _updatedAt = DateTime.now();
 
-  List<SaleModel> get sales => _sales;
-  bool get hasData => _loaded;
+  bool get hasData => _page != null;
   bool get isSaving => _isSaving;
-
-  /// The entry shown in the green "Success" banner.
   SaleModel? get lastSaved => _lastSaved;
   String? get storeFilter => _storeId;
   SalesRange get range => _range;
   DateTime? get customFrom => _customFrom;
   DateTime? get customTo => _customTo;
-  int get page => _page;
+  int get page => _pageIndex;
   DateTime get updatedAt => _updatedAt;
 
-  double get total => _sales.fold(0, (sum, s) => sum + s.amount);
-  double get averageTicket => _sales.isEmpty ? 0 : total / _sales.length;
+  double get todayTotal => _today?.totalAmount ?? 0;
+  double get monthTotal => _month?.totalAmount ?? 0;
 
-  double get todayTotal => _sum(_sales.where((s) => isSameDay(s.date, DateTime.now())));
+  /// Rows of the current page (page search + top-bar search applied on this page).
+  List<SaleModel> filtered([String globalQuery = '']) => (_page?.items ?? const <SaleModel>[])
+      .where((s) => _query.isEmpty || s.searchText.contains(_query))
+      .where((s) => globalQuery.isEmpty || s.searchText.contains(globalQuery))
+      .toList();
 
-  double get monthTotal {
-    final now = DateTime.now();
-    return _sum(_sales.where((s) => s.date.year == now.year && s.date.month == now.month));
+  /// Total of ALL entries in the filter (from the server).
+  double get filteredTotal => _page?.totalAmount ?? 0;
+  int get entryCount => _page?.total ?? 0;
+  int get pageCount => (_page?.pages ?? 1) < 1 ? 1 : _page!.pages;
+
+  double? changeVsPrevious() {
+    final prev = _previousTotal;
+    if (prev == null || prev == 0) return null;
+    return percentChange(filteredTotal, prev);
   }
 
-  /// [from, to) of the selected range.
-  (DateTime, DateTime) _bounds(SalesRange range) {
+  /// Last 7 days (from /api/sales/weekly).
+  List<ChartPointModel> get last7Days {
     final today = dateOnly(DateTime.now());
-    final tomorrow = today.add(const Duration(days: 1));
-    return switch (range) {
-      SalesRange.today => (today, tomorrow),
-      SalesRange.week => (today.subtract(const Duration(days: 6)), tomorrow),
-      SalesRange.month => (DateTime(today.year, today.month), tomorrow),
-      SalesRange.custom => (dateOnly(_customFrom ?? today), dateOnly(_customTo ?? today).add(const Duration(days: 1))),
+    final byDate = {for (final d in _week?.byDay ?? const <DaySalesModel>[]) dateOnly(d.date): d};
+    return [
+      for (var i = 6; i >= 0; i--)
+        () {
+          final day = today.subtract(Duration(days: i));
+          return ChartPointModel(
+            date: day,
+            revenue: byDate[day]?.totalAmount ?? 0,
+            count: byDate[day]?.salesCount ?? 0,
+          );
+        }(),
+    ];
+  }
+
+  /// Stores that already have a sale today.
+  int get storesReportedToday => _today?.stores.where((s) => s.salesCount > 0).length ?? 0;
+
+  (DateTime, DateTime) _bounds() {
+    final today = dateOnly(DateTime.now());
+    return switch (_range) {
+      SalesRange.today => (today, today),
+      SalesRange.week => (today.subtract(const Duration(days: 6)), today),
+      SalesRange.month => (DateTime(today.year, today.month), today),
+      SalesRange.custom => (dateOnly(_customFrom ?? today), dateOnly(_customTo ?? today)),
     };
   }
 
-  Iterable<SaleModel> _inRange(DateTime from, DateTime to) =>
-      _sales.where((s) => !s.date.isBefore(from) && s.date.isBefore(to) && (_storeId == null || s.storeId == _storeId));
-
-  /// Entries after store, date range, page search and top-bar search.
-  List<SaleModel> filtered([String globalQuery = '']) {
-    final (from, to) = _bounds(_range);
-    return _inRange(from, to)
-        .where((s) => (_query.isEmpty || s.searchText.contains(_query)))
-        .where((s) => globalQuery.isEmpty || s.searchText.contains(globalQuery))
-        .toList();
-  }
-
-  double filteredTotal([String globalQuery = '']) => _sum(filtered(globalQuery));
-
-  /// Change vs the same-length period right before; `null` if there is nothing to compare.
-  double? changeVsPrevious() {
-    final (from, to) = _bounds(_range);
-    final length = to.difference(from);
-    final prev = _sum(_inRange(from.subtract(length), from));
-    if (prev == 0) return null;
-    return percentChange(_sum(_inRange(from, to)), prev);
-  }
-
-  int pageCount(int itemCount) => itemCount == 0 ? 1 : (itemCount / pageSize).ceil();
-
-  List<SaleModel> pageItems(List<SaleModel> all) {
-    final start = (_page * pageSize).clamp(0, all.length);
-    return all.sublist(start, (start + pageSize).clamp(0, all.length));
-  }
-
-  /// Today's sales per hour from 08:00 to 22:00 (15 values).
-  List<double> get hourlyToday {
+  Future<void> load() => runTask(() async {
     final now = DateTime.now();
-    final hours = List<double>.filled(15, 0);
-    for (final s in _sales.where((s) => isSameDay(s.date, now))) {
-      final h = s.date.hour - 8;
-      if (h >= 0 && h < hours.length) hours[h] += s.amount;
-    }
-    return hours;
+    final (today, week, month) = await (
+      _service.daily(),
+      _service.weekly(),
+      _service.monthly(month: now.month, year: now.year),
+    ).wait;
+    _today = today;
+    _week = week;
+    _month = month;
+    await _loadPage();
+  });
+
+  Future<void> _loadPage() async {
+    final (from, to) = _bounds();
+    final days = to.difference(from).inDays + 1;
+    final (page, previous) = await (
+      _service.list(storeId: _storeId, startDate: from, endDate: to, page: _pageIndex + 1, limit: pageSize),
+      _service.list(
+        storeId: _storeId,
+        startDate: from.subtract(Duration(days: days)),
+        endDate: from.subtract(const Duration(days: 1)),
+        limit: 1,
+      ),
+    ).wait;
+    _page = page;
+    _previousTotal = previous.totalAmount;
+    _updatedAt = DateTime.now();
   }
 
-  /// Stores that already sent today's entry.
-  int get storesSyncedToday =>
-      _sales.where((s) => isSameDay(s.date, DateTime.now())).map((s) => s.storeId).toSet().length;
+  Future<void> _reloadPage() => runTask(_loadPage);
 
   void setStoreFilter(String? storeId) {
     _storeId = storeId;
-    _page = 0;
-    notifySafe();
+    _pageIndex = 0;
+    _reloadPage();
   }
 
   void setRange(SalesRange range) {
     _range = range;
-    _page = 0;
-    notifySafe();
+    _pageIndex = 0;
+    _reloadPage();
   }
 
   void setCustomRange(DateTime from, DateTime to) {
     _customFrom = from;
     _customTo = to;
     _range = SalesRange.custom;
-    _page = 0;
-    notifySafe();
+    _pageIndex = 0;
+    _reloadPage();
   }
 
   void setQuery(String v) {
     _query = v.trim().toLowerCase();
-    _page = 0;
     notifySafe();
   }
 
   void goToPage(int page) {
-    _page = page;
-    notifySafe();
+    _pageIndex = page;
+    _reloadPage();
   }
 
   void dismissBanner() {
@@ -147,43 +157,55 @@ class SalesViewModel extends BaseViewModel {
     notifySafe();
   }
 
-  Future<void> load() => runTask(() async {
-    _sales = await _service.fetchSales();
-    _loaded = true;
-    _updatedAt = DateTime.now();
-  }, errorMessage: 'Could not load sales.');
-
-  /// Returns `true` when the entry was saved.
-  Future<bool> recordSale({
+  /// POST /api/sales. Returns `null` or the error code.
+  Future<String?> recordSale({
     required String storeId,
     required double amount,
     DateTime? date,
-    BalanceSplit split = BalanceSplit.balanced,
-    String notes = '',
-  }) async {
-    if (_isSaving || amount <= 0) return false;
+    String description = '',
+  }) => _save(() async {
+    _lastSaved = await _service.create(
+      storeId: storeId,
+      amount: amount,
+      saleDate: date ?? DateTime.now(),
+      description: description,
+    );
+  });
+
+  /// PUT /api/sales/{id}.
+  Future<String?> updateSale(
+    SaleModel sale, {
+    required String storeId,
+    required double amount,
+    required DateTime date,
+    String description = '',
+  }) => _save(() async {
+    await _service.update(sale.id, storeId: storeId, amount: amount, saleDate: date, description: description);
+  });
+
+  /// DELETE /api/sales/{id}.
+  Future<String?> deleteSale(SaleModel sale) => _save(() => _service.delete(sale.id));
+
+  Future<String?> _save(Future<void> Function() action) async {
+    if (_isSaving) return 'BUSY';
     _isSaving = true;
     notifySafe();
-    try {
-      final sale = await _service.recordSale(
-        storeId: storeId,
-        amount: amount,
-        date: date ?? DateTime.now(),
-        split: split,
-        notes: notes.trim(),
-      );
-      _sales = [sale, ..._sales]..sort((a, b) => b.date.compareTo(a.date));
-      _lastSaved = sale;
-      _page = 0;
-      _updatedAt = DateTime.now();
-      return true;
-    } catch (_) {
-      return false;
-    } finally {
-      _isSaving = false;
-      notifySafe();
-    }
+    final error = await runAction(() async {
+      await action();
+      _pageIndex = 0;
+      final now = DateTime.now();
+      final (today, week, month) = await (
+        _service.daily(),
+        _service.weekly(),
+        _service.monthly(month: now.month, year: now.year),
+      ).wait;
+      _today = today;
+      _week = week;
+      _month = month;
+      await _loadPage();
+    });
+    _isSaving = false;
+    notifySafe();
+    return error;
   }
-
-  static double _sum(Iterable<SaleModel> list) => list.fold(0, (sum, s) => sum + s.amount);
 }

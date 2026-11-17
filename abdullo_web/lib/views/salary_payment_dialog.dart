@@ -9,7 +9,7 @@ import '../models/payroll_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 
-/// "Record Salary Payment" → POST /payroll/{id}/payments.
+/// "Record Salary Payment" → POST /api/payroll {employeeId, amount, month, year, paymentDate, note}.
 /// With [payroll] the employee is fixed, otherwise the user picks one who is still owed money.
 class SalaryPaymentDialog extends StatefulWidget {
   const SalaryPaymentDialog({super.key, this.payroll});
@@ -26,18 +26,19 @@ class SalaryPaymentDialog extends StatefulWidget {
 }
 
 class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
-  static const _methods = ['Bank Transfer', 'Cash Disbursement'];
-
   final _formKey = GlobalKey<FormState>();
-  late String? _payrollId = widget.payroll?.id;
+  late String? _employeeId = widget.payroll?.employeeId;
   late final _amount = TextEditingController(
-    text: widget.payroll == null ? '' : widget.payroll!.remaining.round().toString(),
+    text: widget.payroll == null ? '' : widget.payroll!.remaining.toStringAsFixed(2),
   );
-  String _method = _methods.first;
+  final _note = TextEditingController();
+  DateTime _date = DateTime.now();
+  bool _amountTouched = false;
 
   @override
   void dispose() {
     _amount.dispose();
+    _note.dispose();
     super.dispose();
   }
 
@@ -45,18 +46,20 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
     if (!_formKey.currentState!.validate()) return;
     final tr = context.l10n;
     final amount = double.parse(_amount.text.trim());
-    final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     final dashboard = context.read<DashboardViewModel>();
-    final ok = await context.read<PayrollViewModel>().recordPayment(p.id, amount, method: _method);
+    final error = await context.read<PayrollViewModel>().recordPayment(
+      p.employeeId,
+      amount,
+      paymentDate: _date,
+      note: _note.text,
+    );
     if (!mounted) return;
-    if (ok) {
+    if (error == null) {
       dashboard.load();
       navigator.pop();
     }
-    messenger.showSnackBar(
-      SnackBar(content: Text(ok ? tr.paidTo('${formatAmount(amount)} TJS', p.employeeName) : tr.paymentFailed)),
-    );
+    showResult(context, error, success: tr.paidTo('${formatAmount(amount)} TJS', p.employeeName));
   }
 
   @override
@@ -64,7 +67,10 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
     final tr = context.l10n;
     final vm = context.watch<PayrollViewModel>();
     final owed = vm.items.where((p) => p.remaining > 0).toList();
-    final selected = _payrollId == null ? (owed.isEmpty ? null : owed.first) : vm.byId(_payrollId!);
+    final selected = _employeeId == null ? (owed.isEmpty ? null : owed.first) : vm.byId(_employeeId!);
+    if (selected != null && widget.payroll == null && !_amountTouched && _amount.text.isEmpty) {
+      _amount.text = selected.remaining.toStringAsFixed(2);
+    }
 
     return AlertDialog(
       title: Text(tr.recordSalaryPayment),
@@ -74,69 +80,103 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
             ? Text(tr.everyonePaid)
             : Form(
                 key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (widget.payroll == null)
-                      DropdownButtonFormField<String>(
-                        key: const Key('payment-employee'),
-                        initialValue: selected.id,
-                        isExpanded: true,
-                        decoration: InputDecoration(labelText: tr.employee),
-                        items: [
-                          for (final p in owed)
-                            DropdownMenuItem(
-                              value: p.id,
-                              child: Text(
-                                tr.owed(p.employeeName, '${formatAmount(p.remaining)} TJS'),
-                                overflow: TextOverflow.ellipsis,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        tr.payFor(formatMonthYear(vm.month)),
+                        style: const TextStyle(color: AppColors.orange, fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 8),
+                      if (widget.payroll == null)
+                        DropdownButtonFormField<String>(
+                          key: const Key('payment-employee'),
+                          initialValue: selected.employeeId,
+                          isExpanded: true,
+                          decoration: InputDecoration(labelText: tr.employee),
+                          items: [
+                            for (final p in owed)
+                              DropdownMenuItem(
+                                value: p.employeeId,
+                                child: Text(
+                                  tr.owed(p.employeeName, '${formatAmount(p.remaining)} TJS'),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            ),
-                        ],
-                        onChanged: (id) => setState(() {
-                          _payrollId = id;
-                          final p = id == null ? null : vm.byId(id);
-                          if (p != null) _amount.text = p.remaining.round().toString();
-                        }),
-                      )
-                    else
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(selected.employeeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                        subtitle: Text('${selected.role} · ${selected.storeName}'),
+                          ],
+                          onChanged: (id) => setState(() {
+                            _employeeId = id;
+                            final p = id == null ? null : vm.byId(id);
+                            if (p != null) _amount.text = p.remaining.toStringAsFixed(2);
+                          }),
+                        )
+                      else
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(selected.employeeName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                          subtitle: Text('${selected.role} · ${selected.storeName}'),
+                        ),
+                      const SizedBox(height: 8),
+                      Text(
+                        tr.salarySummary(
+                          '${formatAmount(selected.salary)} TJS',
+                          '${formatAmount(selected.disbursed)} TJS',
+                          '${formatAmount(selected.remaining)} TJS',
+                        ),
+                        style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
                       ),
-                    const SizedBox(height: 8),
-                    Text(
-                      tr.salarySummary(
-                        '${formatAmount(selected.salary)} TJS',
-                        '${formatAmount(selected.disbursed)} TJS',
-                        '${formatAmount(selected.remaining)} TJS',
+                      const SizedBox(height: 14),
+                      TextFormField(
+                        key: const Key('payment-amount'),
+                        controller: _amount,
+                        onChanged: (_) => _amountTouched = true,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d{0,12}(\.\d{0,2})?'))],
+                        decoration: InputDecoration(
+                          labelText: tr.amountTjs,
+                          prefixIcon: const Icon(Icons.payments_outlined),
+                        ),
+                        validator: (v) {
+                          final n = double.tryParse(v?.trim() ?? '');
+                          if (n == null || n <= 0) return tr.enterAmount;
+                          if (n > selected.remaining + 0.001) {
+                            return tr.maxAmount('${formatAmount(selected.remaining)} TJS');
+                          }
+                          return null;
+                        },
                       ),
-                      style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
-                    ),
-                    const SizedBox(height: 14),
-                    TextFormField(
-                      key: const Key('payment-amount'),
-                      controller: _amount,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
-                      decoration: InputDecoration(labelText: tr.amountTjs, prefixIcon: Icon(Icons.payments_outlined)),
-                      validator: (v) {
-                        final n = double.tryParse(v?.trim() ?? '');
-                        if (n == null || n <= 0) return tr.enterAmount;
-                        if (n > selected.remaining) return tr.maxAmount('${formatAmount(selected.remaining)} TJS');
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 14),
-                    SegmentedButton<String>(
-                      showSelectedIcon: false,
-                      segments: [for (final m in _methods) ButtonSegment(value: m, label: Text(tr.paymentMethod(m)))],
-                      selected: {_method},
-                      onSelectionChanged: (s) => setState(() => _method = s.first),
-                    ),
-                  ],
+                      const SizedBox(height: 12),
+                      InkWell(
+                        key: const Key('payment-date'),
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () async {
+                          final d = await showDatePicker(
+                            context: context,
+                            initialDate: _date,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime.now(),
+                          );
+                          if (d != null) setState(() => _date = d);
+                        },
+                        child: InputDecorator(
+                          decoration: InputDecoration(
+                            labelText: tr.paymentDate,
+                            suffixIcon: const Icon(Icons.calendar_today_outlined, size: 18),
+                          ),
+                          child: Text(formatNumericDate(_date)),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        key: const Key('payment-note'),
+                        controller: _note,
+                        maxLength: 500,
+                        decoration: InputDecoration(labelText: tr.noteOptional, counterText: ''),
+                      ),
+                    ],
+                  ),
                 ),
               ),
       ),

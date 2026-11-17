@@ -1,36 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
 import '../core/l10n/app_language.dart';
+import '../core/l10n/l10n.dart';
+import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
+import '../viewmodels/auth_view_model.dart';
+import '../viewmodels/dashboard_view_model.dart';
+import '../viewmodels/home_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
 
-class SettingsView extends StatefulWidget {
+class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
-
-  @override
-  State<SettingsView> createState() => _SettingsViewState();
-}
-
-class _SettingsViewState extends State<SettingsView> {
-  late final TextEditingController _name = TextEditingController(text: context.read<SettingsViewModel>().businessName);
-
-  @override
-  void dispose() {
-    _name.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final vm = context.watch<SettingsViewModel>();
+    final business = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? '');
+    final online = context.select<DashboardViewModel, bool?>((d) => d.apiOnline);
 
     return PageBody(
       title: tr.navSettings,
@@ -47,17 +40,18 @@ class _SettingsViewState extends State<SettingsView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextField(
-                        key: const Key('business-name'),
-                        controller: _name,
-                        decoration: InputDecoration(
-                          labelText: tr.businessName,
-                          prefixIcon: Icon(Icons.storefront_outlined),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(Icons.storefront_outlined),
+                        title: Text(tr.businessName),
+                        subtitle: Text(business),
+                        trailing: TextButton(
+                          onPressed: () => context.read<HomeViewModel>().select(AppSection.profile),
+                          child: Text(tr.edit),
                         ),
-                        onChanged: vm.setBusinessName,
                       ),
-                      const SizedBox(height: 16),
-                      Text(tr.currency, style: TextStyle(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 8),
+                      Text(tr.currency, style: const TextStyle(fontWeight: FontWeight.w600)),
                       const SizedBox(height: 8),
                       SegmentedButton<Currency>(
                         key: const Key('settings-currency'),
@@ -84,28 +78,35 @@ class _SettingsViewState extends State<SettingsView> {
                 const SizedBox(height: 16),
                 SectionCard(
                   title: tr.backendConnection,
-                  badge: ApiConstants.useMock
-                      ? StatusBadge(tr.demoData, tone: BadgeTone.warning, dot: true)
-                      : const StatusBadge('API', tone: BadgeTone.positive, dot: true),
-                  subtitle: ApiConstants.useMock ? tr.demoNote : ApiConstants.baseUrl,
+                  badge: online == null
+                      ? null
+                      : StatusBadge(
+                          online ? tr.apiOnline : tr.apiOffline,
+                          tone: online ? BadgeTone.positive : BadgeTone.negative,
+                          dot: true,
+                        ),
+                  subtitle: '${tr.apiServer}: ${ApiConstants.baseUrl}\n${tr.openDocs}: ${ApiConstants.docsUrl}',
                   child: Column(
                     children: [
                       for (final (method, path, purpose) in ApiConstants.endpointList)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: 52,
-                                child: StatusBadge(method, tone: method == 'GET' ? BadgeTone.info : BadgeTone.warning),
+                                width: 104,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: StatusBadge(
+                                    method,
+                                    tone: method == 'GET' ? BadgeTone.info : BadgeTone.warning,
+                                  ),
+                                ),
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Text(
-                                  path,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12.5),
-                                ),
+                                child: Text(path, style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
                               ),
                               const SizedBox(width: 8),
                               Flexible(

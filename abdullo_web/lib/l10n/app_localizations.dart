@@ -2109,6 +2109,744 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cashflow: {amount}'**
   String chartCashflow(String amount);
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get loading;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get loginTitle;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to manage your stores, sales and payroll.'**
+  String get loginSubtitle;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your business account'**
+  String get registerTitle;
+
+  /// No description provided for @registerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One account = one business. You can add stores and staff after signing up.'**
+  String get registerSubtitle;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get emailLabel;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get fullName;
+
+  /// No description provided for @phoneOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone (optional)'**
+  String get phoneOptional;
+
+  /// No description provided for @businessNameOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Business name (optional)'**
+  String get businessNameOptional;
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get signIn;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get createAccount;
+
+  /// No description provided for @noAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Create one'**
+  String get noAccount;
+
+  /// No description provided for @haveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign in'**
+  String get haveAccount;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email'**
+  String get invalidEmail;
+
+  /// No description provided for @invalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone: 7–15 digits, e.g. +992901234567'**
+  String get invalidPhone;
+
+  /// No description provided for @errInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password.'**
+  String get errInvalidCredentials;
+
+  /// No description provided for @errEmailTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'An account with this email already exists.'**
+  String get errEmailTaken;
+
+  /// No description provided for @errAccountDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been disabled.'**
+  String get errAccountDisabled;
+
+  /// No description provided for @errAccountLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many failed attempts. Try again later.'**
+  String get errAccountLocked;
+
+  /// No description provided for @errSessionEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has ended. Please sign in again.'**
+  String get errSessionEnded;
+
+  /// No description provided for @errPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to do this.'**
+  String get errPermission;
+
+  /// No description provided for @errNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Not found — it may have been deleted.'**
+  String get errNotFound;
+
+  /// No description provided for @errConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'This conflicts with existing data.'**
+  String get errConflict;
+
+  /// No description provided for @errValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Some fields are not valid: {fields}'**
+  String errValidation(String fields);
+
+  /// No description provided for @errValidationShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the fields.'**
+  String get errValidationShort;
+
+  /// No description provided for @errNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection to the server. Check the internet and try again.'**
+  String get errNetwork;
+
+  /// No description provided for @errRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Wait a moment and try again.'**
+  String get errRateLimited;
+
+  /// No description provided for @errServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Server error. Try again later.'**
+  String get errServer;
+
+  /// No description provided for @errStoreNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'A store with this name already exists.'**
+  String get errStoreNameTaken;
+
+  /// No description provided for @errStoreHasEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'The store still has active employees. Move or deactivate them first.'**
+  String get errStoreHasEmployees;
+
+  /// No description provided for @errAlreadyPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'The salary for this month is already fully paid.'**
+  String get errAlreadyPaid;
+
+  /// No description provided for @errExceedsRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount is larger than what remains for this month.'**
+  String get errExceedsRemaining;
+
+  /// No description provided for @errNotEmployed.
+  ///
+  /// In en, this message translates to:
+  /// **'The employee did not work in this month.'**
+  String get errNotEmployed;
+
+  /// No description provided for @errFutureDate.
+  ///
+  /// In en, this message translates to:
+  /// **'The date cannot be in the future.'**
+  String get errFutureDate;
+
+  /// No description provided for @errFuturePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary can\'t be paid for a future month.'**
+  String get errFuturePeriod;
+
+  /// No description provided for @errEmploymentDates.
+  ///
+  /// In en, this message translates to:
+  /// **'The employment dates are invalid.'**
+  String get errEmploymentDates;
+
+  /// No description provided for @errDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'The date range is invalid.'**
+  String get errDateRange;
+
+  /// No description provided for @errPasswordWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'The password is too weak.'**
+  String get errPasswordWeak;
+
+  /// No description provided for @errCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'The current password is incorrect.'**
+  String get errCurrentPassword;
+
+  /// No description provided for @errAvatarType.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo must be JPEG, PNG or WebP.'**
+  String get errAvatarType;
+
+  /// No description provided for @errAvatarSize.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo is too large.'**
+  String get errAvatarSize;
+
+  /// No description provided for @errUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong ({code}).'**
+  String errUnknown(String code);
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @storeDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Flagship · 8 counters'**
+  String get storeDescriptionHint;
+
+  /// No description provided for @editSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit sale'**
+  String get editSale;
+
+  /// No description provided for @deleteSaleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this sale?'**
+  String get deleteSaleTitle;
+
+  /// No description provided for @deleteSaleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} for {store} on {date} will be removed from reports.'**
+  String deleteSaleBody(String amount, String store, String date);
+
+  /// No description provided for @saleUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale updated'**
+  String get saleUpdated;
+
+  /// No description provided for @saleDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale deleted'**
+  String get saleDeleted;
+
+  /// No description provided for @colActionsShort.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get colActionsShort;
+
+  /// No description provided for @addEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Add employee'**
+  String get addEmployee;
+
+  /// No description provided for @editEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit employee'**
+  String get editEmployee;
+
+  /// No description provided for @position.
+  ///
+  /// In en, this message translates to:
+  /// **'Position'**
+  String get position;
+
+  /// No description provided for @monthlySalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly salary (TJS)'**
+  String get monthlySalary;
+
+  /// No description provided for @hiredAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Hired on'**
+  String get hiredAt;
+
+  /// No description provided for @terminatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Left on (optional)'**
+  String get terminatedAt;
+
+  /// No description provided for @employeeActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee is active'**
+  String get employeeActive;
+
+  /// No description provided for @deleteEmployeeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete employee?'**
+  String get deleteEmployeeTitle;
+
+  /// No description provided for @deleteEmployeeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{name}\" will be hidden. Salary history stays.'**
+  String deleteEmployeeBody(String name);
+
+  /// No description provided for @employeeSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} saved'**
+  String employeeSaved(String name);
+
+  /// No description provided for @employeeDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} deleted'**
+  String employeeDeleted(String name);
+
+  /// No description provided for @hiredThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} hired this month'**
+  String hiredThisMonth(int count);
+
+  /// No description provided for @averageSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Average salary'**
+  String get averageSalary;
+
+  /// No description provided for @byPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'By position'**
+  String get byPosition;
+
+  /// No description provided for @selectStoreFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a store first'**
+  String get selectStoreFirst;
+
+  /// No description provided for @paymentDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment date'**
+  String get paymentDate;
+
+  /// No description provided for @noteOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get noteOptional;
+
+  /// No description provided for @paymentCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment cancelled'**
+  String get paymentCancelled;
+
+  /// No description provided for @cancelPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel payment'**
+  String get cancelPayment;
+
+  /// No description provided for @cancelPaymentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this payment?'**
+  String get cancelPaymentTitle;
+
+  /// No description provided for @workedDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days'**
+  String workedDays(int count);
+
+  /// No description provided for @payFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment for {month}'**
+  String payFor(String month);
+
+  /// No description provided for @owedAllMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'Owed for all months: {amount}'**
+  String owedAllMonths(String amount);
+
+  /// No description provided for @months.
+  ///
+  /// In en, this message translates to:
+  /// **'Months'**
+  String get months;
+
+  /// No description provided for @payments.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get payments;
+
+  /// No description provided for @noPaymentsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments yet'**
+  String get noPaymentsYet;
+
+  /// No description provided for @salesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} sales'**
+  String salesCount(int count);
+
+  /// No description provided for @chartSales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales: {count}'**
+  String chartSales(int count);
+
+  /// No description provided for @averageSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Average sale'**
+  String get averageSale;
+
+  /// No description provided for @salesThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales this month'**
+  String get salesThisMonth;
+
+  /// No description provided for @unpaidAllMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid (all months)'**
+  String get unpaidAllMonths;
+
+  /// No description provided for @ofTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'of {count} total'**
+  String ofTotal(int count);
+
+  /// No description provided for @ofDue.
+  ///
+  /// In en, this message translates to:
+  /// **'of {amount} due'**
+  String ofDue(String amount);
+
+  /// No description provided for @topStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Top store: {name}'**
+  String topStore(String name);
+
+  /// No description provided for @noSalesThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'No sales this month yet'**
+  String get noSalesThisMonth;
+
+  /// No description provided for @recentlyUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently updated stores'**
+  String get recentlyUpdated;
+
+  /// No description provided for @salesShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales share this month'**
+  String get salesShare;
+
+  /// No description provided for @updatedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {date}'**
+  String updatedOn(String date);
+
+  /// No description provided for @storeComparisonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Store comparison — this month'**
+  String get storeComparisonTitle;
+
+  /// No description provided for @payrollYearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payroll {year}'**
+  String payrollYearTitle(String year);
+
+  /// No description provided for @colDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get colDue;
+
+  /// No description provided for @colPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get colPaid;
+
+  /// No description provided for @colRemainingShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get colRemainingShort;
+
+  /// No description provided for @colChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get colChange;
+
+  /// No description provided for @colSales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get colSales;
+
+  /// No description provided for @colMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get colMonth;
+
+  /// No description provided for @colEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'Employees'**
+  String get colEmployees;
+
+  /// No description provided for @prevYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous year'**
+  String get prevYear;
+
+  /// No description provided for @nextYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Next year'**
+  String get nextYear;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get editProfile;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get saveChanges;
+
+  /// No description provided for @profileSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile saved'**
+  String get profileSaved;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get currentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get newPassword;
+
+  /// No description provided for @passwordChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed'**
+  String get passwordChanged;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get changePhoto;
+
+  /// No description provided for @photoUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo updated'**
+  String get photoUpdated;
+
+  /// No description provided for @apiServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Server'**
+  String get apiServer;
+
+  /// No description provided for @apiOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'API connected'**
+  String get apiOnline;
+
+  /// No description provided for @apiOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'API offline'**
+  String get apiOffline;
+
+  /// No description provided for @openDocs.
+  ///
+  /// In en, this message translates to:
+  /// **'API docs (Swagger)'**
+  String get openDocs;
+
+  /// No description provided for @signedInAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as {email}'**
+  String signedInAs(String email);
+
+  /// No description provided for @salesLast7.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales — last 7 days'**
+  String get salesLast7;
+
+  /// No description provided for @storesReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Stores with sales today'**
+  String get storesReported;
+
+  /// No description provided for @storesReportedValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} stores'**
+  String storesReportedValue(int count, int total);
+
+  /// No description provided for @assistantNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Answers use your real numbers. A full AI model can be connected when the backend adds it.'**
+  String get assistantNote;
+
+  /// No description provided for @staffInStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Staff'**
+  String get staffInStore;
+
+  /// No description provided for @createdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Created:'**
+  String get createdLabel;
+
+  /// No description provided for @addressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address:'**
+  String get addressLabel;
+
+  /// No description provided for @searchEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Search store or description…'**
+  String get searchEntries;
+
+  /// No description provided for @today2.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today2;
 }
 
 class _AppLocalizationsDelegate

@@ -6,7 +6,7 @@ import '../models/store_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
 
-/// Add / edit a store → POST /stores or PUT /stores/{id}.
+/// Add / edit a store → POST /api/stores or PUT /api/stores/{id}.
 class StoreFormDialog extends StatefulWidget {
   const StoreFormDialog({super.key, this.store});
 
@@ -23,23 +23,18 @@ class StoreFormDialog extends StatefulWidget {
 }
 
 class _StoreFormDialogState extends State<StoreFormDialog> {
-  static const _regions = ['Dushanbe', 'Sughd', 'Khatlon', 'GBAO', 'RRS'];
-
   final _formKey = GlobalKey<FormState>();
   late final _name = TextEditingController(text: widget.store?.name);
-  late final _type = TextEditingController(text: widget.store?.type ?? 'Branch');
   late final _address = TextEditingController(text: widget.store?.address);
-  late final _city = TextEditingController(text: widget.store?.city ?? 'Dushanbe');
-  late final _phone = TextEditingController(text: widget.store?.phone ?? '+992 ');
-  late final _hours = TextEditingController(text: widget.store?.openingHours ?? 'Mon-Sun: 08:00 - 22:00');
-  late String _region = _regions.contains(widget.store?.region) ? widget.store!.region : _regions.first;
+  late final _phone = TextEditingController(text: widget.store?.phone);
+  late final _description = TextEditingController(text: widget.store?.description);
   late bool _active = widget.store?.isActive ?? true;
 
   bool get _isNew => widget.store == null;
 
   @override
   void dispose() {
-    for (final c in [_name, _type, _address, _city, _phone, _hours]) {
+    for (final c in [_name, _address, _phone, _description]) {
       c.dispose();
     }
     super.dispose();
@@ -47,40 +42,30 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    final base =
-        widget.store ?? const StoreModel(id: '', name: '', type: '', address: '', city: '', region: '', phone: '');
-    final store = base.copyWith(
+    final tr = context.l10n;
+    final store = StoreModel(
+      id: widget.store?.id ?? '',
       name: _name.text.trim(),
-      type: _type.text.trim(),
-      address: _address.text.trim(),
-      city: _city.text.trim(),
-      region: _region,
-      phone: _phone.text.trim(),
-      openingHours: _hours.text.trim(),
+      address: _address.text,
+      phone: _phone.text,
+      description: _description.text,
       isActive: _active,
     );
-    final tr = context.l10n;
-    final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     final dashboard = context.read<DashboardViewModel>();
-    final ok = await context.read<StoresViewModel>().save(store, isNew: _isNew);
+    final error = await context.read<StoresViewModel>().save(store, isNew: _isNew);
     if (!mounted) return;
-    if (ok) {
+    if (error == null) {
       dashboard.load();
       navigator.pop();
     }
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(ok ? (_isNew ? tr.storeAdded(store.name) : tr.storeSaved(store.name)) : tr.storeSaveFailed),
-      ),
-    );
+    showResult(context, error, success: _isNew ? tr.storeAdded(store.name) : tr.storeSaved(store.name));
   }
 
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final saving = context.select<StoresViewModel, bool>((s) => s.isSaving);
-    String? required(String? v) => (v == null || v.trim().isEmpty) ? tr.required : null;
 
     return AlertDialog(
       title: Text(_isNew ? tr.addNewStore : tr.editStore),
@@ -95,59 +80,44 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                 TextFormField(
                   key: const Key('store-name'),
                   controller: _name,
-                  decoration: InputDecoration(labelText: tr.storeName),
-                  validator: required,
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: _type,
-                  decoration: InputDecoration(labelText: tr.storeType),
+                  maxLength: 150,
+                  decoration: InputDecoration(labelText: tr.storeName, counterText: ''),
+                  validator: (v) => (v ?? '').trim().isEmpty ? tr.required : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   key: const Key('store-address'),
                   controller: _address,
-                  decoration: InputDecoration(labelText: tr.address),
-                  validator: required,
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        key: const Key('store-city'),
-                        controller: _city,
-                        decoration: InputDecoration(labelText: tr.city),
-                        validator: required,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        initialValue: _region,
-                        isExpanded: true,
-                        decoration: InputDecoration(labelText: tr.region),
-                        items: [for (final r in _regions) DropdownMenuItem(value: r, child: Text(r))],
-                        onChanged: (v) => setState(() => _region = v ?? _region),
-                      ),
-                    ),
-                  ],
+                  maxLength: 255,
+                  decoration: InputDecoration(labelText: tr.address, counterText: ''),
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   key: const Key('store-phone'),
                   controller: _phone,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(labelText: tr.phone),
-                  validator: (v) => (v ?? '').replaceAll(RegExp(r'\D'), '').length < 9 ? tr.enterPhone : null,
+                  decoration: InputDecoration(labelText: tr.phoneOptional, hintText: '+992901234567'),
+                  validator: (v) {
+                    final s = cleanPhone(v);
+                    return s == null || RegExp(r'^\+?[0-9]{7,15}$').hasMatch(s) ? null : tr.invalidPhone;
+                  },
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
-                  controller: _hours,
-                  decoration: InputDecoration(labelText: tr.operatingHours),
+                  key: const Key('store-description'),
+                  controller: _description,
+                  maxLength: 1000,
+                  minLines: 1,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    labelText: tr.description,
+                    hintText: tr.storeDescriptionHint,
+                    counterText: '',
+                  ),
                 ),
                 const SizedBox(height: 4),
                 SwitchListTile(
+                  key: const Key('store-active'),
                   contentPadding: EdgeInsets.zero,
                   title: Text(tr.storeOpen),
                   value: _active,

@@ -1,81 +1,94 @@
 import '../core/utils/json.dart';
 
 enum PayStatus {
-  paid('Paid'),
-  partial('Partial'),
-  unpaid('Unpaid');
+  paid,
+  partial,
+  unpaid;
 
-  const PayStatus(this.label);
-  final String label;
+  static PayStatus parse(Object? v) => switch ('$v') {
+    'PAID' => PayStatus.paid,
+    'PARTIAL' => PayStatus.partial,
+    _ => PayStatus.unpaid,
+  };
 }
 
-/// GET /payroll?period= — one employee's salary for one month.
+/// MonthlyPayrollRow — one employee in GET /api/payroll/monthly.
 class PayrollModel {
   const PayrollModel({
-    required this.id,
     required this.employeeId,
     required this.employeeName,
     required this.role,
+    required this.storeId,
     required this.storeName,
-    required this.tenureMonths,
+    required this.monthlySalary,
+    required this.workedDays,
     required this.salary,
     required this.disbursed,
-    required this.period,
+    required this.remaining,
+    required this.status,
+    this.paymentsCount = 0,
+    this.employeeActive = true,
   });
 
   factory PayrollModel.fromJson(Map<String, dynamic> json) => PayrollModel(
-    id: asString(json['id']),
     employeeId: asString(json['employeeId']),
-    employeeName: asString(json['employeeName']),
-    role: asString(json['role']),
+    employeeName: asString(json['fullName']),
+    role: asString(json['position']),
+    storeId: asString(json['storeId']),
     storeName: asString(json['storeName']),
-    tenureMonths: asInt(json['tenureMonths']),
-    salary: asDouble(json['salary']),
-    disbursed: asDouble(json['disbursed']),
-    period: asString(json['period']),
+    monthlySalary: asDouble(json['monthlySalary']),
+    workedDays: asInt(json['workedDays']),
+    salary: asDouble(json['dueAmount']),
+    disbursed: asDouble(json['paidAmount']),
+    remaining: asDouble(json['remainingAmount']),
+    status: PayStatus.parse(json['status']),
+    paymentsCount: asInt(json['paymentsCount']),
+    employeeActive: asString(json['employeeStatus'], 'ACTIVE') == 'ACTIVE',
   );
 
-  final String id;
+  /// Used as row id (one row per employee per month).
+  String get id => employeeId;
   final String employeeId;
   final String employeeName;
   final String role;
+  final String storeId;
   final String storeName;
-  final int tenureMonths;
+  final double monthlySalary;
+  final int workedDays;
+
+  /// Due for this month (the backend prorates partial months).
   final double salary;
   final double disbursed;
+  final double remaining;
+  final PayStatus status;
+  final int paymentsCount;
+  final bool employeeActive;
+}
 
-  /// "2026-11"
-  final String period;
+/// MonthlyPayrollOut — GET /api/payroll/monthly?month=&year=.
+class MonthlyPayrollModel {
+  const MonthlyPayrollModel({
+    required this.year,
+    required this.month,
+    required this.totalDue,
+    required this.totalPaid,
+    required this.totalRemaining,
+    required this.items,
+  });
 
-  double get remaining => (salary - disbursed).clamp(0, salary).toDouble();
-
-  PayStatus get status => remaining <= 0
-      ? PayStatus.paid
-      : disbursed > 0
-      ? PayStatus.partial
-      : PayStatus.unpaid;
-
-  PayrollModel copyWith({double? disbursed}) => PayrollModel(
-    id: id,
-    employeeId: employeeId,
-    employeeName: employeeName,
-    role: role,
-    storeName: storeName,
-    tenureMonths: tenureMonths,
-    salary: salary,
-    disbursed: disbursed ?? this.disbursed,
-    period: period,
+  factory MonthlyPayrollModel.fromJson(Map<String, dynamic> json) => MonthlyPayrollModel(
+    year: asInt(json['year']),
+    month: asInt(json['month']),
+    totalDue: asDouble(json['totalDue']),
+    totalPaid: asDouble(json['totalPaid']),
+    totalRemaining: asDouble(json['totalRemaining']),
+    items: asJsonList(json['items']).map(PayrollModel.fromJson).toList(),
   );
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'employeeId': employeeId,
-    'employeeName': employeeName,
-    'role': role,
-    'storeName': storeName,
-    'tenureMonths': tenureMonths,
-    'salary': salary,
-    'disbursed': disbursed,
-    'period': period,
-  };
+  final int year;
+  final int month;
+  final double totalDue;
+  final double totalPaid;
+  final double totalRemaining;
+  final List<PayrollModel> items;
 }

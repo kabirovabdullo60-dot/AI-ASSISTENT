@@ -3,14 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
+import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
-import '../models/store_analytics_model.dart';
 import '../models/store_model.dart';
-import '../services/store_service.dart';
+import '../services/employee_service.dart';
+import '../services/sales_service.dart';
 import '../viewmodels/settings_view_model.dart';
 import '../viewmodels/store_detail_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
@@ -43,7 +43,8 @@ class StoreDetailSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final width = math.min(MediaQuery.sizeOf(context).width, 520.0);
-    final store = context.select<StoresViewModel, StoreModel?>((s) => s.byId(storeId));
+    final stores = context.watch<StoresViewModel>();
+    final store = stores.byId(storeId);
     return Align(
       alignment: Alignment.centerRight,
       child: Material(
@@ -55,8 +56,10 @@ class StoreDetailSheet extends StatelessWidget {
           child: store == null
               ? Center(child: Text(tr.storeNotFound))
               : ChangeNotifierProvider(
-                  create: (_) => StoreDetailViewModel(StoreService(), storeId)..load(),
-                  child: _Body(store: store),
+                  create: (_) =>
+                      StoreDetailViewModel(context.read<SalesService>(), context.read<EmployeeService>(), storeId)
+                        ..load(),
+                  child: _Body(store: store, stats: stores.statsOf(store)),
                 ),
         ),
       ),
@@ -65,9 +68,10 @@ class StoreDetailSheet extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.store});
+  const _Body({required this.store, required this.stats});
 
   final StoreModel store;
+  final StoreStats stats;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +92,7 @@ class _Body extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(store.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                      Text(store.fullAddress, style: const TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                      Text(store.address ?? '—', style: const TextStyle(fontSize: 12.5, color: AppColors.muted)),
                     ],
                   ),
                 ),
@@ -103,10 +107,10 @@ class _Body extends StatelessWidget {
           ),
           Expanded(
             child: AsyncContent(
-              hasData: vm.analytics != null,
+              hasData: vm.last7Days != null,
               error: vm.error,
               onRetry: vm.load,
-              builder: (_) => _Content(store: store, analytics: vm.analytics!, currency: cur),
+              builder: (_) => _Content(store: store, stats: stats, vm: vm, currency: cur),
             ),
           ),
         ],
@@ -116,19 +120,20 @@ class _Body extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  const _Content({required this.store, required this.analytics, required this.currency});
+  const _Content({required this.store, required this.stats, required this.vm, required this.currency});
 
   final StoreModel store;
-  final StoreAnalyticsModel analytics;
+  final StoreStats stats;
+  final StoreDetailViewModel vm;
   final Currency currency;
 
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
-    final days = analytics.last7Days;
+    final days = vm.last7Days!;
     final maxV = days.isEmpty ? 0.0 : days.map((d) => d.revenue).reduce(math.max);
 
-    Widget tile(String label, double value, double change, {bool accent = false}) => Expanded(
+    Widget tile(String label, double value, double? change, {bool accent = false}) => Expanded(
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -148,7 +153,11 @@ class _Content extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.w800, color: accent ? AppColors.orange : AppColors.ink),
               ),
             ),
-            Text(formatPercent(change), style: const TextStyle(fontSize: 11, color: AppColors.green)),
+            if (change != null)
+              Text(
+                formatPercent(change),
+                style: TextStyle(fontSize: 11, color: change >= 0 ? AppColors.green : AppColors.red),
+              ),
           ],
         ),
       ),
@@ -180,11 +189,11 @@ class _Content extends StatelessWidget {
       children: [
         Row(
           children: [
-            tile(tr.dailySales, store.todaySales, store.todayChange),
+            tile(tr.dailySales, stats.today, null),
             const SizedBox(width: 8),
-            tile(tr.kpiWeeklySales, store.weeklySales, store.todayChange * 0.7),
+            tile(tr.kpiWeeklySales, stats.week, null),
             const SizedBox(width: 8),
-            tile(tr.monthlyTotal, store.monthlySales, store.monthlyChange, accent: true),
+            tile(tr.monthlyTotal, stats.month, stats.monthChange, accent: true),
           ],
         ),
         const SizedBox(height: 14),
@@ -197,10 +206,10 @@ class _Content extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Text(tr.velocity7, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                    child: Text(tr.velocity7, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   Text(
-                    tr.avgPerDay(currency.format(analytics.average)),
+                    tr.avgPerDay(currency.format(vm.average)),
                     style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
                   ),
                 ],
@@ -231,9 +240,9 @@ class _Content extends StatelessWidget {
               const SizedBox(height: 6),
               Row(
                 children: [
-                  Text(tr.sixDaysAgo, style: TextStyle(fontSize: 11, color: AppColors.muted)),
-                  Spacer(),
-                  Text(tr.todayCurrent, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(tr.sixDaysAgo, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                  const Spacer(),
+                  Text(tr.todayCurrent, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
                 ],
               ),
             ],
@@ -246,25 +255,39 @@ class _Content extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(tr.storeParams, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+              Text(tr.storeParams, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               const SizedBox(height: 6),
-              param(tr.phoneLine, store.phone),
-              param(tr.staffAllocation, tr.activeCrew(store.staffCount)),
-              param(
-                tr.apiSync,
-                'GET ${ApiConstants.storeAnalytics(store.id)}${ApiConstants.useMock ? ' (demo)' : ''}',
-                color: AppColors.green,
-              ),
-              param(tr.operatingHoursLabel, store.openingHours),
+              param(tr.phoneLine, store.phone ?? '—'),
+              param(tr.staffAllocation, tr.activeCrew(vm.staff.where((e) => e.isActive).length)),
+              param(tr.apiSync, 'GET ${ApiConstants.store(store.id)}', color: AppColors.green),
               param(tr.statusLabel, tr.storeStatus(store)),
+              if (store.createdAt != null) param(tr.createdLabel, formatDate(store.createdAt!)),
+              if ((store.description ?? '').isNotEmpty) param(tr.description, store.description!),
             ],
           ),
         ),
+        if (vm.staff.isNotEmpty) ...[
+          const SizedBox(height: 14),
+          Text(tr.staffInStore, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              for (final e in vm.staff)
+                Chip(
+                  visualDensity: VisualDensity.compact,
+                  avatar: CircleAvatar(child: Text(initials(e.fullName), style: const TextStyle(fontSize: 9))),
+                  label: Text('${e.fullName} · ${e.position}'),
+                ),
+            ],
+          ),
+        ],
         const SizedBox(height: 14),
-        Text(tr.recentPos, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+        Text(tr.recentPos, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
         const SizedBox(height: 8),
-        if (analytics.recent.isEmpty) Text(tr.noSalesYet),
-        for (final s in analytics.recent)
+        if (vm.recent.isEmpty) Text(tr.noSalesYet),
+        for (final s in vm.recent)
           Container(
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(10),
@@ -283,13 +306,11 @@ class _Content extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${s.reference} (${tr.split(s.split)})',
+                        formatRelativeDay(s.saleDate),
                         style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
                       ),
-                      Text(
-                        '${formatRelativeDay(s.date)} ${formatTime(s.date)} • ${s.registeredBy}',
-                        style: const TextStyle(fontSize: 11, color: AppColors.muted),
-                      ),
+                      if ((s.description ?? '').isNotEmpty)
+                        Text(s.description!, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
                     ],
                   ),
                 ),

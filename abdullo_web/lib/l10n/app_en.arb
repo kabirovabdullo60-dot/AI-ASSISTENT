@@ -855,5 +855,270 @@
         "type": "String"
       }
     }
-  }
+  },
+  "loading": "Loading…",
+  "loginTitle": "Welcome back",
+  "loginSubtitle": "Sign in to manage your stores, sales and payroll.",
+  "registerTitle": "Create your business account",
+  "registerSubtitle": "One account = one business. You can add stores and staff after signing up.",
+  "emailLabel": "Email",
+  "password": "Password",
+  "fullName": "Full name",
+  "phoneOptional": "Phone (optional)",
+  "businessNameOptional": "Business name (optional)",
+  "signIn": "Sign in",
+  "createAccount": "Create account",
+  "noAccount": "Don't have an account? Create one",
+  "haveAccount": "Already have an account? Sign in",
+  "invalidEmail": "Enter a valid email",
+  "invalidPhone": "Phone: 7–15 digits, e.g. +992901234567",
+  "errInvalidCredentials": "Incorrect email or password.",
+  "errEmailTaken": "An account with this email already exists.",
+  "errAccountDisabled": "This account has been disabled.",
+  "errAccountLocked": "Too many failed attempts. Try again later.",
+  "errSessionEnded": "Your session has ended. Please sign in again.",
+  "errPermission": "You do not have permission to do this.",
+  "errNotFound": "Not found — it may have been deleted.",
+  "errConflict": "This conflicts with existing data.",
+  "errValidation": "Some fields are not valid: {fields}",
+  "@errValidation": {
+    "placeholders": {
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "errValidationShort": "Please check the fields.",
+  "errNetwork": "No connection to the server. Check the internet and try again.",
+  "errRateLimited": "Too many requests. Wait a moment and try again.",
+  "errServer": "Server error. Try again later.",
+  "errStoreNameTaken": "A store with this name already exists.",
+  "errStoreHasEmployees": "The store still has active employees. Move or deactivate them first.",
+  "errAlreadyPaid": "The salary for this month is already fully paid.",
+  "errExceedsRemaining": "The amount is larger than what remains for this month.",
+  "errNotEmployed": "The employee did not work in this month.",
+  "errFutureDate": "The date cannot be in the future.",
+  "errFuturePeriod": "Salary can't be paid for a future month.",
+  "errEmploymentDates": "The employment dates are invalid.",
+  "errDateRange": "The date range is invalid.",
+  "errPasswordWeak": "The password is too weak.",
+  "errCurrentPassword": "The current password is incorrect.",
+  "errAvatarType": "The photo must be JPEG, PNG or WebP.",
+  "errAvatarSize": "The photo is too large.",
+  "errUnknown": "Something went wrong ({code}).",
+  "@errUnknown": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "description": "Description",
+  "storeDescriptionHint": "e.g. Flagship · 8 counters",
+  "editSale": "Edit sale",
+  "deleteSaleTitle": "Delete this sale?",
+  "deleteSaleBody": "{amount} for {store} on {date} will be removed from reports.",
+  "@deleteSaleBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "store": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "saleUpdated": "Sale updated",
+  "saleDeleted": "Sale deleted",
+  "colActionsShort": "",
+  "addEmployee": "Add employee",
+  "editEmployee": "Edit employee",
+  "position": "Position",
+  "monthlySalary": "Monthly salary (TJS)",
+  "hiredAt": "Hired on",
+  "terminatedAt": "Left on (optional)",
+  "employeeActive": "Employee is active",
+  "deleteEmployeeTitle": "Delete employee?",
+  "deleteEmployeeBody": "\"{name}\" will be hidden. Salary history stays.",
+  "@deleteEmployeeBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeSaved": "{name} saved",
+  "@employeeSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeDeleted": "{name} deleted",
+  "@employeeDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hiredThisMonth": "{count} hired this month",
+  "@hiredThisMonth": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "averageSalary": "Average salary",
+  "byPosition": "By position",
+  "selectStoreFirst": "Add a store first",
+  "paymentDate": "Payment date",
+  "noteOptional": "Note (optional)",
+  "paymentCancelled": "Payment cancelled",
+  "cancelPayment": "Cancel payment",
+  "cancelPaymentTitle": "Cancel this payment?",
+  "workedDays": "{count} days",
+  "@workedDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "payFor": "Payment for {month}",
+  "@payFor": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "owedAllMonths": "Owed for all months: {amount}",
+  "@owedAllMonths": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "months": "Months",
+  "payments": "Payments",
+  "noPaymentsYet": "No payments yet",
+  "salesCount": "{count} sales",
+  "@salesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chartSales": "Sales: {count}",
+  "@chartSales": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "averageSale": "Average sale",
+  "salesThisMonth": "Sales this month",
+  "unpaidAllMonths": "Unpaid (all months)",
+  "ofTotal": "of {count} total",
+  "@ofTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ofDue": "of {amount} due",
+  "@ofDue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "topStore": "Top store: {name}",
+  "@topStore": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noSalesThisMonth": "No sales this month yet",
+  "recentlyUpdated": "Recently updated stores",
+  "salesShare": "Sales share this month",
+  "updatedOn": "Updated {date}",
+  "@updatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "storeComparisonTitle": "Store comparison — this month",
+  "payrollYearTitle": "Payroll {year}",
+  "@payrollYearTitle": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "colDue": "Due",
+  "colPaid": "Paid",
+  "colRemainingShort": "Remaining",
+  "colChange": "Change",
+  "colSales": "Sales",
+  "colMonth": "Month",
+  "colEmployees": "Employees",
+  "prevYear": "Previous year",
+  "nextYear": "Next year",
+  "editProfile": "Edit profile",
+  "saveChanges": "Save changes",
+  "profileSaved": "Profile saved",
+  "changePassword": "Change password",
+  "currentPassword": "Current password",
+  "newPassword": "New password",
+  "passwordChanged": "Password changed",
+  "changePhoto": "Change photo",
+  "photoUpdated": "Photo updated",
+  "apiServer": "Server",
+  "apiOnline": "API connected",
+  "apiOffline": "API offline",
+  "openDocs": "API docs (Swagger)",
+  "signedInAs": "Signed in as {email}",
+  "@signedInAs": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "salesLast7": "Sales — last 7 days",
+  "storesReported": "Stores with sales today",
+  "storesReportedValue": "{count} of {total} stores",
+  "@storesReportedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "assistantNote": "Answers use your real numbers. A full AI model can be connected when the backend adds it.",
+  "staffInStore": "Staff",
+  "createdLabel": "Created:",
+  "addressLabel": "Address:",
+  "searchEntries": "Search store or description…",
+  "today2": "Today"
 }

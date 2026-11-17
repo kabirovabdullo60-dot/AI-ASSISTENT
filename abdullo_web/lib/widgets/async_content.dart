@@ -22,7 +22,9 @@ class AsyncContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final tr = context.l10n;
     if (hasData) return builder(context);
-    if (error != null) return ErrorRetry(message: tr.loadError, onRetry: onRetry);
+    if (error != null) {
+      return ErrorRetry(message: error == 'NETWORK_ERROR' ? tr.errNetwork : tr.loadError, onRetry: onRetry);
+    }
     return const Center(child: CircularProgressIndicator());
   }
 }

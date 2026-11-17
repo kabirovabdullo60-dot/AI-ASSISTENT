@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../core/l10n/l10n.dart';
 import '../core/utils/format.dart';
+import '../models/sale_model.dart';
 import 'sale_entry_form_view.dart';
 
-/// "Record Sale" from the dashboard: the same form as on the Sales page, in a dialog.
+/// Record a sale (dashboard) or edit one (sales table) — the same form as on the Sales page.
 class RecordSaleDialog extends StatelessWidget {
-  const RecordSaleDialog({super.key});
+  const RecordSaleDialog({super.key, this.sale});
 
-  static Future<void> show(BuildContext context) =>
-      showDialog<void>(context: context, builder: (_) => const RecordSaleDialog());
+  final SaleModel? sale;
+
+  static Future<void> show(BuildContext context, {SaleModel? sale}) => showDialog<void>(
+    context: context,
+    builder: (_) => RecordSaleDialog(sale: sale),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +27,12 @@ class RecordSaleDialog extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: SaleEntryFormView(
+            sale: sale,
             onSaved: () {
               Navigator.of(context).pop();
-              messenger.showSnackBar(SnackBar(content: Text(tr.saleRecorded(formatDate(DateTime.now())))));
+              if (sale == null) {
+                messenger.showSnackBar(SnackBar(content: Text(tr.saleRecorded(formatDate(DateTime.now())))));
+              }
             },
           ),
         ),

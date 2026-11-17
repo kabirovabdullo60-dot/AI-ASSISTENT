@@ -1165,4 +1165,418 @@ class AppLocalizationsRu extends AppLocalizations {
   String chartCashflow(String amount) {
     return 'Денежный поток: $amount';
   }
+
+  @override
+  String get loading => 'Загрузка…';
+
+  @override
+  String get loginTitle => 'С возвращением';
+
+  @override
+  String get loginSubtitle =>
+      'Войдите, чтобы управлять магазинами, продажами и зарплатами.';
+
+  @override
+  String get registerTitle => 'Создайте аккаунт бизнеса';
+
+  @override
+  String get registerSubtitle =>
+      'Один аккаунт = один бизнес. Магазины и сотрудников добавите после регистрации.';
+
+  @override
+  String get emailLabel => 'Эл. почта';
+
+  @override
+  String get password => 'Пароль';
+
+  @override
+  String get fullName => 'Полное имя';
+
+  @override
+  String get phoneOptional => 'Телефон (необязательно)';
+
+  @override
+  String get businessNameOptional => 'Название бизнеса (необязательно)';
+
+  @override
+  String get signIn => 'Войти';
+
+  @override
+  String get createAccount => 'Создать аккаунт';
+
+  @override
+  String get noAccount => 'Нет аккаунта? Создайте';
+
+  @override
+  String get haveAccount => 'Уже есть аккаунт? Войти';
+
+  @override
+  String get invalidEmail => 'Введите корректный email';
+
+  @override
+  String get invalidPhone => 'Телефон: 7–15 цифр, напр. +992901234567';
+
+  @override
+  String get errInvalidCredentials => 'Неверный email или пароль.';
+
+  @override
+  String get errEmailTaken => 'Аккаунт с таким email уже существует.';
+
+  @override
+  String get errAccountDisabled => 'Этот аккаунт отключён.';
+
+  @override
+  String get errAccountLocked =>
+      'Слишком много неудачных попыток. Попробуйте позже.';
+
+  @override
+  String get errSessionEnded => 'Сессия завершена. Войдите снова.';
+
+  @override
+  String get errPermission => 'Нет прав на это действие.';
+
+  @override
+  String get errNotFound => 'Не найдено — возможно, удалено.';
+
+  @override
+  String get errConflict => 'Конфликт с существующими данными.';
+
+  @override
+  String errValidation(String fields) {
+    return 'Неверно заполнены поля: $fields';
+  }
+
+  @override
+  String get errValidationShort => 'Проверьте заполненные поля.';
+
+  @override
+  String get errNetwork =>
+      'Нет связи с сервером. Проверьте интернет и повторите.';
+
+  @override
+  String get errRateLimited => 'Слишком много запросов. Подождите немного.';
+
+  @override
+  String get errServer => 'Ошибка сервера. Попробуйте позже.';
+
+  @override
+  String get errStoreNameTaken => 'Магазин с таким названием уже есть.';
+
+  @override
+  String get errStoreHasEmployees =>
+      'В магазине есть активные сотрудники. Сначала переведите или отключите их.';
+
+  @override
+  String get errAlreadyPaid =>
+      'Зарплата за этот месяц уже полностью выплачена.';
+
+  @override
+  String get errExceedsRemaining => 'Сумма больше остатка за этот месяц.';
+
+  @override
+  String get errNotEmployed => 'Сотрудник не работал в этом месяце.';
+
+  @override
+  String get errFutureDate => 'Дата не может быть в будущем.';
+
+  @override
+  String get errFuturePeriod => 'Нельзя выплатить зарплату за будущий месяц.';
+
+  @override
+  String get errEmploymentDates => 'Неверные даты работы.';
+
+  @override
+  String get errDateRange => 'Неверный период.';
+
+  @override
+  String get errPasswordWeak => 'Пароль слишком простой.';
+
+  @override
+  String get errCurrentPassword => 'Текущий пароль неверный.';
+
+  @override
+  String get errAvatarType => 'Фото должно быть JPEG, PNG или WebP.';
+
+  @override
+  String get errAvatarSize => 'Фото слишком большое.';
+
+  @override
+  String errUnknown(String code) {
+    return 'Что-то пошло не так ($code).';
+  }
+
+  @override
+  String get description => 'Описание';
+
+  @override
+  String get storeDescriptionHint => 'напр. флагман · 8 касс';
+
+  @override
+  String get editSale => 'Изменить продажу';
+
+  @override
+  String get deleteSaleTitle => 'Удалить эту продажу?';
+
+  @override
+  String deleteSaleBody(String amount, String store, String date) {
+    return '$amount ($store, $date) будет удалено из отчётов.';
+  }
+
+  @override
+  String get saleUpdated => 'Продажа изменена';
+
+  @override
+  String get saleDeleted => 'Продажа удалена';
+
+  @override
+  String get colActionsShort => '';
+
+  @override
+  String get addEmployee => 'Добавить сотрудника';
+
+  @override
+  String get editEmployee => 'Изменить сотрудника';
+
+  @override
+  String get position => 'Должность';
+
+  @override
+  String get monthlySalary => 'Оклад в месяц (TJS)';
+
+  @override
+  String get hiredAt => 'Дата приёма';
+
+  @override
+  String get terminatedAt => 'Дата увольнения (необязательно)';
+
+  @override
+  String get employeeActive => 'Сотрудник активен';
+
+  @override
+  String get deleteEmployeeTitle => 'Удалить сотрудника?';
+
+  @override
+  String deleteEmployeeBody(String name) {
+    return '«$name» будет скрыт. История зарплат сохранится.';
+  }
+
+  @override
+  String employeeSaved(String name) {
+    return '«$name» сохранён';
+  }
+
+  @override
+  String employeeDeleted(String name) {
+    return '«$name» удалён';
+  }
+
+  @override
+  String hiredThisMonth(int count) {
+    return 'Принято в этом месяце: $count';
+  }
+
+  @override
+  String get averageSalary => 'Средний оклад';
+
+  @override
+  String get byPosition => 'По должностям';
+
+  @override
+  String get selectStoreFirst => 'Сначала добавьте магазин';
+
+  @override
+  String get paymentDate => 'Дата выплаты';
+
+  @override
+  String get noteOptional => 'Заметка (необязательно)';
+
+  @override
+  String get paymentCancelled => 'Выплата отменена';
+
+  @override
+  String get cancelPayment => 'Отменить выплату';
+
+  @override
+  String get cancelPaymentTitle => 'Отменить эту выплату?';
+
+  @override
+  String workedDays(int count) {
+    return '$count дн.';
+  }
+
+  @override
+  String payFor(String month) {
+    return 'Выплата за $month';
+  }
+
+  @override
+  String owedAllMonths(String amount) {
+    return 'Долг за все месяцы: $amount';
+  }
+
+  @override
+  String get months => 'Месяцы';
+
+  @override
+  String get payments => 'Выплаты';
+
+  @override
+  String get noPaymentsYet => 'Выплат пока нет';
+
+  @override
+  String salesCount(int count) {
+    return '$count продаж';
+  }
+
+  @override
+  String chartSales(int count) {
+    return 'Продаж: $count';
+  }
+
+  @override
+  String get averageSale => 'Средняя продажа';
+
+  @override
+  String get salesThisMonth => 'Продаж за месяц';
+
+  @override
+  String get unpaidAllMonths => 'Не выплачено (все месяцы)';
+
+  @override
+  String ofTotal(int count) {
+    return 'из $count';
+  }
+
+  @override
+  String ofDue(String amount) {
+    return 'из $amount';
+  }
+
+  @override
+  String topStore(String name) {
+    return 'Лучший магазин: $name';
+  }
+
+  @override
+  String get noSalesThisMonth => 'В этом месяце продаж пока нет';
+
+  @override
+  String get recentlyUpdated => 'Недавно изменённые магазины';
+
+  @override
+  String get salesShare => 'Доля продаж за месяц';
+
+  @override
+  String updatedOn(String date) {
+    return 'Изменён $date';
+  }
+
+  @override
+  String get storeComparisonTitle => 'Сравнение магазинов — этот месяц';
+
+  @override
+  String payrollYearTitle(String year) {
+    return 'Зарплаты за $year';
+  }
+
+  @override
+  String get colDue => 'Начислено';
+
+  @override
+  String get colPaid => 'Выплачено';
+
+  @override
+  String get colRemainingShort => 'Остаток';
+
+  @override
+  String get colChange => 'Изм.';
+
+  @override
+  String get colSales => 'Продаж';
+
+  @override
+  String get colMonth => 'Месяц';
+
+  @override
+  String get colEmployees => 'Сотр.';
+
+  @override
+  String get prevYear => 'Предыдущий год';
+
+  @override
+  String get nextYear => 'Следующий год';
+
+  @override
+  String get editProfile => 'Редактировать профиль';
+
+  @override
+  String get saveChanges => 'Сохранить';
+
+  @override
+  String get profileSaved => 'Профиль сохранён';
+
+  @override
+  String get changePassword => 'Сменить пароль';
+
+  @override
+  String get currentPassword => 'Текущий пароль';
+
+  @override
+  String get newPassword => 'Новый пароль';
+
+  @override
+  String get passwordChanged => 'Пароль изменён';
+
+  @override
+  String get changePhoto => 'Сменить фото';
+
+  @override
+  String get photoUpdated => 'Фото обновлено';
+
+  @override
+  String get apiServer => 'Сервер';
+
+  @override
+  String get apiOnline => 'API подключён';
+
+  @override
+  String get apiOffline => 'API недоступен';
+
+  @override
+  String get openDocs => 'Документация API (Swagger)';
+
+  @override
+  String signedInAs(String email) {
+    return 'Вы вошли как $email';
+  }
+
+  @override
+  String get salesLast7 => 'Продажи — 7 дней';
+
+  @override
+  String get storesReported => 'Магазины с продажами сегодня';
+
+  @override
+  String storesReportedValue(int count, int total) {
+    return '$count из $total магазинов';
+  }
+
+  @override
+  String get assistantNote =>
+      'Ответы строятся на ваших реальных данных. Полноценный ИИ подключим, когда он появится на сервере.';
+
+  @override
+  String get staffInStore => 'Сотрудники';
+
+  @override
+  String get createdLabel => 'Создан:';
+
+  @override
+  String get addressLabel => 'Адрес:';
+
+  @override
+  String get searchEntries => 'Поиск по магазину или описанию…';
+
+  @override
+  String get today2 => 'Сегодня';
 }

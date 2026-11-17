@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/activity_model.dart';
 import '../../models/payroll_model.dart';
-import '../../models/sale_model.dart';
 import '../../models/store_model.dart';
 import '../../viewmodels/payroll_view_model.dart';
 import '../../viewmodels/sales_view_model.dart';
@@ -46,7 +45,6 @@ class _TgFallback<T> extends LocalizationsDelegate<T> {
   bool shouldReload(_TgFallback<T> old) => false;
 }
 
-/// Translated names for enums used on screen.
 extension EnumLabels on AppLocalizations {
   String section(AppSection s) => switch (s) {
     AppSection.dashboard => navDashboard,
@@ -60,12 +58,6 @@ extension EnumLabels on AppLocalizations {
     AppSection.settings => navSettings,
   };
 
-  String split(BalanceSplit s) => switch (s) {
-    BalanceSplit.balanced => splitBalanced,
-    BalanceSplit.posHeavy => splitPos,
-    BalanceSplit.cashHeavy => splitCash,
-  };
-
   String payStatus(PayStatus s) => switch (s) {
     PayStatus.paid => statusPaid,
     PayStatus.partial => statusPartial,
@@ -75,19 +67,8 @@ extension EnumLabels on AppLocalizations {
   String activityType(ActivityType t) => switch (t) {
     ActivityType.sale => activitySales,
     ActivityType.payroll => activityPayroll,
-    ActivityType.audit => activityAudits,
-    ActivityType.staff => activityStaff,
   };
 
-  /// Payment method names come from the backend in English.
-  String paymentMethod(String method) => switch (method) {
-    'Bank Transfer' => methodBank,
-    'Cash Disbursement' => methodCash,
-    _ => method,
-  };
-}
-
-extension ViewModelLabels on AppLocalizations {
   String salesRange(SalesRange r) => switch (r) {
     SalesRange.today => rangeToday,
     SalesRange.week => rangeWeek,
@@ -108,6 +89,48 @@ extension ViewModelLabels on AppLocalizations {
     PayrollTab.unpaid => tabUnpaid,
   };
 
-  String storeStatus(StoreModel s) =>
-      s.isActive ? active : (s.statusNote.isEmpty ? inactive : inactiveWithReason(s.statusNote));
+  String storeStatus(StoreModel s) => s.isActive ? active : inactive;
+
+  /// Translated text for a backend error code (see the error table in Swagger).
+  String error(String code) => switch (code) {
+    'AUTH_INVALID_CREDENTIALS' => errInvalidCredentials,
+    'EMAIL_ALREADY_REGISTERED' => errEmailTaken,
+    'AUTH_ACCOUNT_DISABLED' => errAccountDisabled,
+    'AUTH_ACCOUNT_LOCKED' => errAccountLocked,
+    'AUTH_REQUIRED' || 'AUTH_SESSION_REVOKED' || 'AUTH_TOKEN_EXPIRED' || 'AUTH_TOKEN_INVALID' => errSessionEnded,
+    'PERMISSION_DENIED' => errPermission,
+    'NOT_FOUND' || 'STORE_NOT_FOUND' || 'SALE_NOT_FOUND' || 'EMPLOYEE_NOT_FOUND' || 'PAYROLL_NOT_FOUND' => errNotFound,
+    'CONFLICT' => errConflict,
+    'STORE_NAME_TAKEN' => errStoreNameTaken,
+    'STORE_HAS_ACTIVE_EMPLOYEES' => errStoreHasEmployees,
+    'PAYROLL_ALREADY_PAID' => errAlreadyPaid,
+    'PAYROLL_AMOUNT_EXCEEDS_REMAINING' => errExceedsRemaining,
+    'EMPLOYEE_NOT_EMPLOYED_IN_PERIOD' => errNotEmployed,
+    'SALE_DATE_IN_FUTURE' || 'PAYMENT_DATE_IN_FUTURE' => errFutureDate,
+    'PAYROLL_PERIOD_IN_FUTURE' => errFuturePeriod,
+    'INVALID_EMPLOYMENT_DATES' => errEmploymentDates,
+    'INVALID_DATE_RANGE' => errDateRange,
+    'PASSWORD_TOO_WEAK' => errPasswordWeak,
+    'CURRENT_PASSWORD_INCORRECT' => errCurrentPassword,
+    'AVATAR_INVALID_TYPE' || 'UNSUPPORTED_MEDIA_TYPE' => errAvatarType,
+    'AVATAR_TOO_LARGE' || 'PAYLOAD_TOO_LARGE' => errAvatarSize,
+    'VALIDATION_ERROR' => errValidationShort,
+    'NETWORK_ERROR' => errNetwork,
+    'RATE_LIMITED' => errRateLimited,
+    'INTERNAL_ERROR' => errServer,
+    _ => errUnknown(code),
+  };
+}
+
+/// Shows a translated error (or success) message at the bottom of the screen.
+void showResult(BuildContext context, String? errorCode, {required String success}) {
+  final tr = context.l10n;
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(errorCode == null ? success : tr.error(errorCode)),
+        backgroundColor: errorCode == null ? null : const Color(0xFFB91C1C),
+      ),
+    );
 }

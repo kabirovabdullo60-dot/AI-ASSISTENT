@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
-import '../core/navigation/app_section.dart';
+import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
-import '../models/activity_model.dart';
 import '../models/store_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/home_view_model.dart';
@@ -26,16 +24,17 @@ import '../widgets/status_badge.dart';
 import 'store_detail_sheet.dart';
 import 'store_form_dialog.dart';
 
-/// "Store Management" from the Figma.
+/// "Store Management" — /api/stores + sales reports.
 class StoresView extends StatelessWidget {
   const StoresView({super.key});
 
-  static void _export(BuildContext context, List<StoreModel> stores) {
-    final csv = StringBuffer('Name,City,Address,Phone,Status,Today TJS,Monthly TJS,Staff\n');
+  static void _export(BuildContext context, StoresViewModel vm, List<StoreModel> stores) {
+    final csv = StringBuffer('Name,Address,Phone,Status,Today TJS,Month TJS,Staff\n');
     for (final s in stores) {
+      final st = vm.statsOf(s);
       csv.writeln(
-        '"${s.name}","${s.city}","${s.address}","${s.phone}",${s.isActive ? 'Active' : 'Inactive'},'
-        '${s.todaySales.round()},${s.monthlySales.round()},${s.staffCount}',
+        '"${s.name}","${s.address ?? ''}","${s.phone ?? ''}",${s.isActive ? 'ACTIVE' : 'INACTIVE'},'
+        '${st.today.toStringAsFixed(2)},${st.month.toStringAsFixed(2)},${st.staff}',
       );
     }
     Clipboard.setData(ClipboardData(text: csv.toString()));
@@ -55,14 +54,6 @@ class StoresView extends StatelessWidget {
       onRetry: vm.load,
       builder: (_) {
         final list = vm.visible(query);
-        double weighted(double Function(StoreModel) value, double Function(StoreModel) change) {
-          final total = vm.stores.fold<double>(0, (s, e) => s + value(e));
-          return total == 0 ? 0 : vm.stores.fold<double>(0, (s, e) => s + value(e) * change(e)) / total;
-        }
-
-        final todayChange = weighted((s) => s.todaySales, (s) => s.todayChange);
-        final monthChange = weighted((s) => s.monthlySales, (s) => s.monthlyChange);
-
         return PageBody(
           eyebrow: [tr.storesEyebrow1, tr.storesEyebrow2],
           title: tr.storesTitle,
@@ -70,7 +61,7 @@ class StoresView extends StatelessWidget {
           actions: [
             OutlinedButton.icon(
               key: const Key('export-stores'),
-              onPressed: () => _export(context, list),
+              onPressed: () => _export(context, vm, list),
               icon: const Icon(Icons.download_outlined, size: 18),
               label: Text(tr.exportDirectory),
             ),
@@ -98,17 +89,17 @@ class StoresView extends StatelessWidget {
                     value: cur.amount(vm.todayTotal),
                     unit: cur.code,
                     icon: Icons.payments_outlined,
-                    badge: formatPercent(todayChange),
-                    badgeIcon: Icons.trending_up,
+                    badge: vm.todayChange == null ? null : formatPercent(vm.todayChange!),
+                    badgeTone: (vm.todayChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
                     caption: tr.allBranchesToday,
                   ),
                   KpiCard(
                     title: tr.totalMonthlyRevenue,
-                    value: cur.amount(vm.totalSales),
+                    value: cur.amount(vm.monthTotal),
                     unit: cur.code,
                     icon: Icons.insights_outlined,
-                    badge: formatPercent(monthChange),
-                    badgeIcon: Icons.trending_up,
+                    badge: vm.monthChange == null ? null : formatPercent(vm.monthChange!),
+                    badgeTone: (vm.monthChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
                     caption: tr.vsLastMonth,
                   ),
                   KpiCard(
@@ -127,7 +118,7 @@ class StoresView extends StatelessWidget {
             if (list.isEmpty)
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(32),
                   child: Center(child: Text(tr.noStoresMatch)),
                 ),
               )
@@ -137,7 +128,7 @@ class StoresView extends StatelessWidget {
                   key: const Key('stores-grid'),
                   columns: c.maxWidth >= 1000 ? 3 : (c.maxWidth >= 620 ? 2 : 1),
                   spacing: 16,
-                  children: [for (final s in list) _StoreCard(store: s, rank: vm.rankOf(s), currency: cur)],
+                  children: [for (final s in list) _StoreCard(store: s, stats: vm.statsOf(s), currency: cur)],
                 ),
               )
             else
@@ -146,18 +137,27 @@ class StoresView extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: AppTable(
-                    columns: [tr.store, tr.city, tr.status, tr.kpiTodaySales, tr.monthlyVolume, tr.staff, tr.phone, ''],
+                    columns: [
+                      tr.store,
+                      tr.address,
+                      tr.status,
+                      tr.kpiTodaySales,
+                      tr.monthlyVolume,
+                      tr.staff,
+                      tr.phone,
+                      '',
+                    ],
                     numeric: const {3, 4, 5},
                     rows: [
                       for (final s in list)
                         [
                           Text(s.name, style: const TextStyle(fontWeight: FontWeight.w600)),
-                          Text(s.city),
+                          Text(s.address ?? '—'),
                           _StatusBadge(store: s),
-                          Text(cur.format(s.todaySales)),
-                          Text(cur.format(s.monthlySales), style: const TextStyle(fontWeight: FontWeight.w700)),
-                          Text('${s.staffCount}'),
-                          Text(s.phone),
+                          Text(cur.format(vm.statsOf(s).today)),
+                          Text(cur.format(vm.statsOf(s).month), style: const TextStyle(fontWeight: FontWeight.w700)),
+                          Text('${vm.statsOf(s).staff}'),
+                          Text(s.phone ?? '—'),
                           _StoreActions(store: s),
                         ],
                     ],
@@ -167,15 +167,15 @@ class StoresView extends StatelessWidget {
             const SizedBox(height: 16),
             LayoutBuilder(
               builder: (context, c) {
-                final regional = _RegionalCard(vm: vm, currency: cur);
-                final log = _OperationsLogCard(log: vm.operationsLog);
-                if (c.maxWidth < 1000) return Column(children: [regional, const SizedBox(height: 16), log]);
+                final share = _ShareCard(vm: vm, currency: cur);
+                final recent = _RecentCard(stores: vm.recentlyUpdated);
+                if (c.maxWidth < 1000) return Column(children: [share, const SizedBox(height: 16), recent]);
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(flex: 3, child: regional),
+                    Expanded(flex: 3, child: share),
                     const SizedBox(width: 16),
-                    Expanded(flex: 2, child: log),
+                    Expanded(flex: 2, child: recent),
                   ],
                 );
               },
@@ -211,8 +211,8 @@ class _FilterBar extends StatelessWidget {
               style: const TextStyle(fontSize: 13),
               decoration: InputDecoration(
                 hintText: tr.searchStores,
-                prefixIcon: Icon(Icons.search, size: 18),
-                contentPadding: EdgeInsets.symmetric(vertical: 10),
+                prefixIcon: const Icon(Icons.search, size: 18),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
               ),
             );
             final controls = Wrap(
@@ -322,11 +322,10 @@ class _StoreActions extends StatelessWidget {
       ),
     );
     if (ok != true || !context.mounted) return;
-    final messenger = ScaffoldMessenger.of(context);
     final dashboard = context.read<DashboardViewModel>();
-    final done = await context.read<StoresViewModel>().delete(store.id);
-    if (done) dashboard.load();
-    messenger.showSnackBar(SnackBar(content: Text(done ? tr.storeDeleted(store.name) : tr.deleteFailed)));
+    final error = await context.read<StoresViewModel>().delete(store.id);
+    if (error == null) dashboard.load();
+    if (context.mounted) showResult(context, error, success: tr.storeDeleted(store.name));
   }
 
   @override
@@ -343,7 +342,7 @@ class _StoreActions extends StatelessWidget {
               padding: EdgeInsets.zero,
             ),
             onPressed: () => StoreDetailSheet.show(context, store.id),
-            child: Text(tr.viewAnalytics, style: TextStyle(fontWeight: FontWeight.w600)),
+            child: Text(tr.viewAnalytics, style: const TextStyle(fontWeight: FontWeight.w600)),
           ),
           const Spacer(),
         ],
@@ -367,17 +366,17 @@ class _StoreActions extends StatelessWidget {
 }
 
 class _StoreCard extends StatelessWidget {
-  const _StoreCard({required this.store, required this.rank, required this.currency});
+  const _StoreCard({required this.store, required this.stats, required this.currency});
 
   final StoreModel store;
-  final int rank;
+  final StoreStats stats;
   final Currency currency;
 
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final s = store;
-    final first = rank == 1 && s.isActive;
+    final first = stats.rank == 1 && stats.month > 0;
     Widget figure(String label, String value, String sub, Color subColor) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -457,7 +456,7 @@ class _StoreCard extends StatelessWidget {
                 const SizedBox(width: 3),
                 Expanded(
                   child: Text(
-                    s.fullAddress,
+                    s.address ?? '—',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 12, color: AppColors.muted),
@@ -474,9 +473,9 @@ class _StoreCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: figure(
-                      "Today's Sales",
-                      currency.format(s.todaySales),
-                      s.isActive ? tr.vsYest(formatPercent(s.todayChange)) : tr.offline,
+                      tr.kpiTodaySales,
+                      currency.format(stats.today),
+                      s.isActive ? tr.active : tr.offline,
                       s.isActive ? AppColors.green : AppColors.muted,
                     ),
                   ),
@@ -484,9 +483,13 @@ class _StoreCard extends StatelessWidget {
                   Expanded(
                     child: figure(
                       tr.monthlyVolume,
-                      currency.format(s.monthlySales),
-                      rank == 1 && s.isActive ? tr.topEarner : s.note,
-                      AppColors.muted,
+                      currency.format(stats.month),
+                      first
+                          ? tr.topEarner
+                          : stats.monthChange == null
+                          ? tr.shareValue((stats.share * 100).toStringAsFixed(0))
+                          : '${formatPercent(stats.monthChange!)} · ${tr.vsLastMonth}',
+                      first ? AppColors.orange : AppColors.green,
                     ),
                   ),
                 ],
@@ -496,12 +499,9 @@ class _StoreCard extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8),
               child: Column(
                 children: [
-                  info(Icons.phone_outlined, tr.phone, s.phone),
-                  info(
-                    Icons.groups_outlined,
-                    tr.staffHeadcount,
-                    s.staffCount == 0 && !s.isActive ? tr.reassigned : tr.nEmployees(s.staffCount),
-                  ),
+                  info(Icons.phone_outlined, tr.phone, s.phone ?? '—'),
+                  info(Icons.groups_outlined, tr.staffHeadcount, tr.nEmployees(stats.staff)),
+                  if ((s.description ?? '').isNotEmpty) info(Icons.notes_outlined, tr.description, s.description!),
                 ],
               ),
             ),
@@ -514,8 +514,8 @@ class _StoreCard extends StatelessWidget {
   }
 }
 
-class _RegionalCard extends StatelessWidget {
-  const _RegionalCard({required this.vm, required this.currency});
+class _ShareCard extends StatelessWidget {
+  const _ShareCard({required this.vm, required this.currency});
 
   final StoresViewModel vm;
   final Currency currency;
@@ -523,22 +523,23 @@ class _RegionalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
-    final regions = vm.regions;
+    final rows = vm.shares.take(6).toList();
     return SectionCard(
-      title: tr.regionalTitle,
-      subtitle: tr.regionalSubtitle(regions.map((r) => r.region).join(', ')),
+      title: tr.salesShare,
+      subtitle: tr.storeComparisonTitle,
       trailing: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(6)),
         child: Text(
-          '${tr.endpoint}:\n${ApiConstants.stores}',
+          '${tr.endpoint}:\n${ApiConstants.reportStoreComparison}',
           style: const TextStyle(fontSize: 10.5, fontFamily: 'monospace', color: AppColors.navy),
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var i = 0; i < regions.length; i++)
+          if (rows.isEmpty) Text(tr.noSalesThisMonth),
+          for (var i = 0; i < rows.length; i++)
             Padding(
               padding: const EdgeInsets.only(bottom: 14),
               child: Column(
@@ -547,12 +548,14 @@ class _RegionalCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '${regions[i].region} (${tr.branchesCount(regions[i].stores)}${regions[i].inactive > 0 ? ' · ${tr.nInactive(regions[i].inactive)}' : ''})',
+                          rows[i].storeName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                         ),
                       ),
                       Text(
-                        '${currency.format(regions[i].sales)} (${(regions[i].share * 100).toStringAsFixed(1)}%)',
+                        '${currency.format(rows[i].totalAmount)} (${rows[i].sharePercent.toStringAsFixed(1)}%)',
                         style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700),
                       ),
                     ],
@@ -561,7 +564,7 @@ class _RegionalCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
-                      value: regions[i].share,
+                      value: rows[i].sharePercent / 100,
                       minHeight: 7,
                       backgroundColor: AppColors.border,
                       color: i == 0
@@ -574,34 +577,9 @@ class _RegionalCard extends StatelessWidget {
                 ],
               ),
             ),
-          const SizedBox(height: 4),
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            spacing: 16,
-            runSpacing: 6,
-            children: [
-              Text.rich(
-                TextSpan(
-                  style: TextStyle(fontSize: 11.5, color: AppColors.muted),
-                  children: [
-                    TextSpan(
-                      text: '● ',
-                      style: TextStyle(color: AppColors.orange),
-                    ),
-                    TextSpan(text: '${tr.capitalOutlets}   '),
-                    TextSpan(
-                      text: '● ',
-                      style: TextStyle(color: AppColors.navy),
-                    ),
-                    TextSpan(text: tr.regionalTerritory),
-                  ],
-                ),
-              ),
-              Text(
-                tr.registersSynced(vm.activeCount),
-                style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
-              ),
-            ],
+          Text(
+            tr.registersSynced(vm.activeCount),
+            style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -609,55 +587,47 @@ class _RegionalCard extends StatelessWidget {
   }
 }
 
-class _OperationsLogCard extends StatelessWidget {
-  const _OperationsLogCard({required this.log});
+class _RecentCard extends StatelessWidget {
+  const _RecentCard({required this.stores});
 
-  final List<ActivityModel> log;
+  final List<StoreModel> stores;
 
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
     return SectionCard(
-      title: tr.opsLog,
+      title: tr.recentlyUpdated,
       trailing: const Icon(Icons.history, color: AppColors.navy),
       child: Column(
         children: [
-          if (log.isEmpty) Text(tr.noOperations),
-          for (final a in log)
+          if (stores.isEmpty) Text(tr.noOperations),
+          for (final s in stores)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IconBox(
-                    switch (a.type) {
-                      ActivityType.sale => Icons.inventory_2_outlined,
-                      ActivityType.staff => Icons.construction_outlined,
-                      _ => Icons.storefront_outlined,
-                    },
+                    Icons.storefront_outlined,
                     size: 28,
-                    color: a.type == ActivityType.sale ? AppColors.orange : AppColors.green,
-                    background: a.type == ActivityType.sale ? AppColors.orangeSoft : AppColors.greenSoft,
+                    color: s.isActive ? AppColors.green : AppColors.muted,
+                    background: s.isActive ? AppColors.greenSoft : AppColors.surfaceSoft,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(a.highlight, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                        Text(a.reference, style: const TextStyle(fontSize: 11.5, color: AppColors.muted)),
+                        Text(s.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text(
+                          tr.updatedOn(s.updatedAt == null ? '—' : formatTimeAgo(s.updatedAt!)),
+                          style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-          const Divider(height: 16),
-          TextButton(
-            onPressed: () => context.read<HomeViewModel>().select(AppSection.dashboard),
-            style: TextButton.styleFrom(foregroundColor: AppColors.orange),
-            child: Text(tr.viewAuditTrail, style: TextStyle(fontWeight: FontWeight.w600)),
-          ),
         ],
       ),
     );

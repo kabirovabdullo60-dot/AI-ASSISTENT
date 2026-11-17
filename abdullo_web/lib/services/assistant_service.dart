@@ -1,45 +1,47 @@
-import '../core/constants/api_constants.dart';
 import '../core/utils/format.dart';
-import '../core/utils/json.dart';
 import '../models/chat_message_model.dart';
-import 'base_service.dart';
-import 'mock/mock_database.dart';
+import '../models/dashboard_model.dart';
+import '../models/sales_report_model.dart';
+import 'reports_service.dart';
 
-class AssistantService extends BaseService {
-  AssistantService({super.client, super.useMock});
+/// The backend has no AI endpoint yet, so the assistant answers with rules built from the
+/// real numbers of /api/reports/dashboard and /api/reports/store-comparison.
+/// When Mehroj adds an AI endpoint, only [sendMessage] has to change.
+class AssistantService {
+  AssistantService(this._reports);
 
-  /// Sends the whole conversation, returns the assistant's reply in [language] ('en' / 'ru' / 'tg').
-  Future<ChatMessageModel> sendMessage(List<ChatMessageModel> history, {String language = 'en'}) => mockOr(
-    mock: (db) {
-      final last = history.lastWhere((m) => m.isUser, orElse: () => history.last);
-      return ChatMessageModel(
-        role: ChatRole.assistant,
-        text: mockReply(last.text, db, language: language),
-        time: DateTime.now(),
-      );
-    },
-    api: () async => ChatMessageModel.fromJson(
-      asJsonMap(
-        await client.post(ApiConstants.assistantChat, {
-          'language': language,
-          'messages': history.map((m) => m.toJson()).toList(),
-        }),
-      ),
-    ),
-  );
+  final ReportsService _reports;
 
-  /// Keyword answers built from the demo data. Understands questions in en / ru / tg,
-  /// answers in [language].
-  static String mockReply(String question, MockDatabase db, {String language = 'en'}) {
+  Future<ChatMessageModel> sendMessage(List<ChatMessageModel> history, {String language = 'en'}) async {
+    final last = history.lastWhere((m) => m.isUser, orElse: () => history.last);
+    final now = DateTime.now();
+    final (dashboard, stores) = await (
+      _reports.dashboard(),
+      _reports.storeComparison(startDate: DateTime(now.year, now.month), endDate: now),
+    ).wait;
+    return ChatMessageModel(
+      role: ChatRole.assistant,
+      text: reply(last.text, dashboard, stores, language: language),
+      time: DateTime.now(),
+    );
+  }
+
+  /// Keyword answers. Understands questions in en / ru / tg, answers in [language].
+  static String reply(String question, DashboardModel o, SalesReportModel month, {String language = 'en'}) {
     final q = question.toLowerCase();
     bool has(List<String> words) => words.any(q.contains);
-    final o = db.overview();
     String tjs(double v) => '${formatAmount(v)} TJS';
-    final ranked = List.of(db.stores)..sort((a, b) => b.monthlySales.compareTo(a.monthlySales));
+    final ranked = List.of(month.stores)..sort((a, b) => b.totalAmount.compareTo(a.totalAmount));
     final top3 = ranked.take(3).toList();
-    final topList = [
-      for (var i = 0; i < top3.length; i++) '${i + 1}. ${top3[i].name} — ${tjs(top3[i].monthlySales)}',
-    ].join('\n');
+    final topList = top3.isEmpty
+        ? '—'
+        : [
+            for (var i = 0; i < top3.length; i++) '${i + 1}. ${top3[i].storeName} — ${tjs(top3[i].totalAmount)}',
+          ].join('\n');
+    final best = ranked.isEmpty ? '—' : ranked.first.storeName;
+    final worst = ranked.isEmpty ? '—' : ranked.last.storeName;
+    final second = ranked.length > 1 ? ranked[1].storeName : best;
+    final change = month.changePercent == null ? '' : ' (${formatPercent(month.changePercent!)})';
     String pick(String en, String ru, String tg) => switch (language) {
       'ru' => ru,
       'tg' => tg,
@@ -48,35 +50,35 @@ class AssistantService extends BaseService {
 
     if (has(['report', 'hisobot', 'ҳисобот', 'отчет', 'отчёт', 'analy', 'анализ', 'таҳлил', 'tahlil'])) {
       return pick(
-        'Report: this month ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)} vs last month), '
-            'average ${tjs(o.averageDaily)} a day, gross margin ${o.grossMargin}%. Best store: ${ranked.first.name}. '
-            'Unpaid salaries: ${tjs(o.unpaidSalaries)} (${o.pendingPayrolls} people). Trend: steady growth.',
-        'Отчёт: за месяц ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)} к прошлому месяцу), '
-            'в среднем ${tjs(o.averageDaily)} в день, валовая маржа ${o.grossMargin}%. Лучший магазин: ${ranked.first.name}. '
-            'Невыплаченные зарплаты: ${tjs(o.unpaidSalaries)} (${o.pendingPayrolls} чел.). Тренд: стабильный рост.',
-        'Ҳисобот: дар ин моҳ ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)} нисбат ба моҳи гузашта), '
-            'миёна ${tjs(o.averageDaily)} дар як рӯз, фоидаи умумӣ ${o.grossMargin}%. Беҳтарин мағоза: ${ranked.first.name}. '
-            'Музди пардохтнашуда: ${tjs(o.unpaidSalaries)} (${o.pendingPayrolls} нафар). Тамоюл: афзоиши устувор.',
+        'Report: this month ${tjs(o.monthSales)}$change, '
+            '${o.monthSalesCount} sales. Best store: $best. '
+            'Unpaid salaries this month: ${tjs(o.remainingSalaryThisMonth)}.',
+        'Отчёт: за месяц ${tjs(o.monthSales)}$change, '
+            '${o.monthSalesCount} продаж. Лучший магазин: $best. '
+            'Невыплачено зарплат за месяц: ${tjs(o.remainingSalaryThisMonth)}.',
+        'Ҳисобот: дар ин моҳ ${tjs(o.monthSales)}$change, '
+            '${o.monthSalesCount} фурӯш. Беҳтарин мағоза: $best. '
+            'Музди пардохтнашудаи моҳ: ${tjs(o.remainingSalaryThisMonth)}.',
       );
     }
     if (has(['salar', 'payroll', 'maosh', 'моаш', 'музд', 'muzd', 'зарплат', 'unpaid'])) {
       return pick(
-        'Unpaid salaries: ${tjs(o.unpaidSalaries)} for ${o.pendingPayrolls} employees (${o.payrollCycle} cycle). '
-            'Open the Salaries page to pay them.',
-        'Невыплаченные зарплаты: ${tjs(o.unpaidSalaries)} для ${o.pendingPayrolls} сотрудников (цикл: ${o.payrollCycle}). '
-            'Откройте страницу «Зарплаты», чтобы выплатить.',
-        'Музди пардохтнашуда: ${tjs(o.unpaidSalaries)} барои ${o.pendingPayrolls} корманд (давраи ${o.payrollCycle}). '
-            'Барои пардохт саҳифаи «Музди меҳнат»-ро кушоед.',
+        'Unpaid salaries this month: ${tjs(o.remainingSalaryThisMonth)} of ${tjs(o.salaryDueThisMonth)}. '
+            'All months together: ${tjs(o.remainingSalaryTotal)}. Open the Salaries page to pay them.',
+        'Невыплачено за месяц: ${tjs(o.remainingSalaryThisMonth)} из ${tjs(o.salaryDueThisMonth)}. '
+            'За все месяцы: ${tjs(o.remainingSalaryTotal)}. Откройте страницу «Зарплаты», чтобы выплатить.',
+        'Музди пардохтнашудаи ин моҳ: ${tjs(o.remainingSalaryThisMonth)} аз ${tjs(o.salaryDueThisMonth)}. '
+            'Дар ҳамаи моҳҳо: ${tjs(o.remainingSalaryTotal)}. Барои пардохт саҳифаи «Музди меҳнат»-ро кушоед.',
       );
     }
     if (has(['sale', 'revenue', 'savdo', 'фурӯш', 'furush', 'продаж', 'выручк'])) {
       return pick(
-        "Today's sales are ${tjs(o.todaySales)}. This week ${tjs(o.weeklySales)} — target ${tjs(o.weeklyTarget)}. "
-            'This month ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)}).',
-        'Продажи сегодня: ${tjs(o.todaySales)}. За неделю ${tjs(o.weeklySales)} — цель ${tjs(o.weeklyTarget)}. '
-            'За месяц ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)}).',
-        'Фурӯши имрӯза: ${tjs(o.todaySales)}. Дар ҳафта ${tjs(o.weeklySales)} — ҳадаф ${tjs(o.weeklyTarget)}. '
-            'Дар моҳ ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)}).',
+        "Today's sales are ${tjs(o.todaySales)}. This week ${tjs(o.weekSales)}. "
+            'This month ${tjs(o.monthSales)}$change.',
+        'Продажи сегодня: ${tjs(o.todaySales)}. За неделю ${tjs(o.weekSales)}. '
+            'За месяц ${tjs(o.monthSales)}$change.',
+        'Фурӯши имрӯза: ${tjs(o.todaySales)}. Дар ҳафта ${tjs(o.weekSales)}. '
+            'Дар моҳ ${tjs(o.monthSales)}$change.',
       );
     }
     if (has([
@@ -94,12 +96,12 @@ class AssistantService extends BaseService {
       'марж',
     ])) {
       return pick(
-        'Gross margin is ${o.grossMargin}%. Payroll is the biggest cost, then rent and delivery. '
-            '${ranked.last.name} brings the least — check whether its rent pays off.',
-        'Валовая маржа ${o.grossMargin}%. Самая большая статья расходов — зарплаты, затем аренда и доставка. '
-            '${ranked.last.name} приносит меньше всех — проверьте, окупается ли аренда.',
-        'Фоидаи умумӣ ${o.grossMargin}% аст. Хароҷоти калонтарин — музди меҳнат, баъд иҷора ва расонидан. '
-            '${ranked.last.name} камтар аз ҳама даромад медиҳад — санҷед, ки иҷораи он худро сафед мекунад ё не.',
+        'Salaries due this month: ${tjs(o.salaryDueThisMonth)} — ${o.monthSales == 0 ? 0 : (o.salaryDueThisMonth / o.monthSales * 100).round()}% of sales. '
+            '$worst brings the least — check whether its rent pays off.',
+        'Зарплаты за месяц: ${tjs(o.salaryDueThisMonth)} — ${o.monthSales == 0 ? 0 : (o.salaryDueThisMonth / o.monthSales * 100).round()}% от продаж. '
+            '$worst приносит меньше всех — проверьте, окупается ли аренда.',
+        'Музди ин моҳ: ${tjs(o.salaryDueThisMonth)} — ${o.monthSales == 0 ? 0 : (o.salaryDueThisMonth / o.monthSales * 100).round()}% аз фурӯш. '
+            '$worst камтар аз ҳама даромад медиҳад — санҷед, ки иҷораи он худро сафед мекунад ё не.',
       );
     }
     if (has(['store', 'magoza', 'мағоза', 'магазин', 'branch', 'лучш', 'беҳтарин'])) {
@@ -111,9 +113,9 @@ class AssistantService extends BaseService {
     }
     if (has(['staff', 'employee', 'kormand', 'корманд', 'сотрудник', 'персонал', 'shift'])) {
       return pick(
-        'You have ${o.totalStaff} staff, ${o.staffOnShift} on shift today.',
-        'У вас ${o.totalStaff} сотрудников, сегодня на смене ${o.staffOnShift}.',
-        'Шумо ${o.totalStaff} корманд доред, имрӯз ${o.staffOnShift} нафар дар баст ҳастанд.',
+        'You have ${o.totalEmployees} employees, ${o.activeEmployees} active.',
+        'У вас ${o.totalEmployees} сотрудников, активных: ${o.activeEmployees}.',
+        'Шумо ${o.totalEmployees} корманд доред, ${o.activeEmployees} нафар фаъол.',
       );
     }
     if (has([
@@ -131,14 +133,14 @@ class AssistantService extends BaseService {
       'мизоҷ',
     ])) {
       return pick(
-        'Three ideas for next month:\n1. Move a promo stand from ${ranked.first.name} to ${ranked[3].name} for a week.\n'
-            '2. ${o.onlineShare}% already pay by card/QR — give 3% cashback on QR payments.\n'
+        'Three ideas for next month:\n1. Move a promo stand from $best to $second for a week.\n'
+            '2. Give 3% cashback on card/QR payments for a month and compare sales.\n'
             '3. A holiday bundle of your top 3 products in all stores.',
-        'Три идеи на следующий месяц:\n1. Перенесите промостойку из ${ranked.first.name} в ${ranked[3].name} на неделю.\n'
-            '2. ${o.onlineShare}% уже платят картой/QR — дайте 3% кэшбэк за оплату по QR.\n'
+        'Три идеи на следующий месяц:\n1. Перенесите промостойку из $best в $second на неделю.\n'
+            '2. Дайте 3% кэшбэк за оплату картой/QR на месяц и сравните продажи.\n'
             '3. Праздничный набор из 3 самых продаваемых товаров во всех магазинах.',
-        'Се ғоя барои моҳи оянда:\n1. Стенди рекламаро аз ${ranked.first.name} ба ${ranked[3].name} барои як ҳафта баред.\n'
-            '2. ${o.onlineShare}% аллакай бо корт/QR пардохт мекунанд — барои QR 3% кэшбэк диҳед.\n'
+        'Се ғоя барои моҳи оянда:\n1. Стенди рекламаро аз $best ба $second барои як ҳафта баред.\n'
+            '2. Барои як моҳ ба пардохти корт/QR 3% кэшбэк диҳед ва фурӯшро муқоиса кунед.\n'
             '3. Маҷмӯаи идонаи 3 моли серхаридор дар ҳамаи мағозаҳо.',
       );
     }

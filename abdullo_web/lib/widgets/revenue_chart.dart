@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 import '../models/chart_point_model.dart';
 
-/// Bars = daily revenue, smooth orange line = cashflow.
+/// Bars = daily revenue, smooth orange line = number of sales.
 /// The best day is orange with a label, today is dark navy.
 /// Hover with the mouse (or tap / drag on a phone) to see any day's numbers.
 class RevenueChart extends StatefulWidget {
@@ -204,7 +204,7 @@ class _RevenueChartPainter extends CustomPainter {
     }
 
     // cashflow line
-    final cash = points.map((p) => p.cashflow).toList();
+    final cash = points.map((p) => p.count.toDouble()).toList();
     final minC = cash.reduce(math.min);
     final maxC = cash.reduce(math.max);
     final span = maxC - minC == 0 ? 1 : maxC - minC;

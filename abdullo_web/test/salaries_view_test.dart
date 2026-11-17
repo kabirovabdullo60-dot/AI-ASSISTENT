@@ -6,61 +6,56 @@ import 'helpers.dart';
 
 void main() {
   for (final width in [mobileWidth, desktopWidth]) {
-    final w = '${width.toInt()}px';
-
-    testWidgets('salaries at $w: KPIs, table, record a payment', (tester) async {
-      await pumpAt(tester, width);
+    testWidgets('salaries at ${width.toInt()}px: KPIs + pay the rest of a partial salary', (tester) async {
+      final backend = await pumpApp(tester, width);
       await openSection(tester, AppSection.salaries);
-      expect(find.text('Salaries & Payroll Management'), findsOneWidget);
-      expect(find.text('7,200'), findsOneWidget); // outstanding
-      expect(find.text('14 employees'), findsOneWidget);
-
-      await scrollTo(tester, find.byKey(const Key('pay-p3')));
-      await tester.tap(find.byKey(const Key('pay-p3')));
+      expect(find.text('4,200'), findsOneWidget); // remaining this month
+      await scrollTo(tester, find.byKey(const Key('pay-e3')));
+      await tester.tap(find.byKey(const Key('pay-e3')));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('payment-save'))); // pays remaining 1,000
+      await tester.tap(find.byKey(const Key('payment-save'))); // prefilled with remaining 1,000
       await tester.pumpAndSettle();
-      await tester.drag(find.byKey(const Key('payroll-table')), const Offset(0, 3000));
-      await tester.pumpAndSettle();
-      expect(find.text('6,200'), findsOneWidget);
-
-      await scrollTo(tester, find.text('Store Budget Allocation'));
-      await scrollTo(tester, find.byKey(const Key('disbursements')));
+      expect(backend.requests, contains('POST /api/payroll'));
+      await scrollToTop(tester);
+      expect(find.text('3,200'), findsOneWidget);
     });
   }
 
-  testWidgets('tabs filter by status; previous month is fully paid', (tester) async {
-    await pumpAt(tester, desktopWidth);
+  testWidgets('amount above the remaining salary is blocked in the form', (tester) async {
+    await pumpApp(tester, desktopWidth);
     await openSection(tester, AppSection.salaries);
-    await tester.tap(find.text('Unpaid (2)'));
+    await scrollTo(tester, find.byKey(const Key('pay-e2')));
+    await tester.tap(find.byKey(const Key('pay-e2')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('pay-p6')), findsOneWidget);
-    expect(find.byKey(const Key('pay-p3')), findsNothing);
-
-    await tester.tap(find.byKey(const Key('prev-month')));
-    await tester.pumpAndSettle();
-    expect(find.text('Unpaid (0)'), findsOneWidget);
-    expect(find.text('0'), findsWidgets);
-  });
-
-  testWidgets('History dialog lists payments', (tester) async {
-    await pumpAt(tester, desktopWidth);
-    await openSection(tester, AppSection.salaries);
-    await scrollTo(tester, find.byKey(const Key('history-p1')));
-    await tester.tap(find.byKey(const Key('history-p1')));
-    await tester.pumpAndSettle();
-    expect(find.text('+4,500 TJS'), findsWidgets);
-  });
-
-  testWidgets('Record Salary Payment button: choose employee', (tester) async {
-    await pumpAt(tester, desktopWidth);
-    await openSection(tester, AppSection.salaries);
-    await tester.tap(find.byKey(const Key('record-salary')));
-    await tester.pumpAndSettle();
-    expect(find.byKey(const Key('payment-employee')), findsOneWidget);
-    await tester.enterText(find.byKey(const Key('payment-amount')), '500');
+    await tester.enterText(find.byKey(const Key('payment-amount')), '9999');
     await tester.tap(find.byKey(const Key('payment-save')));
     await tester.pumpAndSettle();
-    expect(find.text('6,700'), findsOneWidget);
+    expect(find.text('Max 3,200 TJS'), findsOneWidget);
+  });
+
+  testWidgets('history dialog: cancel a payment (DELETE /api/payroll/{id})', (tester) async {
+    final backend = await pumpApp(tester, desktopWidth);
+    await openSection(tester, AppSection.salaries);
+    await scrollTo(tester, find.byKey(const Key('history-e1')));
+    await tester.tap(find.byKey(const Key('history-e1')));
+    await tester.pumpAndSettle();
+    final pay = backend.payments.firstWhere((p) => p['employeeId'] == 'e1');
+    await tester.tap(find.byKey(Key('cancel-payment-${pay['id']}')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('confirm-cancel-payment')));
+    await tester.pumpAndSettle();
+    expect(pay['deleted'], isTrue);
+  });
+
+  testWidgets('tabs filter by status; previous month loads from the API', (tester) async {
+    final backend = await pumpApp(tester, desktopWidth);
+    await openSection(tester, AppSection.salaries);
+    await tester.tap(find.text('Unpaid (1)'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('pay-e2')), findsOneWidget);
+    expect(find.byKey(const Key('pay-e3')), findsNothing);
+    await tester.tap(find.byKey(const Key('prev-month')));
+    await tester.pumpAndSettle();
+    expect(backend.requests.where((r) => r == 'GET /api/payroll/monthly').length, greaterThan(1));
   });
 }

@@ -4,11 +4,15 @@ import 'package:provider/provider.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/format.dart';
+import '../models/payment_model.dart';
 import '../models/payroll_model.dart';
+import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
+import '../widgets/status_badge.dart';
 
-/// Payments made to one employee in the selected month.
-class PayrollHistoryDialog extends StatelessWidget {
+/// All months and payments of one employee — GET /api/payroll/employee/{id}.
+/// A payment can be cancelled here (DELETE /api/payroll/{id}).
+class PayrollHistoryDialog extends StatefulWidget {
   const PayrollHistoryDialog({super.key, required this.payroll});
 
   final PayrollModel payroll;
@@ -19,44 +23,121 @@ class PayrollHistoryDialog extends StatelessWidget {
   );
 
   @override
+  State<PayrollHistoryDialog> createState() => _PayrollHistoryDialogState();
+}
+
+class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
+  late Future<EmployeePayrollModel> _future = _load();
+
+  Future<EmployeePayrollModel> _load() => context.read<PayrollViewModel>().history(widget.payroll.employeeId);
+
+  Future<void> _cancel(PaymentModel p) async {
+    final tr = context.l10n;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(tr.cancelPaymentTitle),
+        content: Text('${formatAmount(p.amount)} TJS · ${formatDate(p.paymentDate)}'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr.close)),
+          FilledButton(
+            key: const Key('confirm-cancel-payment'),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.red),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(tr.cancelPayment),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    final dashboard = context.read<DashboardViewModel>();
+    final error = await context.read<PayrollViewModel>().cancelPayment(p.id);
+    if (!mounted) return;
+    if (error == null) {
+      dashboard.load();
+      setState(() {
+        _future = _load();
+      });
+    }
+    showResult(context, error, success: tr.paymentCancelled);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
-    final history = context.watch<PayrollViewModel>().historyFor(payroll.id);
     return AlertDialog(
-      title: Text(tr.paymentsOf(payroll.employeeName)),
+      title: Text(tr.paymentsOf(widget.payroll.employeeName)),
       content: SizedBox(
-        width: 420,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              tr.salarySummary(
-                '${formatAmount(payroll.salary)} TJS',
-                '${formatAmount(payroll.disbursed)} TJS',
-                '${formatAmount(payroll.remaining)} TJS',
+        width: 480,
+        child: FutureBuilder<EmployeePayrollModel>(
+          future: _future,
+          builder: (context, snap) {
+            if (snap.hasError) return Text(tr.loadError);
+            if (!snap.hasData) {
+              return const SizedBox(height: 120, child: Center(child: CircularProgressIndicator()));
+            }
+            final h = snap.data!;
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    tr.salarySummary(
+                      '${formatAmount(h.totalDue)} TJS',
+                      '${formatAmount(h.totalPaid)} TJS',
+                      '${formatAmount(h.totalRemaining)} TJS',
+                    ),
+                    style: const TextStyle(color: AppColors.muted),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(tr.payments, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  if (h.payments.isEmpty) Padding(padding: const EdgeInsets.all(8), child: Text(tr.noPaymentsYet)),
+                  for (final p in h.payments)
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.account_balance_outlined, color: AppColors.green),
+                      title: Text(
+                        '+${formatAmount(p.amount)} TJS',
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      subtitle: Text(
+                        '${formatMonthYear(DateTime(p.year, p.month))} · ${formatDate(p.paymentDate)}'
+                        '${(p.note ?? '').isEmpty ? '' : ' · ${p.note}'}',
+                      ),
+                      trailing: IconButton(
+                        key: Key('cancel-payment-${p.id}'),
+                        tooltip: tr.cancelPayment,
+                        icon: const Icon(Icons.undo, color: AppColors.red),
+                        onPressed: () => _cancel(p),
+                      ),
+                    ),
+                  const SizedBox(height: 8),
+                  Text(tr.months, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 6),
+                  for (final m in h.months.reversed.take(12))
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          Expanded(child: Text(formatMonthYear(DateTime(m.year, m.month)))),
+                          Text('${formatAmount(m.paid)} / ${formatAmount(m.due)}'),
+                          const SizedBox(width: 8),
+                          StatusBadge(
+                            tr.payStatus(m.status),
+                            tone: switch (m.status) {
+                              PayStatus.paid => BadgeTone.positive,
+                              PayStatus.partial => BadgeTone.warning,
+                              PayStatus.unpaid => BadgeTone.negative,
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ),
-              style: const TextStyle(color: AppColors.muted),
-            ),
-            const SizedBox(height: 12),
-            if (history.isEmpty)
-              Text(tr.paidBeforeRecords)
-            else
-              for (final d in history)
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.account_balance_outlined, color: AppColors.green),
-                  title: Text('+${formatAmount(d.amount)} TJS', style: const TextStyle(fontWeight: FontWeight.w700)),
-                  subtitle: Text(
-                    '${tr.paymentMethod(d.method)} • ${d.reference}${d.part.isEmpty ? '' : ' • ${d.part}'}',
-                  ),
-                  trailing: Text(
-                    '${formatRelativeDay(d.time)}\n${formatTime(d.time)}',
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted),
-                  ),
-                ),
-          ],
+            );
+          },
         ),
       ),
       actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text(tr.close))],

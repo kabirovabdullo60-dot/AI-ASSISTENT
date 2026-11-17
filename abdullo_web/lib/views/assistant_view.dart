@@ -118,6 +118,13 @@ class _EmptyChat extends StatelessWidget {
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
           ),
+          const SizedBox(height: 6),
+          Text(
+            tr.assistantNote,
+            key: const Key('assistant-note'),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
           const SizedBox(height: 20),
           Wrap(
             alignment: WrapAlignment.center,

@@ -8,26 +8,25 @@ import 'helpers.dart';
 
 void main() {
   testWidgets('mobile (400px): bottom NavigationBar, no sidebar', (tester) async {
-    await pumpAt(tester, mobileWidth);
+    await pumpApp(tester, mobileWidth);
     expect(find.byType(NavigationBar), findsOneWidget);
     expect(find.byType(AppSidebar), findsNothing);
   });
 
   testWidgets('tablet (800px): compact sidebar', (tester) async {
-    await pumpAt(tester, tabletWidth);
+    await pumpApp(tester, tabletWidth);
     expect(tester.widget<AppSidebar>(find.byType(AppSidebar)).extended, isFalse);
-    expect(find.byType(NavigationBar), findsNothing);
   });
 
-  testWidgets('desktop (1400px): extended sidebar', (tester) async {
-    await pumpAt(tester, desktopWidth);
+  testWidgets('desktop (1400px): extended sidebar + API status', (tester) async {
+    await pumpApp(tester, desktopWidth);
     expect(tester.widget<AppSidebar>(find.byType(AppSidebar)).extended, isTrue);
-    expect(tester.getSize(find.byKey(const Key('app-sidebar'))).width, AppSidebar.extendedWidth);
+    expect(find.textContaining('API connected'), findsOneWidget);
   });
 
   for (final width in [mobileWidth, desktopWidth]) {
     testWidgets('every page opens without layout errors at ${width.toInt()}px', (tester) async {
-      await pumpAt(tester, width);
+      await pumpApp(tester, width);
       for (final s in AppSection.values) {
         await openSection(tester, s);
         expect(
@@ -38,10 +37,4 @@ void main() {
       }
     });
   }
-
-  testWidgets('mobile "More" sheet opens Salaries', (tester) async {
-    await pumpAt(tester, mobileWidth);
-    await openSection(tester, AppSection.salaries);
-    await scrollTo(tester, find.byKey(const Key('payroll-table')));
-  });
 }

@@ -1,42 +1,33 @@
 import '../core/constants/api_constants.dart';
+import '../core/network/api_client.dart';
 import '../core/utils/json.dart';
-import '../models/activity_model.dart';
-import '../models/store_analytics_model.dart';
+import '../models/page_model.dart';
 import '../models/store_model.dart';
-import 'base_service.dart';
 
-class StoreService extends BaseService {
-  StoreService({super.client, super.useMock});
+class StoreService {
+  StoreService(this._api);
 
-  Future<List<StoreModel>> fetchStores() => mockOr(
-    mock: (db) => List.of(db.stores),
-    api: () async => asJsonList(await client.get(ApiConstants.stores)).map(StoreModel.fromJson).toList(),
-  );
+  final ApiClient _api;
 
-  Future<StoreModel> createStore(StoreModel draft) => mockOr(
-    mock: (db) => db.addStore(draft),
-    api: () async => StoreModel.fromJson(asJsonMap(await client.post(ApiConstants.stores, draft.toJson()))),
-  );
+  /// All stores (walks through every page, 100 per page).
+  Future<List<StoreModel>> fetchAll() async {
+    final all = <StoreModel>[];
+    for (var page = 1; ; page++) {
+      final p = PageModel.fromJson(
+        await _api.get(ApiConstants.stores, query: {'page': page, 'limit': 100, 'sort': 'name'}),
+        StoreModel.fromJson,
+      );
+      all.addAll(p.items);
+      if (page >= p.pages || p.items.isEmpty) return all;
+    }
+  }
 
-  Future<StoreModel> updateStore(StoreModel store) => mockOr(
-    mock: (db) => db.updateStore(store),
-    api: () async => StoreModel.fromJson(asJsonMap(await client.put(ApiConstants.store(store.id), store.toJson()))),
-  );
+  Future<StoreModel> create(StoreModel store) async =>
+      StoreModel.fromJson(asJsonMap(await _api.post(ApiConstants.stores, store.toJson())));
 
-  Future<void> deleteStore(String id) => mockOr(
-    mock: (db) => db.deleteStore(id),
-    api: () async {
-      await client.delete(ApiConstants.store(id));
-    },
-  );
+  Future<StoreModel> update(StoreModel store) async =>
+      StoreModel.fromJson(asJsonMap(await _api.put(ApiConstants.store(store.id), store.toJson())));
 
-  Future<StoreAnalyticsModel> fetchAnalytics(String id) => mockOr(
-    mock: (db) => db.analytics(id),
-    api: () async => StoreAnalyticsModel.fromJson(asJsonMap(await client.get(ApiConstants.storeAnalytics(id)))),
-  );
-
-  Future<List<ActivityModel>> fetchOperationsLog() => mockOr(
-    mock: (db) => db.storeLog.take(5).toList(),
-    api: () async => asJsonList(await client.get(ApiConstants.storesLog)).map(ActivityModel.fromJson).toList(),
-  );
+  /// Soft delete — sales history stays.
+  Future<void> delete(String id) => _api.delete(ApiConstants.store(id));
 }

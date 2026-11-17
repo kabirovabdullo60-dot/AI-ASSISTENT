@@ -1,60 +1,81 @@
-/// Backend config. Backend + Swagger are owned by Mehroj.
-///
-/// When Mehroj sends the endpoints:
-/// 1. put the server address in [baseUrl],
-/// 2. fix the paths below to match his Swagger,
-/// 3. set [useMock] to `false`.
-/// Nothing else in the app has to change.
+/// Backend config — Mehroj's API (Swagger: [baseUrl]/docs).
 class ApiConstants {
   ApiConstants._();
 
-  /// TODO: real URL from Mehroj's Swagger.
-  static const String baseUrl = 'http://localhost:8080/api/v1';
-  static const Duration timeout = Duration(seconds: 20);
+  static const String baseUrl = 'https://api-production-86caefb2.up.railway.app';
+  static const String docsUrl = '$baseUrl/docs';
+  static const Duration timeout = Duration(seconds: 25);
 
-  /// `true` = demo data, no backend needed.
-  static const bool useMock = true;
+  // auth
+  static const String register = '/api/auth/register';
+  static const String login = '/api/auth/login';
+  static const String refresh = '/api/auth/refresh';
+  static const String logout = '/api/auth/logout';
+  static const String me = '/api/auth/me';
 
-  // ---- Endpoints (TODO: confirm with Mehroj's Swagger) ----
-  static const String me = '/auth/me';
-  static const String overview = '/dashboard/overview'; // ?storeId=
-  static const String activity = '/activity'; // ?limit=
+  // profile
+  static const String profile = '/api/profile';
+  static const String profileAvatar = '/api/profile/avatar';
+  static const String profilePassword = '/api/profile/password';
 
-  static const String stores = '/stores'; // GET list, POST create
-  static String store(String id) => '/stores/$id'; // PUT update, DELETE
-  static String storeAnalytics(String id) => '/stores/$id/analytics'; // GET
-  static const String storesLog = '/stores/log'; // GET operations log
+  // stores
+  static const String stores = '/api/stores';
+  static String store(String id) => '/api/stores/$id';
 
-  static const String sales = '/sales'; // GET list, POST create
+  // sales
+  static const String sales = '/api/sales';
+  static String sale(String id) => '/api/sales/$id';
+  static const String salesDaily = '/api/sales/daily';
+  static const String salesWeekly = '/api/sales/weekly';
+  static const String salesMonthly = '/api/sales/monthly';
+  static String salesOfStore(String storeId) => '/api/sales/store/$storeId';
 
-  static const String employees = '/employees';
+  // employees
+  static const String employees = '/api/employees';
+  static String employee(String id) => '/api/employees/$id';
+  static String employeesOfStore(String storeId) => '/api/employees/store/$storeId';
 
-  static const String payroll = '/payroll'; // GET ?period=2026-11
-  static String payrollPayments(String id) => '/payroll/$id/payments'; // POST {amount, method}
-  static const String disbursements = '/payroll/disbursements'; // GET ?period=
+  // payroll
+  static const String payroll = '/api/payroll';
+  static String payment(String id) => '/api/payroll/$id';
+  static const String payrollMonthly = '/api/payroll/monthly';
+  static const String payrollSummary = '/api/payroll/summary';
+  static String payrollOfEmployee(String employeeId) => '/api/payroll/employee/$employeeId';
 
-  static const String assistantChat = '/assistant/chat'; // POST {messages: [...]}
+  // reports
+  static const String reportDashboard = '/api/reports/dashboard';
+  static const String reportWeeklySales = '/api/reports/weekly-sales';
+  static const String reportMonthlySales = '/api/reports/monthly-sales';
+  static const String reportStoreComparison = '/api/reports/store-comparison';
+  static const String reportEmployees = '/api/reports/employees';
+  static const String reportPayroll = '/api/reports/payroll';
 
-  /// Method, path, purpose — shown on the Settings page so the team sees the contract.
+  // health (no auth)
+  static const String healthLive = '/health/live';
+  static const String healthReady = '/health/ready';
+
+  /// Method, path, purpose — shown on the Settings page.
   static const List<(String, String, String)> endpointList = [
+    ('POST', '$register · $login · $refresh · $logout', 'Auth'),
     ('GET', me, 'Current user'),
-    ('GET', '$overview?storeId=', 'Dashboard KPIs + daily revenue'),
-    ('GET', '$activity?limit=', 'Recent business activity'),
-    ('GET', stores, 'Stores'),
-    ('POST', stores, 'Add store'),
-    ('PUT', '/stores/{id}', 'Edit store'),
-    ('DELETE', '/stores/{id}', 'Delete store'),
-    ('GET', '/stores/{id}/analytics', 'Store analytics (7 days + POS)'),
-    ('GET', storesLog, 'Store operations log'),
-    ('GET', sales, 'Daily sales entries'),
-    ('POST', sales, 'Record daily sales'),
-    ('GET', employees, 'Employees'),
-    ('GET', '$payroll?period=', 'Payroll for a month'),
-    ('POST', '/payroll/{id}/payments', 'Record salary payment'),
-    ('GET', '$disbursements?period=', 'Recent disbursements'),
-    ('POST', assistantChat, 'AI assistant reply'),
+    ('GET/PUT', profile, 'Profile'),
+    ('PATCH', '$profileAvatar · $profilePassword', 'Avatar, password'),
+    ('GET/POST', stores, 'Stores'),
+    ('GET/PUT/DELETE', '/api/stores/{id}', 'One store'),
+    ('GET/POST', sales, 'Sales'),
+    ('GET/PUT/DELETE', '/api/sales/{id}', 'One sale'),
+    ('GET', '$salesDaily · $salesWeekly · $salesMonthly', 'Sales reports'),
+    ('GET', '/api/sales/store/{storeId}', 'Sales of a store'),
+    ('GET/POST', employees, 'Employees'),
+    ('GET/PUT/DELETE', '/api/employees/{id}', 'One employee'),
+    ('GET', '/api/employees/store/{storeId}', 'Employees of a store'),
+    ('GET/POST', payroll, 'Salary payments'),
+    ('GET', '$payrollMonthly · $payrollSummary', 'Payroll reports'),
+    ('GET', '/api/payroll/employee/{employeeId}', 'Salary history'),
+    ('GET/DELETE', '/api/payroll/{id}', 'One payment'),
+    ('GET', '/api/reports/*', 'Dashboard, sales, stores, employees, payroll'),
+    ('GET', healthReady, 'Server health'),
   ];
 
-  /// Shown in the dashboard footer.
   static const List<String> mainEndpoints = [stores, sales, payroll];
 }
