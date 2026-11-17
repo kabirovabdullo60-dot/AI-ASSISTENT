@@ -100,11 +100,7 @@ class _RevenueChartPainter extends CustomPainter {
         ).createShader(rect);
       }
       canvas.drawRRect(
-        RRect.fromRectAndCorners(
-          rect,
-          topLeft: Radius.circular(barW / 2),
-          topRight: Radius.circular(barW / 2),
-        ),
+        RRect.fromRectAndCorners(rect, topLeft: Radius.circular(barW / 2), topRight: Radius.circular(barW / 2)),
         paint,
       );
     }
@@ -114,9 +110,7 @@ class _RevenueChartPainter extends CustomPainter {
     final minC = cash.reduce(math.min);
     final maxC = cash.reduce(math.max);
     final span = maxC - minC == 0 ? 1 : maxC - minC;
-    final pts = [
-      for (var i = 0; i < n; i++) Offset(xOf(i), bottom - ((cash[i] - minC) / span * 0.78 + 0.12) * chartH),
-    ];
+    final pts = [for (var i = 0; i < n; i++) Offset(xOf(i), bottom - ((cash[i] - minC) / span * 0.78 + 0.12) * chartH)];
     final line = Path()..moveTo(pts.first.dx, pts.first.dy);
     for (var i = 1; i < n; i++) {
       final midX = (pts[i - 1].dx + pts[i].dx) / 2;
@@ -200,8 +194,5 @@ class _RevenueChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RevenueChartPainter old) =>
-      old.points != points ||
-      old.peakIndex != peakIndex ||
-      old.peakLabel != peakLabel ||
-      old.xLabels != xLabels;
+      old.points != points || old.peakIndex != peakIndex || old.peakLabel != peakLabel || old.xLabels != xLabels;
 }

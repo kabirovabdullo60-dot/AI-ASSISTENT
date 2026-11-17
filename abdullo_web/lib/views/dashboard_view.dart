@@ -132,17 +132,16 @@ class _DashboardContent extends StatelessWidget {
     );
   }
 
-  KpiCard _moneyKpi(String title, double tjs, double change, String caption, IconData icon, Currency cur) =>
-      KpiCard(
-        title: title,
-        value: cur.amount(tjs),
-        unit: cur.code,
-        icon: icon,
-        badge: formatPercent(change),
-        badgeTone: change >= 0 ? BadgeTone.positive : BadgeTone.negative,
-        badgeIcon: change >= 0 ? Icons.trending_up : Icons.trending_down,
-        caption: caption,
-      );
+  KpiCard _moneyKpi(String title, double tjs, double change, String caption, IconData icon, Currency cur) => KpiCard(
+    title: title,
+    value: cur.amount(tjs),
+    unit: cur.code,
+    icon: icon,
+    badge: formatPercent(change),
+    badgeTone: change >= 0 ? BadgeTone.positive : BadgeTone.negative,
+    badgeIcon: change >= 0 ? Icons.trending_up : Icons.trending_down,
+    caption: caption,
+  );
 }
 
 class _DateChip extends StatelessWidget {
@@ -276,10 +275,7 @@ class _RevenueCard extends StatelessWidget {
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceSoft,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                decoration: BoxDecoration(color: AppColors.surfaceSoft, borderRadius: BorderRadius.circular(8)),
                 child: Wrap(
                   alignment: WrapAlignment.spaceBetween,
                   spacing: 16,
@@ -308,11 +304,7 @@ class _RevenueCard extends StatelessWidget {
                     ),
                     Text(
                       '${o.reconciliationRate}% Automated Reconciliation',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.muted,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: const TextStyle(fontSize: 12, color: AppColors.muted, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -335,11 +327,7 @@ class _RevenueCard extends StatelessWidget {
                     icon: Icons.percent,
                     iconColor: AppColors.green,
                   ),
-                  MiniStatTile(
-                    label: 'Online / QR Split',
-                    value: '${o.onlineShare}% Card',
-                    icon: Icons.qr_code_2,
-                  ),
+                  MiniStatTile(label: 'Online / QR Split', value: '${o.onlineShare}% Card', icon: Icons.qr_code_2),
                   MiniStatTile(
                     label: 'Cash in Safe Vaults',
                     value: currency.format(o.cashInVaults),
@@ -535,10 +523,7 @@ class _ActivityCard extends StatelessWidget {
           PopupMenuButton<ActivityType?>(
             key: const Key('activity-filter'),
             tooltip: 'Filter',
-            icon: Icon(
-              Icons.filter_list,
-              color: vm.activityFilter == null ? AppColors.muted : AppColors.orange,
-            ),
+            icon: Icon(Icons.filter_list, color: vm.activityFilter == null ? AppColors.muted : AppColors.orange),
             onSelected: vm.setActivityFilter,
             itemBuilder: (_) => [
               const PopupMenuItem(value: null, child: Text('All activity')),

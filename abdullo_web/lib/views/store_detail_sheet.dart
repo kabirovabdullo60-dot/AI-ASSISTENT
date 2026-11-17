@@ -1,0 +1,305 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../core/constants/api_constants.dart';
+import '../core/theme/app_colors.dart';
+import '../core/utils/currency.dart';
+import '../core/utils/format.dart';
+import '../models/store_analytics_model.dart';
+import '../models/store_model.dart';
+import '../services/store_service.dart';
+import '../viewmodels/settings_view_model.dart';
+import '../viewmodels/store_detail_view_model.dart';
+import '../viewmodels/stores_view_model.dart';
+import '../widgets/async_content.dart';
+import '../widgets/icon_box.dart';
+
+/// Side panel with one store's analytics (slides in from the right; full screen on a phone).
+class StoreDetailSheet extends StatelessWidget {
+  const StoreDetailSheet({super.key, required this.storeId});
+
+  final String storeId;
+
+  static Future<void> show(BuildContext context, String storeId) => showGeneralDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: 'Close',
+    barrierColor: Colors.black38,
+    transitionDuration: const Duration(milliseconds: 220),
+    pageBuilder: (_, _, _) => StoreDetailSheet(storeId: storeId),
+    transitionBuilder: (_, anim, _, child) => SlideTransition(
+      position: Tween(
+        begin: const Offset(1, 0),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(parent: anim, curve: Curves.easeOut)),
+      child: child,
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final width = math.min(MediaQuery.sizeOf(context).width, 520.0);
+    final store = context.select<StoresViewModel, StoreModel?>((s) => s.byId(storeId));
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Material(
+        key: const Key('store-detail'),
+        color: AppColors.background,
+        child: SizedBox(
+          width: width,
+          height: double.infinity,
+          child: store == null
+              ? const Center(child: Text('Store not found'))
+              : ChangeNotifierProvider(
+                  create: (_) => StoreDetailViewModel(StoreService(), storeId)..load(),
+                  child: _Body(store: store),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  const _Body({required this.store});
+
+  final StoreModel store;
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = context.watch<StoreDetailViewModel>();
+    final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
+
+    return SafeArea(
+      child: Column(
+        children: [
+          Container(
+            color: AppColors.blueSoft,
+            padding: const EdgeInsets.fromLTRB(20, 16, 8, 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(store.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                      Text(store.fullAddress, style: const TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  key: const Key('close-detail'),
+                  tooltip: 'Close',
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: AsyncContent(
+              hasData: vm.analytics != null,
+              error: vm.error,
+              onRetry: vm.load,
+              builder: (_) => _Content(store: store, analytics: vm.analytics!, currency: cur),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Content extends StatelessWidget {
+  const _Content({required this.store, required this.analytics, required this.currency});
+
+  final StoreModel store;
+  final StoreAnalyticsModel analytics;
+  final Currency currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final days = analytics.last7Days;
+    final maxV = days.isEmpty ? 0.0 : days.map((d) => d.revenue).reduce(math.max);
+
+    Widget tile(String label, double value, double change, {bool accent = false}) => Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+            const SizedBox(height: 2),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                currency.format(value),
+                style: TextStyle(fontWeight: FontWeight.w800, color: accent ? AppColors.orange : AppColors.ink),
+              ),
+            ),
+            Text(formatPercent(change), style: const TextStyle(fontSize: 11, color: AppColors.green)),
+          ],
+        ),
+      ),
+    );
+    Widget param(String label, String value, {Color? color}) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7),
+      child: Row(
+        children: [
+          Text(label, style: const TextStyle(fontSize: 12.5, color: AppColors.muted)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: color),
+            ),
+          ),
+        ],
+      ),
+    );
+    BoxDecoration box() => BoxDecoration(
+      color: AppColors.card,
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(color: AppColors.border),
+    );
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Row(
+          children: [
+            tile('Daily Sales', store.todaySales, store.todayChange),
+            const SizedBox(width: 8),
+            tile('Weekly Sales', store.weeklySales, store.todayChange * 0.7),
+            const SizedBox(width: 8),
+            tile('Monthly Total', store.monthlySales, store.monthlyChange, accent: true),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: box(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text('7-Day Sales Velocity', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                  ),
+                  Text(
+                    'Avg: ${currency.format(analytics.average)}/day',
+                    style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 90,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    for (var i = 0; i < days.length; i++)
+                      Expanded(
+                        child: Tooltip(
+                          message: '${formatDay(days[i].date)}: ${currency.format(days[i].revenue)}',
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 3),
+                            height: maxV == 0 ? 2 : math.max(2, 90 * days[i].revenue / maxV),
+                            decoration: BoxDecoration(
+                              color: i == days.length - 1 ? AppColors.orange : AppColors.blueSoft,
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(3)),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 6),
+              const Row(
+                children: [
+                  Text('6 Days Ago', style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Spacer(),
+                  Text('Today (Current)', style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: box(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Store Parameters & Configuration',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+              ),
+              const SizedBox(height: 6),
+              param('Phone Line:', store.phone),
+              param('Branch Staff Allocation:', '${store.staffCount} Active Crew'),
+              param(
+                'REST API Synchronizer:',
+                'GET ${ApiConstants.storeAnalytics(store.id)}${ApiConstants.useMock ? ' (demo)' : ''}',
+                color: AppColors.green,
+              ),
+              param('Operating Hours:', store.openingHours),
+              param('Status:', store.statusLabel),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        const Text('Recent POS Activity', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+        const SizedBox(height: 8),
+        if (analytics.recent.isEmpty) const Text('No sales yet'),
+        for (final s in analytics.recent)
+          Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(8)),
+            child: Row(
+              children: [
+                const IconBox(
+                  Icons.receipt_long_outlined,
+                  size: 28,
+                  color: AppColors.orange,
+                  background: AppColors.orangeSoft,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${s.reference} (${s.split.label})',
+                        style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        '${formatRelativeDay(s.date)} ${formatTime(s.date)} • ${s.registeredBy}',
+                        style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  '+${currency.format(s.amount)}',
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: AppColors.green),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}

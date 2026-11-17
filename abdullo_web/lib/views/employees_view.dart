@@ -38,11 +38,7 @@ class EmployeesView extends StatelessWidget {
               builder: (context, c) => CardGrid(
                 columns: c.maxWidth >= 620 ? 3 : 1,
                 children: [
-                  MiniStatTile(
-                    label: 'Employees',
-                    value: '${vm.employees.length}',
-                    icon: Icons.groups_outlined,
-                  ),
+                  MiniStatTile(label: 'Employees', value: '${vm.employees.length}', icon: Icons.groups_outlined),
                   MiniStatTile(
                     label: 'On shift now',
                     value: '${vm.onShiftCount}',

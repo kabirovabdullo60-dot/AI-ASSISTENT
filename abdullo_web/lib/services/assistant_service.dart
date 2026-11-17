@@ -15,9 +15,7 @@ class AssistantService extends BaseService {
       return ChatMessageModel(role: ChatRole.assistant, text: mockReply(last.text, db), time: DateTime.now());
     },
     api: () async => ChatMessageModel.fromJson(
-      asJsonMap(
-        await client.post(ApiConstants.assistantChat, {'messages': history.map((m) => m.toJson()).toList()}),
-      ),
+      asJsonMap(await client.post(ApiConstants.assistantChat, {'messages': history.map((m) => m.toJson()).toList()})),
     ),
   );
 
@@ -44,19 +42,7 @@ class AssistantService extends BaseService {
           'This week ${tjs(o.weeklySales)} — target ${tjs(o.weeklyTarget)}. '
           'This month ${tjs(o.monthlySales)} (${formatPercent(o.monthlyChange)}).';
     }
-    if (has([
-      'expense',
-      'cost',
-      'xaroj',
-      'хароҷ',
-      'расход',
-      'cut',
-      'profit',
-      'foida',
-      'фоида',
-      'прибыл',
-      'margin',
-    ])) {
+    if (has(['expense', 'cost', 'xaroj', 'хароҷ', 'расход', 'cut', 'profit', 'foida', 'фоида', 'прибыл', 'margin'])) {
       return 'Gross margin is ${o.grossMargin}%. Payroll is the biggest cost line, then rent and delivery. '
           'The two smallest stores (${ranked[ranked.length - 2].name}, ${ranked.last.name}) bring under 2% of sales — '
           'check whether their rent pays off.';
@@ -69,18 +55,7 @@ class AssistantService extends BaseService {
     if (has(['staff', 'employee', 'kormand', 'корманд', 'сотрудник', 'shift'])) {
       return 'You have ${o.totalStaff} staff, ${o.staffOnShift} on shift today.';
     }
-    if (has([
-      'marketing',
-      'reklama',
-      'реклам',
-      'idea',
-      'ғоя',
-      'идея',
-      'grow',
-      'customer',
-      'mijoz',
-      'клиент',
-    ])) {
+    if (has(['marketing', 'reklama', 'реклам', 'idea', 'ғоя', 'идея', 'grow', 'customer', 'mijoz', 'клиент'])) {
       return 'Three ideas for next month:\n'
           '1. Move a promo stand from ${ranked.first.name} to ${ranked[3].name} for a week.\n'
           '2. ${o.onlineShare}% already pay by card/QR — give 3% cashback on QR payments.\n'

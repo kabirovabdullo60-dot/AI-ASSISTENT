@@ -16,9 +16,7 @@ class EmployeesViewModel extends BaseViewModel {
 
   List<EmployeeModel> filtered(String query) => query.isEmpty
       ? _employees
-      : _employees
-            .where((e) => '${e.name} ${e.role} ${e.storeName} ${e.shift}'.toLowerCase().contains(query))
-            .toList();
+      : _employees.where((e) => '${e.name} ${e.role} ${e.storeName} ${e.shift}'.toLowerCase().contains(query)).toList();
 
   Future<void> load() => runTask(() async {
     _employees = await _service.fetchEmployees();

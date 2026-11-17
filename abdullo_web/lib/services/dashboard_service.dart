@@ -10,9 +10,8 @@ class DashboardService extends BaseService {
   /// [storeId] `null` = all stores.
   Future<OverviewModel> fetchOverview({String? storeId}) => mockOr(
     mock: (db) => db.overview(storeId: storeId),
-    api: () async => OverviewModel.fromJson(
-      asJsonMap(await client.get(ApiConstants.overview, query: {'storeId': ?storeId})),
-    ),
+    api: () async =>
+        OverviewModel.fromJson(asJsonMap(await client.get(ApiConstants.overview, query: {'storeId': ?storeId}))),
   );
 
   Future<List<ActivityModel>> fetchActivity({int limit = 20}) => mockOr(

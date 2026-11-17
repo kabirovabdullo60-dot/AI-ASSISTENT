@@ -1,5 +1,6 @@
 import 'package:abdullo_web/core/navigation/app_section.dart';
 import 'package:abdullo_web/widgets/app_sidebar.dart';
+import 'package:abdullo_web/widgets/page_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -30,8 +31,8 @@ void main() {
       for (final s in AppSection.values) {
         await openSection(tester, s);
         expect(
-          find.text(s == AppSection.assistant ? 'Ask your business assistant' : s.label),
-          findsWidgets,
+          s == AppSection.assistant ? find.text('Ask your business assistant') : find.byType(PageBody),
+          findsOneWidget,
           reason: s.name,
         );
       }
@@ -41,6 +42,6 @@ void main() {
   testWidgets('mobile "More" sheet opens Salaries', (tester) async {
     await pumpAt(tester, mobileWidth);
     await openSection(tester, AppSection.salaries);
-    expect(find.byKey(const Key('payroll-table')), findsOneWidget);
+    await scrollTo(tester, find.byKey(const Key('payroll-table')));
   });
 }

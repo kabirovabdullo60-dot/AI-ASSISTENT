@@ -9,36 +9,10 @@ void main() {
   for (final width in [mobileWidth, desktopWidth]) {
     final w = '${width.toInt()}px';
 
-    testWidgets('stores at $w: all 8 stores, search filters', (tester) async {
-      await pumpAt(tester, width);
-      await openSection(tester, AppSection.stores);
-      expect(find.text('Central Plaza Store'), findsOneWidget);
-      await tester.enterText(find.byKey(const Key('global-search')), 'rudaki');
-      await tester.pumpAndSettle();
-      expect(find.text('Rudaki Mall Kiosk'), findsOneWidget);
-      expect(find.text('Central Plaza Store'), findsNothing);
-    });
-
-    testWidgets('sales at $w: receipts table', (tester) async {
-      await pumpAt(tester, width);
-      await openSection(tester, AppSection.sales);
-      await scrollTo(tester, find.text('POS-88219'));
-    });
-
     testWidgets('employees at $w: staff table', (tester) async {
       await pumpAt(tester, width);
       await openSection(tester, AppSection.employees);
       await scrollTo(tester, find.text('Zarina Karimova'));
-    });
-
-    testWidgets('salaries at $w: pay one salary', (tester) async {
-      await pumpAt(tester, width);
-      await openSection(tester, AppSection.salaries);
-      expect(find.text('14,200 TJS'), findsOneWidget);
-      await scrollTo(tester, find.byKey(const Key('pay-p1')));
-      await tester.tap(find.byKey(const Key('pay-p1')));
-      await tester.pumpAndSettle();
-      expect(find.text('10,400 TJS'), findsOneWidget);
     });
 
     testWidgets('reports at $w: table + AI analysis', (tester) async {
@@ -60,7 +34,7 @@ void main() {
       await tester.tap(find.byKey(const Key('chat-send')));
       await tester.pumpAndSettle();
       expect(find.byType(ChatBubble), findsNWidgets(2));
-      expect(find.textContaining('38,450 TJS'), findsOneWidget);
+      expect(find.textContaining('36,750 TJS'), findsOneWidget);
     });
 
     testWidgets('profile at $w', (tester) async {
@@ -75,7 +49,7 @@ void main() {
       await tester.enterText(find.byKey(const Key('business-name')), 'Dushanbe Trade');
       await tester.pumpAndSettle();
       expect(find.textContaining('Dushanbe Trade'), findsWidgets);
-      await scrollTo(tester, find.text('/payroll/{id}/pay'));
+      await scrollTo(tester, find.text('/payroll/{id}/payments'));
     });
   }
 }

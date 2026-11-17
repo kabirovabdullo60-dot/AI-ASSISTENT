@@ -1,58 +1,67 @@
 import '../core/utils/json.dart';
 
-enum PaymentMethod {
-  cash('Cash'),
-  card('Card'),
-  qr('QR');
+/// "Primary Balance Split" of a daily entry.
+enum BalanceSplit {
+  balanced('Balanced'),
+  posHeavy('POS > 80%'),
+  cashHeavy('Cash Heavy');
 
-  const PaymentMethod(this.label);
+  const BalanceSplit(this.label);
   final String label;
 
-  static PaymentMethod parse(Object? v) =>
-      PaymentMethod.values.firstWhere((m) => m.name == '$v'.toLowerCase(), orElse: () => PaymentMethod.cash);
+  static BalanceSplit parse(Object? v) =>
+      BalanceSplit.values.firstWhere((s) => s.name == '$v', orElse: () => BalanceSplit.balanced);
 }
 
-/// GET /sales, POST /sales
+/// GET /sales, POST /sales — one daily sales entry of a store.
 class SaleModel {
   const SaleModel({
     required this.id,
-    required this.receipt,
+    required this.reference,
     required this.storeId,
     required this.storeName,
     required this.amount,
-    required this.method,
-    required this.register,
-    required this.time,
+    required this.date,
+    required this.registeredBy,
+    this.split = BalanceSplit.balanced,
+    this.notes = '',
   });
 
   factory SaleModel.fromJson(Map<String, dynamic> json) => SaleModel(
     id: asString(json['id']),
-    receipt: asString(json['receipt']),
+    reference: asString(json['reference']),
     storeId: asString(json['storeId']),
     storeName: asString(json['storeName']),
     amount: asDouble(json['amount']),
-    method: PaymentMethod.parse(json['method']),
-    register: asString(json['register']),
-    time: asDate(json['time']),
+    date: asDate(json['date']),
+    registeredBy: asString(json['registeredBy']),
+    split: BalanceSplit.parse(json['split']),
+    notes: asString(json['notes']),
   );
 
   final String id;
-  final String receipt;
+
+  /// Receipt / entry number, e.g. "ENT-10421".
+  final String reference;
   final String storeId;
   final String storeName;
   final double amount;
-  final PaymentMethod method;
-  final String register;
-  final DateTime time;
+  final DateTime date;
+  final String registeredBy;
+  final BalanceSplit split;
+  final String notes;
+
+  String get searchText => '$reference $storeName $registeredBy $notes ${split.label}'.toLowerCase();
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'receipt': receipt,
+    'reference': reference,
     'storeId': storeId,
     'storeName': storeName,
     'amount': amount,
-    'method': method.name,
-    'register': register,
-    'time': time.toIso8601String(),
+    'date': date.toIso8601String(),
+    'registeredBy': registeredBy,
+    'split': split.name,
+    'notes': notes,
   };
 }

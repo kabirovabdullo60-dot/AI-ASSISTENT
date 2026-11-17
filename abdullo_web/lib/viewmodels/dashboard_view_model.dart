@@ -43,10 +43,7 @@ class DashboardViewModel extends BaseViewModel {
       .toList();
 
   Future<void> load() => runTask(() async {
-    final (overview, activity) = await (
-      _service.fetchOverview(storeId: _storeId),
-      _service.fetchActivity(),
-    ).wait;
+    final (overview, activity) = await (_service.fetchOverview(storeId: _storeId), _service.fetchActivity()).wait;
     _overview = overview;
     _activity = activity;
   }, errorMessage: 'Could not load the dashboard. Check the connection and try again.');

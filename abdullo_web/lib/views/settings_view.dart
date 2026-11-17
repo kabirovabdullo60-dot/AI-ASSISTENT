@@ -17,9 +17,7 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  late final TextEditingController _name = TextEditingController(
-    text: context.read<SettingsViewModel>().businessName,
-  );
+  late final TextEditingController _name = TextEditingController(text: context.read<SettingsViewModel>().businessName);
 
   @override
   void dispose() {
@@ -61,9 +59,7 @@ class _SettingsViewState extends State<SettingsView> {
                       SegmentedButton<Currency>(
                         key: const Key('settings-currency'),
                         showSelectedIcon: false,
-                        segments: [
-                          for (final c in Currency.values) ButtonSegment(value: c, label: Text(c.label)),
-                        ],
+                        segments: [for (final c in Currency.values) ButtonSegment(value: c, label: Text(c.label))],
                         selected: {vm.currency},
                         onSelectionChanged: (s) => vm.setCurrency(s.first),
                       ),
@@ -88,10 +84,7 @@ class _SettingsViewState extends State<SettingsView> {
                             children: [
                               SizedBox(
                                 width: 52,
-                                child: StatusBadge(
-                                  method,
-                                  tone: method == 'GET' ? BadgeTone.info : BadgeTone.warning,
-                                ),
+                                child: StatusBadge(method, tone: method == 'GET' ? BadgeTone.info : BadgeTone.warning),
                               ),
                               const SizedBox(width: 10),
                               Expanded(

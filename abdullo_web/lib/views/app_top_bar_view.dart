@@ -58,10 +58,7 @@ class AppTopBarView extends StatelessWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 420),
-                  child: const _SearchField(),
-                ),
+                child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: const _SearchField()),
               ),
             ),
             const SizedBox(width: 12),
@@ -83,9 +80,7 @@ class _StoreSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final stores = context.watch<StoresViewModel>();
     final selected = context.select<DashboardViewModel, String?>((d) => d.selectedStoreId);
-    final label = selected == null
-        ? 'All Stores (${stores.activeCount} Active)'
-        : stores.nameOf(selected) ?? 'Store';
+    final label = selected == null ? 'All Stores (${stores.activeCount} Active)' : stores.nameOf(selected) ?? 'Store';
 
     return PopupMenuButton<String>(
       key: const Key('store-selector'),
@@ -152,11 +147,7 @@ class _ApiStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return ApiConstants.useMock
         ? const StatusBadge('Demo data · API not connected', tone: BadgeTone.warning, dot: true)
-        : StatusBadge(
-            'REST API (${Uri.parse(ApiConstants.baseUrl).path})',
-            tone: BadgeTone.positive,
-            dot: true,
-          );
+        : StatusBadge('REST API (${Uri.parse(ApiConstants.baseUrl).path})', tone: BadgeTone.positive, dot: true);
   }
 }
 
@@ -201,8 +192,7 @@ class _NotificationsButton extends StatelessWidget {
               ),
             ),
           ),
-        if (pending == 0 && recent.isEmpty)
-          const PopupMenuItem(enabled: false, child: Text('No notifications')),
+        if (pending == 0 && recent.isEmpty) const PopupMenuItem(enabled: false, child: Text('No notifications')),
       ],
     );
   }

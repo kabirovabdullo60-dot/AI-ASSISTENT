@@ -46,12 +46,7 @@ class StatusBadge extends StatelessWidget {
               text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: tone.foreground,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.2,
-              ),
+              style: TextStyle(color: tone.foreground, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.2),
             ),
           ),
         ],

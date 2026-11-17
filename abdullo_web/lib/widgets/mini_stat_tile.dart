@@ -4,13 +4,7 @@ import '../core/theme/app_colors.dart';
 
 /// Small grey tile under the chart (e.g. "Gross Profit Margin 34.8%").
 class MiniStatTile extends StatelessWidget {
-  const MiniStatTile({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.icon,
-    this.iconColor,
-  });
+  const MiniStatTile({super.key, required this.label, required this.value, required this.icon, this.iconColor});
 
   final String label;
   final String value;

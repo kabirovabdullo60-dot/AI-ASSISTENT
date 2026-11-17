@@ -1,4 +1,8 @@
 const _months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const _monthsLong = [
+  'January', 'February', 'March', 'April', 'May', 'June', //
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
 const _weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 /// 48250 -> "48,250"
@@ -32,8 +36,7 @@ String formatWeekday(DateTime d) => _weekdays[d.weekday - 1];
 String formatMonth(DateTime d) => _months[d.month - 1];
 
 /// "14:05"
-String formatTime(DateTime d) =>
-    '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+String formatTime(DateTime d) => '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
 
 /// "12 mins ago", "3 hours ago"
 String formatTimeAgo(DateTime time, {DateTime? now}) {
@@ -50,3 +53,38 @@ String initials(String name) {
   if (parts.isEmpty) return '?';
   return parts.take(2).map((p) => p[0].toUpperCase()).join();
 }
+
+/// 12400 -> "12,400.00"
+String formatAmount2(double value) {
+  final cents = (value.abs() * 100).round();
+  return '${value < 0 ? '-' : ''}${formatAmount((cents ~/ 100).toDouble())}.${(cents % 100).toString().padLeft(2, '0')}';
+}
+
+bool isSameDay(DateTime a, DateTime b) => a.year == b.year && a.month == b.month && a.day == b.day;
+
+DateTime dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
+
+/// "Today", "Yesterday" or "Nov 06"
+String formatRelativeDay(DateTime d, {DateTime? now}) {
+  final today = dateOnly(now ?? DateTime.now());
+  final day = dateOnly(d);
+  if (day == today) return 'Today';
+  if (day == today.subtract(const Duration(days: 1))) return 'Yesterday';
+  return formatDay(d);
+}
+
+/// "11/17/2026"
+String formatNumericDate(DateTime d) =>
+    '${d.month.toString().padLeft(2, '0')}/${d.day.toString().padLeft(2, '0')}/${d.year}';
+
+/// "November 2026"
+String formatMonthYear(DateTime d) => '${_monthsLong[d.month - 1]} ${d.year}';
+
+/// "2026-11" — the payroll period sent to the backend.
+String periodKey(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}';
+
+/// 1 -> "1 mo", 18 -> "18 mos"
+String formatTenure(int months) => '$months mo${months == 1 ? '' : 's'}';
+
+/// Percent change from [previous] to [current]; 0 when there is no previous value.
+double percentChange(double current, double previous) => previous == 0 ? 0 : (current - previous) / previous * 100;

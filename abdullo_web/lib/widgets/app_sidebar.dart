@@ -92,12 +92,7 @@ class _Brand extends StatelessWidget {
 }
 
 class _SidebarItem extends StatelessWidget {
-  const _SidebarItem({
-    required this.section,
-    required this.selected,
-    required this.extended,
-    required this.onTap,
-  });
+  const _SidebarItem({required this.section, required this.selected, required this.extended, required this.onTap});
 
   final AppSection section;
   final bool selected;

@@ -8,7 +8,6 @@ class EmployeeService extends BaseService {
 
   Future<List<EmployeeModel>> fetchEmployees() => mockOr(
     mock: (db) => List.of(db.employees),
-    api: () async =>
-        asJsonList(await client.get(ApiConstants.employees)).map(EmployeeModel.fromJson).toList(),
+    api: () async => asJsonList(await client.get(ApiConstants.employees)).map(EmployeeModel.fromJson).toList(),
   );
 }

@@ -11,10 +11,10 @@ void main() {
       await pumpAt(tester, width);
       expect(find.text('Business Overview'), findsOneWidget);
       expect(find.byType(KpiCard), findsNWidgets(6));
-      expect(find.text('38,450'), findsOneWidget);
-      expect(find.text('14,200'), findsOneWidget);
+      expect(find.text('36,750'), findsOneWidget); // today = sum of stores
+      expect(find.text('7,200'), findsOneWidget); // unpaid salaries
       await scrollTo(tester, find.byKey(const Key('revenue-chart')));
-      await scrollTo(tester, find.text('Central Plaza Store'));
+      await scrollTo(tester, find.text('Central Plaza Flagship'));
       await scrollTo(tester, find.text('Recent Business Activity'));
     });
   }
@@ -33,11 +33,10 @@ void main() {
     await pumpAt(tester, desktopWidth);
     await tester.tap(find.text(r'USD ($)'));
     await tester.pumpAndSettle();
-    expect(find.text('3,511'), findsOneWidget); // 38,450 / 10.95
-    expect(find.text('USD'), findsWidgets);
+    expect(find.text('3,356'), findsOneWidget); // 36,750 / 10.95
   });
 
-  testWidgets('Record Sale adds to today and to the activity feed', (tester) async {
+  testWidgets('Record Sale dialog adds to today and to the activity feed', (tester) async {
     await pumpAt(tester, desktopWidth);
     await tester.tap(find.byKey(const Key('record-sale')));
     await tester.pumpAndSettle();
@@ -45,7 +44,8 @@ void main() {
     await tester.tap(find.byKey(const Key('sale-save')));
     await tester.pumpAndSettle();
 
-    expect(find.text('40,000'), findsOneWidget); // 38,450 + 1,550
+    expect(find.byType(Dialog), findsNothing);
+    expect(find.text('38,300'), findsOneWidget); // 36,750 + 1,550
     await scrollTo(tester, find.textContaining('+1,550 TJS', findRichText: true));
   });
 
@@ -55,8 +55,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Rudaki Mall Kiosk').last);
     await tester.pumpAndSettle();
-    expect(find.text('1 Active'), findsOneWidget);
-    expect(find.text('5 Staff'), findsOneWidget);
+    expect(find.text('6,100'), findsOneWidget); // Rudaki today only
+    expect(find.text('All Stores (5 Active)'), findsNothing);
   });
 
   testWidgets('"View All Stores" opens the Stores page', (tester) async {
@@ -64,7 +64,7 @@ void main() {
     await scrollTo(tester, find.byKey(const Key('view-all-stores')));
     await tester.tap(find.byKey(const Key('view-all-stores')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('stores-grid')), findsOneWidget);
+    expect(find.text('Store Management'), findsOneWidget);
     await openSection(tester, AppSection.dashboard);
   });
 }

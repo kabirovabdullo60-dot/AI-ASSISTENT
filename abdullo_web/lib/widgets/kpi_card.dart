@@ -83,8 +83,7 @@ class KpiCard extends StatelessWidget {
                   style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, color: accent),
                 ),
               ),
-              if (unit != null)
-                Text(unit!, style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted)),
+              if (unit != null) Text(unit!, style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted)),
               const SizedBox(height: 8),
               if (badge != null) StatusBadge(badge!, tone: badgeTone, icon: badgeIcon, dot: badgeDot),
               if (caption != null) ...[

@@ -48,6 +48,18 @@ class ApiClient {
     return _handle(res);
   }
 
+  Future<dynamic> put(String path, [Object? body]) async {
+    final res = await _client
+        .put(_uri(path, null), headers: _headers, body: body == null ? null : jsonEncode(body))
+        .timeout(ApiConstants.timeout);
+    return _handle(res);
+  }
+
+  Future<dynamic> delete(String path) async {
+    final res = await _client.delete(_uri(path, null), headers: _headers).timeout(ApiConstants.timeout);
+    return _handle(res);
+  }
+
   dynamic _handle(http.Response res) {
     final data = res.body.isEmpty ? null : jsonDecode(utf8.decode(res.bodyBytes));
     if (res.statusCode >= 200 && res.statusCode < 300) return data;
