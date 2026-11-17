@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
@@ -20,6 +21,7 @@ class EmployeesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<EmployeesViewModel>();
     final query = context.select<HomeViewModel, String>((h) => h.query);
     final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
@@ -31,22 +33,22 @@ class EmployeesView extends StatelessWidget {
       builder: (_) {
         final list = vm.filtered(query);
         return PageBody(
-          title: 'Employees',
-          subtitle: 'Staff across all stores and shifts',
+          title: tr.navEmployees,
+          subtitle: tr.employeesSubtitle,
           children: [
             LayoutBuilder(
               builder: (context, c) => CardGrid(
                 columns: c.maxWidth >= 620 ? 3 : 1,
                 children: [
-                  MiniStatTile(label: 'Employees', value: '${vm.employees.length}', icon: Icons.groups_outlined),
+                  MiniStatTile(label: tr.navEmployees, value: '${vm.employees.length}', icon: Icons.groups_outlined),
                   MiniStatTile(
-                    label: 'On shift now',
+                    label: tr.onShiftNow,
                     value: '${vm.onShiftCount}',
                     icon: Icons.schedule,
                     iconColor: AppColors.green,
                   ),
                   MiniStatTile(
-                    label: 'Monthly payroll',
+                    label: tr.monthlyPayroll,
                     value: cur.format(vm.monthlyPayroll),
                     icon: Icons.account_balance_wallet_outlined,
                     iconColor: AppColors.orange,
@@ -56,11 +58,11 @@ class EmployeesView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             SectionCard(
-              title: 'Staff directory',
+              title: tr.staffDirectory,
               child: AppTable(
                 key: const Key('employees-table'),
-                columns: const ['Name', 'Role', 'Store', 'Shift', 'Status'],
-                empty: 'No employees found',
+                columns: [tr.name, tr.role, tr.store, tr.shift, tr.status],
+                empty: tr.noEmployees,
                 rows: [
                   for (final e in list)
                     [
@@ -83,7 +85,7 @@ class EmployeesView extends StatelessWidget {
                       Text(e.storeName),
                       Text(e.shift),
                       StatusBadge(
-                        e.isOnShift ? 'On shift' : 'Off',
+                        e.isOnShift ? tr.onShift : tr.offShift,
                         tone: e.isOnShift ? BadgeTone.positive : BadgeTone.neutral,
                         dot: true,
                       ),

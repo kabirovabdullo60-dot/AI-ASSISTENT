@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/l10n/l10n.dart';
 
 /// DataTable that scrolls sideways on narrow screens instead of overflowing.
 class AppTable extends StatelessWidget {
@@ -13,10 +14,11 @@ class AppTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     if (rows.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 24),
-        child: Center(child: Text(empty ?? 'Nothing found')),
+        child: Center(child: Text(empty ?? tr.nothingFound)),
       );
     }
     return LayoutBuilder(

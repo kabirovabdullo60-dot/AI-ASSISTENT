@@ -13,7 +13,7 @@ void main() {
       await openSection(tester, AppSection.salaries);
       expect(find.text('Salaries & Payroll Management'), findsOneWidget);
       expect(find.text('7,200'), findsOneWidget); // outstanding
-      expect(find.text('14 Employees'), findsOneWidget);
+      expect(find.text('14 employees'), findsOneWidget);
 
       await scrollTo(tester, find.byKey(const Key('pay-p3')));
       await tester.tap(find.byKey(const Key('pay-p3')));

@@ -7,13 +7,15 @@ import '../models/chart_point_model.dart';
 
 /// Bars = daily revenue, smooth orange line = cashflow.
 /// The best day is orange with a label, today is dark navy.
-class RevenueChart extends StatelessWidget {
+/// Hover with the mouse (or tap / drag on a phone) to see any day's numbers.
+class RevenueChart extends StatefulWidget {
   const RevenueChart({
     super.key,
     required this.points,
     required this.peakIndex,
     required this.xLabels,
     required this.peakLabel,
+    required this.tooltipLines,
     this.height = 260,
   });
 
@@ -23,25 +25,119 @@ class RevenueChart extends StatelessWidget {
   /// One label per point; empty string = no label.
   final List<String> xLabels;
   final String peakLabel;
+
+  /// Text lines shown in the tooltip for point [index] (first line is bold).
+  final List<String> Function(int index) tooltipLines;
   final double height;
 
   @override
+  State<RevenueChart> createState() => _RevenueChartState();
+}
+
+class _RevenueChartState extends State<RevenueChart> {
+  int? _hover;
+
+  void _setHover(Offset local, double width) {
+    final n = widget.points.length;
+    if (n == 0 || width <= 0) return;
+    final i = (local.dx / (width / n)).floor().clamp(0, n - 1);
+    if (i != _hover) setState(() => _hover = i);
+  }
+
+  void _clear() {
+    if (_hover != null) setState(() => _hover = null);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final points = widget.points;
     return SizedBox(
       key: const Key('revenue-chart'),
-      height: height,
+      height: widget.height,
       width: double.infinity,
       child: points.isEmpty
-          ? const Center(child: Text('No data yet'))
-          : CustomPaint(
-              painter: _RevenueChartPainter(
-                points: points,
-                peakIndex: peakIndex,
-                xLabels: xLabels,
-                peakLabel: peakLabel,
-                labelStyle: Theme.of(context).textTheme.labelSmall ?? const TextStyle(fontSize: 11),
+          ? const SizedBox.shrink()
+          : LayoutBuilder(
+              builder: (context, c) {
+                final hover = _hover != null && _hover! < points.length ? _hover : null;
+                final slot = c.maxWidth / points.length;
+                const tipWidth = 170.0;
+                return MouseRegion(
+                  cursor: SystemMouseCursors.precise,
+                  onHover: (e) => _setHover(e.localPosition, c.maxWidth),
+                  onExit: (_) => _clear(),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTapDown: (d) => _setHover(d.localPosition, c.maxWidth),
+                    onHorizontalDragUpdate: (d) => _setHover(d.localPosition, c.maxWidth),
+                    onHorizontalDragEnd: (_) => _clear(),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned.fill(
+                          child: CustomPaint(
+                            painter: _RevenueChartPainter(
+                              points: points,
+                              peakIndex: widget.peakIndex,
+                              hoverIndex: hover,
+                              xLabels: widget.xLabels,
+                              peakLabel: hover == null ? widget.peakLabel : '',
+                              labelStyle: Theme.of(context).textTheme.labelSmall ?? const TextStyle(fontSize: 11),
+                            ),
+                          ),
+                        ),
+                        if (hover != null)
+                          Positioned(
+                            key: const Key('chart-tooltip'),
+                            top: 0,
+                            left: (slot * (hover + 0.5) - tipWidth / 2).clamp(
+                              0.0,
+                              math.max(0.0, c.maxWidth - tipWidth),
+                            ),
+                            width: tipWidth,
+                            child: IgnorePointer(child: _Tooltip(lines: widget.tooltipLines(hover))),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
+  }
+}
+
+class _Tooltip extends StatelessWidget {
+  const _Tooltip({required this.lines});
+
+  final List<String> lines;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.navy,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 2))],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var i = 0; i < lines.length; i++)
+            Text(
+              lines[i],
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: i == 0 ? Colors.white : Colors.white70,
+                fontSize: i == 0 ? 12.5 : 12,
+                fontWeight: i == 0 ? FontWeight.w700 : FontWeight.w500,
               ),
             ),
+        ],
+      ),
     );
   }
 }
@@ -50,6 +146,7 @@ class _RevenueChartPainter extends CustomPainter {
   _RevenueChartPainter({
     required this.points,
     required this.peakIndex,
+    required this.hoverIndex,
     required this.xLabels,
     required this.peakLabel,
     required this.labelStyle,
@@ -57,6 +154,7 @@ class _RevenueChartPainter extends CustomPainter {
 
   final List<ChartPointModel> points;
   final int peakIndex;
+  final int? hoverIndex;
   final List<String> xLabels;
   final String peakLabel;
   final TextStyle labelStyle;
@@ -138,6 +236,25 @@ class _RevenueChartPainter extends CustomPainter {
         ..strokeCap = StrokeCap.round,
     );
 
+    // hover guide
+    final h = hoverIndex;
+    if (h != null && h < n) {
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTRB(xOf(h) - slot / 2 + 1, _top, xOf(h) + slot / 2 - 1, bottom),
+          const Radius.circular(4),
+        ),
+        Paint()..color = AppColors.navy.withValues(alpha: 0.06),
+      );
+      canvas.drawLine(
+        Offset(xOf(h), _top),
+        Offset(xOf(h), bottom),
+        Paint()
+          ..color = AppColors.navy.withValues(alpha: 0.35)
+          ..strokeWidth = 1,
+      );
+    }
+
     // dots
     void dot(Offset o, Color c) {
       canvas.drawCircle(o, 4.5, Paint()..color = Colors.white);
@@ -153,6 +270,7 @@ class _RevenueChartPainter extends CustomPainter {
 
     if (peakIndex >= 0 && peakIndex < n) dot(pts[peakIndex], AppColors.orange);
     dot(pts.last, AppColors.navy);
+    if (h != null && h < n) dot(pts[h], AppColors.orange);
 
     // peak label
     if (peakIndex >= 0 && peakIndex < n && peakLabel.isNotEmpty) {
@@ -194,5 +312,9 @@ class _RevenueChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RevenueChartPainter old) =>
-      old.points != points || old.peakIndex != peakIndex || old.peakLabel != peakLabel || old.xLabels != xLabels;
+      old.points != points ||
+      old.peakIndex != peakIndex ||
+      old.hoverIndex != hoverIndex ||
+      old.peakLabel != peakLabel ||
+      old.xLabels != xLabels;
 }

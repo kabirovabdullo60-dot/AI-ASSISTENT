@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'error_retry.dart';
+import '../core/l10n/l10n.dart';
 
 /// Spinner while the first load runs, error + retry if it fails, otherwise the page.
 class AsyncContent extends StatelessWidget {
@@ -19,8 +20,9 @@ class AsyncContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     if (hasData) return builder(context);
-    if (error != null) return ErrorRetry(message: error!, onRetry: onRetry);
+    if (error != null) return ErrorRetry(message: tr.loadError, onRetry: onRetry);
     return const Center(child: CircularProgressIndicator());
   }
 }

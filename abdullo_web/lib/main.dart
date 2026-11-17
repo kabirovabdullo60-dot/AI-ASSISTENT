@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'core/l10n/l10n.dart';
 import 'core/theme/app_theme.dart';
 import 'services/assistant_service.dart';
 import 'services/dashboard_service.dart';
 import 'services/employee_service.dart';
 import 'services/payroll_service.dart';
+import 'services/preferences_service.dart';
 import 'services/profile_service.dart';
 import 'services/sales_service.dart';
 import 'services/store_service.dart';
@@ -32,7 +34,12 @@ class WebApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
-        ChangeNotifierProvider(create: (_) => SettingsViewModel()),
+        ChangeNotifierProvider(
+          create: (_) => SettingsViewModel(
+            PreferencesService(),
+            systemLanguage: WidgetsBinding.instance.platformDispatcher.locale.languageCode,
+          )..load(),
+        ),
         ChangeNotifierProvider(create: (_) => ProfileViewModel(ProfileService())..load()),
         ChangeNotifierProvider(create: (_) => DashboardViewModel(DashboardService())..load()),
         ChangeNotifierProvider(create: (_) => StoresViewModel(StoreService())..load()),
@@ -46,6 +53,9 @@ class WebApp extends StatelessWidget {
           title: context.select<SettingsViewModel, String>((s) => s.businessName),
           debugShowCheckedModeBanner: false,
           theme: AppTheme.light,
+          locale: Locale(context.select<SettingsViewModel, String>((s) => s.language.name)),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: appLocalizationsDelegates,
           home: const HomeView(),
         ),
       ),

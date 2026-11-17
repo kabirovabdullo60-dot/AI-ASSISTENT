@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/format.dart';
@@ -50,6 +51,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
 
   Future<void> _save(String? storeId) async {
     if (!_formKey.currentState!.validate() || storeId == null) return;
+    final tr = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
     final dashboard = context.read<DashboardViewModel>();
     final stores = context.read<StoresViewModel>();
@@ -62,7 +64,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
     );
     if (!mounted) return;
     if (!ok) {
-      messenger.showSnackBar(const SnackBar(content: Text('Could not save the sale. Try again.')));
+      messenger.showSnackBar(SnackBar(content: Text(tr.saleFailed)));
       return;
     }
     dashboard.load();
@@ -74,6 +76,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final stores = context.watch<StoresViewModel>();
     final active = stores.ranked.where((s) => s.isActive).toList();
     final saving = context.select<SalesViewModel, bool>((s) => s.isSaving);
@@ -90,18 +93,18 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             children: [
               const Icon(Icons.add_circle_outline, color: AppColors.orange),
               const SizedBox(width: 8),
-              const Expanded(
-                child: Text('New Daily Sales Record', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+              Expanded(
+                child: Text(tr.newDailySale, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
               ),
-              const StatusBadge('POS Terminal', tone: BadgeTone.info),
+              StatusBadge(tr.posTerminal, tone: BadgeTone.info),
             ],
           ),
           const SizedBox(height: 18),
           Row(
             children: [
-              const Expanded(child: Text('Select Store', style: label)),
+              Expanded(child: Text(tr.selectStore, style: label)),
               Text(
-                '${active.length} active branches',
+                tr.activeBranches(active.length),
                 style: const TextStyle(fontSize: 11.5, color: AppColors.orange, fontWeight: FontWeight.w600),
               ),
             ],
@@ -121,7 +124,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             onChanged: (v) => setState(() => _storeId = v),
           ),
           const SizedBox(height: 14),
-          const Text('Daily Sales Amount', style: label),
+          Text(tr.dailySalesAmount, style: label),
           const SizedBox(height: 6),
           TextFormField(
             key: const Key('sale-amount'),
@@ -129,22 +132,22 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            decoration: const InputDecoration(
-              hintText: 'e.g. 5,450.00',
+            decoration: InputDecoration(
+              hintText: tr.amountHint,
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 child: Text('TJS', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
               ),
               prefixIconConstraints: BoxConstraints(minWidth: 0),
-              helperText: 'Gross daily register total inclusive of VAT',
+              helperText: tr.amountHelper,
             ),
             validator: (v) {
               final n = double.tryParse(v?.trim() ?? '');
-              return n == null || n <= 0 ? 'Enter an amount above 0' : null;
+              return n == null || n <= 0 ? tr.enterAmount : null;
             },
           ),
           const SizedBox(height: 14),
-          const Text('Transaction Accounting Date', style: label),
+          Text(tr.accountingDate, style: label),
           const SizedBox(height: 6),
           InkWell(
             key: const Key('sale-date'),
@@ -156,7 +159,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             ),
           ),
           const SizedBox(height: 14),
-          const Text('Primary Balance Split', style: label),
+          Text(tr.balanceSplit, style: label),
           const SizedBox(height: 6),
           Row(
             children: [
@@ -173,7 +176,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         child: Text(
-                          s.label,
+                          tr.split(s),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12.5,
@@ -189,13 +192,13 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             ],
           ),
           const SizedBox(height: 14),
-          const Text.rich(
+          Text.rich(
             TextSpan(
-              text: 'Description / Notes ',
+              text: tr.notesLabel,
               style: label,
               children: [
                 TextSpan(
-                  text: '(optional)',
+                  text: tr.optional,
                   style: TextStyle(fontWeight: FontWeight.w400),
                 ),
               ],
@@ -207,9 +210,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             controller: _notes,
             minLines: 2,
             maxLines: 4,
-            decoration: const InputDecoration(
-              hintText: 'e.g. End of day cash & POS terminal reconciliation, promo event',
-            ),
+            decoration: InputDecoration(hintText: tr.notesHint),
           ),
           const SizedBox(height: 18),
           FilledButton.icon(
@@ -219,7 +220,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             icon: saving
                 ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
                 : const Icon(Icons.check_circle_outline, size: 18),
-            label: const Text('Save Sale Record', style: TextStyle(fontWeight: FontWeight.w700)),
+            label: Text(tr.saveSaleRecord, style: TextStyle(fontWeight: FontWeight.w700)),
           ),
           const SizedBox(height: 8),
           Text.rich(
@@ -227,7 +228,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
               style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
               children: [
                 const WidgetSpan(child: Icon(Icons.sync, size: 13, color: AppColors.green)),
-                const TextSpan(text: '  Data syncs instantly to REST endpoint '),
+                TextSpan(text: tr.syncsTo),
                 TextSpan(
                   text: ApiConstants.sales,
                   style: const TextStyle(fontFamily: 'monospace', color: AppColors.ink),

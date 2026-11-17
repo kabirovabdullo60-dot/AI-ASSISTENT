@@ -8,8 +8,6 @@ class AssistantViewModel extends ChangeNotifier {
 
   final AssistantService _service;
 
-  static const suggestions = ['Sales today', 'Top stores', 'Unpaid salaries', 'Marketing ideas'];
-
   final List<ChatMessageModel> _messages = [];
   bool _isSending = false;
   String? _error;
@@ -19,7 +17,8 @@ class AssistantViewModel extends ChangeNotifier {
   bool get isSending => _isSending;
   String? get error => _error;
 
-  Future<void> send(String text) async {
+  /// [language] = 'en' / 'ru' / 'tg' — the assistant answers in it.
+  Future<void> send(String text, {String language = 'en'}) async {
     final question = text.trim();
     if (question.isEmpty || _isSending) return;
 
@@ -28,7 +27,7 @@ class AssistantViewModel extends ChangeNotifier {
     _error = null;
     _notify();
     try {
-      final reply = await _service.sendMessage(List.of(_messages));
+      final reply = await _service.sendMessage(List.of(_messages), language: language);
       _messages.add(reply);
     } catch (e) {
       _error = 'The assistant did not answer. Please try again.';

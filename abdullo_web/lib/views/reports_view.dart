@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -22,11 +23,15 @@ class ReportsView extends StatelessWidget {
 
   void _analyze(BuildContext context) {
     context.read<HomeViewModel>().select(AppSection.assistant);
-    context.read<AssistantViewModel>().send('Analyze my sales report');
+    context.read<AssistantViewModel>().send(
+      context.l10n.analyzeMyReport,
+      language: Localizations.localeOf(context).languageCode,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final dashboard = context.watch<DashboardViewModel>();
     final stores = context.watch<StoresViewModel>();
     final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
@@ -42,14 +47,14 @@ class ReportsView extends StatelessWidget {
         final o = dashboard.overview!;
         final ranked = stores.ranked;
         return PageBody(
-          title: 'Reports',
-          subtitle: 'Monthly performance by store',
+          title: tr.navReports,
+          subtitle: tr.reportsSubtitle,
           actions: [
             FilledButton.icon(
               key: const Key('analyze-report'),
               onPressed: () => _analyze(context),
               icon: const Icon(Icons.auto_awesome, size: 18),
-              label: const Text('Analyze with AI'),
+              label: Text(tr.analyzeWithAi),
             ),
           ],
           children: [
@@ -58,14 +63,14 @@ class ReportsView extends StatelessWidget {
                 columns: c.maxWidth >= 620 ? 3 : 1,
                 children: [
                   MiniStatTile(
-                    label: 'Monthly sales (${formatPercent(o.monthlyChange)})',
+                    label: tr.monthlySalesChange(formatPercent(o.monthlyChange)),
                     value: cur.format(o.monthlySales),
                     icon: Icons.insights_outlined,
                     iconColor: AppColors.green,
                   ),
-                  MiniStatTile(label: 'Gross margin', value: '${o.grossMargin}%', icon: Icons.percent),
+                  MiniStatTile(label: tr.grossMarginShort, value: '${o.grossMargin}%', icon: Icons.percent),
                   MiniStatTile(
-                    label: 'Average per day',
+                    label: tr.averagePerDay,
                     value: cur.format(o.averageDaily),
                     icon: Icons.calendar_month_outlined,
                   ),
@@ -74,10 +79,10 @@ class ReportsView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             SectionCard(
-              title: 'Sales by store',
+              title: tr.salesByStore,
               child: AppTable(
                 key: const Key('reports-table'),
-                columns: const ['#', 'Store', 'Type', 'Monthly sales', 'Share'],
+                columns: ['#', tr.store, tr.type, tr.monthlySalesCol, tr.share],
                 numeric: const {3, 4},
                 rows: [
                   for (var i = 0; i < ranked.length; i++)

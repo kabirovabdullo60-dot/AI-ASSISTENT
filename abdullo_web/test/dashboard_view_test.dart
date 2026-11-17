@@ -1,5 +1,6 @@
 import 'package:abdullo_web/core/navigation/app_section.dart';
 import 'package:abdullo_web/widgets/kpi_card.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -27,6 +28,33 @@ void main() {
     await pumpAt(tester, mobileWidth);
     expect(tester.getTopLeft(cards.at(0)).dy, tester.getTopLeft(cards.at(1)).dy);
     expect(tester.getTopLeft(cards.at(0)).dy, lessThan(tester.getTopLeft(cards.at(2)).dy));
+  });
+
+  testWidgets('hovering the chart shows that day\'s numbers', (tester) async {
+    await pumpAt(tester, desktopWidth);
+    await scrollTo(tester, find.byKey(const Key('revenue-chart')));
+    final chart = find.byKey(const Key('revenue-chart'));
+    final box = tester.getRect(chart);
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    await mouse.addPointer(location: Offset.zero);
+    addTearDown(mouse.removePointer);
+    await mouse.moveTo(Offset(box.right - 5, box.center.dy)); // last bar = today
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('chart-tooltip')), findsOneWidget);
+    expect(find.text('Revenue: 36,750 TJS'), findsOneWidget);
+    expect(find.textContaining('Cashflow: '), findsOneWidget);
+    await mouse.moveTo(Offset(box.left - 50, box.top - 50));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('chart-tooltip')), findsNothing);
+  });
+
+  testWidgets('tapping a bar on a phone shows the tooltip', (tester) async {
+    await pumpAt(tester, mobileWidth);
+    await scrollTo(tester, find.byKey(const Key('revenue-chart')));
+    final box = tester.getRect(find.byKey(const Key('revenue-chart')));
+    await tester.tapAt(Offset(box.left + 3, box.center.dy));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('chart-tooltip')), findsOneWidget);
   });
 
   testWidgets('USD toggle converts amounts', (tester) async {

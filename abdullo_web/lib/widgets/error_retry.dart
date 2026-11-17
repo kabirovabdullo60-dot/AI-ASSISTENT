@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/l10n/l10n.dart';
 
 class ErrorRetry extends StatelessWidget {
   const ErrorRetry({super.key, required this.message, required this.onRetry});
@@ -8,6 +9,7 @@ class ErrorRetry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -18,7 +20,7 @@ class ErrorRetry extends StatelessWidget {
             const SizedBox(height: 12),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 12),
-            FilledButton.tonal(onPressed: onRetry, child: const Text('Try again')),
+            FilledButton.tonal(onPressed: onRetry, child: Text(tr.tryAgain)),
           ],
         ),
       ),

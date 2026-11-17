@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../viewmodels/assistant_view_model.dart';
 import '../widgets/chat_bubble.dart';
 
@@ -27,7 +28,7 @@ class _AssistantViewState extends State<AssistantView> {
     final value = text ?? _input.text;
     if (value.trim().isEmpty) return;
     _input.clear();
-    vm.send(value);
+    vm.send(value, language: Localizations.localeOf(context).languageCode);
   }
 
   void _scrollToBottomIfNew(int count) {
@@ -45,6 +46,7 @@ class _AssistantViewState extends State<AssistantView> {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<AssistantViewModel>();
     final messages = vm.messages;
     final itemCount = messages.length + (vm.isSending ? 1 : 0);
@@ -72,7 +74,7 @@ class _AssistantViewState extends State<AssistantView> {
               if (vm.error != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(vm.error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                  child: Text(tr.assistantError, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 ),
               _InputBar(
                 controller: _input,
@@ -96,6 +98,7 @@ class _EmptyChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final theme = Theme.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -108,10 +111,10 @@ class _EmptyChat extends StatelessWidget {
             child: Icon(Icons.smart_toy_outlined, size: 32, color: theme.colorScheme.onPrimaryContainer),
           ),
           const SizedBox(height: 16),
-          Text('Ask your business assistant', textAlign: TextAlign.center, style: theme.textTheme.titleLarge),
+          Text(tr.askAssistant, textAlign: TextAlign.center, style: theme.textTheme.titleLarge),
           const SizedBox(height: 8),
           Text(
-            'Sales, expenses, profit, customers or marketing — ask in Tajik, Russian or English.',
+            tr.assistantIntro,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
           ),
@@ -121,7 +124,7 @@ class _EmptyChat extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final s in AssistantViewModel.suggestions)
+              for (final s in [tr.suggestSales, tr.suggestStores, tr.suggestSalaries, tr.suggestMarketing])
                 ActionChip(label: Text(s), onPressed: () => onSuggestion(s)),
             ],
           ),
@@ -168,12 +171,13 @@ class _InputBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
       child: Row(
         children: [
           IconButton(
-            tooltip: 'New chat',
+            tooltip: tr.newChat,
             onPressed: canClear ? onClear : null,
             icon: const Icon(Icons.add_comment_outlined),
           ),
@@ -186,8 +190,8 @@ class _InputBar extends StatelessWidget {
               maxLines: 4,
               textInputAction: TextInputAction.send,
               onSubmitted: (_) => onSend(),
-              decoration: const InputDecoration(
-                hintText: 'Ask about your business…',
+              decoration: InputDecoration(
+                hintText: tr.askHint,
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(24))),
                 contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
@@ -196,7 +200,7 @@ class _InputBar extends StatelessWidget {
           const SizedBox(width: 8),
           IconButton.filled(
             key: const Key('chat-send'),
-            tooltip: 'Send',
+            tooltip: tr.send,
             onPressed: enabled ? onSend : null,
             icon: const Icon(Icons.send),
           ),

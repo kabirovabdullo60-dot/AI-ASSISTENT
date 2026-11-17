@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../viewmodels/home_view_model.dart';
@@ -115,7 +116,7 @@ class _MobileNavBar extends StatelessWidget {
                 ListTile(
                   key: Key('more-${s.name}'),
                   leading: Icon(s == section ? s.selectedIcon : s.icon),
-                  title: Text(s.label),
+                  title: Text(context.l10n.section(s)),
                   selected: s == section,
                   selectedColor: AppColors.orange,
                   onTap: () {
@@ -131,6 +132,7 @@ class _MobileNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final index = AppSection.mobileBar.indexOf(section);
     return NavigationBar(
       selectedIndex: index < 0 ? _moreIndex : index,
@@ -138,8 +140,8 @@ class _MobileNavBar extends StatelessWidget {
       onDestinationSelected: (i) => i == _moreIndex ? _openMore(context) : onSelect(AppSection.mobileBar[i]),
       destinations: [
         for (final s in AppSection.mobileBar)
-          NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: s.label),
-        const NavigationDestination(icon: Icon(Icons.more_horiz), label: 'More'),
+          NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: tr.section(s)),
+        NavigationDestination(icon: Icon(Icons.more_horiz), label: tr.navMore),
       ],
     );
   }

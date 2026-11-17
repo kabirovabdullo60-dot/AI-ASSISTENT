@@ -43,13 +43,13 @@ void main() {
     await scrollTo(tester, find.byKey(const Key('pager-next')));
     await tester.tap(find.byKey(const Key('pager-next')));
     await tester.pumpAndSettle();
-    expect(find.textContaining('7 to 12', findRichText: true), findsOneWidget);
+    expect(find.textContaining('7–12'), findsOneWidget);
 
     await scrollTo(tester, find.byKey(const Key('sales-store-filter')));
     await tester.tap(find.byKey(const Key('sales-store-filter')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Rudaki Mall Kiosk').last);
     await tester.pumpAndSettle();
-    expect(find.textContaining('1 to', findRichText: true), findsOneWidget);
+    expect(find.textContaining('Showing 1–'), findsOneWidget);
   });
 }

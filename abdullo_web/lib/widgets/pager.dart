@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 
 /// "Showing 1 to 6 of 148 entries   ‹ Prev 1 2 3 … 25 Next ›"
@@ -39,6 +40,7 @@ class Pager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final from = itemCount == 0 ? 0 : page * pageSize + 1;
     final to = ((page + 1) * pageSize).clamp(0, itemCount);
     Widget btn(String label, int? target, {bool selected = false, Key? key}) => Padding(
@@ -82,32 +84,17 @@ class Pager extends StatelessWidget {
       spacing: 12,
       runSpacing: 10,
       children: [
-        Text.rich(
-          TextSpan(
-            style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
-            children: [
-              const TextSpan(text: 'Showing '),
-              TextSpan(
-                text: '$from to $to',
-                style: const TextStyle(color: AppColors.ink, fontWeight: FontWeight.w700),
-              ),
-              const TextSpan(text: ' of '),
-              TextSpan(
-                text: '$itemCount',
-                style: const TextStyle(color: AppColors.ink, fontWeight: FontWeight.w700),
-              ),
-              TextSpan(text: ' $noun'),
-              if (extra != null) TextSpan(text: '   |   $extra'),
-            ],
-          ),
+        Text(
+          '${tr.showingRange(from, to, itemCount)}${extra == null ? '' : '   |   $extra'}',
+          style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            btn('‹ Prev', page > 0 ? page - 1 : null, key: const Key('pager-prev')),
+            btn(tr.pagerPrev, page > 0 ? page - 1 : null, key: const Key('pager-prev')),
             for (final p in _pages)
               p == null ? btn('…', null) : btn('${p + 1}', p, selected: p == page, key: Key('pager-$p')),
-            btn('Next ›', page < pageCount - 1 ? page + 1 : null, key: const Key('pager-next')),
+            btn(tr.pagerNext, page < pageCount - 1 ? page + 1 : null, key: const Key('pager-next')),
           ],
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
@@ -48,53 +49,54 @@ class _DashboardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
     final o = overview;
     final quarter = (DateTime.now().month - 1) ~/ 3 + 1;
 
     final kpis = [
       KpiCard(
-        title: 'Total Stores',
-        value: '${o.activeStores} Active',
+        title: tr.kpiTotalStores,
+        value: tr.nActive(o.activeStores),
         icon: Icons.storefront_outlined,
-        badge: o.newStoresThisQuarter > 0 ? '+${o.newStoresThisQuarter} Q$quarter' : null,
-        caption: 'of ${o.totalStores} registered',
+        badge: o.newStoresThisQuarter > 0 ? tr.quarterNew(o.newStoresThisQuarter, quarter) : null,
+        caption: tr.ofRegistered(o.totalStores),
       ),
       KpiCard(
-        title: 'Total Staff',
-        value: '${o.totalStaff} Staff',
+        title: tr.kpiTotalStaff,
+        value: tr.nStaff(o.totalStaff),
         icon: Icons.badge_outlined,
-        badge: '${o.staffOnShift} Active',
+        badge: tr.nActive(o.staffOnShift),
         badgeTone: BadgeTone.info,
-        caption: 'on shift today',
+        caption: tr.onShiftToday,
       ),
-      _moneyKpi("Today's Sales", o.todaySales, o.todayChange, 'vs yesterday', Icons.today_outlined, cur),
+      _moneyKpi(tr.kpiTodaySales, o.todaySales, o.todayChange, tr.vsYesterday, Icons.today_outlined, cur),
       _moneyKpi(
-        'Weekly Sales',
+        tr.kpiWeeklySales,
         o.weeklySales,
         o.weeklyChange,
-        'Target ${formatCompact(cur.fromTjs(o.weeklyTarget))}',
+        tr.target(formatCompact(cur.fromTjs(o.weeklyTarget))),
         Icons.date_range_outlined,
         cur,
       ),
-      _moneyKpi('Monthly Sales', o.monthlySales, o.monthlyChange, 'MoM', Icons.insights_outlined, cur),
+      _moneyKpi(tr.kpiMonthlySales, o.monthlySales, o.monthlyChange, tr.mom, Icons.insights_outlined, cur),
       KpiCard(
-        title: 'Unpaid Salaries',
+        title: tr.kpiUnpaidSalaries,
         value: cur.amount(o.unpaidSalaries),
         unit: cur.code,
         icon: Icons.account_balance_wallet_outlined,
-        badge: '${o.pendingPayrolls} Pending',
+        badge: tr.nPending(o.pendingPayrolls),
         badgeTone: BadgeTone.warning,
         badgeDot: true,
-        caption: '${o.payrollCycle} cycle',
+        caption: tr.cycle(o.payrollCycle),
         highlight: true,
       ),
     ];
 
     return PageBody(
-      title: 'Business Overview',
-      badge: const StatusBadge('LIVE AUDIT', tone: BadgeTone.info),
-      subtitle: 'Real-time consolidated performance across all retail branches and capital flows',
+      title: tr.businessOverview,
+      badge: StatusBadge(tr.liveAudit, tone: BadgeTone.info),
+      subtitle: tr.overviewSubtitle,
       actions: [
         const _DateChip(),
         _CurrencyToggle(selected: cur),
@@ -102,7 +104,7 @@ class _DashboardContent extends StatelessWidget {
           key: const Key('record-sale'),
           onPressed: () => RecordSaleDialog.show(context),
           icon: const Icon(Icons.add, size: 18),
-          label: const Text('Record Sale'),
+          label: Text(tr.recordSale),
         ),
       ],
       children: [
@@ -149,6 +151,7 @@ class _DateChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
@@ -162,7 +165,7 @@ class _DateChip extends StatelessWidget {
           const Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.orange),
           const SizedBox(width: 6),
           Text(
-            'Today: ${formatDate(DateTime.now())}',
+            tr.todayDate(formatDate(DateTime.now())),
             style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
           ),
           const SizedBox(width: 6),
@@ -207,19 +210,19 @@ class _RevenueCard extends StatelessWidget {
   final OverviewModel overview;
   final Currency currency;
 
-  List<String> _labels(bool narrow) {
+  List<String> _labels(bool narrow, AppLocalizations tr) {
     final points = vm.chartPoints;
     final n = points.length;
     final peak = vm.peakIndex;
     if (vm.range == ChartRange.weekly) {
-      return [for (var i = 0; i < n; i++) i == n - 1 ? 'Today' : formatWeekday(points[i].date)];
+      return [for (var i = 0; i < n; i++) i == n - 1 ? tr.today : formatWeekday(points[i].date)];
     }
     return [
       for (var i = 0; i < n; i++)
         if (i == n - 1)
-          'Today'
+          tr.today
         else if (i == peak)
-          narrow ? formatDay(points[i].date) : '${formatDay(points[i].date)} (Peak)'
+          narrow ? formatDay(points[i].date) : '${formatDay(points[i].date)} (${tr.peakShort})'
         else if (i % 5 == 0 && (i - peak).abs() > 3 && n - 1 - i > 3)
           formatDay(points[i].date)
         else
@@ -229,14 +232,15 @@ class _RevenueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final points = vm.chartPoints;
     final peak = vm.peakIndex;
     final peakPoint = peak >= 0 ? points[peak] : null;
     final o = overview;
 
     return SectionCard(
-      title: 'Revenue & Cashflow Analytics',
-      subtitle: 'Daily gross revenue trajectory across the current operational month',
+      title: tr.revenueTitle,
+      subtitle: tr.revenueSubtitle,
       child: LayoutBuilder(
         builder: (context, c) {
           final narrow = c.maxWidth < 520;
@@ -249,23 +253,25 @@ class _RevenueCard extends StatelessWidget {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   SegmentedButton<ChartRange>(
-                    key: const Key('chart-range'),
+                    key: Key('chart-range'),
                     showSelectedIcon: false,
                     style: SegmentedButton.styleFrom(
                       visualDensity: VisualDensity.compact,
-                      textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                     ),
-                    segments: const [
-                      ButtonSegment(value: ChartRange.weekly, label: Text('Weekly')),
-                      ButtonSegment(value: ChartRange.monthly, label: Text('Monthly')),
+                    segments: [
+                      ButtonSegment(value: ChartRange.weekly, label: Text(tr.weekly)),
+                      ButtonSegment(value: ChartRange.monthly, label: Text(tr.monthly)),
                     ],
                     selected: {vm.range},
                     onSelectionChanged: (s) => vm.setRange(s.first),
                   ),
                   if (peakPoint != null)
                     StatusBadge(
-                      'Peak: ${formatWeekday(peakPoint.date)}, ${formatDay(peakPoint.date)} '
-                      '(${currency.format(peakPoint.revenue)})',
+                      tr.peakLabel(
+                        '${formatWeekday(peakPoint.date)}, ${formatDay(peakPoint.date)}',
+                        currency.format(peakPoint.revenue),
+                      ),
                       tone: BadgeTone.warning,
                       icon: Icons.bolt,
                     ),
@@ -289,21 +295,21 @@ class _RevenueCard extends StatelessWidget {
                             text: '● ',
                             style: TextStyle(color: AppColors.green),
                           ),
-                          const TextSpan(text: 'Average Daily: '),
+                          TextSpan(text: tr.averageDaily),
                           TextSpan(
                             text: currency.format(o.averageDaily),
                             style: const TextStyle(color: AppColors.green, fontWeight: FontWeight.w700),
                           ),
-                          const TextSpan(text: '   ·   Total Volume: '),
+                          TextSpan(text: '   ·   ${tr.totalVolume}'),
                           TextSpan(
-                            text: '${formatAmount(o.totalTransactions.toDouble())} txns',
+                            text: tr.txns(formatAmount(o.totalTransactions.toDouble())),
                             style: const TextStyle(color: AppColors.ink, fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
                     ),
                     Text(
-                      '${o.reconciliationRate}% Automated Reconciliation',
+                      tr.autoReconciliation('${o.reconciliationRate}'),
                       style: const TextStyle(fontSize: 12, color: AppColors.muted, fontWeight: FontWeight.w600),
                     ),
                   ],
@@ -313,8 +319,13 @@ class _RevenueCard extends StatelessWidget {
               RevenueChart(
                 points: points,
                 peakIndex: peak,
-                xLabels: _labels(narrow),
+                xLabels: _labels(narrow, tr),
                 peakLabel: peakPoint == null ? '' : currency.amount(peakPoint.revenue),
+                tooltipLines: (i) => [
+                  '${formatWeekday(points[i].date)}, ${formatDay(points[i].date)}',
+                  tr.chartRevenue(currency.format(points[i].revenue)),
+                  tr.chartCashflow(currency.format(points[i].cashflow)),
+                ],
                 height: narrow ? 220 : 270,
               ),
               const SizedBox(height: 14),
@@ -322,14 +333,14 @@ class _RevenueCard extends StatelessWidget {
                 columns: c.maxWidth >= 560 ? 3 : 1,
                 children: [
                   MiniStatTile(
-                    label: 'Gross Profit Margin',
+                    label: tr.grossMargin,
                     value: '${o.grossMargin}%',
                     icon: Icons.percent,
                     iconColor: AppColors.green,
                   ),
-                  MiniStatTile(label: 'Online / QR Split', value: '${o.onlineShare}% Card', icon: Icons.qr_code_2),
+                  MiniStatTile(label: tr.onlineSplit, value: tr.cardShare('${o.onlineShare}'), icon: Icons.qr_code_2),
                   MiniStatTile(
-                    label: 'Cash in Safe Vaults',
+                    label: tr.cashVaults,
                     value: currency.format(o.cashInVaults),
                     icon: Icons.shield_outlined,
                     iconColor: AppColors.orange,
@@ -349,15 +360,16 @@ class _TopStoresCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<StoresViewModel>();
     final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
     final top = vm.top(4);
     final maxShare = top.isEmpty ? 1.0 : vm.shareOf(top.first);
 
     return SectionCard(
-      title: 'Top Stores',
-      badge: const StatusBadge('Ranked', tone: BadgeTone.warning),
-      subtitle: 'Ranked by monthly sales volume',
+      title: tr.topStores,
+      badge: StatusBadge(tr.ranked, tone: BadgeTone.warning),
+      subtitle: tr.rankedSubtitle,
       trailing: const Icon(Icons.leaderboard_outlined, color: AppColors.navy),
       child: !vm.hasData
           ? const Padding(
@@ -390,7 +402,7 @@ class _TopStoresCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            'View All ${vm.stores.length} Stores Directory',
+                            tr.viewAllStores(vm.stores.length),
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
@@ -423,6 +435,7 @@ class _StoreRankTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final first = rank == 1;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -456,7 +469,7 @@ class _StoreRankTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${store.type} • ${store.counters} Counters',
+                      tr.countersType(store.type, store.counters),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 11, color: AppColors.muted),
@@ -474,7 +487,7 @@ class _StoreRankTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '${(share * 100).round()}% Share',
+                    tr.shareValue('${(share * 100).round()}'),
                     style: const TextStyle(fontSize: 11, color: AppColors.green, fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -505,29 +518,26 @@ class _ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final query = context.select<HomeViewModel, String>((h) => h.query);
     final items = vm.activity(query);
 
     return SectionCard(
-      title: 'Recent Business Activity',
-      badge: const StatusBadge('LIVE FEED'),
-      subtitle: 'Real-time financial audits, POS register closures, and staff deployments',
+      title: tr.recentActivity,
+      badge: StatusBadge(tr.liveFeed),
+      subtitle: tr.activitySubtitle,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          StatusBadge(
-            ApiConstants.useMock ? 'Demo feed' : 'Real-time Sync Active',
-            tone: BadgeTone.positive,
-            dot: true,
-          ),
+          StatusBadge(ApiConstants.useMock ? tr.demoFeed : tr.syncActive, tone: BadgeTone.positive, dot: true),
           PopupMenuButton<ActivityType?>(
             key: const Key('activity-filter'),
-            tooltip: 'Filter',
+            tooltip: tr.filter,
             icon: Icon(Icons.filter_list, color: vm.activityFilter == null ? AppColors.muted : AppColors.orange),
             onSelected: vm.setActivityFilter,
             itemBuilder: (_) => [
-              const PopupMenuItem(value: null, child: Text('All activity')),
-              for (final t in ActivityType.values) PopupMenuItem(value: t, child: Text(_typeLabel(t))),
+              PopupMenuItem(value: null, child: Text(tr.allActivity)),
+              for (final t in ActivityType.values) PopupMenuItem(value: t, child: Text(tr.activityType(t))),
             ],
           ),
         ],
@@ -538,8 +548,7 @@ class _ActivityCard extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (items.isEmpty)
-                const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('No activity found')),
+              if (items.isEmpty) Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text(tr.noActivity)),
               for (final a in items) _ActivityRow(activity: a, currency: currency, compact: compact),
               const Divider(height: 24),
               Wrap(
@@ -548,11 +557,11 @@ class _ActivityCard extends StatelessWidget {
                 runSpacing: 6,
                 children: [
                   Text(
-                    'Connected to ${ApiConstants.mainEndpoints.join(', ')}',
+                    tr.connectedTo(ApiConstants.mainEndpoints.join(', ')),
                     style: const TextStyle(fontSize: 11, fontFamily: 'monospace', color: AppColors.muted),
                   ),
                   Text(
-                    ApiConstants.useMock ? 'Demo data — backend not connected yet' : ApiConstants.baseUrl,
+                    ApiConstants.useMock ? tr.demoBackend : ApiConstants.baseUrl,
                     style: const TextStyle(fontSize: 11, color: AppColors.muted),
                   ),
                 ],
@@ -563,13 +572,6 @@ class _ActivityCard extends StatelessWidget {
       ),
     );
   }
-
-  static String _typeLabel(ActivityType t) => switch (t) {
-    ActivityType.sale => 'Sales',
-    ActivityType.payroll => 'Payroll',
-    ActivityType.audit => 'Audits',
-    ActivityType.staff => 'Staff',
-  };
 }
 
 class _ActivityRow extends StatelessWidget {

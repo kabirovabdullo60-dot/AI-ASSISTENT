@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
@@ -38,13 +39,12 @@ class StoresView extends StatelessWidget {
       );
     }
     Clipboard.setData(ClipboardData(text: csv.toString()));
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Directory of ${stores.length} stores copied as CSV — paste it into Excel')));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.rowsCopied(stores.length))));
   }
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<StoresViewModel>();
     final query = context.select<HomeViewModel, String>((h) => h.query);
     final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
@@ -64,21 +64,21 @@ class StoresView extends StatelessWidget {
         final monthChange = weighted((s) => s.monthlySales, (s) => s.monthlyChange);
 
         return PageBody(
-          eyebrow: const ['ENTERPRISE FLEET', 'STORE DIRECTORY'],
-          title: 'Store Management',
-          subtitle: 'Manage multi-branch retail locations, track revenue and branch health across regional networks.',
+          eyebrow: [tr.storesEyebrow1, tr.storesEyebrow2],
+          title: tr.storesTitle,
+          subtitle: tr.storesSubtitle,
           actions: [
             OutlinedButton.icon(
               key: const Key('export-stores'),
               onPressed: () => _export(context, list),
               icon: const Icon(Icons.download_outlined, size: 18),
-              label: const Text('Export Directory'),
+              label: Text(tr.exportDirectory),
             ),
             FilledButton.icon(
               key: const Key('add-store'),
               onPressed: () => StoreFormDialog.show(context),
               icon: const Icon(Icons.add, size: 18),
-              label: const Text('Add New Store'),
+              label: Text(tr.addNewStore),
             ),
           ],
           children: [
@@ -87,35 +87,35 @@ class StoresView extends StatelessWidget {
                 columns: c.maxWidth >= 900 ? 4 : 2,
                 children: [
                   KpiCard(
-                    title: 'Network Scope',
-                    value: '${vm.stores.length} Locations',
+                    title: tr.networkScope,
+                    value: tr.nLocations(vm.stores.length),
                     icon: Icons.apartment_outlined,
-                    badge: '${(vm.operatingRatio * 100).round()}% Op. Ratio',
-                    caption: '${vm.activeCount} active · ${vm.inactiveCount} inactive',
+                    badge: tr.opRatio((vm.operatingRatio * 100).round()),
+                    caption: tr.activeInactive(vm.activeCount, vm.inactiveCount),
                   ),
                   KpiCard(
-                    title: "Today's Fleet Velocity",
+                    title: tr.fleetVelocity,
                     value: cur.amount(vm.todayTotal),
                     unit: cur.code,
                     icon: Icons.payments_outlined,
                     badge: formatPercent(todayChange),
                     badgeIcon: Icons.trending_up,
-                    caption: 'all branches today',
+                    caption: tr.allBranchesToday,
                   ),
                   KpiCard(
-                    title: 'Total Monthly Revenue',
+                    title: tr.totalMonthlyRevenue,
                     value: cur.amount(vm.totalSales),
                     unit: cur.code,
                     icon: Icons.insights_outlined,
                     badge: formatPercent(monthChange),
                     badgeIcon: Icons.trending_up,
-                    caption: 'vs last month',
+                    caption: tr.vsLastMonth,
                   ),
                   KpiCard(
-                    title: 'Allocated Workforce',
-                    value: '${vm.workforce} Active',
+                    title: tr.allocatedWorkforce,
+                    value: tr.nActive(vm.workforce),
                     icon: Icons.badge_outlined,
-                    badge: 'Across ${vm.staffedBranches} branches',
+                    badge: tr.acrossBranches(vm.staffedBranches),
                     badgeTone: BadgeTone.info,
                   ),
                 ],
@@ -125,10 +125,10 @@ class StoresView extends StatelessWidget {
             _FilterBar(vm: vm),
             const SizedBox(height: 16),
             if (list.isEmpty)
-              const Card(
+              Card(
                 child: Padding(
                   padding: EdgeInsets.all(32),
-                  child: Center(child: Text('No stores match the filters')),
+                  child: Center(child: Text(tr.noStoresMatch)),
                 ),
               )
             else if (vm.gridView)
@@ -146,7 +146,7 @@ class StoresView extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: AppTable(
-                    columns: const ['Store', 'City', 'Status', "Today's Sales", 'Monthly Volume', 'Staff', 'Phone', ''],
+                    columns: [tr.store, tr.city, tr.status, tr.kpiTodaySales, tr.monthlyVolume, tr.staff, tr.phone, ''],
                     numeric: const {3, 4, 5},
                     rows: [
                       for (final s in list)
@@ -194,10 +194,11 @@ class _FilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final statusLabel = switch (vm.statusFilter) {
-      StoreStatusFilter.all => 'All Status (${vm.activeCount} Active, ${vm.inactiveCount} Inactive)',
-      StoreStatusFilter.active => 'Active only (${vm.activeCount})',
-      StoreStatusFilter.inactive => 'Inactive only (${vm.inactiveCount})',
+      StoreStatusFilter.all => tr.allStatusCounts(vm.activeCount, vm.inactiveCount),
+      StoreStatusFilter.active => tr.activeOnly(vm.activeCount),
+      StoreStatusFilter.inactive => tr.inactiveOnly(vm.inactiveCount),
     };
     return Card(
       child: Padding(
@@ -208,8 +209,8 @@ class _FilterBar extends StatelessWidget {
               key: const Key('store-search'),
               onChanged: vm.setQuery,
               style: const TextStyle(fontSize: 13),
-              decoration: const InputDecoration(
-                hintText: 'Search stores by name, city, phone…',
+              decoration: InputDecoration(
+                hintText: tr.searchStores,
                 prefixIcon: Icon(Icons.search, size: 18),
                 contentPadding: EdgeInsets.symmetric(vertical: 10),
               ),
@@ -225,17 +226,17 @@ class _FilterBar extends StatelessWidget {
                   value: vm.statusFilter,
                   onSelected: vm.setStatusFilter,
                   items: [
-                    (StoreStatusFilter.all, 'All Status'),
-                    (StoreStatusFilter.active, 'Active'),
-                    (StoreStatusFilter.inactive, 'Inactive'),
+                    (StoreStatusFilter.all, tr.allStatus),
+                    (StoreStatusFilter.active, tr.active),
+                    (StoreStatusFilter.inactive, tr.inactive),
                   ],
                 ),
                 DropdownChip<StoreSort>(
                   key: const Key('store-sort'),
-                  label: 'Sort by: ${vm.sort.label}',
+                  label: tr.sortBy(tr.storeSort(vm.sort)),
                   value: vm.sort,
                   onSelected: vm.setSort,
-                  items: [for (final s in StoreSort.values) (s, s.label)],
+                  items: [for (final s in StoreSort.values) (s, tr.storeSort(s))],
                 ),
                 _ViewToggle(grid: vm.gridView, onChanged: vm.setGridView),
               ],
@@ -263,6 +264,7 @@ class _ViewToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     Widget btn(bool value, IconData icon, String tip) => IconButton(
       key: Key(value ? 'grid-view' : 'list-view'),
       tooltip: tip,
@@ -277,7 +279,7 @@ class _ViewToggle extends StatelessWidget {
     );
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [btn(true, Icons.grid_view, 'Grid'), const SizedBox(width: 4), btn(false, Icons.view_list, 'List')],
+      children: [btn(true, Icons.grid_view, tr.grid), const SizedBox(width: 4), btn(false, Icons.view_list, tr.list)],
     );
   }
 }
@@ -288,8 +290,11 @@ class _StatusBadge extends StatelessWidget {
   final StoreModel store;
 
   @override
-  Widget build(BuildContext context) =>
-      StatusBadge(store.statusLabel, tone: store.isActive ? BadgeTone.positive : BadgeTone.neutral, dot: true);
+  Widget build(BuildContext context) => StatusBadge(
+    context.l10n.storeStatus(store),
+    tone: store.isActive ? BadgeTone.positive : BadgeTone.neutral,
+    dot: true,
+  );
 }
 
 class _StoreActions extends StatelessWidget {
@@ -299,18 +304,19 @@ class _StoreActions extends StatelessWidget {
   final bool showAnalytics;
 
   Future<void> _delete(BuildContext context) async {
+    final tr = context.l10n;
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete store?'),
-        content: Text('"${store.name}" will be removed from the directory. Its past sales stay in reports.'),
+        title: Text(tr.deleteStoreTitle),
+        content: Text(tr.deleteStoreBody(store.name)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr.cancel)),
           FilledButton(
             key: const Key('confirm-delete'),
             style: FilledButton.styleFrom(backgroundColor: AppColors.red),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Delete'),
+            child: Text(tr.delete),
           ),
         ],
       ),
@@ -320,11 +326,12 @@ class _StoreActions extends StatelessWidget {
     final dashboard = context.read<DashboardViewModel>();
     final done = await context.read<StoresViewModel>().delete(store.id);
     if (done) dashboard.load();
-    messenger.showSnackBar(SnackBar(content: Text(done ? '${store.name} deleted' : 'Could not delete the store')));
+    messenger.showSnackBar(SnackBar(content: Text(done ? tr.storeDeleted(store.name) : tr.deleteFailed)));
   }
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     return Row(
       mainAxisSize: showAnalytics ? MainAxisSize.max : MainAxisSize.min,
       children: [
@@ -336,20 +343,20 @@ class _StoreActions extends StatelessWidget {
               padding: EdgeInsets.zero,
             ),
             onPressed: () => StoreDetailSheet.show(context, store.id),
-            child: const Text('View Analytics →', style: TextStyle(fontWeight: FontWeight.w600)),
+            child: Text(tr.viewAnalytics, style: TextStyle(fontWeight: FontWeight.w600)),
           ),
           const Spacer(),
         ],
         IconButton(
           key: Key('edit-${store.id}'),
-          tooltip: 'Edit',
+          tooltip: tr.edit,
           visualDensity: VisualDensity.compact,
           onPressed: () => StoreFormDialog.show(context, store: store),
           icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
         ),
         IconButton(
           key: Key('delete-${store.id}'),
-          tooltip: 'Delete',
+          tooltip: tr.delete,
           visualDensity: VisualDensity.compact,
           onPressed: () => _delete(context),
           icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
@@ -368,6 +375,7 @@ class _StoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final s = store;
     final first = rank == 1 && s.isActive;
     Widget figure(String label, String value, String sub, Color subColor) => Column(
@@ -468,16 +476,16 @@ class _StoreCard extends StatelessWidget {
                     child: figure(
                       "Today's Sales",
                       currency.format(s.todaySales),
-                      s.isActive ? '${formatPercent(s.todayChange)} vs yest.' : 'Offline',
+                      s.isActive ? tr.vsYest(formatPercent(s.todayChange)) : tr.offline,
                       s.isActive ? AppColors.green : AppColors.muted,
                     ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: figure(
-                      'Monthly Volume',
+                      tr.monthlyVolume,
                       currency.format(s.monthlySales),
-                      rank == 1 && s.isActive ? 'Top Earner (#1)' : s.note,
+                      rank == 1 && s.isActive ? tr.topEarner : s.note,
                       AppColors.muted,
                     ),
                   ),
@@ -488,11 +496,11 @@ class _StoreCard extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8),
               child: Column(
                 children: [
-                  info(Icons.phone_outlined, 'Phone', s.phone),
+                  info(Icons.phone_outlined, tr.phone, s.phone),
                   info(
                     Icons.groups_outlined,
-                    'Staff Headcount',
-                    s.staffCount == 0 && !s.isActive ? '0 (reassigned)' : '${s.staffCount} employees',
+                    tr.staffHeadcount,
+                    s.staffCount == 0 && !s.isActive ? tr.reassigned : tr.nEmployees(s.staffCount),
                   ),
                 ],
               ),
@@ -514,15 +522,16 @@ class _RegionalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final regions = vm.regions;
     return SectionCard(
-      title: 'Regional Sales Distribution',
-      subtitle: 'Live breakdown across ${regions.map((r) => r.region).join(', ')} territories',
+      title: tr.regionalTitle,
+      subtitle: tr.regionalSubtitle(regions.map((r) => r.region).join(', ')),
       trailing: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(6)),
         child: Text(
-          'Endpoint:\n${ApiConstants.stores}',
+          '${tr.endpoint}:\n${ApiConstants.stores}',
           style: const TextStyle(fontSize: 10.5, fontFamily: 'monospace', color: AppColors.navy),
         ),
       ),
@@ -538,9 +547,7 @@ class _RegionalCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '${regions[i].region} (${regions[i].stores} '
-                          '${regions[i].stores == 1 ? 'Branch' : 'Branches'}'
-                          '${regions[i].inactive > 0 ? ' · ${regions[i].inactive} inactive' : ''})',
+                          '${regions[i].region} (${tr.branchesCount(regions[i].stores)}${regions[i].inactive > 0 ? ' · ${tr.nInactive(regions[i].inactive)}' : ''})',
                           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                         ),
                       ),
@@ -573,7 +580,7 @@ class _RegionalCard extends StatelessWidget {
             spacing: 16,
             runSpacing: 6,
             children: [
-              const Text.rich(
+              Text.rich(
                 TextSpan(
                   style: TextStyle(fontSize: 11.5, color: AppColors.muted),
                   children: [
@@ -581,17 +588,17 @@ class _RegionalCard extends StatelessWidget {
                       text: '● ',
                       style: TextStyle(color: AppColors.orange),
                     ),
-                    TextSpan(text: 'Capital outlets   '),
+                    TextSpan(text: '${tr.capitalOutlets}   '),
                     TextSpan(
                       text: '● ',
                       style: TextStyle(color: AppColors.navy),
                     ),
-                    TextSpan(text: 'Regional territory'),
+                    TextSpan(text: tr.regionalTerritory),
                   ],
                 ),
               ),
               Text(
-                '✓ All ${vm.activeCount} active registers synced',
+                tr.registersSynced(vm.activeCount),
                 style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
               ),
             ],
@@ -609,12 +616,13 @@ class _OperationsLogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     return SectionCard(
-      title: 'Store Operations Log',
+      title: tr.opsLog,
       trailing: const Icon(Icons.history, color: AppColors.navy),
       child: Column(
         children: [
-          if (log.isEmpty) const Text('No operations yet'),
+          if (log.isEmpty) Text(tr.noOperations),
           for (final a in log)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
@@ -648,7 +656,7 @@ class _OperationsLogCard extends StatelessWidget {
           TextButton(
             onPressed: () => context.read<HomeViewModel>().select(AppSection.dashboard),
             style: TextButton.styleFrom(foregroundColor: AppColors.orange),
-            child: const Text('View Full Audit Trail →', style: TextStyle(fontWeight: FontWeight.w600)),
+            child: Text(tr.viewAuditTrail, style: TextStyle(fontWeight: FontWeight.w600)),
           ),
         ],
       ),

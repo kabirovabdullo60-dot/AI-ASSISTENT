@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 
@@ -117,7 +118,7 @@ class _SidebarItem extends StatelessWidget {
           child: Semantics(
             selected: selected,
             button: true,
-            label: section.label,
+            label: context.l10n.section(section),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: extended ? 12 : 4, vertical: extended ? 11 : 9),
               child: extended
@@ -127,7 +128,7 @@ class _SidebarItem extends StatelessWidget {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            section.label,
+                            context.l10n.section(section),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -144,7 +145,7 @@ class _SidebarItem extends StatelessWidget {
                         icon,
                         const SizedBox(height: 4),
                         Text(
-                          section.label,
+                          context.l10n.section(section),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: color, fontSize: 10.5),

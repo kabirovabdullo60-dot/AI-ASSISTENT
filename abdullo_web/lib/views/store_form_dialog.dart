@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../models/store_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
@@ -58,6 +59,7 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
       openingHours: _hours.text.trim(),
       isActive: _active,
     );
+    final tr = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     final dashboard = context.read<DashboardViewModel>();
@@ -69,18 +71,19 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
     }
     messenger.showSnackBar(
       SnackBar(
-        content: Text(ok ? '${store.name} ${_isNew ? 'added' : 'saved'}' : 'Could not save the store. Try again.'),
+        content: Text(ok ? (_isNew ? tr.storeAdded(store.name) : tr.storeSaved(store.name)) : tr.storeSaveFailed),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final saving = context.select<StoresViewModel, bool>((s) => s.isSaving);
-    String? required(String? v) => (v == null || v.trim().isEmpty) ? 'Required' : null;
+    String? required(String? v) => (v == null || v.trim().isEmpty) ? tr.required : null;
 
     return AlertDialog(
-      title: Text(_isNew ? 'Add New Store' : 'Edit Store'),
+      title: Text(_isNew ? tr.addNewStore : tr.editStore),
       content: SizedBox(
         width: 460,
         child: Form(
@@ -92,19 +95,19 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                 TextFormField(
                   key: const Key('store-name'),
                   controller: _name,
-                  decoration: const InputDecoration(labelText: 'Store name'),
+                  decoration: InputDecoration(labelText: tr.storeName),
                   validator: required,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _type,
-                  decoration: const InputDecoration(labelText: 'Type (Flagship, Mall Express…)'),
+                  decoration: InputDecoration(labelText: tr.storeType),
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   key: const Key('store-address'),
                   controller: _address,
-                  decoration: const InputDecoration(labelText: 'Address'),
+                  decoration: InputDecoration(labelText: tr.address),
                   validator: required,
                 ),
                 const SizedBox(height: 12),
@@ -114,7 +117,7 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                       child: TextFormField(
                         key: const Key('store-city'),
                         controller: _city,
-                        decoration: const InputDecoration(labelText: 'City'),
+                        decoration: InputDecoration(labelText: tr.city),
                         validator: required,
                       ),
                     ),
@@ -123,7 +126,7 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                       child: DropdownButtonFormField<String>(
                         initialValue: _region,
                         isExpanded: true,
-                        decoration: const InputDecoration(labelText: 'Region'),
+                        decoration: InputDecoration(labelText: tr.region),
                         items: [for (final r in _regions) DropdownMenuItem(value: r, child: Text(r))],
                         onChanged: (v) => setState(() => _region = v ?? _region),
                       ),
@@ -135,18 +138,18 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                   key: const Key('store-phone'),
                   controller: _phone,
                   keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(labelText: 'Phone'),
-                  validator: (v) => (v ?? '').replaceAll(RegExp(r'\D'), '').length < 9 ? 'Enter a phone number' : null,
+                  decoration: InputDecoration(labelText: tr.phone),
+                  validator: (v) => (v ?? '').replaceAll(RegExp(r'\D'), '').length < 9 ? tr.enterPhone : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _hours,
-                  decoration: const InputDecoration(labelText: 'Operating hours'),
+                  decoration: InputDecoration(labelText: tr.operatingHours),
                 ),
                 const SizedBox(height: 4),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('Store is open (active)'),
+                  title: Text(tr.storeOpen),
                   value: _active,
                   onChanged: (v) => setState(() => _active = v),
                 ),
@@ -156,13 +159,13 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
         ),
       ),
       actions: [
-        TextButton(onPressed: saving ? null : () => Navigator.pop(context), child: const Text('Cancel')),
+        TextButton(onPressed: saving ? null : () => Navigator.pop(context), child: Text(tr.cancel)),
         FilledButton(
           key: const Key('store-save'),
           onPressed: saving ? null : _save,
           child: saving
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-              : Text(_isNew ? 'Add Store' : 'Save'),
+              : Text(_isNew ? tr.addStore : tr.save),
         ),
       ],
     );

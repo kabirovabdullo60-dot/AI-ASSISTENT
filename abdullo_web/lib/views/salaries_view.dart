@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
@@ -40,11 +41,12 @@ class SalariesView extends StatelessWidget {
     Clipboard.setData(ClipboardData(text: csv.toString()));
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text('Ledger for ${formatMonthYear(vm.month)} copied as CSV')));
+    ).showSnackBar(SnackBar(content: Text(context.l10n.ledgerCopied(formatMonthYear(vm.month)))));
   }
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<PayrollViewModel>();
     final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
     final query = context.select<HomeViewModel, String>((h) => h.query);
@@ -59,24 +61,23 @@ class SalariesView extends StatelessWidget {
         final month = '${formatMonth(vm.month)} ${vm.month.year}';
         return PageBody(
           eyebrow: [
-            'ENTERPRISE PORTAL',
-            'FISCAL YEAR ${vm.month.year}',
-            'LEDGER ${ApiConstants.payroll.toUpperCase()}',
+            tr.payrollEyebrow,
+            tr.fiscalYear('${vm.month.year}'),
+            tr.ledger(ApiConstants.payroll.toUpperCase()),
           ],
-          title: 'Salaries & Payroll Management',
-          subtitle:
-              'Manage monthly employee remuneration, record disbursements and track outstanding balances across all regional hubs.',
+          title: tr.payrollTitle,
+          subtitle: tr.payrollSubtitle,
           actions: [
             OutlinedButton.icon(
               onPressed: () => _export(context, vm),
               icon: const Icon(Icons.download_outlined, size: 18),
-              label: const Text('Export Ledger'),
+              label: Text(tr.exportLedger),
             ),
             FilledButton.icon(
               key: const Key('record-salary'),
               onPressed: vm.pendingCount == 0 ? null : () => SalaryPaymentDialog.show(context),
               icon: const Icon(Icons.add_circle_outline, size: 18),
-              label: const Text('Record Salary Payment'),
+              label: Text(tr.recordSalaryPayment),
             ),
           ],
           children: [
@@ -85,41 +86,41 @@ class SalariesView extends StatelessWidget {
                 columns: c.maxWidth >= 900 ? 4 : 2,
                 children: [
                   KpiCard(
-                    title: 'Total Monthly Payroll',
+                    title: tr.totalMonthlyPayroll,
                     value: cur.amount(vm.totalPayroll),
                     unit: cur.code,
                     icon: Icons.account_balance_outlined,
                     badge: month,
                     badgeTone: BadgeTone.info,
-                    caption: 'Allocated monthly budget',
+                    caption: tr.allocatedBudget,
                   ),
                   KpiCard(
-                    title: 'Total Disbursed',
+                    title: tr.totalDisbursed,
                     value: cur.amount(vm.disbursedTotal),
                     unit: cur.code,
                     icon: Icons.check_circle_outline,
-                    badge: '${(vm.disbursedRatio * 100).toStringAsFixed(1)}% disbursed',
+                    badge: tr.pctDisbursed((vm.disbursedRatio * 100).toStringAsFixed(1)),
                     badgeIcon: Icons.trending_up,
-                    caption: 'Settled',
+                    caption: tr.settled,
                   ),
                   KpiCard(
-                    title: 'Total Outstanding',
+                    title: tr.totalOutstanding,
                     value: cur.amount(vm.pendingTotal),
                     unit: cur.code,
                     icon: Icons.pending_actions_outlined,
-                    badge: '${((1 - vm.disbursedRatio) * 100).toStringAsFixed(1)}% balance',
+                    badge: tr.pctBalance(((1 - vm.disbursedRatio) * 100).toStringAsFixed(1)),
                     badgeTone: BadgeTone.warning,
                     badgeDot: true,
-                    caption: 'Pending clearance',
+                    caption: tr.pendingClearance,
                     highlight: true,
                   ),
                   KpiCard(
-                    title: 'Staff Distribution',
-                    value: '${vm.items.length} Employees',
+                    title: tr.staffDistribution,
+                    value: tr.nEmployees(vm.items.length),
                     icon: Icons.badge_outlined,
-                    badge: '${vm.branchCount} Branches',
+                    badge: tr.nBranches(vm.branchCount),
                     badgeTone: BadgeTone.info,
-                    caption: '100% active contracts',
+                    caption: tr.activeContracts,
                   ),
                 ],
               ),
@@ -134,18 +135,18 @@ class SalariesView extends StatelessWidget {
                   children: [
                     AppTable(
                       key: const Key('payroll-table'),
-                      columns: const [
-                        'EMPLOYEE & POSITION',
-                        'ASSIGNED STORE',
-                        'TENURE',
-                        'MONTHLY SALARY',
-                        'DISBURSED',
-                        'REMAINING',
-                        'STATUS',
-                        'ACTIONS',
+                      columns: [
+                        tr.colEmployee,
+                        tr.colAssignedStore,
+                        tr.colTenure,
+                        tr.colMonthlySalary,
+                        tr.colDisbursed,
+                        tr.colRemaining,
+                        tr.colStatus,
+                        tr.colActions,
                       ],
                       numeric: const {3, 4, 5},
-                      empty: vm.items.isEmpty ? 'No payroll for $month yet' : 'No employees match the filters',
+                      empty: vm.items.isEmpty ? tr.noPayrollFor(month) : tr.noEmployeesMatch,
                       rows: [for (final p in page) _row(context, p, cur, vm)],
                     ),
                     const Divider(height: 20),
@@ -156,7 +157,7 @@ class SalariesView extends StatelessWidget {
                       itemCount: rows.length,
                       onPage: vm.goToPage,
                       noun: 'employees',
-                      extra: 'Filtered Batch: ${formatMonthYear(vm.month)}',
+                      extra: tr.filteredBatch(formatMonthYear(vm.month)),
                     ),
                   ],
                 ),
@@ -235,24 +236,24 @@ class SalariesView extends StatelessWidget {
           Text(p.storeName),
         ],
       ),
-      StatusBadge(formatTenure(p.tenureMonths), tone: BadgeTone.info),
+      StatusBadge(context.l10n.tenure(p.tenureMonths), tone: BadgeTone.info),
       money(p.salary),
       money(p.disbursed, color: p.status == PayStatus.paid ? AppColors.green : null),
       money(p.remaining, color: p.remaining > 0 ? AppColors.red : AppColors.muted),
-      StatusBadge(p.status.label, tone: tone, dot: true),
+      StatusBadge(context.l10n.payStatus(p.status), tone: tone, dot: true),
       p.remaining > 0 && vm.isCurrentMonth
           ? FilledButton.icon(
               key: Key('pay-${p.id}'),
               style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
               onPressed: vm.payingId == null ? () => SalaryPaymentDialog.show(context, payroll: p) : null,
               icon: const Icon(Icons.payments_outlined, size: 16),
-              label: const Text('Record Payment'),
+              label: Text(context.l10n.recordPayment),
             )
           : TextButton.icon(
               key: Key('history-${p.id}'),
               onPressed: () => PayrollHistoryDialog.show(context, p),
               icon: const Icon(Icons.receipt_long_outlined, size: 16),
-              label: const Text('History'),
+              label: Text(context.l10n.history),
             ),
     ];
   }
@@ -265,6 +266,7 @@ class _Filters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -287,7 +289,7 @@ class _Filters extends StatelessWidget {
                     children: [
                       IconButton(
                         key: const Key('prev-month'),
-                        tooltip: 'Previous month',
+                        tooltip: tr.prevMonth,
                         visualDensity: VisualDensity.compact,
                         onPressed: vm.previousMonth,
                         icon: const Icon(Icons.chevron_left),
@@ -301,7 +303,7 @@ class _Filters extends StatelessWidget {
                       ),
                       IconButton(
                         key: const Key('next-month'),
-                        tooltip: 'Next month',
+                        tooltip: tr.nextMonth,
                         visualDensity: VisualDensity.compact,
                         onPressed: vm.isCurrentMonth ? null : vm.nextMonth,
                         icon: const Icon(Icons.chevron_right),
@@ -312,10 +314,10 @@ class _Filters extends StatelessWidget {
                 DropdownChip<String>(
                   key: const Key('payroll-store-filter'),
                   icon: Icons.storefront_outlined,
-                  label: vm.storeFilter ?? 'All Stores (${vm.storeNames.length})',
+                  label: vm.storeFilter ?? tr.allStoresCount(vm.storeNames.length),
                   value: vm.storeFilter ?? '',
                   onSelected: (s) => vm.setStoreFilter(s.isEmpty ? null : s),
-                  items: [('', 'All Stores'), for (final s in vm.storeNames) (s, s)],
+                  items: [('', tr.allStores), for (final s in vm.storeNames) (s, s)],
                 ),
                 SizedBox(
                   width: 280,
@@ -323,8 +325,8 @@ class _Filters extends StatelessWidget {
                     key: const Key('payroll-search'),
                     onChanged: vm.setQuery,
                     style: const TextStyle(fontSize: 13),
-                    decoration: const InputDecoration(
-                      hintText: 'Search by staff name or position…',
+                    decoration: InputDecoration(
+                      hintText: tr.searchStaff,
                       prefixIcon: Icon(Icons.search, size: 18),
                       contentPadding: EdgeInsets.symmetric(vertical: 10),
                     ),
@@ -335,7 +337,7 @@ class _Filters extends StatelessWidget {
             const SizedBox(height: 10),
             PillTabs(
               dark: false,
-              labels: [for (final t in PayrollTab.values) '${t.label} (${vm.countFor(t)})'],
+              labels: [for (final t in PayrollTab.values) tr.tabCount(tr.payrollTab(t), vm.countFor(t))],
               selected: vm.tab.index,
               onSelect: (i) => vm.setTab(PayrollTab.values[i]),
             ),
@@ -354,20 +356,21 @@ class _BudgetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final rows = vm.budgetByStore;
     final max = rows.isEmpty ? 1.0 : rows.first.total;
     const colors = [AppColors.navy, AppColors.orange, Color(0xFF4B5675), Color(0xFFB8C0D6)];
     final now = DateTime.now();
     return SectionCard(
-      title: 'Store Budget Allocation',
+      title: tr.budgetTitle,
       badge: StatusBadge(
-        vm.pendingTotal == 0 ? 'Balanced' : 'Open balance',
+        vm.pendingTotal == 0 ? tr.balanced : tr.openBalance,
         tone: vm.pendingTotal == 0 ? BadgeTone.positive : BadgeTone.warning,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (rows.isEmpty) const Text('No payroll for this month'),
+          if (rows.isEmpty) Text(tr.noPayrollMonth),
           for (var i = 0; i < rows.length; i++)
             Padding(
               padding: const EdgeInsets.only(bottom: 14),
@@ -376,7 +379,7 @@ class _BudgetCard extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text('${rows[i].store} (${rows[i].staff} staff)', style: const TextStyle(fontSize: 13)),
+                        child: Text(tr.storeStaff(rows[i].store, rows[i].staff), style: const TextStyle(fontSize: 13)),
                       ),
                       Text(
                         currency.format(rows[i].total),
@@ -400,8 +403,8 @@ class _BudgetCard extends StatelessWidget {
           const SizedBox(height: 6),
           Row(
             children: [
-              const Expanded(
-                child: Text('Synced with ERP General Ledger', style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
+              Expanded(
+                child: Text(tr.erpSynced, style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
               ),
               Text(
                 '${formatDay(now)}, ${formatTime(now)}',
@@ -423,18 +426,19 @@ class _DisbursementsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     return SectionCard(
-      title: 'Recent Payroll Disbursements',
-      subtitle: 'Real-time payment audit log across retail branches',
+      title: tr.recentDisbursements,
+      subtitle: tr.disbursementsSubtitle,
       trailing: TextButton(
         style: TextButton.styleFrom(foregroundColor: AppColors.orange),
         onPressed: () => context.read<HomeViewModel>().select(AppSection.dashboard),
-        child: const Text('View Full Audit →', style: TextStyle(fontWeight: FontWeight.w600)),
+        child: Text(tr.viewFullAudit, style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       child: Column(
         children: [
           if (items.isEmpty)
-            const Padding(padding: EdgeInsets.all(12), child: Text('No payments recorded this month'))
+            Padding(padding: EdgeInsets.all(12), child: Text(tr.noPaymentsMonth))
           else
             LayoutBuilder(
               builder: (context, c) => CardGrid(
@@ -465,7 +469,7 @@ class _DisbursementsCard extends StatelessWidget {
                                   style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
                                 ),
                                 Text(
-                                  '${d.part.isEmpty ? d.method : d.part} • ${d.reference}',
+                                  '${d.part.isEmpty ? tr.paymentMethod(d.method) : d.part} • ${d.reference}',
                                   maxLines: 2,
                                   style: const TextStyle(fontSize: 11, color: AppColors.muted),
                                 ),
@@ -496,16 +500,11 @@ class _DisbursementsCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(10)),
-            child: const Row(
+            child: Row(
               children: [
                 Icon(Icons.shield_outlined, color: AppColors.orange),
                 SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'All bank settlements follow National Bank standard formats and are signed via TLS.',
-                    style: TextStyle(fontSize: 12.5),
-                  ),
-                ),
+                Expanded(child: Text(tr.bankNote, style: TextStyle(fontSize: 12.5))),
               ],
             ),
           ),

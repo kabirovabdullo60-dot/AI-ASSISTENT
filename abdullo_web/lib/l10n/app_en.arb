@@ -1,0 +1,859 @@
+{
+  "@@locale": "en",
+  "navDashboard": "Dashboard",
+  "navStores": "Stores",
+  "navSales": "Sales",
+  "navEmployees": "Employees",
+  "navSalaries": "Salaries",
+  "navReports": "Reports",
+  "navAssistant": "AI Assistant",
+  "navProfile": "Profile",
+  "navSettings": "Settings",
+  "navMore": "More",
+  "cancel": "Cancel",
+  "save": "Save",
+  "close": "Close",
+  "delete": "Delete",
+  "edit": "Edit",
+  "tryAgain": "Try again",
+  "loadError": "Could not load data. Check the connection and try again.",
+  "nothingFound": "Nothing found",
+  "noDataYet": "No data yet",
+  "today": "Today",
+  "active": "Active",
+  "inactive": "Inactive",
+  "inactiveWithReason": "Inactive ({reason})",
+  "@inactiveWithReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "store": "Store",
+  "city": "City",
+  "status": "Status",
+  "phone": "Phone",
+  "staff": "Staff",
+  "name": "Name",
+  "role": "Role",
+  "shift": "Shift",
+  "type": "Type",
+  "share": "Share",
+  "export": "Export",
+  "allStores": "All Stores",
+  "amountTjs": "Amount (TJS)",
+  "enterAmount": "Enter an amount above 0",
+  "required": "Required",
+  "rowsCopied": "{count} rows copied as CSV — paste them into Excel",
+  "@rowsCopied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pagerPrev": "‹ Prev",
+  "pagerNext": "Next ›",
+  "showingRange": "Showing {from}–{to} of {total}",
+  "@showingRange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "language": "Language",
+  "allStoresActive": "All Stores ({count} Active)",
+  "@allStoresActive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chooseStore": "Choose store",
+  "searchHint": "Search transactions, stores, staff…",
+  "demoBadge": "Demo data · API not connected",
+  "notifications": "Notifications",
+  "salariesWaiting": "{count} salaries waiting to be paid",
+  "@salariesWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noNotifications": "No notifications",
+  "businessOverview": "Business Overview",
+  "liveAudit": "LIVE AUDIT",
+  "overviewSubtitle": "Real-time consolidated performance across all retail branches and capital flows",
+  "recordSale": "Record Sale",
+  "todayDate": "Today: {date}",
+  "@todayDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "kpiTotalStores": "Total Stores",
+  "nActive": "{count} Active",
+  "@nActive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quarterNew": "+{count} Q{quarter}",
+  "@quarterNew": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "quarter": {
+        "type": "int"
+      }
+    }
+  },
+  "ofRegistered": "of {count} registered",
+  "@ofRegistered": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kpiTotalStaff": "Total Staff",
+  "nStaff": "{count} Staff",
+  "@nStaff": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onShiftToday": "on shift today",
+  "kpiTodaySales": "Today's Sales",
+  "vsYesterday": "vs yesterday",
+  "kpiWeeklySales": "Weekly Sales",
+  "target": "Target {value}",
+  "@target": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "kpiMonthlySales": "Monthly Sales",
+  "mom": "MoM",
+  "kpiUnpaidSalaries": "Unpaid Salaries",
+  "nPending": "{count} Pending",
+  "@nPending": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cycle": "{month} cycle",
+  "@cycle": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "revenueTitle": "Revenue & Cashflow Analytics",
+  "revenueSubtitle": "Daily gross revenue trajectory across the current operational month",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "peakLabel": "Peak: {day} ({amount})",
+  "@peakLabel": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "peakShort": "Peak",
+  "averageDaily": "Average Daily: ",
+  "totalVolume": "Total Volume: ",
+  "txns": "{count} txns",
+  "@txns": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "autoReconciliation": "{pct}% Automated Reconciliation",
+  "@autoReconciliation": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "grossMargin": "Gross Profit Margin",
+  "onlineSplit": "Online / QR Split",
+  "cardShare": "{pct}% Card",
+  "@cardShare": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "cashVaults": "Cash in Safe Vaults",
+  "topStores": "Top Stores",
+  "ranked": "Ranked",
+  "rankedSubtitle": "Ranked by monthly sales volume",
+  "countersType": "{type} • {count} Counters",
+  "@countersType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shareValue": "{pct}% Share",
+  "@shareValue": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "viewAllStores": "View All {count} Stores Directory",
+  "@viewAllStores": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recentActivity": "Recent Business Activity",
+  "liveFeed": "LIVE FEED",
+  "activitySubtitle": "Real-time financial audits, POS register closures, and staff deployments",
+  "demoFeed": "Demo feed",
+  "syncActive": "Real-time Sync Active",
+  "filter": "Filter",
+  "allActivity": "All activity",
+  "activitySales": "Sales",
+  "activityPayroll": "Payroll",
+  "activityAudits": "Audits",
+  "activityStaff": "Staff",
+  "noActivity": "No activity found",
+  "connectedTo": "Connected to {endpoints}",
+  "@connectedTo": {
+    "placeholders": {
+      "endpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "demoBackend": "Demo data — backend not connected yet",
+  "salesEyebrow": "FINANCIAL OPERATIONS · TAJIKISTAN ZONE",
+  "salesTitle": "Sales & Daily Entries",
+  "salesSubtitle": "Log daily store turnover in Tajikistani Somoni (TJS) and monitor real-time transaction logs.",
+  "totalToday": "TOTAL TODAY",
+  "totalThisMonth": "TOTAL THIS MONTH",
+  "successPrefix": "Success: ",
+  "saleSavedMessage": "Daily sales of {amount} recorded for {store}.",
+  "@saleSavedMessage": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "store": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionClerk": "Active Session Clerk",
+  "authorized": "Authorized",
+  "storeLabel": "Store:",
+  "searchReceipt": "Search receipt # or notes…",
+  "updatedJustNow": "Updated just now",
+  "updatedMinutesAgo": "Updated {count} minutes ago",
+  "@updatedMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeFilterVolume": "ACTIVE FILTER VOLUME",
+  "filteredTotal": "Filtered Total: ",
+  "acrossEntries": "  across {count} entries",
+  "@acrossEntries": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vsPrevPeriod": "{pct} vs prev. period",
+  "@vsPrevPeriod": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "colDateTime": "DATE & TIME",
+  "colStoreName": "STORE NAME",
+  "colSalesAmount": "SALES AMOUNT",
+  "colRegisteredBy": "REGISTERED BY",
+  "colNotesMethod": "NOTES / METHOD",
+  "noEntries": "No entries for this filter",
+  "hourlyVelocity": "Hourly Velocity (Today)",
+  "reconciliation": "Reconciliation Compliance",
+  "storesSynced": "{synced} of {total} stores synced today",
+  "@storesSynced": {
+    "placeholders": {
+      "synced": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "rangeToday": "Today",
+  "rangeWeek": "This Week",
+  "rangeMonth": "This Month",
+  "rangeCustom": "Custom Range",
+  "newDailySale": "New Daily Sales Record",
+  "posTerminal": "POS Terminal",
+  "selectStore": "Select Store",
+  "activeBranches": "{count} active branches",
+  "@activeBranches": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dailySalesAmount": "Daily Sales Amount",
+  "amountHint": "e.g. 5,450.00",
+  "amountHelper": "Gross daily register total inclusive of VAT",
+  "accountingDate": "Transaction Accounting Date",
+  "balanceSplit": "Primary Balance Split",
+  "splitBalanced": "Balanced",
+  "splitPos": "POS > 80%",
+  "splitCash": "Cash Heavy",
+  "notesLabel": "Description / Notes ",
+  "optional": "(optional)",
+  "notesHint": "e.g. End of day cash & POS terminal reconciliation, promo event",
+  "saveSaleRecord": "Save Sale Record",
+  "syncsTo": "  Data syncs instantly to REST endpoint ",
+  "saleFailed": "Could not save the sale. Try again.",
+  "saleRecorded": "Sale recorded · {date}",
+  "@saleRecorded": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "storesEyebrow1": "ENTERPRISE FLEET",
+  "storesEyebrow2": "STORE DIRECTORY",
+  "storesTitle": "Store Management",
+  "storesSubtitle": "Manage multi-branch retail locations, track revenue and branch health across regional networks.",
+  "exportDirectory": "Export Directory",
+  "addNewStore": "Add New Store",
+  "networkScope": "Network Scope",
+  "nLocations": "{count} Locations",
+  "@nLocations": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "opRatio": "{pct}% Op. Ratio",
+  "@opRatio": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "activeInactive": "{active} active · {inactive} inactive",
+  "@activeInactive": {
+    "placeholders": {
+      "active": {
+        "type": "int"
+      },
+      "inactive": {
+        "type": "int"
+      }
+    }
+  },
+  "fleetVelocity": "Today's Fleet Velocity",
+  "allBranchesToday": "all branches today",
+  "totalMonthlyRevenue": "Total Monthly Revenue",
+  "vsLastMonth": "vs last month",
+  "allocatedWorkforce": "Allocated Workforce",
+  "acrossBranches": "Across {count} branches",
+  "@acrossBranches": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noStoresMatch": "No stores match the filters",
+  "monthlyVolume": "Monthly Volume",
+  "allStatusCounts": "All Status ({active} Active, {inactive} Inactive)",
+  "@allStatusCounts": {
+    "placeholders": {
+      "active": {
+        "type": "int"
+      },
+      "inactive": {
+        "type": "int"
+      }
+    }
+  },
+  "activeOnly": "Active only ({count})",
+  "@activeOnly": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inactiveOnly": "Inactive only ({count})",
+  "@inactiveOnly": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allStatus": "All Status",
+  "searchStores": "Search stores by name, city, phone…",
+  "sortBy": "Sort by: {label}",
+  "@sortBy": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "sortRevenue": "Highest Revenue",
+  "sortName": "Name A–Z",
+  "grid": "Grid",
+  "list": "List",
+  "deleteStoreTitle": "Delete store?",
+  "deleteStoreBody": "\"{name}\" will be removed from the directory. Its past sales stay in reports.",
+  "@deleteStoreBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeDeleted": "{name} deleted",
+  "@storeDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteFailed": "Could not delete the store",
+  "viewAnalytics": "View Analytics →",
+  "vsYest": "{pct} vs yest.",
+  "@vsYest": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "offline": "Offline",
+  "topEarner": "Top Earner (#1)",
+  "staffHeadcount": "Staff Headcount",
+  "reassigned": "0 (reassigned)",
+  "nEmployees": "{count} employees",
+  "@nEmployees": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "regionalTitle": "Regional Sales Distribution",
+  "regionalSubtitle": "Live breakdown across {regions}",
+  "@regionalSubtitle": {
+    "placeholders": {
+      "regions": {
+        "type": "String"
+      }
+    }
+  },
+  "endpoint": "Endpoint",
+  "branchesCount": "{count, plural, =1{1 Branch} other{{count} Branches}}",
+  "@branchesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nInactive": "{count} inactive",
+  "@nInactive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "capitalOutlets": "Capital outlets",
+  "regionalTerritory": "Regional territory",
+  "registersSynced": "✓ All {count} active registers synced",
+  "@registersSynced": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "opsLog": "Store Operations Log",
+  "noOperations": "No operations yet",
+  "viewAuditTrail": "View Full Audit Trail →",
+  "editStore": "Edit Store",
+  "storeName": "Store name",
+  "storeType": "Type (Flagship, Mall Express…)",
+  "address": "Address",
+  "region": "Region",
+  "enterPhone": "Enter a phone number",
+  "operatingHours": "Operating hours",
+  "storeOpen": "Store is open (active)",
+  "addStore": "Add Store",
+  "storeAdded": "{name} added",
+  "@storeAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeSaved": "{name} saved",
+  "@storeSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeSaveFailed": "Could not save the store. Try again.",
+  "storeNotFound": "Store not found",
+  "dailySales": "Daily Sales",
+  "monthlyTotal": "Monthly Total",
+  "velocity7": "7-Day Sales Velocity",
+  "avgPerDay": "Avg: {amount}/day",
+  "@avgPerDay": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "sixDaysAgo": "6 Days Ago",
+  "todayCurrent": "Today (Current)",
+  "storeParams": "Store Parameters & Configuration",
+  "phoneLine": "Phone Line:",
+  "staffAllocation": "Branch Staff Allocation:",
+  "activeCrew": "{count} Active Crew",
+  "@activeCrew": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "apiSync": "REST API Synchronizer:",
+  "operatingHoursLabel": "Operating Hours:",
+  "statusLabel": "Status:",
+  "recentPos": "Recent POS Activity",
+  "noSalesYet": "No sales yet",
+  "payrollEyebrow": "ENTERPRISE PORTAL",
+  "fiscalYear": "FISCAL YEAR {year}",
+  "@fiscalYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "ledger": "LEDGER {path}",
+  "@ledger": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "payrollTitle": "Salaries & Payroll Management",
+  "payrollSubtitle": "Manage monthly employee remuneration, record disbursements and track outstanding balances across all regional hubs.",
+  "exportLedger": "Export Ledger",
+  "recordSalaryPayment": "Record Salary Payment",
+  "totalMonthlyPayroll": "Total Monthly Payroll",
+  "allocatedBudget": "Allocated monthly budget",
+  "totalDisbursed": "Total Disbursed",
+  "pctDisbursed": "{pct}% disbursed",
+  "@pctDisbursed": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "settled": "Settled",
+  "totalOutstanding": "Total Outstanding",
+  "pctBalance": "{pct}% balance",
+  "@pctBalance": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "pendingClearance": "Pending clearance",
+  "staffDistribution": "Staff Distribution",
+  "nBranches": "{count} Branches",
+  "@nBranches": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeContracts": "100% active contracts",
+  "colEmployee": "EMPLOYEE & POSITION",
+  "colAssignedStore": "ASSIGNED STORE",
+  "colTenure": "TENURE",
+  "colMonthlySalary": "MONTHLY SALARY",
+  "colDisbursed": "DISBURSED",
+  "colRemaining": "REMAINING",
+  "colStatus": "STATUS",
+  "colActions": "ACTIONS",
+  "noPayrollFor": "No payroll for {month} yet",
+  "@noPayrollFor": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "noEmployeesMatch": "No employees match the filters",
+  "filteredBatch": "Filtered Batch: {month}",
+  "@filteredBatch": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "recordPayment": "Record Payment",
+  "history": "History",
+  "prevMonth": "Previous month",
+  "nextMonth": "Next month",
+  "allStoresCount": "All Stores ({count})",
+  "@allStoresCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchStaff": "Search by staff name or position…",
+  "tabAll": "All",
+  "tabPaid": "Fully Paid",
+  "tabPartial": "Partial",
+  "tabUnpaid": "Unpaid",
+  "statusPaid": "Paid",
+  "statusPartial": "Partial",
+  "statusUnpaid": "Unpaid",
+  "tabCount": "{label} ({count})",
+  "@tabCount": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tenure": "{count, plural, =1{1 mo} other{{count} mos}}",
+  "@tenure": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "budgetTitle": "Store Budget Allocation",
+  "balanced": "Balanced",
+  "openBalance": "Open balance",
+  "noPayrollMonth": "No payroll for this month",
+  "storeStaff": "{store} ({count} staff)",
+  "@storeStaff": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "erpSynced": "Synced with ERP General Ledger",
+  "recentDisbursements": "Recent Payroll Disbursements",
+  "disbursementsSubtitle": "Real-time payment audit log across retail branches",
+  "viewFullAudit": "View Full Audit →",
+  "noPaymentsMonth": "No payments recorded this month",
+  "bankNote": "All bank settlements follow National Bank standard formats and are signed via TLS.",
+  "ledgerCopied": "Ledger for {month} copied as CSV",
+  "@ledgerCopied": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "methodBank": "Bank Transfer",
+  "methodCash": "Cash Disbursement",
+  "paidTo": "Paid {amount} to {name}",
+  "@paidTo": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentFailed": "Payment failed. Try again.",
+  "everyonePaid": "Everyone is fully paid for this month.",
+  "employee": "Employee",
+  "owed": "{name} — owed {amount}",
+  "@owed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "salarySummary": "Salary {salary} · paid {paid} · remaining {remaining}",
+  "@salarySummary": {
+    "placeholders": {
+      "salary": {
+        "type": "String"
+      },
+      "paid": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmount": "Max {amount}",
+  "@maxAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentsOf": "{name} — payments",
+  "@paymentsOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "paidBeforeRecords": "Paid before the records in this app (no separate payments listed).",
+  "employeesSubtitle": "Staff across all stores and shifts",
+  "onShiftNow": "On shift now",
+  "monthlyPayroll": "Monthly payroll",
+  "staffDirectory": "Staff directory",
+  "noEmployees": "No employees found",
+  "onShift": "On shift",
+  "offShift": "Off",
+  "analyzeMyReport": "Analyze my sales report",
+  "reportsSubtitle": "Monthly performance by store",
+  "analyzeWithAi": "Analyze with AI",
+  "monthlySalesChange": "Monthly sales ({pct})",
+  "@monthlySalesChange": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "grossMarginShort": "Gross margin",
+  "averagePerDay": "Average per day",
+  "salesByStore": "Sales by store",
+  "monthlySalesCol": "Monthly sales",
+  "email": "Email",
+  "signOut": "Sign out",
+  "signOutNote": "Sign in / sign out will work once the backend login is ready.",
+  "business": "Business",
+  "businessName": "Business name",
+  "currency": "Currency",
+  "backendConnection": "Backend connection",
+  "demoData": "Demo data",
+  "demoNote": "The web shows demo data until the endpoints below are connected.",
+  "askAssistant": "Ask your business assistant",
+  "assistantIntro": "Sales, stores, staff, salaries or marketing — ask in Tajik, Russian or English.",
+  "newChat": "New chat",
+  "askHint": "Ask about your business…",
+  "send": "Send",
+  "assistantError": "The assistant did not answer. Please try again.",
+  "suggestSales": "Sales today",
+  "suggestStores": "Top stores",
+  "suggestSalaries": "Unpaid salaries",
+  "suggestMarketing": "Marketing ideas",
+  "chartRevenue": "Revenue: {amount}",
+  "@chartRevenue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "chartCashflow": "Cashflow: {amount}",
+  "@chartCashflow": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
+}

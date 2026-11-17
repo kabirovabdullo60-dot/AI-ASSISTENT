@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/format.dart';
 import '../models/payroll_model.dart';
@@ -42,6 +43,7 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
 
   Future<void> _save(PayrollModel p) async {
     if (!_formKey.currentState!.validate()) return;
+    final tr = context.l10n;
     final amount = double.parse(_amount.text.trim());
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
@@ -53,24 +55,23 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
       navigator.pop();
     }
     messenger.showSnackBar(
-      SnackBar(
-        content: Text(ok ? 'Paid ${formatAmount(amount)} TJS to ${p.employeeName}' : 'Payment failed. Try again.'),
-      ),
+      SnackBar(content: Text(ok ? tr.paidTo('${formatAmount(amount)} TJS', p.employeeName) : tr.paymentFailed)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<PayrollViewModel>();
     final owed = vm.items.where((p) => p.remaining > 0).toList();
     final selected = _payrollId == null ? (owed.isEmpty ? null : owed.first) : vm.byId(_payrollId!);
 
     return AlertDialog(
-      title: const Text('Record Salary Payment'),
+      title: Text(tr.recordSalaryPayment),
       content: SizedBox(
         width: 440,
         child: selected == null
-            ? const Text('Everyone is fully paid for this month.')
+            ? Text(tr.everyonePaid)
             : Form(
                 key: _formKey,
                 child: Column(
@@ -82,13 +83,13 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
                         key: const Key('payment-employee'),
                         initialValue: selected.id,
                         isExpanded: true,
-                        decoration: const InputDecoration(labelText: 'Employee'),
+                        decoration: InputDecoration(labelText: tr.employee),
                         items: [
                           for (final p in owed)
                             DropdownMenuItem(
                               value: p.id,
                               child: Text(
-                                '${p.employeeName} — owed ${formatAmount(p.remaining)} TJS',
+                                tr.owed(p.employeeName, '${formatAmount(p.remaining)} TJS'),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -107,8 +108,11 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
                       ),
                     const SizedBox(height: 8),
                     Text(
-                      'Salary ${formatAmount(selected.salary)} TJS · paid ${formatAmount(selected.disbursed)} · '
-                      'remaining ${formatAmount(selected.remaining)} TJS',
+                      tr.salarySummary(
+                        '${formatAmount(selected.salary)} TJS',
+                        '${formatAmount(selected.disbursed)} TJS',
+                        '${formatAmount(selected.remaining)} TJS',
+                      ),
                       style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
                     ),
                     const SizedBox(height: 14),
@@ -117,21 +121,18 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
                       controller: _amount,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
-                      decoration: const InputDecoration(
-                        labelText: 'Amount (TJS)',
-                        prefixIcon: Icon(Icons.payments_outlined),
-                      ),
+                      decoration: InputDecoration(labelText: tr.amountTjs, prefixIcon: Icon(Icons.payments_outlined)),
                       validator: (v) {
                         final n = double.tryParse(v?.trim() ?? '');
-                        if (n == null || n <= 0) return 'Enter an amount above 0';
-                        if (n > selected.remaining) return 'Max ${formatAmount(selected.remaining)} TJS';
+                        if (n == null || n <= 0) return tr.enterAmount;
+                        if (n > selected.remaining) return tr.maxAmount('${formatAmount(selected.remaining)} TJS');
                         return null;
                       },
                     ),
                     const SizedBox(height: 14),
                     SegmentedButton<String>(
                       showSelectedIcon: false,
-                      segments: [for (final m in _methods) ButtonSegment(value: m, label: Text(m))],
+                      segments: [for (final m in _methods) ButtonSegment(value: m, label: Text(tr.paymentMethod(m)))],
                       selected: {_method},
                       onSelectionChanged: (s) => setState(() => _method = s.first),
                     ),
@@ -140,14 +141,14 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
               ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(tr.cancel)),
         if (selected != null)
           FilledButton(
             key: const Key('payment-save'),
             onPressed: vm.payingId != null ? null : () => _save(selected),
             child: vm.payingId != null
                 ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                : const Text('Record Payment'),
+                : Text(tr.recordPayment),
           ),
       ],
     );

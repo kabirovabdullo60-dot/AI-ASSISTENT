@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -25,7 +26,7 @@ class StoreDetailSheet extends StatelessWidget {
   static Future<void> show(BuildContext context, String storeId) => showGeneralDialog<void>(
     context: context,
     barrierDismissible: true,
-    barrierLabel: 'Close',
+    barrierLabel: context.l10n.close,
     barrierColor: Colors.black38,
     transitionDuration: const Duration(milliseconds: 220),
     pageBuilder: (_, _, _) => StoreDetailSheet(storeId: storeId),
@@ -40,6 +41,7 @@ class StoreDetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final width = math.min(MediaQuery.sizeOf(context).width, 520.0);
     final store = context.select<StoresViewModel, StoreModel?>((s) => s.byId(storeId));
     return Align(
@@ -51,7 +53,7 @@ class StoreDetailSheet extends StatelessWidget {
           width: width,
           height: double.infinity,
           child: store == null
-              ? const Center(child: Text('Store not found'))
+              ? Center(child: Text(tr.storeNotFound))
               : ChangeNotifierProvider(
                   create: (_) => StoreDetailViewModel(StoreService(), storeId)..load(),
                   child: _Body(store: store),
@@ -69,6 +71,7 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<StoreDetailViewModel>();
     final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
 
@@ -91,7 +94,7 @@ class _Body extends StatelessWidget {
                 ),
                 IconButton(
                   key: const Key('close-detail'),
-                  tooltip: 'Close',
+                  tooltip: tr.close,
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(Icons.close),
                 ),
@@ -121,6 +124,7 @@ class _Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final days = analytics.last7Days;
     final maxV = days.isEmpty ? 0.0 : days.map((d) => d.revenue).reduce(math.max);
 
@@ -176,11 +180,11 @@ class _Content extends StatelessWidget {
       children: [
         Row(
           children: [
-            tile('Daily Sales', store.todaySales, store.todayChange),
+            tile(tr.dailySales, store.todaySales, store.todayChange),
             const SizedBox(width: 8),
-            tile('Weekly Sales', store.weeklySales, store.todayChange * 0.7),
+            tile(tr.kpiWeeklySales, store.weeklySales, store.todayChange * 0.7),
             const SizedBox(width: 8),
-            tile('Monthly Total', store.monthlySales, store.monthlyChange, accent: true),
+            tile(tr.monthlyTotal, store.monthlySales, store.monthlyChange, accent: true),
           ],
         ),
         const SizedBox(height: 14),
@@ -192,11 +196,11 @@ class _Content extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Expanded(
-                    child: Text('7-Day Sales Velocity', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                  Expanded(
+                    child: Text(tr.velocity7, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
                   ),
                   Text(
-                    'Avg: ${currency.format(analytics.average)}/day',
+                    tr.avgPerDay(currency.format(analytics.average)),
                     style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
                   ),
                 ],
@@ -225,11 +229,11 @@ class _Content extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              const Row(
+              Row(
                 children: [
-                  Text('6 Days Ago', style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(tr.sixDaysAgo, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                   Spacer(),
-                  Text('Today (Current)', style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(tr.todayCurrent, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                 ],
               ),
             ],
@@ -242,27 +246,24 @@ class _Content extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Store Parameters & Configuration',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
-              ),
+              Text(tr.storeParams, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               const SizedBox(height: 6),
-              param('Phone Line:', store.phone),
-              param('Branch Staff Allocation:', '${store.staffCount} Active Crew'),
+              param(tr.phoneLine, store.phone),
+              param(tr.staffAllocation, tr.activeCrew(store.staffCount)),
               param(
-                'REST API Synchronizer:',
+                tr.apiSync,
                 'GET ${ApiConstants.storeAnalytics(store.id)}${ApiConstants.useMock ? ' (demo)' : ''}',
                 color: AppColors.green,
               ),
-              param('Operating Hours:', store.openingHours),
-              param('Status:', store.statusLabel),
+              param(tr.operatingHoursLabel, store.openingHours),
+              param(tr.statusLabel, tr.storeStatus(store)),
             ],
           ),
         ),
         const SizedBox(height: 14),
-        const Text('Recent POS Activity', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+        Text(tr.recentPos, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
         const SizedBox(height: 8),
-        if (analytics.recent.isEmpty) const Text('No sales yet'),
+        if (analytics.recent.isEmpty) Text(tr.noSalesYet),
         for (final s in analytics.recent)
           Container(
             margin: const EdgeInsets.only(bottom: 8),
@@ -282,7 +283,7 @@ class _Content extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${s.reference} (${s.split.label})',
+                        '${s.reference} (${tr.split(s.split)})',
                         style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
                       ),
                       Text(

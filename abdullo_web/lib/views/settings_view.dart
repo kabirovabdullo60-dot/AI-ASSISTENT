@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/constants/api_constants.dart';
+import '../core/l10n/app_language.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../viewmodels/settings_view_model.dart';
@@ -27,10 +29,11 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<SettingsViewModel>();
 
     return PageBody(
-      title: 'Settings',
+      title: tr.navSettings,
       children: [
         Align(
           alignment: Alignment.topLeft,
@@ -40,21 +43,21 @@ class _SettingsViewState extends State<SettingsView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SectionCard(
-                  title: 'Business',
+                  title: tr.business,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextField(
                         key: const Key('business-name'),
                         controller: _name,
-                        decoration: const InputDecoration(
-                          labelText: 'Business name',
+                        decoration: InputDecoration(
+                          labelText: tr.businessName,
                           prefixIcon: Icon(Icons.storefront_outlined),
                         ),
                         onChanged: vm.setBusinessName,
                       ),
                       const SizedBox(height: 16),
-                      const Text('Currency', style: TextStyle(fontWeight: FontWeight.w600)),
+                      Text(tr.currency, style: TextStyle(fontWeight: FontWeight.w600)),
                       const SizedBox(height: 8),
                       SegmentedButton<Currency>(
                         key: const Key('settings-currency'),
@@ -63,18 +66,28 @@ class _SettingsViewState extends State<SettingsView> {
                         selected: {vm.currency},
                         onSelectionChanged: (s) => vm.setCurrency(s.first),
                       ),
+                      const SizedBox(height: 16),
+                      Text(tr.language, style: const TextStyle(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 8),
+                      SegmentedButton<AppLanguage>(
+                        key: const Key('settings-language'),
+                        showSelectedIcon: false,
+                        segments: [
+                          for (final l in AppLanguage.values) ButtonSegment(value: l, label: Text(l.nativeName)),
+                        ],
+                        selected: {vm.language},
+                        onSelectionChanged: (s) => vm.setLanguage(s.first),
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
                 SectionCard(
-                  title: 'Backend connection',
+                  title: tr.backendConnection,
                   badge: ApiConstants.useMock
-                      ? const StatusBadge('Demo data', tone: BadgeTone.warning, dot: true)
+                      ? StatusBadge(tr.demoData, tone: BadgeTone.warning, dot: true)
                       : const StatusBadge('API', tone: BadgeTone.positive, dot: true),
-                  subtitle: ApiConstants.useMock
-                      ? 'The web shows demo data until the endpoints below are connected.'
-                      : ApiConstants.baseUrl,
+                  subtitle: ApiConstants.useMock ? tr.demoNote : ApiConstants.baseUrl,
                   child: Column(
                     children: [
                       for (final (method, path, purpose) in ApiConstants.endpointList)

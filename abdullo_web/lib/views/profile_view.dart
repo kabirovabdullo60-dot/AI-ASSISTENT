@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/format.dart';
 import '../viewmodels/profile_view_model.dart';
@@ -13,6 +14,7 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<ProfileViewModel>();
     return AsyncContent(
       hasData: vm.profile != null,
@@ -21,7 +23,7 @@ class ProfileView extends StatelessWidget {
       builder: (_) {
         final p = vm.profile!;
         return PageBody(
-          title: 'Profile',
+          title: tr.navProfile,
           children: [
             Align(
               alignment: Alignment.topLeft,
@@ -70,22 +72,19 @@ class ProfileView extends StatelessWidget {
                         ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: const Icon(Icons.mail_outline),
-                          title: const Text('Email'),
+                          title: Text(tr.email),
                           subtitle: Text(p.email),
                         ),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: const Icon(Icons.phone_outlined),
-                          title: const Text('Phone'),
+                          title: Text(tr.phone),
                           subtitle: Text(p.phone),
                         ),
                         const SizedBox(height: 8),
-                        const OutlinedButton(onPressed: null, child: Text('Sign out')),
+                        OutlinedButton(onPressed: null, child: Text(tr.signOut)),
                         const SizedBox(height: 6),
-                        const Text(
-                          'Sign in / sign out will work once the backend login is ready.',
-                          style: TextStyle(fontSize: 12, color: AppColors.muted),
-                        ),
+                        Text(tr.signOutNote, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                       ],
                     ),
                   ),

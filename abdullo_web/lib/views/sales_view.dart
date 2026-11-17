@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
@@ -29,6 +30,7 @@ class SalesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final vm = context.watch<SalesViewModel>();
     final cur = context.select<SettingsViewModel, Currency>((s) => s.currency);
 
@@ -37,13 +39,13 @@ class SalesView extends StatelessWidget {
       error: vm.error,
       onRetry: vm.load,
       builder: (_) => PageBody(
-        eyebrow: const ['FINANCIAL OPERATIONS · TAJIKISTAN ZONE'],
-        title: 'Sales & Daily Entries',
-        subtitle: 'Log daily store turnover in Tajikistani Somoni (TJS) and monitor real-time transaction logs.',
+        eyebrow: [tr.salesEyebrow],
+        title: tr.salesTitle,
+        subtitle: tr.salesSubtitle,
         actions: [
-          _TotalChip(label: 'TOTAL TODAY', value: vm.todayTotal, icon: Icons.today_outlined, currency: cur),
+          _TotalChip(label: tr.totalToday, value: vm.todayTotal, icon: Icons.today_outlined, currency: cur),
           _TotalChip(
-            label: 'TOTAL THIS MONTH',
+            label: tr.totalThisMonth,
             value: vm.monthTotal,
             icon: Icons.calendar_month_outlined,
             currency: cur,
@@ -140,6 +142,7 @@ class _SuccessBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     return Card(
       key: const Key('sale-success'),
       child: Padding(
@@ -157,23 +160,18 @@ class _SuccessBanner extends StatelessWidget {
                 TextSpan(
                   style: const TextStyle(fontSize: 13.5),
                   children: [
-                    const TextSpan(
-                      text: 'Success: ',
+                    TextSpan(
+                      text: tr.successPrefix,
                       style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
                     ),
-                    const TextSpan(text: 'Daily sales of '),
-                    TextSpan(
-                      text: '${formatAmount(sale.amount)} TJS',
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    TextSpan(text: ' recorded for ${sale.storeName}.'),
+                    TextSpan(text: tr.saleSavedMessage('${formatAmount(sale.amount)} TJS', sale.storeName)),
                   ],
                 ),
               ),
             ),
             IconButton(
               key: const Key('dismiss-banner'),
-              tooltip: 'Close',
+              tooltip: tr.close,
               onPressed: onClose,
               icon: const Icon(Icons.close, size: 18),
             ),
@@ -198,6 +196,7 @@ class _ClerkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final p = context.watch<ProfileViewModel>().profile;
     return Card(
       child: Padding(
@@ -210,7 +209,7 @@ class _ClerkCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Active Session Clerk', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
+                  Text(tr.sessionClerk, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
                   Text(
                     p == null ? '…' : '${p.name} · ${p.role}',
                     style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
@@ -218,7 +217,7 @@ class _ClerkCard extends StatelessWidget {
                 ],
               ),
             ),
-            const StatusBadge('Authorized', tone: BadgeTone.positive),
+            StatusBadge(tr.authorized, tone: BadgeTone.positive),
           ],
         ),
       ),
@@ -240,7 +239,7 @@ class _EntriesColumn extends StatelessWidget {
       );
     }
     Clipboard.setData(ClipboardData(text: csv.toString()));
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${rows.length} entries copied as CSV')));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.rowsCopied(rows.length))));
   }
 
   Future<void> _pickRange(BuildContext context) async {
@@ -259,6 +258,7 @@ class _EntriesColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final stores = context.watch<StoresViewModel>();
     final query = context.select<HomeViewModel, String>((h) => h.query);
     final rows = vm.filtered(query);
@@ -284,13 +284,13 @@ class _EntriesColumn extends StatelessWidget {
                   runSpacing: 10,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    const Text('Store:', style: TextStyle(fontWeight: FontWeight.w600)),
+                    Text(tr.storeLabel, style: TextStyle(fontWeight: FontWeight.w600)),
                     DropdownChip<String>(
                       key: const Key('sales-store-filter'),
-                      label: stores.nameOf(vm.storeFilter) ?? 'All Stores',
+                      label: stores.nameOf(vm.storeFilter) ?? tr.allStores,
                       value: vm.storeFilter ?? '',
                       onSelected: (id) => vm.setStoreFilter(id.isEmpty ? null : id),
-                      items: [('', 'All Stores'), for (final s in stores.ranked) (s.id, s.name)],
+                      items: [('', tr.allStores), for (final s in stores.ranked) (s.id, s.name)],
                     ),
                     SizedBox(
                       width: 260,
@@ -298,8 +298,8 @@ class _EntriesColumn extends StatelessWidget {
                         key: const Key('sales-search'),
                         onChanged: vm.setQuery,
                         style: const TextStyle(fontSize: 13),
-                        decoration: const InputDecoration(
-                          hintText: 'Search receipt # or notes…',
+                        decoration: InputDecoration(
+                          hintText: tr.searchReceipt,
                           prefixIcon: Icon(Icons.search, size: 18),
                           contentPadding: EdgeInsets.symmetric(vertical: 10),
                         ),
@@ -308,7 +308,7 @@ class _EntriesColumn extends StatelessWidget {
                     FilledButton.tonalIcon(
                       onPressed: () => _export(context, rows),
                       icon: const Icon(Icons.download_outlined, size: 18),
-                      label: const Text('Export'),
+                      label: Text(tr.export),
                     ),
                   ],
                 ),
@@ -320,7 +320,7 @@ class _EntriesColumn extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     PillTabs(
-                      labels: [for (final r in SalesRange.values) r.label],
+                      labels: [for (final r in SalesRange.values) tr.salesRange(r)],
                       icons: const {3: Icons.calendar_today_outlined},
                       selected: vm.range.index,
                       onSelect: (i) => SalesRange.values[i] == SalesRange.custom
@@ -335,7 +335,7 @@ class _EntriesColumn extends StatelessWidget {
                             text: '● ',
                             style: TextStyle(color: AppColors.orange),
                           ),
-                          TextSpan(text: minutes < 1 ? 'Updated just now' : 'Updated $minutes minutes ago'),
+                          TextSpan(text: minutes < 1 ? tr.updatedJustNow : tr.updatedMinutesAgo(minutes)),
                         ],
                       ),
                     ),
@@ -358,8 +358,8 @@ class _EntriesColumn extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'ACTIVE FILTER VOLUME',
+                    Text(
+                      tr.activeFilterVolume,
                       style: TextStyle(
                         fontSize: 11,
                         letterSpacing: 0.6,
@@ -371,26 +371,28 @@ class _EntriesColumn extends StatelessWidget {
                       TextSpan(
                         style: const TextStyle(fontSize: 14),
                         children: [
-                          const TextSpan(text: 'Filtered Total: '),
+                          TextSpan(text: tr.filteredTotal),
                           TextSpan(
                             text: currency.format(vm.filteredTotal(query)),
                             style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
                           ),
                           TextSpan(
-                            text: '  across ${rows.length} entries',
+                            text: tr.acrossEntries(rows.length),
                             style: const TextStyle(color: AppColors.muted),
                           ),
                         ],
                       ),
                     ),
+                    if (change != null) ...[
+                      const SizedBox(height: 6),
+                      StatusBadge(
+                        tr.vsPrevPeriod(formatPercent(change)),
+                        tone: change >= 0 ? BadgeTone.positive : BadgeTone.negative,
+                      ),
+                    ],
                   ],
                 ),
               ),
-              if (change != null)
-                StatusBadge(
-                  '${formatPercent(change)} vs prev. period',
-                  tone: change >= 0 ? BadgeTone.positive : BadgeTone.negative,
-                ),
             ],
           ),
         ),
@@ -402,9 +404,9 @@ class _EntriesColumn extends StatelessWidget {
               children: [
                 AppTable(
                   key: const Key('sales-table'),
-                  columns: const ['DATE & TIME', 'STORE NAME', 'SALES AMOUNT', 'REGISTERED BY', 'NOTES / METHOD'],
+                  columns: [tr.colDateTime, tr.colStoreName, tr.colSalesAmount, tr.colRegisteredBy, tr.colNotesMethod],
                   numeric: const {2},
-                  empty: 'No entries for this filter',
+                  empty: tr.noEntries,
                   rows: [
                     for (final s in page)
                       [
@@ -460,7 +462,7 @@ class _EntriesColumn extends StatelessWidget {
                         s.notes.contains('POS') || s.notes.contains('Card')
                             ? StatusBadge(s.notes, tone: BadgeTone.info, icon: Icons.credit_card)
                             : Text(
-                                s.notes.isEmpty ? s.split.label : s.notes,
+                                s.notes.isEmpty ? tr.split(s.split) : s.notes,
                                 style: const TextStyle(color: AppColors.muted),
                               ),
                       ],
@@ -482,16 +484,19 @@ class _EntriesColumn extends StatelessWidget {
         LayoutBuilder(
           builder: (context, c) {
             final hourlyCard = SectionCard(
-              title: 'Hourly Velocity (Today)',
+              title: tr.hourlyVelocity,
               trailing: Text(
-                'Peak: ${(peakHour + 8).toString().padLeft(2, '0')}:00\n(${formatCompact(currency.fromTjs(hourly[peakHour]))} ${currency.code})',
+                tr.peakLabel(
+                  '${(peakHour + 8).toString().padLeft(2, '0')}:00',
+                  '${formatCompact(currency.fromTjs(hourly[peakHour]))} ${currency.code}',
+                ),
                 textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
               ),
               child: Sparkline(values: hourly),
             );
             final reconCard = SectionCard(
-              title: 'Reconciliation Compliance',
+              title: tr.reconciliation,
               child: Row(
                 children: [
                   Expanded(
@@ -503,7 +508,7 @@ class _EntriesColumn extends StatelessWidget {
                           style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
                         ),
                         Text(
-                          '$synced of $active stores synced today',
+                          tr.storesSynced(synced, active),
                           style: const TextStyle(fontSize: 12, color: AppColors.green, fontWeight: FontWeight.w600),
                         ),
                       ],

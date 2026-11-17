@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/utils/format.dart';
 import 'sale_entry_form_view.dart';
 
@@ -12,6 +13,7 @@ class RecordSaleDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
@@ -22,7 +24,7 @@ class RecordSaleDialog extends StatelessWidget {
           child: SaleEntryFormView(
             onSaved: () {
               Navigator.of(context).pop();
-              messenger.showSnackBar(SnackBar(content: Text('Sale recorded · ${formatDate(DateTime.now())}')));
+              messenger.showSnackBar(SnackBar(content: Text(tr.saleRecorded(formatDate(DateTime.now())))));
             },
           ),
         ),
