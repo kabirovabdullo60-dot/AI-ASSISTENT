@@ -95,7 +95,7 @@ class ReportsView extends StatelessWidget {
                       Text(cur.format(ranked[i].totalAmount)),
                       Text(
                         '${ranked[i].sharePercent.toStringAsFixed(1)}%',
-                        style: const TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
+                        style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
                       ),
                       Text(
                         ranked[i].changePercent == null ? '—' : formatPercent(ranked[i].changePercent!),
@@ -140,7 +140,7 @@ class ReportsView extends StatelessWidget {
                       Text(formatMonthYear(DateTime(pay.year, m.month))),
                       Text('${m.employees}'),
                       Text(cur.format(m.due)),
-                      Text(cur.format(m.paid), style: const TextStyle(color: AppColors.green)),
+                      Text(cur.format(m.paid), style: TextStyle(color: AppColors.green)),
                       Text(
                         cur.format(m.remaining),
                         style: TextStyle(

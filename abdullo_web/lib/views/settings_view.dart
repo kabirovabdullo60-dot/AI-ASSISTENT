@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../core/constants/api_constants.dart';
 import '../core/l10n/app_language.dart';
 import '../core/l10n/l10n.dart';
+import '../core/theme/app_palette.dart';
+import '../widgets/palette_swatch.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -72,6 +74,17 @@ class SettingsView extends StatelessWidget {
                         selected: {vm.language},
                         onSelectionChanged: (s) => vm.setLanguage(s.first),
                       ),
+                      const SizedBox(height: 16),
+                      Text(tr.themeLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: [
+                          for (final p in AppPalette.values)
+                            PaletteCard(palette: p, selected: vm.palette == p, onTap: () => vm.setPalette(p)),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -112,7 +125,7 @@ class SettingsView extends StatelessWidget {
                                   purpose,
                                   textAlign: TextAlign.right,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                                 ),
                               ),
                             ],

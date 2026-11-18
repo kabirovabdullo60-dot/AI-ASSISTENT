@@ -4,6 +4,8 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:abdullo_web/core/navigation/app_section.dart';
+import 'package:abdullo_web/core/theme/app_colors.dart';
+import 'package:abdullo_web/core/theme/app_palette.dart';
 import 'package:abdullo_web/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,6 +16,7 @@ import '../helpers.dart';
 
 const _capture = bool.fromEnvironment('CAPTURE');
 const _out = String.fromEnvironment('OUT', defaultValue: 'build/screens');
+const _paletteName = String.fromEnvironment('PALETTE', defaultValue: 'aurora');
 const _fonts = '/Users/abdullo/Documents/flutter/bin/cache/artifacts/material_fonts';
 
 Future<void> _loadFonts() async {
@@ -29,7 +32,7 @@ Future<void> _shot(WidgetTester tester, String name) async {
     final ui.Image img = await boundary.toImage(pixelRatio: 1);
     final bytes = await img.toByteData(format: ui.ImageByteFormat.png);
     await Directory(_out).create(recursive: true);
-    await File('$_out/$name.png').writeAsBytes(bytes!.buffer.asUint8List());
+    await File('$_out/$_paletteName-$name.png').writeAsBytes(bytes!.buffer.asUint8List());
   });
 }
 
@@ -43,6 +46,7 @@ void main() {
   setUpAll(() async {
     if (_capture) await _loadFonts();
   });
+  setUp(() => AppColors.use(AppPalette.fromName(_paletteName)));
 
   for (final (label, size) in [('desktop', const Size(1440, 1000)), ('mobile', const Size(400, 860))]) {
     testWidgets('capture $label', (tester) async {

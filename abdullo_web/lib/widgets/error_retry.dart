@@ -20,8 +20,8 @@ class ErrorRetry extends StatelessWidget {
             Container(
               width: 56,
               height: 56,
-              decoration: const BoxDecoration(color: AppColors.redSoft, shape: BoxShape.circle),
-              child: const Icon(Icons.cloud_off_outlined, size: 26, color: AppColors.red),
+              decoration: BoxDecoration(color: AppColors.redSoft, shape: BoxShape.circle),
+              child: Icon(Icons.cloud_off_outlined, size: 26, color: AppColors.red),
             ),
             const SizedBox(height: 14),
             ConstrainedBox(
@@ -29,7 +29,7 @@ class ErrorRetry extends StatelessWidget {
               child: Text(
                 message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.ink, fontSize: 15, height: 1.45),
+                style: TextStyle(color: AppColors.ink, fontSize: 15, height: 1.45),
               ),
             ),
             const SizedBox(height: 16),

@@ -33,7 +33,7 @@ class AppSidebar extends StatelessWidget {
     return Container(
       key: const Key('app-sidebar'),
       width: extended ? extendedWidth : compactWidth,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.card,
         border: Border(right: BorderSide(color: AppColors.border)),
       ),
@@ -47,7 +47,7 @@ class AppSidebar extends StatelessWidget {
                 children: [for (final s in AppSection.main) item(s)],
               ),
             ),
-            const Divider(color: AppColors.border, height: 1),
+            Divider(color: AppColors.border, height: 1),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
               child: Column(children: [for (final s in AppSection.footer) item(s)]),
@@ -80,7 +80,7 @@ class _Brand extends StatelessWidget {
                     name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.ink,
                       fontSize: 17,
                       fontWeight: FontWeight.w700,

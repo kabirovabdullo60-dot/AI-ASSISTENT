@@ -104,12 +104,12 @@ class _AssistantViewState extends State<AssistantView> {
                           decoration: BoxDecoration(color: AppColors.redSoft, borderRadius: BorderRadius.circular(12)),
                           child: Row(
                             children: [
-                              const Icon(Icons.error_outline, size: 18, color: AppColors.red),
+                              Icon(Icons.error_outline, size: 18, color: AppColors.red),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   vm.rateLimited ? tr.assistantBusy : tr.assistantError,
-                                  style: const TextStyle(color: AppColors.red, fontSize: 13),
+                                  style: TextStyle(color: AppColors.red, fontSize: 13),
                                 ),
                               ),
                             ],
@@ -220,17 +220,13 @@ class _EmptyChat extends StatelessWidget {
                               Container(
                                 width: 6,
                                 height: 6,
-                                decoration: const BoxDecoration(color: AppColors.amber, shape: BoxShape.circle),
+                                decoration: BoxDecoration(color: AppColors.amber, shape: BoxShape.circle),
                               ),
                               const SizedBox(width: 7),
                               Flexible(
                                 child: Text(
                                   tr.assistantLiveData,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.amber,
-                                  ),
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.amber),
                                 ),
                               ),
                             ],
@@ -296,7 +292,7 @@ class _SuggestionCard extends StatelessWidget {
         color: AppColors.card,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: AppColors.border),
+          side: BorderSide(color: AppColors.border),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -324,20 +320,20 @@ class _SuggestionCard extends StatelessWidget {
                           title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.ink),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.ink),
                         ),
                         const SizedBox(height: 3),
                         Text(
                           question,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
+                          style: TextStyle(fontSize: 12.5, color: AppColors.muted),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Icon(Icons.north_east, size: 16, color: AppColors.muted),
+                  Icon(Icons.north_east, size: 16, color: AppColors.muted),
                 ],
               ),
             ),
@@ -385,7 +381,7 @@ class _InputBar extends StatelessWidget {
             IconButton(
               tooltip: tr.newChat,
               onPressed: canClear ? onClear : null,
-              icon: const Icon(Icons.add_comment_outlined, color: AppColors.muted),
+              icon: Icon(Icons.add_comment_outlined, color: AppColors.muted),
             ),
             Expanded(
               child: TextField(
@@ -417,7 +413,7 @@ class _InputBar extends StatelessWidget {
                   shape: const CircleBorder(),
                   clipBehavior: Clip.antiAlias,
                   child: Ink(
-                    decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.teal),
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.teal),
                     child: InkWell(
                       key: const Key('chat-send'),
                       onTap: enabled ? onSend : null,

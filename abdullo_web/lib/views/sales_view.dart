@@ -108,7 +108,7 @@ class _TotalChip extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10.5,
                     letterSpacing: 0.6,
                     color: AppColors.muted,
@@ -124,7 +124,7 @@ class _TotalChip extends StatelessWidget {
                       ),
                       TextSpan(
                         text: ' ${currency.code}',
-                        style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                        style: TextStyle(fontSize: 11, color: AppColors.muted),
                       ),
                     ],
                   ),
@@ -153,7 +153,7 @@ class _SuccessBanner extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
         child: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 13,
               backgroundColor: AppColors.greenSoft,
               child: Icon(Icons.check, size: 16, color: AppColors.green),
@@ -166,7 +166,7 @@ class _SuccessBanner extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: tr.successPrefix,
-                      style: const TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
+                      style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
                     ),
                     TextSpan(text: tr.saleSavedMessage('${formatAmount(sale.amount)} TJS', sale.storeName)),
                   ],
@@ -198,7 +198,7 @@ class _ClerkCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            const IconBox(Icons.verified_user_outlined, color: AppColors.navy, background: AppColors.blueSoft),
+            IconBox(Icons.verified_user_outlined, color: AppColors.blue, background: AppColors.blueSoft),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -209,7 +209,7 @@ class _ClerkCard extends StatelessWidget {
                     user == null ? '…' : '${user.fullName} · ${user.email}',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
+                    style: TextStyle(fontSize: 12.5, color: AppColors.muted),
                   ),
                 ],
               ),
@@ -386,7 +386,7 @@ class _EntriesColumn extends StatelessWidget {
           decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(12)),
           child: Row(
             children: [
-              const IconBox(Icons.calculate_outlined, color: Colors.white, background: AppColors.navy),
+              IconBox(Icons.calculate_outlined, color: Colors.white, background: AppColors.navy),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -394,7 +394,7 @@ class _EntriesColumn extends StatelessWidget {
                   children: [
                     Text(
                       tr.activeFilterVolume,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         letterSpacing: 0.6,
                         fontWeight: FontWeight.w600,
@@ -412,7 +412,7 @@ class _EntriesColumn extends StatelessWidget {
                           ),
                           TextSpan(
                             text: tr.acrossEntries(vm.entryCount),
-                            style: const TextStyle(color: AppColors.muted),
+                            style: TextStyle(color: AppColors.muted),
                           ),
                         ],
                       ),
@@ -464,7 +464,7 @@ class _EntriesColumn extends StatelessWidget {
                                 ),
                                 Text(
                                   s.createdAt == null ? formatDate(s.saleDate) : formatTime(s.createdAt!.toLocal()),
-                                  style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                  style: TextStyle(fontSize: 11, color: AppColors.muted),
                                 ),
                               ],
                             ),
@@ -480,7 +480,7 @@ class _EntriesColumn extends StatelessWidget {
                               ),
                               TextSpan(
                                 text: ' ${currency.code}',
-                                style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                style: TextStyle(fontSize: 11, color: AppColors.muted),
                               ),
                             ],
                           ),
@@ -491,7 +491,7 @@ class _EntriesColumn extends StatelessWidget {
                             s.description ?? '—',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: AppColors.muted),
+                            style: TextStyle(color: AppColors.muted),
                           ),
                         ),
                         Row(
@@ -502,14 +502,14 @@ class _EntriesColumn extends StatelessWidget {
                               tooltip: tr.edit,
                               visualDensity: VisualDensity.compact,
                               onPressed: () => RecordSaleDialog.show(context, sale: s),
-                              icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
+                              icon: Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
                             ),
                             IconButton(
                               key: Key('delete-sale-${s.id}'),
                               tooltip: tr.delete,
                               visualDensity: VisualDensity.compact,
                               onPressed: () => _delete(context, s),
-                              icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
+                              icon: Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
                             ),
                           ],
                         ),
@@ -538,7 +538,7 @@ class _EntriesColumn extends StatelessWidget {
                   : Text(
                       tr.peakLabel(formatWeekday(week[peak].date), currency.format(week[peak].revenue)),
                       textAlign: TextAlign.right,
-                      style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
                     ),
               child: Sparkline(values: [for (final p in week) p.revenue]),
             );
@@ -556,7 +556,7 @@ class _EntriesColumn extends StatelessWidget {
                         ),
                         Text(
                           tr.storesReportedValue(reported, active),
-                          style: const TextStyle(fontSize: 12, color: AppColors.green, fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 12, color: AppColors.green, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),

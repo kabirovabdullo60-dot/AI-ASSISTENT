@@ -87,7 +87,7 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
                     children: [
                       Text(
                         tr.payFor(formatMonthYear(vm.month)),
-                        style: const TextStyle(color: AppColors.orange, fontWeight: FontWeight.w600),
+                        style: TextStyle(color: AppColors.orange, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 8),
                       if (widget.payroll == null)
@@ -125,7 +125,7 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
                           '${formatAmount(selected.disbursed)} TJS',
                           '${formatAmount(selected.remaining)} TJS',
                         ),
-                        style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
+                        style: TextStyle(fontSize: 12.5, color: AppColors.muted),
                       ),
                       const SizedBox(height: 14),
                       TextFormField(

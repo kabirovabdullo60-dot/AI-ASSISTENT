@@ -1,47 +1,66 @@
 import 'package:flutter/material.dart';
 
-/// "Pamir stone" palette — cool stone surfaces, deep ink text, one teal accent,
-/// gold reserved for the AI assistant, amber for things that need attention.
+import 'app_palette.dart';
+
+/// Color roles of the current [AppPalette]. Switching the palette ([use]) and rebuilding
+/// the app repaints every page.
 ///
-/// Older role names are kept so every page picks up the new look:
-/// `orange` = the accent (now teal), `navy` = the dark surface (now ink).
+/// Older role names are kept so every page follows the palette:
+/// `orange` / `teal` = the accent, `gold` = the AI's second accent, `navy` = the dark surface.
 class AppColors {
   AppColors._();
 
+  static PaletteColors _c = AppPalette.aurora.colors;
+  static AppPalette _palette = AppPalette.aurora;
+
+  static AppPalette get palette => _palette;
+  static void use(AppPalette p) {
+    _palette = p;
+    _c = p.colors;
+  }
+
+  static bool get isDark => _c.dark;
+
   // Surfaces
-  static const background = Color(0xFFEDF2F6);
-  static const card = Colors.white;
-  static const surfaceSoft = Color(0xFFF6F9FB);
-  static const border = Color(0xFFDCE4EC);
+  static Color get background => _c.background;
+  static Color get card => _c.card;
+  static Color get surfaceSoft => _c.surfaceSoft;
+  static Color get border => _c.border;
 
   // Text
-  static const ink = Color(0xFF142235);
-  static const muted = Color(0xFF64748B); // 4.8:1 on white
+  static Color get ink => _c.ink;
+  static Color get muted => _c.muted;
 
-  // Accent (teal) — actions, selection, the brand
-  static const orange = Color(0xFF087F80);
-  static const orangeSoft = Color(0xFFE1F0EF);
-  static const teal = orange;
-  static const tealSoft = orangeSoft;
+  // Accent — actions, selection, the brand
+  static Color get orange => _c.accent;
+  static Color get orangeSoft => _c.accentSoft;
+  static Color get teal => _c.accent;
+  static Color get tealSoft => _c.accentSoft;
+
+  /// Text / icons on the accent (always light: every accent is dark enough).
+  static const onAccent = Colors.white;
 
   // Dark surface — user chat bubble, tooltips, dark badges, chart bars
-  static const navy = Color(0xFF142235);
-  static const navyLight = Color(0xFF22344A);
+  static Color get navy => _c.navy;
+  static Color get navyLight => _c.navyLight;
 
-  // AI only
-  static const gold = Color(0xFFE9A23B); // secondary accent (fills, never small text)
-  static const goldSoft = Color(0xFFFCF3E3);
+  /// Strong mark on the page (chart highlight, sparkline): dark on light themes, light on dark.
+  static Color get strong => _c.dark ? _c.ink : _c.navy;
+
+  // Second accent — the AI
+  static Color get gold => _c.accent2;
+  static Color get goldSoft => _c.accent2Soft;
 
   // Meaning
-  static const amber = Color(0xFFB25E09); // needs attention
-  static const amberSoft = Color(0xFFFCF0E3);
-  static const green = Color(0xFF1F7A4D); // money in, growth
-  static const greenSoft = Color(0xFFE4F2EA);
-  static const red = Color(0xFFB42318); // money out, errors
-  static const redSoft = Color(0xFFFDECEA);
-  static const blue = Color(0xFF2F5D8A);
-  static const blueSoft = Color(0xFFE8EFF6);
-  static const purple = Color(0xFF6B4FA0);
-  static const purpleSoft = Color(0xFFF0ECF7);
-  static const barGray = Color(0xFFA9B4C0);
+  static Color get amber => _c.amber;
+  static Color get amberSoft => _c.amberSoft;
+  static Color get green => _c.green;
+  static Color get greenSoft => _c.greenSoft;
+  static Color get red => _c.red;
+  static Color get redSoft => _c.redSoft;
+  static Color get blue => _c.blue;
+  static Color get blueSoft => _c.blueSoft;
+  static Color get purple => _c.purple;
+  static Color get purpleSoft => _c.purpleSoft;
+  static Color get barGray => _c.barGray;
 }

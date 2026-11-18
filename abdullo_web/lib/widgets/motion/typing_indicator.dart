@@ -51,7 +51,7 @@ class _TypingIndicatorState extends State<TypingIndicator> with SingleTickerProv
               const SizedBox(width: 10),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.card,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(4),
@@ -74,7 +74,7 @@ class _TypingIndicatorState extends State<TypingIndicator> with SingleTickerProv
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(widget.label, style: const TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                    Text(widget.label, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
                   ],
                 ),
               ),

@@ -186,7 +186,7 @@ class _GoalsCard extends StatelessWidget {
         key: key,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
           const SizedBox(height: 4),
           Text(
             target == null
@@ -218,7 +218,7 @@ class _GoalsCard extends StatelessWidget {
       key: const Key('month-profit'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(tr.profitThisMonth, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        Text(tr.profitThisMonth, style: TextStyle(fontSize: 12, color: AppColors.muted)),
         const SizedBox(height: 4),
         Text(
           currency.format(d.monthProfit),
@@ -233,7 +233,7 @@ class _GoalsCard extends StatelessWidget {
             '${tr.navExpenses}: ${currency.format(d.monthExpenses)}',
             if (d.monthMarginPercent != null) formatPercent(d.monthMarginPercent!),
           ].join(' · '),
-          style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+          style: TextStyle(fontSize: 11.5, color: AppColors.muted),
         ),
       ],
     );
@@ -287,7 +287,7 @@ class _DateChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.orange),
+          Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.orange),
           const SizedBox(width: 6),
           Text(
             context.l10n.todayDate(formatDate(DateTime.now())),
@@ -297,7 +297,7 @@ class _DateChip extends StatelessWidget {
           Container(
             width: 6,
             height: 6,
-            decoration: const BoxDecoration(color: AppColors.green, shape: BoxShape.circle),
+            decoration: BoxDecoration(color: AppColors.green, shape: BoxShape.circle),
           ),
         ],
       ),
@@ -407,7 +407,7 @@ class _RevenueCard extends StatelessWidget {
                 decoration: BoxDecoration(color: AppColors.surfaceSoft, borderRadius: BorderRadius.circular(8)),
                 child: Text.rich(
                   TextSpan(
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted),
                     children: [
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
@@ -415,18 +415,18 @@ class _RevenueCard extends StatelessWidget {
                           width: 7,
                           height: 7,
                           margin: const EdgeInsets.only(right: 6),
-                          decoration: const BoxDecoration(color: AppColors.green, shape: BoxShape.circle),
+                          decoration: BoxDecoration(color: AppColors.green, shape: BoxShape.circle),
                         ),
                       ),
                       TextSpan(text: tr.averageDaily),
                       TextSpan(
                         text: currency.format(vm.averageDaily),
-                        style: const TextStyle(color: AppColors.green, fontWeight: FontWeight.w700),
+                        style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w700),
                       ),
                       TextSpan(text: '   ·   ${tr.totalVolume}'),
                       TextSpan(
                         text: tr.salesCount(d.monthSalesCount),
-                        style: const TextStyle(color: AppColors.ink, fontWeight: FontWeight.w700),
+                        style: TextStyle(color: AppColors.ink, fontWeight: FontWeight.w700),
                       ),
                     ],
                   ),
@@ -492,7 +492,7 @@ class _TopStoresCard extends StatelessWidget {
       title: tr.topStores,
       badge: StatusBadge(tr.ranked, tone: BadgeTone.warning),
       subtitle: tr.rankedSubtitle,
-      trailing: const Icon(Icons.leaderboard_outlined, color: AppColors.navy),
+      trailing: Icon(Icons.leaderboard_outlined, color: AppColors.ink),
       child: Column(
         children: [
           if (top.isEmpty) Padding(padding: const EdgeInsets.all(16), child: Text(tr.noSalesThisMonth)),
@@ -510,7 +510,7 @@ class _TopStoresCard extends StatelessWidget {
               key: const Key('view-all-stores'),
               style: TextButton.styleFrom(
                 backgroundColor: AppColors.blueSoft,
-                foregroundColor: AppColors.navy,
+                foregroundColor: AppColors.ink,
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
@@ -563,7 +563,7 @@ class _StoreRankTile extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: first ? Colors.white : AppColors.navy,
+                    color: first ? Colors.white : AppColors.ink,
                   ),
                 ),
               ),
@@ -583,7 +583,7 @@ class _StoreRankTile extends StatelessWidget {
                       '${tr.salesCount(store.salesCount)}${change == null ? '' : ' · ${formatPercent(change)}'}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                      style: TextStyle(fontSize: 11, color: AppColors.muted),
                     ),
                   ],
                 ),
@@ -599,7 +599,7 @@ class _StoreRankTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     tr.shareValue(store.sharePercent.toStringAsFixed(0)),
-                    style: const TextStyle(fontSize: 11, color: AppColors.green, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 11, color: AppColors.green, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -658,7 +658,7 @@ class _ActivityCard extends StatelessWidget {
               const Divider(height: 24),
               Text(
                 tr.connectedTo(ApiConstants.mainEndpoints.join(', ')),
-                style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                style: TextStyle(fontSize: 11, color: AppColors.muted),
               ),
             ],
           );
@@ -688,7 +688,7 @@ class _ActivityRow extends StatelessWidget {
     };
     final amount = a.amount;
     final detail = [if (a.action != null) tr.activityAction(a.action!), if (a.detail.isNotEmpty) a.detail].join(' · ');
-    final time = Text(formatTimeAgo(a.time), style: const TextStyle(fontSize: 11, color: AppColors.muted));
+    final time = Text(formatTimeAgo(a.time), style: TextStyle(fontSize: 11, color: AppColors.muted));
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 9),
@@ -703,7 +703,7 @@ class _ActivityRow extends StatelessWidget {
               children: [
                 Text.rich(
                   TextSpan(
-                    style: const TextStyle(fontSize: 13, color: AppColors.ink, height: 1.35),
+                    style: TextStyle(fontSize: 13, color: AppColors.ink, height: 1.35),
                     children: [
                       TextSpan(text: '${tr.activityType(a.type)}: '),
                       TextSpan(
@@ -728,8 +728,7 @@ class _ActivityRow extends StatelessWidget {
                     runSpacing: 4,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      if (detail.isNotEmpty)
-                        Text(detail, style: const TextStyle(fontSize: 11.5, color: AppColors.muted)),
+                      if (detail.isNotEmpty) Text(detail, style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
                       if (compact) time,
                     ],
                   ),

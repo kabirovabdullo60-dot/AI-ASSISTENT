@@ -3,16 +3,30 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 
 enum BadgeTone {
-  positive(AppColors.green, AppColors.greenSoft),
-  negative(AppColors.red, AppColors.redSoft),
-  warning(AppColors.amber, AppColors.amberSoft),
-  info(AppColors.blue, AppColors.blueSoft),
-  neutral(AppColors.muted, AppColors.surfaceSoft),
-  dark(Colors.white, AppColors.navy);
+  positive,
+  negative,
+  warning,
+  info,
+  neutral,
+  dark;
 
-  const BadgeTone(this.foreground, this.background);
-  final Color foreground;
-  final Color background;
+  Color get foreground => switch (this) {
+    positive => AppColors.green,
+    negative => AppColors.red,
+    warning => AppColors.amber,
+    info => AppColors.blue,
+    neutral => AppColors.muted,
+    dark => Colors.white,
+  };
+
+  Color get background => switch (this) {
+    positive => AppColors.greenSoft,
+    negative => AppColors.redSoft,
+    warning => AppColors.amberSoft,
+    info => AppColors.blueSoft,
+    neutral => AppColors.surfaceSoft,
+    dark => AppColors.navy,
+  };
 }
 
 /// Small pill like "+12.4%", "LIVE AUDIT", "4 Pending".

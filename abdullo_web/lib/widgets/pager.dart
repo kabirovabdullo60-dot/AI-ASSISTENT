@@ -46,7 +46,7 @@ class Pager extends StatelessWidget {
     Widget btn(String label, int? target, {bool selected = false, Key? key}) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2),
       child: Material(
-        color: selected ? AppColors.navy : AppColors.card,
+        color: selected ? AppColors.teal : AppColors.card,
         borderRadius: BorderRadius.circular(6),
         child: InkWell(
           key: key,
@@ -59,7 +59,7 @@ class Pager extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: selected ? AppColors.navy : AppColors.border),
+              border: Border.all(color: selected ? AppColors.teal : AppColors.border),
             ),
             child: Text(
               label,
@@ -86,7 +86,7 @@ class Pager extends StatelessWidget {
       children: [
         Text(
           '${tr.showingRange(from, to, itemCount)}${extra == null ? '' : '   |   $extra'}',
-          style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
+          style: TextStyle(fontSize: 12.5, color: AppColors.muted),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,

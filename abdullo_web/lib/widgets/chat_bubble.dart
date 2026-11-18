@@ -33,7 +33,7 @@ class ChatBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: isUser ? AppColors.navy : AppColors.card,
           gradient: isUser
-              ? const LinearGradient(
+              ? LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [AppColors.navyLight, AppColors.navy],
@@ -59,7 +59,7 @@ class ChatBubble extends StatelessWidget {
             : TypewriterText(
                 text: message.text,
                 animate: fresh,
-                style: const TextStyle(color: AppColors.ink, height: 1.55, fontSize: 14),
+                style: TextStyle(color: AppColors.ink, height: 1.55, fontSize: 14),
               ),
       ),
     );

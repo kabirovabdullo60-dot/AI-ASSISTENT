@@ -97,7 +97,7 @@ class _LoginViewState extends State<LoginView> {
                       const SizedBox(height: 4),
                       Text(
                         _register ? tr.registerSubtitle : tr.loginSubtitle,
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: AppColors.muted),
                       ),
                       const SizedBox(height: 20),
                       if (_register) ...[
@@ -162,7 +162,7 @@ class _LoginViewState extends State<LoginView> {
                           key: const Key('login-error'),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(color: AppColors.redSoft, borderRadius: BorderRadius.circular(8)),
-                          child: Text(_error!, style: const TextStyle(color: AppColors.red)),
+                          child: Text(_error!, style: TextStyle(color: AppColors.red)),
                         ),
                       ],
                       const SizedBox(height: 20),
@@ -218,7 +218,7 @@ class _LoginHero extends StatelessWidget {
     final tr = context.l10n;
     const soft = Color(0xFFB9C6D3); // secondary text tinted from the ink surface
     return Container(
-      color: AppColors.ink,
+      color: AppColors.navy,
       child: Stack(
         children: [
           const Positioned(left: 0, right: 0, bottom: 0, height: 260, child: PamirRidges(color: Colors.white)),

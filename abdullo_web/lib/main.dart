@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'core/l10n/l10n.dart';
 import 'core/network/api_client.dart';
 import 'core/network/token_storage.dart';
+import 'core/theme/app_palette.dart';
 import 'core/theme/app_theme.dart';
 import 'services/activity_service.dart';
 import 'widgets/brand_mark.dart';
@@ -77,7 +78,11 @@ class _WebAppState extends State<WebApp> {
       child: Builder(
         builder: (context) {
           final status = context.select<AuthViewModel, AuthStatus>((a) => a.status);
+          // A new palette remounts the app below the providers so every color repaints
+          // (data and the open page stay — they live in the providers above).
+          final palette = context.select<SettingsViewModel, AppPalette>((s) => s.palette);
           final app = MaterialApp(
+            key: ValueKey(palette),
             title: context.select<AuthViewModel, String?>((a) => a.user?.businessName) ?? 'Apex Suite',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,

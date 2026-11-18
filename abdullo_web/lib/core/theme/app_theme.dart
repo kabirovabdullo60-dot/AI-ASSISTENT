@@ -6,9 +6,11 @@ import 'app_colors.dart';
 class AppTheme {
   AppTheme._();
 
+  /// Theme for the current [AppColors.palette] (light or dark).
   static ThemeData get light {
     final scheme = ColorScheme.fromSeed(
       seedColor: AppColors.teal,
+      brightness: AppColors.isDark ? Brightness.dark : Brightness.light,
       primary: AppColors.orange,
       onPrimary: Colors.white,
       surface: AppColors.card,
@@ -16,12 +18,24 @@ class AppTheme {
       error: AppColors.red,
     );
     // Onest everywhere (bundled, full Tajik Cyrillic).
-    final base = ThemeData(useMaterial3: true, colorScheme: scheme, fontFamily: 'Onest').textTheme;
+    final base = ThemeData(
+      useMaterial3: true,
+      colorScheme: scheme,
+      fontFamily: 'Onest',
+    ).textTheme.apply(bodyColor: AppColors.ink, displayColor: AppColors.ink);
     const radius = BorderRadius.all(Radius.circular(12));
     const buttonShape = RoundedRectangleBorder(borderRadius: radius);
     return ThemeData(
       useMaterial3: true,
-      colorScheme: scheme,
+      brightness: AppColors.isDark ? Brightness.dark : Brightness.light,
+      colorScheme: scheme.copyWith(
+        surfaceContainerHighest: AppColors.surfaceSoft,
+        surfaceContainerHigh: AppColors.surfaceSoft,
+        outline: AppColors.border,
+        outlineVariant: AppColors.border,
+        onSurfaceVariant: AppColors.muted,
+      ),
+      canvasColor: AppColors.card,
       fontFamily: 'Onest',
       // Browser surfaces carry the palette too: selection, caret, scrollbars.
       textSelectionTheme: TextSelectionThemeData(
@@ -64,7 +78,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           shape: buttonShape,
-          side: const BorderSide(color: AppColors.border),
+          side: BorderSide(color: AppColors.border),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           animationDuration: Motion.fast,
         ),
@@ -72,7 +86,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(shape: buttonShape, animationDuration: Motion.fast),
       ),
-      dialogTheme: const DialogThemeData(
+      dialogTheme: DialogThemeData(
         backgroundColor: AppColors.card,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -84,7 +98,7 @@ class AppTheme {
           color: AppColors.ink,
         ),
       ),
-      popupMenuTheme: const PopupMenuThemeData(
+      popupMenuTheme: PopupMenuThemeData(
         color: AppColors.card,
         surfaceTintColor: Colors.transparent,
         elevation: 8,
@@ -94,23 +108,23 @@ class AppTheme {
         ),
         shadowColor: Color(0x29142235),
       ),
-      tooltipTheme: const TooltipThemeData(
+      tooltipTheme: TooltipThemeData(
         waitDuration: Duration(milliseconds: 450),
         decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.all(Radius.circular(8))),
         textStyle: TextStyle(fontFamily: 'Onest', color: Colors.white, fontSize: 12),
       ),
       // Fixed (not floating): a floating bar would cover buttons at the bottom of phone screens.
-      snackBarTheme: const SnackBarThemeData(backgroundColor: AppColors.navy),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppColors.teal),
+      snackBarTheme: SnackBarThemeData(backgroundColor: AppColors.navy),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.teal),
       scaffoldBackgroundColor: AppColors.background,
       dividerColor: AppColors.border,
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.card,
         foregroundColor: AppColors.ink,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
       ),
-      cardTheme: const CardThemeData(
+      cardTheme: CardThemeData(
         color: AppColors.card,
         elevation: 0,
         margin: EdgeInsets.zero,
@@ -125,32 +139,32 @@ class AppTheme {
         fillColor: AppColors.card,
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        labelStyle: const TextStyle(color: AppColors.muted),
-        hintStyle: const TextStyle(color: AppColors.muted),
+        labelStyle: TextStyle(color: AppColors.muted),
+        hintStyle: TextStyle(color: AppColors.muted),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.teal, width: 1.6),
+          borderSide: BorderSide(color: AppColors.teal, width: 1.6),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.red),
+          borderSide: BorderSide(color: AppColors.red),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.red, width: 1.6),
+          borderSide: BorderSide(color: AppColors.red, width: 1.6),
         ),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
-          side: const WidgetStatePropertyAll(BorderSide(color: AppColors.border)),
+          side: WidgetStatePropertyAll(BorderSide(color: AppColors.border)),
           shape: const WidgetStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
           ),
@@ -162,7 +176,7 @@ class AppTheme {
           ),
         ),
       ),
-      chipTheme: const ChipThemeData(
+      chipTheme: ChipThemeData(
         backgroundColor: AppColors.card,
         selectedColor: AppColors.tealSoft,
         side: BorderSide(color: AppColors.border),
@@ -181,20 +195,20 @@ class AppTheme {
         ),
       ),
       dataTableTheme: DataTableThemeData(
-        headingTextStyle: const TextStyle(
+        headingTextStyle: TextStyle(
           fontFamily: 'Onest',
           color: AppColors.muted,
           fontWeight: FontWeight.w600,
           fontSize: 12.5,
         ),
-        dataTextStyle: const TextStyle(fontFamily: 'Onest', color: AppColors.ink, fontSize: 13.5),
+        dataTextStyle: TextStyle(fontFamily: 'Onest', color: AppColors.ink, fontSize: 13.5),
         dividerThickness: 1,
-        headingRowColor: const WidgetStatePropertyAll(AppColors.surfaceSoft),
+        headingRowColor: WidgetStatePropertyAll(AppColors.surfaceSoft),
         dataRowColor: WidgetStateProperty.resolveWith(
           (s) => s.contains(WidgetState.hovered) ? AppColors.tealSoft.withValues(alpha: 0.45) : null,
         ),
       ),
-      dividerTheme: const DividerThemeData(color: AppColors.border, thickness: 1, space: 1),
+      dividerTheme: DividerThemeData(color: AppColors.border, thickness: 1, space: 1),
     );
   }
 }

@@ -1202,5 +1202,6 @@
   "askSales": "How much did I sell today?",
   "askStores": "Which store sells best this month?",
   "askSalaries": "Who is still waiting for salary?",
-  "askMarketing": "Ideas to bring in more customers"
+  "askMarketing": "Ideas to bring in more customers",
+  "themeLabel": "Theme"
 }

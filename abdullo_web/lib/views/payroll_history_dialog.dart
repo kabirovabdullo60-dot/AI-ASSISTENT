@@ -88,7 +88,7 @@ class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
                       '${formatAmount(h.totalPaid)} TJS',
                       '${formatAmount(h.totalRemaining)} TJS',
                     ),
-                    style: const TextStyle(color: AppColors.muted),
+                    style: TextStyle(color: AppColors.muted),
                   ),
                   const SizedBox(height: 12),
                   Text(tr.payments, style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -96,7 +96,7 @@ class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
                   for (final p in h.payments)
                     ListTile(
                       contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.account_balance_outlined, color: AppColors.green),
+                      leading: Icon(Icons.account_balance_outlined, color: AppColors.green),
                       title: Text(
                         '+${formatAmount(p.amount)} TJS',
                         style: const TextStyle(fontWeight: FontWeight.w700),
@@ -108,7 +108,7 @@ class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
                       trailing: IconButton(
                         key: Key('cancel-payment-${p.id}'),
                         tooltip: tr.cancelPayment,
-                        icon: const Icon(Icons.undo, color: AppColors.red),
+                        icon: Icon(Icons.undo, color: AppColors.red),
                         onPressed: () => _cancel(p),
                       ),
                     ),

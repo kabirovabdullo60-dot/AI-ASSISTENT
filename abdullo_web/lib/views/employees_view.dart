@@ -124,10 +124,7 @@ class EmployeesView extends StatelessWidget {
                           CircleAvatar(
                             radius: 14,
                             backgroundColor: AppColors.orangeSoft,
-                            child: Text(
-                              initials(e.fullName),
-                              style: const TextStyle(fontSize: 11, color: AppColors.orange),
-                            ),
+                            child: Text(initials(e.fullName), style: TextStyle(fontSize: 11, color: AppColors.orange)),
                           ),
                           const SizedBox(width: 8),
                           Column(
@@ -136,7 +133,7 @@ class EmployeesView extends StatelessWidget {
                             children: [
                               Text(e.fullName, style: const TextStyle(fontWeight: FontWeight.w600)),
                               if (e.phone != null)
-                                Text(e.phone!, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                                Text(e.phone!, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                             ],
                           ),
                         ],
@@ -158,14 +155,14 @@ class EmployeesView extends StatelessWidget {
                             tooltip: tr.edit,
                             visualDensity: VisualDensity.compact,
                             onPressed: () => EmployeeFormDialog.show(context, employee: e),
-                            icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
+                            icon: Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
                           ),
                           IconButton(
                             key: Key('delete-employee-${e.id}'),
                             tooltip: tr.delete,
                             visualDensity: VisualDensity.compact,
                             onPressed: () => _delete(context, e),
-                            icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
+                            icon: Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
                           ),
                         ],
                       ),

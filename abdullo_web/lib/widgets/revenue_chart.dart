@@ -117,7 +117,7 @@ class _Tooltip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.navy,
+        color: AppColors.strong,
         borderRadius: BorderRadius.circular(8),
         boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 2))],
       ),
@@ -189,7 +189,7 @@ class _RevenueChartPainter extends CustomPainter {
       if (i == peakIndex) {
         paint.color = AppColors.orange;
       } else if (i == n - 1) {
-        paint.color = AppColors.navy;
+        paint.color = AppColors.strong;
       } else {
         paint.shader = LinearGradient(
           begin: Alignment.topCenter,
@@ -244,13 +244,13 @@ class _RevenueChartPainter extends CustomPainter {
           Rect.fromLTRB(xOf(h) - slot / 2 + 1, _top, xOf(h) + slot / 2 - 1, bottom),
           const Radius.circular(4),
         ),
-        Paint()..color = AppColors.navy.withValues(alpha: 0.06),
+        Paint()..color = AppColors.strong.withValues(alpha: 0.06),
       );
       canvas.drawLine(
         Offset(xOf(h), _top),
         Offset(xOf(h), bottom),
         Paint()
-          ..color = AppColors.navy.withValues(alpha: 0.35)
+          ..color = AppColors.strong.withValues(alpha: 0.35)
           ..strokeWidth = 1,
       );
     }
@@ -269,7 +269,7 @@ class _RevenueChartPainter extends CustomPainter {
     }
 
     if (peakIndex >= 0 && peakIndex < n) dot(pts[peakIndex], AppColors.orange);
-    dot(pts.last, AppColors.navy);
+    dot(pts.last, AppColors.strong);
     if (h != null && h < n) dot(pts[h], AppColors.orange);
 
     // peak label
@@ -282,7 +282,7 @@ class _RevenueChartPainter extends CustomPainter {
         Rect.fromCenter(center: Offset(cx, _top - h / 2 - 2), width: w, height: h),
         const Radius.circular(4),
       );
-      canvas.drawRRect(r, Paint()..color = AppColors.navy);
+      canvas.drawRRect(r, Paint()..color = AppColors.strong);
       tp.paint(canvas, Offset(cx - tp.width / 2, r.top + 3));
       tp.dispose();
     }
