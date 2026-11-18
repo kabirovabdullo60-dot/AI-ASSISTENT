@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/theme/app_dimensions.dart';
-import '../core/theme/app_theme.dart';
 import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../l10n/validators.dart';
@@ -12,19 +11,19 @@ import '../widgets/app_button.dart';
 import '../widgets/app_inline_message.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/auth_footer_link.dart';
-import '../widgets/auth_scaffold.dart';
+import '../widgets/auth_hero.dart';
+import '../widgets/auth_sheet_layout.dart';
 import '../widgets/jelly_blob.dart';
 import '../widgets/look_at_pointer.dart';
-import '../widgets/vivid_button_theme.dart';
-import '../widgets/auth_night_background.dart';
 
 /// `POST /api/auth/register`: name, work e-mail and password (the API's
 /// required fields). Phone and business name are optional in the API and
 /// are filled in later in the profile; the business is named after the
 /// owner until then.
 ///
-/// A dark screen: the jelly mascot (looks where the screen is pressed,
-/// closes its eyes while the password is typed) above the form.
+/// A purple header with the jelly mascot (looks where the screen is
+/// pressed, closes its eyes while the password is typed) and the rain of
+/// accountant's things; the form sits on a white sheet under it.
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -72,26 +71,22 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   @override
-  Widget build(BuildContext context) => Theme(
-    data: AppTheme.dark,
-    child: Builder(builder: _build),
-  );
-
-  Widget _build(BuildContext context) {
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
     final session = context.watch<SessionViewModel>();
     final busy = session.isSubmitting;
     const gap = SizedBox(height: AppSpacing.lg);
     return LookAtPointer(
       lookAt: _lookAt,
-      child: AuthScaffold(
-        background: const AuthNightBackground(),
+      child: AuthSheetLayout(
         title: l10n.authRegisterTitle,
         subtitle: l10n.authRegisterSubtitle,
-        hero: JellyBlob(
-          lookAt: _lookAt,
-          eyesClosed: _passwordFocus.hasFocus,
-          size: 150,
+        hero: AuthHero(
+          child: JellyBlob(
+            lookAt: _lookAt,
+            eyesClosed: _passwordFocus.hasFocus,
+            size: 150,
+          ),
         ),
         footer: AuthFooterLink(
           question: l10n.authHaveAccount,
@@ -155,12 +150,10 @@ class _RegisterViewState extends State<RegisterView> {
             ),
             gap,
           ],
-          VividButtonTheme(
-            child: AppButton(
-              label: l10n.authCreateAccount,
-              isLoading: busy,
-              onPressed: _register,
-            ),
+          AppButton(
+            label: l10n.authCreateAccount,
+            isLoading: busy,
+            onPressed: _register,
           ),
         ],
       ),
