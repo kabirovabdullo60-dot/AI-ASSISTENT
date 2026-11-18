@@ -2919,6 +2919,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{store}: no sales today'**
   String noticeNoSales(String store);
+
+  /// No description provided for @navExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get navExpenses;
+
+  /// No description provided for @expensesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent, utilities, delivery and other costs, and the profit that is left'**
+  String get expensesSubtitle;
+
+  /// No description provided for @addExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Add expense'**
+  String get addExpense;
+
+  /// No description provided for @editExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit expense'**
+  String get editExpense;
+
+  /// No description provided for @expenseList.
+  ///
+  /// In en, this message translates to:
+  /// **'All expenses'**
+  String get expenseList;
+
+  /// No description provided for @expenseTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get expenseTotal;
+
+  /// No description provided for @expenseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get expenseDate;
+
+  /// No description provided for @expenseAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get expenseAmount;
+
+  /// No description provided for @expenseCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get expenseCategoryLabel;
+
+  /// No description provided for @allCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get allCategories;
+
+  /// No description provided for @wholeBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole business'**
+  String get wholeBusiness;
+
+  /// No description provided for @expenseSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense saved'**
+  String get expenseSaved;
+
+  /// No description provided for @expenseDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense deleted'**
+  String get expenseDeleted;
+
+  /// No description provided for @deleteExpenseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this expense?'**
+  String get deleteExpenseTitle;
+
+  /// No description provided for @deleteExpenseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It will no longer count in the profit report.'**
+  String get deleteExpenseBody;
+
+  /// No description provided for @noExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses yet'**
+  String get noExpenses;
+
+  /// No description provided for @catRent.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get catRent;
+
+  /// No description provided for @catUtilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Utilities'**
+  String get catUtilities;
+
+  /// No description provided for @catDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery'**
+  String get catDelivery;
+
+  /// No description provided for @catSupplies.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplies'**
+  String get catSupplies;
+
+  /// No description provided for @catMarketing.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketing'**
+  String get catMarketing;
+
+  /// No description provided for @catTaxes.
+  ///
+  /// In en, this message translates to:
+  /// **'Taxes'**
+  String get catTaxes;
+
+  /// No description provided for @catOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get catOther;
+
+  /// No description provided for @profitThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit this month'**
+  String get profitThisMonth;
+
+  /// No description provided for @profitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit'**
+  String get profitLabel;
+
+  /// No description provided for @salaryDueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary due'**
+  String get salaryDueLabel;
+
+  /// No description provided for @byCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'By category'**
+  String get byCategory;
+
+  /// No description provided for @profitByStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit by store'**
+  String get profitByStore;
+
+  /// No description provided for @errExpenseNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This expense no longer exists.'**
+  String get errExpenseNotFound;
 }
 
 class _AppLocalizationsDelegate

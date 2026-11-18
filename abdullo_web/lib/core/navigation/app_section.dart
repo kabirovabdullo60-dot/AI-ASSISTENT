@@ -7,6 +7,7 @@ enum AppSection {
   sales('Sales', Icons.receipt_long_outlined, Icons.receipt_long),
   employees('Employees', Icons.groups_outlined, Icons.groups),
   salaries('Salaries', Icons.account_balance_wallet_outlined, Icons.account_balance_wallet),
+  expenses('Expenses', Icons.request_quote_outlined, Icons.request_quote),
   reports('Reports', Icons.bar_chart_outlined, Icons.bar_chart),
   assistant('AI Assistant', Icons.auto_awesome_outlined, Icons.auto_awesome),
   profile('Profile', Icons.account_circle_outlined, Icons.account_circle),
@@ -19,7 +20,7 @@ enum AppSection {
   final IconData selectedIcon;
 
   /// Top part of the sidebar.
-  static const main = [dashboard, stores, sales, employees, salaries, reports, assistant];
+  static const main = [dashboard, stores, sales, employees, salaries, expenses, reports, assistant];
 
   /// Bottom part of the sidebar.
   static const footer = [profile, settings];

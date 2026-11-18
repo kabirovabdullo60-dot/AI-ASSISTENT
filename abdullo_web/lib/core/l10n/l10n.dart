@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../models/activity_model.dart';
+import '../../models/expense_model.dart';
 import '../../models/payroll_model.dart';
 import '../../models/store_model.dart';
 import '../../viewmodels/payroll_view_model.dart';
@@ -52,6 +53,7 @@ extension EnumLabels on AppLocalizations {
     AppSection.sales => navSales,
     AppSection.employees => navEmployees,
     AppSection.salaries => navSalaries,
+    AppSection.expenses => navExpenses,
     AppSection.reports => navReports,
     AppSection.assistant => navAssistant,
     AppSection.profile => navProfile,
@@ -70,6 +72,16 @@ extension EnumLabels on AppLocalizations {
     ActivityType.store => activityStores,
     ActivityType.employee => activityStaff,
     ActivityType.profile => activityProfile,
+  };
+
+  String expenseCategory(ExpenseCategory c) => switch (c) {
+    ExpenseCategory.rent => catRent,
+    ExpenseCategory.utilities => catUtilities,
+    ExpenseCategory.delivery => catDelivery,
+    ExpenseCategory.supplies => catSupplies,
+    ExpenseCategory.marketing => catMarketing,
+    ExpenseCategory.taxes => catTaxes,
+    ExpenseCategory.other => catOther,
   };
 
   String activityAction(ActivityAction a) => switch (a) {
@@ -111,6 +123,8 @@ extension EnumLabels on AppLocalizations {
     'AUTH_ACCOUNT_LOCKED' => errAccountLocked,
     'AUTH_REQUIRED' || 'AUTH_SESSION_REVOKED' || 'AUTH_TOKEN_EXPIRED' || 'AUTH_TOKEN_INVALID' => errSessionEnded,
     'PERMISSION_DENIED' => errPermission,
+    'EXPENSE_NOT_FOUND' => errExpenseNotFound,
+    'EXPENSE_DATE_IN_FUTURE' => errFutureDate,
     'NOT_FOUND' || 'STORE_NOT_FOUND' || 'SALE_NOT_FOUND' || 'EMPLOYEE_NOT_FOUND' || 'PAYROLL_NOT_FOUND' => errNotFound,
     'CONFLICT' => errConflict,
     'STORE_NAME_TAKEN' => errStoreNameTaken,

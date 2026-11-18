@@ -12,6 +12,7 @@ import 'app_top_bar_view.dart';
 import 'assistant_view.dart';
 import 'dashboard_view.dart';
 import 'employees_view.dart';
+import 'expenses_view.dart';
 import 'profile_view.dart';
 import 'reports_view.dart';
 import 'salaries_view.dart';
@@ -29,6 +30,7 @@ class HomeView extends StatelessWidget {
     AppSection.sales => const SalesView(),
     AppSection.employees => const EmployeesView(),
     AppSection.salaries => const SalariesView(),
+    AppSection.expenses => const ExpensesView(),
     AppSection.reports => const ReportsView(),
     AppSection.assistant => const AssistantView(),
     AppSection.profile => const ProfileView(),

@@ -1633,4 +1633,93 @@ class AppLocalizationsEn extends AppLocalizations {
   String noticeNoSales(String store) {
     return '$store: no sales today';
   }
+
+  @override
+  String get navExpenses => 'Expenses';
+
+  @override
+  String get expensesSubtitle =>
+      'Rent, utilities, delivery and other costs, and the profit that is left';
+
+  @override
+  String get addExpense => 'Add expense';
+
+  @override
+  String get editExpense => 'Edit expense';
+
+  @override
+  String get expenseList => 'All expenses';
+
+  @override
+  String get expenseTotal => 'Total';
+
+  @override
+  String get expenseDate => 'Date';
+
+  @override
+  String get expenseAmount => 'Amount';
+
+  @override
+  String get expenseCategoryLabel => 'Category';
+
+  @override
+  String get allCategories => 'All categories';
+
+  @override
+  String get wholeBusiness => 'Whole business';
+
+  @override
+  String get expenseSaved => 'Expense saved';
+
+  @override
+  String get expenseDeleted => 'Expense deleted';
+
+  @override
+  String get deleteExpenseTitle => 'Delete this expense?';
+
+  @override
+  String get deleteExpenseBody =>
+      'It will no longer count in the profit report.';
+
+  @override
+  String get noExpenses => 'No expenses yet';
+
+  @override
+  String get catRent => 'Rent';
+
+  @override
+  String get catUtilities => 'Utilities';
+
+  @override
+  String get catDelivery => 'Delivery';
+
+  @override
+  String get catSupplies => 'Supplies';
+
+  @override
+  String get catMarketing => 'Marketing';
+
+  @override
+  String get catTaxes => 'Taxes';
+
+  @override
+  String get catOther => 'Other';
+
+  @override
+  String get profitThisMonth => 'Profit this month';
+
+  @override
+  String get profitLabel => 'Profit';
+
+  @override
+  String get salaryDueLabel => 'Salary due';
+
+  @override
+  String get byCategory => 'By category';
+
+  @override
+  String get profitByStore => 'Profit by store';
+
+  @override
+  String get errExpenseNotFound => 'This expense no longer exists.';
 }

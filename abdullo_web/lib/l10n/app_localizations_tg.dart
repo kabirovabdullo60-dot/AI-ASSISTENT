@@ -1615,4 +1615,93 @@ class AppLocalizationsTg extends AppLocalizations {
   String noticeNoSales(String store) {
     return '$store: имрӯз фурӯш нест';
   }
+
+  @override
+  String get navExpenses => 'Хароҷот';
+
+  @override
+  String get expensesSubtitle =>
+      'Иҷора, коммуналӣ, расонидан ва дигар хароҷот — ва фоидае, ки мемонад';
+
+  @override
+  String get addExpense => 'Илова кардани хароҷот';
+
+  @override
+  String get editExpense => 'Тағйири хароҷот';
+
+  @override
+  String get expenseList => 'Ҳамаи хароҷот';
+
+  @override
+  String get expenseTotal => 'Ҳамагӣ';
+
+  @override
+  String get expenseDate => 'Сана';
+
+  @override
+  String get expenseAmount => 'Маблағ';
+
+  @override
+  String get expenseCategoryLabel => 'Категория';
+
+  @override
+  String get allCategories => 'Ҳамаи категорияҳо';
+
+  @override
+  String get wholeBusiness => 'Тамоми бизнес';
+
+  @override
+  String get expenseSaved => 'Хароҷот сабт шуд';
+
+  @override
+  String get expenseDeleted => 'Хароҷот нест карда шуд';
+
+  @override
+  String get deleteExpenseTitle => 'Ин хароҷот нест карда шавад?';
+
+  @override
+  String get deleteExpenseBody =>
+      'Он дигар дар ҳисоботи фоида ҳисоб намешавад.';
+
+  @override
+  String get noExpenses => 'Ҳоло хароҷот нест';
+
+  @override
+  String get catRent => 'Иҷора';
+
+  @override
+  String get catUtilities => 'Хизматҳои коммуналӣ';
+
+  @override
+  String get catDelivery => 'Расонидан';
+
+  @override
+  String get catSupplies => 'Маводҳо';
+
+  @override
+  String get catMarketing => 'Маркетинг';
+
+  @override
+  String get catTaxes => 'Андозҳо';
+
+  @override
+  String get catOther => 'Дигар';
+
+  @override
+  String get profitThisMonth => 'Фоидаи ин моҳ';
+
+  @override
+  String get profitLabel => 'Фоида';
+
+  @override
+  String get salaryDueLabel => 'Музди ҳисобшуда';
+
+  @override
+  String get byCategory => 'Аз рӯи категория';
+
+  @override
+  String get profitByStore => 'Фоида аз рӯи мағоза';
+
+  @override
+  String get errExpenseNotFound => 'Ин хароҷот дигар вуҷуд надорад.';
 }

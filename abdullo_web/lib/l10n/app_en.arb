@@ -1159,5 +1159,34 @@
         "type": "String"
       }
     }
-  }
+  },
+  "navExpenses": "Expenses",
+  "expensesSubtitle": "Rent, utilities, delivery and other costs, and the profit that is left",
+  "addExpense": "Add expense",
+  "editExpense": "Edit expense",
+  "expenseList": "All expenses",
+  "expenseTotal": "Total",
+  "expenseDate": "Date",
+  "expenseAmount": "Amount",
+  "expenseCategoryLabel": "Category",
+  "allCategories": "All categories",
+  "wholeBusiness": "Whole business",
+  "expenseSaved": "Expense saved",
+  "expenseDeleted": "Expense deleted",
+  "deleteExpenseTitle": "Delete this expense?",
+  "deleteExpenseBody": "It will no longer count in the profit report.",
+  "noExpenses": "No expenses yet",
+  "catRent": "Rent",
+  "catUtilities": "Utilities",
+  "catDelivery": "Delivery",
+  "catSupplies": "Supplies",
+  "catMarketing": "Marketing",
+  "catTaxes": "Taxes",
+  "catOther": "Other",
+  "profitThisMonth": "Profit this month",
+  "profitLabel": "Profit",
+  "salaryDueLabel": "Salary due",
+  "byCategory": "By category",
+  "profitByStore": "Profit by store",
+  "errExpenseNotFound": "This expense no longer exists."
 }

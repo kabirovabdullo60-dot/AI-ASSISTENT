@@ -30,6 +30,9 @@ class FakeBackend {
   /// GET /api/notifications rows (`NotificationOut`); read-all marks them read.
   final notifications = <Map<String, dynamic>>[];
 
+  /// /api/expenses rows (`ExpenseOut` + `deleted`).
+  final expenses = <Map<String, dynamic>>[];
+
   /// GET /api/settings/exchange-rates.
   String usdRate = '10.95';
 
@@ -765,6 +768,80 @@ class FakeBackend {
       final rows = activity.where((a) => storeId == null || a['storeId'] == storeId).toList();
       final limit = int.tryParse(q['limit'] ?? '') ?? 20;
       return _json({'items': rows.take(limit).toList(), 'total': rows.length, 'page': 1, 'limit': limit, 'pages': 1});
+    }
+
+    // expenses + profit
+    final expenseId = RegExp(r'^/api/expenses/([^/]+)$').firstMatch(path)?.group(1);
+    Iterable<Map<String, dynamic>> liveExpenses() => expenses.where((e) => e['deleted'] != true);
+    if (path == '/api/expenses' && m == 'GET') {
+      final cat = q['category'];
+      final rows = liveExpenses().where((e) => cat == null || e['category'] == cat).toList()
+        ..sort((a, b) => '${b['expenseDate']}'.compareTo('${a['expenseDate']}'));
+      final total = rows.fold<double>(0, (t, e) => t + double.parse(e['amount'] as String));
+      return _json({
+        'items': rows,
+        'total': rows.length,
+        'page': 1,
+        'limit': 100,
+        'pages': 1,
+        'totalAmount': money(total),
+      });
+    }
+    if ((path == '/api/expenses' && m == 'POST') || (expenseId != null && m == 'PUT')) {
+      final b = body();
+      final amount = double.tryParse('${b['amount']}') ?? 0;
+      if (amount <= 0) return _error(422, 'VALIDATION_ERROR');
+      final storeId = b['storeId'] as String?;
+      if (storeId != null && _store(storeId) == null) return _error(404, 'STORE_NOT_FOUND');
+      final existing = expenseId == null ? null : liveExpenses().where((e) => e['id'] == expenseId).firstOrNull;
+      if (expenseId != null && existing == null) return _error(404, 'EXPENSE_NOT_FOUND');
+      final row = existing ?? <String, dynamic>{'id': _id('x'), 'createdAt': DateTime.now().toUtc().toIso8601String()};
+      row.addAll({
+        'storeId': storeId,
+        'storeName': storeId == null ? null : _store(storeId)!['name'],
+        'category': b['category'],
+        'amount': money(amount),
+        'expenseDate': b['expenseDate'] ?? day(today),
+        'description': b['description'],
+        'updatedAt': DateTime.now().toUtc().toIso8601String(),
+      });
+      if (existing == null) expenses.add(row);
+      return _json(row, existing == null ? 201 : 200);
+    }
+    if (expenseId != null && m == 'DELETE') {
+      final row = liveExpenses().where((e) => e['id'] == expenseId).firstOrNull;
+      if (row == null) return _error(404, 'EXPENSE_NOT_FOUND');
+      row['deleted'] = true;
+      return http.Response('', 204);
+    }
+    if (path == '/api/reports/profit') {
+      final start = DateTime(today.year, today.month);
+      final end = DateTime(today.year, today.month + 1, 0);
+      bool inMonth(String d) => !parseDay(d).isBefore(start) && !parseDay(d).isAfter(end);
+      final salesTotal = _liveSales
+          .where((x) => inMonth(x['saleDate'] as String))
+          .fold<double>(0, (t, x) => t + double.parse(x['amount'] as String));
+      final monthExpenses = liveExpenses().where((e) => inMonth(e['expenseDate'] as String)).toList();
+      final expensesTotal = monthExpenses.fold<double>(0, (t, e) => t + double.parse(e['amount'] as String));
+      final byCat = <String, double>{};
+      for (final e in monthExpenses) {
+        byCat[e['category'] as String] = (byCat[e['category']] ?? 0) + double.parse(e['amount'] as String);
+      }
+      const salaryDue = 0.0;
+      final profit = salesTotal - expensesTotal - salaryDue;
+      return _json({
+        'currency': 'TJS',
+        'period': {'startDate': day(start), 'endDate': day(end), 'days': end.day},
+        'salesTotal': money(salesTotal),
+        'expensesTotal': money(expensesTotal),
+        'salaryDue': money(salaryDue),
+        'grossProfit': money(profit),
+        'marginPercent': salesTotal == 0 ? null : profit / salesTotal * 100,
+        'byCategory': [
+          for (final e in byCat.entries) {'category': e.key, 'totalAmount': money(e.value)},
+        ],
+        'byStore': <Object>[],
+      });
     }
 
     if (path == '/api/notifications' && m == 'GET') {

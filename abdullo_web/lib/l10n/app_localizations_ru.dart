@@ -1622,4 +1622,93 @@ class AppLocalizationsRu extends AppLocalizations {
   String noticeNoSales(String store) {
     return '$store: сегодня нет продаж';
   }
+
+  @override
+  String get navExpenses => 'Расходы';
+
+  @override
+  String get expensesSubtitle =>
+      'Аренда, коммунальные, доставка и другие расходы — и сколько остаётся прибыли';
+
+  @override
+  String get addExpense => 'Добавить расход';
+
+  @override
+  String get editExpense => 'Изменить расход';
+
+  @override
+  String get expenseList => 'Все расходы';
+
+  @override
+  String get expenseTotal => 'Итого';
+
+  @override
+  String get expenseDate => 'Дата';
+
+  @override
+  String get expenseAmount => 'Сумма';
+
+  @override
+  String get expenseCategoryLabel => 'Категория';
+
+  @override
+  String get allCategories => 'Все категории';
+
+  @override
+  String get wholeBusiness => 'Весь бизнес';
+
+  @override
+  String get expenseSaved => 'Расход сохранён';
+
+  @override
+  String get expenseDeleted => 'Расход удалён';
+
+  @override
+  String get deleteExpenseTitle => 'Удалить этот расход?';
+
+  @override
+  String get deleteExpenseBody =>
+      'Он больше не будет учитываться в отчёте о прибыли.';
+
+  @override
+  String get noExpenses => 'Расходов пока нет';
+
+  @override
+  String get catRent => 'Аренда';
+
+  @override
+  String get catUtilities => 'Коммунальные';
+
+  @override
+  String get catDelivery => 'Доставка';
+
+  @override
+  String get catSupplies => 'Расходники';
+
+  @override
+  String get catMarketing => 'Маркетинг';
+
+  @override
+  String get catTaxes => 'Налоги';
+
+  @override
+  String get catOther => 'Другое';
+
+  @override
+  String get profitThisMonth => 'Прибыль за месяц';
+
+  @override
+  String get profitLabel => 'Прибыль';
+
+  @override
+  String get salaryDueLabel => 'Начислено зарплат';
+
+  @override
+  String get byCategory => 'По категориям';
+
+  @override
+  String get profitByStore => 'Прибыль по магазинам';
+
+  @override
+  String get errExpenseNotFound => 'Этот расход больше не существует.';
 }

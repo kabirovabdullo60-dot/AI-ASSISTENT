@@ -4,6 +4,7 @@ import '../core/utils/json.dart';
 import '../models/dashboard_model.dart';
 import '../models/employees_report_model.dart';
 import '../models/payment_model.dart';
+import '../models/profit_model.dart';
 import '../models/sales_report_model.dart';
 
 class ReportsService {
@@ -47,6 +48,19 @@ class ReportsService {
 
   Future<PayrollYearModel> payrollYear(int year) async =>
       PayrollYearModel.fromJson(asJsonMap(await _api.get(ApiConstants.reportPayroll, query: {'year': year})));
+
+  /// GET /api/reports/profit — defaults to this month; up to 366 days.
+  Future<ProfitModel> profit({DateTime? startDate, DateTime? endDate}) async => ProfitModel.fromJson(
+    asJsonMap(
+      await _api.get(
+        ApiConstants.reportProfit,
+        query: {
+          'startDate': startDate == null ? null : isoDay(startDate),
+          'endDate': endDate == null ? null : isoDay(endDate),
+        },
+      ),
+    ),
+  );
 
   /// GET /health/ready (no auth) — true when the server and database answer.
   Future<bool> healthy() async {

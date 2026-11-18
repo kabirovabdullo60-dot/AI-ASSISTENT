@@ -11,6 +11,7 @@ import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
 import 'services/employee_service.dart';
+import 'services/expense_service.dart';
 import 'services/notification_service.dart';
 import 'services/payroll_service.dart';
 import 'services/preferences_service.dart';
@@ -22,6 +23,7 @@ import 'viewmodels/assistant_view_model.dart';
 import 'viewmodels/auth_view_model.dart';
 import 'viewmodels/dashboard_view_model.dart';
 import 'viewmodels/employees_view_model.dart';
+import 'viewmodels/expenses_view_model.dart';
 import 'viewmodels/home_view_model.dart';
 import 'viewmodels/notifications_view_model.dart';
 import 'viewmodels/payroll_view_model.dart';
@@ -132,6 +134,7 @@ class _SignedInState extends State<_SignedIn> {
         ChangeNotifierProvider(create: (_) => SalesViewModel(sales)..load()),
         ChangeNotifierProvider(create: (_) => EmployeesViewModel(employees, reports)..load()),
         ChangeNotifierProvider(create: (_) => PayrollViewModel(payroll)..load()),
+        ChangeNotifierProvider(create: (_) => ExpensesViewModel(ExpenseService(api), reports)..load()),
         ChangeNotifierProvider(create: (_) => ReportsViewModel(reports)..load()),
         ChangeNotifierProvider(create: (_) => AssistantViewModel(AssistantService(api, reports))),
       ],
