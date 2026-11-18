@@ -1,0 +1,352 @@
+{
+  "@@locale": "en",
+  "appTitle": "OFAR",
+  "commonLoading": "Loading…",
+  "commonEmptyTitle": "Nothing here yet",
+  "commonErrorTitle": "Could not load",
+  "commonRetry": "Try again",
+  "commonCancel": "Cancel",
+  "commonConfirm": "Confirm",
+  "commonSave": "Save",
+  "commonDelete": "Delete",
+  "commonEdit": "Edit",
+  "commonClear": "Clear",
+  "commonShowMore": "Show more",
+  "commonNothingFound": "Nothing found.",
+  "fieldShowPassword": "Show password",
+  "fieldHidePassword": "Hide password",
+  "navHome": "Home",
+  "navSales": "Sales",
+  "navPayroll": "Salaries",
+  "navMore": "More",
+  "navAdd": "Add",
+  "navStores": "Stores",
+  "navEmployees": "Employees",
+  "navReports": "Reports",
+  "navProfile": "Profile and settings",
+  "quickActionsTitle": "Add",
+  "actionNewSale": "Sale",
+  "actionPaySalary": "Pay salary",
+  "actionNewStore": "Store",
+  "actionNewEmployee": "Employee",
+  "authLoginTitle": "Sign in",
+  "authLoginSubtitle": "Sign in to keep working with your business finances",
+  "authRegisterTitle": "Create an account",
+  "authRegisterSubtitle": "Your account and your business — in a couple of minutes",
+  "authNoAccount": "No account?",
+  "authHaveAccount": "Already have an account?",
+  "authCreateAccount": "Create account",
+  "authSignInButton": "Sign in",
+  "authPasswordLabel": "Password",
+  "authPasswordHint": "Enter your password",
+  "authPasswordRepeat": "Repeat the password",
+  "authSignOut": "Sign out",
+  "authSignOutConfirmTitle": "Sign out?",
+  "authSignOutConfirmMessage": "You will need your e-mail and password to sign in again.",
+  "fieldEmail": "E-mail",
+  "fieldEmailHint": "name@company.tj",
+  "fieldFullName": "Full name",
+  "fieldBusinessName": "Business name",
+  "fieldPhone": "Phone",
+  "fieldPhoneHint": "+992 90 123 45 67",
+  "fieldOptional": "Optional",
+  "fieldStore": "Store",
+  "fieldChooseStore": "Choose a store",
+  "fieldStoreName": "Store name",
+  "fieldAddress": "Address",
+  "fieldDescription": "Description",
+  "fieldStatus": "Status",
+  "fieldAmount": "Amount",
+  "fieldDate": "Date",
+  "fieldPeriod": "Period",
+  "fieldPosition": "Position",
+  "fieldMonthlySalary": "Monthly salary",
+  "fieldHiredAt": "Hired on",
+  "fieldTerminatedAt": "Left on",
+  "fieldPaymentDate": "Payment date",
+  "fieldNote": "Note",
+  "validationRequired": "Fill in this field",
+  "validationEmail": "Enter a valid e-mail",
+  "validationPhone": "7–15 digits, may start with +",
+  "validationAmount": "Enter an amount greater than 0 (up to 2 decimals)",
+  "validationPasswordsDiffer": "The passwords do not match",
+  "statusActive": "Active",
+  "statusInactive": "Inactive",
+  "homeMonthSales": "Sales this month",
+  "homeToday": "Today",
+  "homeWeek": "This week",
+  "homeRevenueToday": "Revenue today",
+  "periodToday": "Today",
+  "periodWeek": "Week",
+  "periodMonth": "Month",
+  "periodPrevious": "Previous",
+  "periodNext": "Next",
+  "homePeriodSales": "Sales",
+  "homeAverageSale": "Average sale",
+  "homeNoComparison": "Nothing to compare yet",
+  "homeChange": "{change} {compare}",
+  "@homeChange": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      },
+      "compare": {
+        "type": "String"
+      }
+    }
+  },
+  "compareToday": "vs yesterday",
+  "compareWeek": "vs last week",
+  "compareMonth": "vs last month",
+  "homeSalaries": "Salaries this month",
+  "homeRemainingTotal": "Unpaid for all months: {amount}",
+  "@homeRemainingTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBusiness": "Stores and employees",
+  "homeOfTotal": "active of {total}",
+  "@homeOfTotal": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTopStores": "Top stores this month",
+  "homeShowAll": "All sales",
+  "homeNoSales": "No sales yet.",
+  "salesCount": "{count, plural, =0{No sales} one{{count} sale} other{{count} sales}}",
+  "@salesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "salesTotal": "Sales total",
+  "salesAllStores": "All stores",
+  "salesAllDates": "All time",
+  "salesClearFilter": "Reset filter",
+  "salesNothingFound": "No sales for this filter.",
+  "salesEmptyTitle": "No sales yet",
+  "salesEmptyMessage": "Record the first sale of a store.",
+  "saleNewTitle": "New sale",
+  "saleEditTitle": "Sale",
+  "saleNoStores": "Add a store first",
+  "saleSaved": "Sale recorded",
+  "saleUpdated": "Sale updated",
+  "saleDeleted": "Sale deleted",
+  "saleDeleteTitle": "Delete the sale?",
+  "saleDeleteMessage": "It will no longer count in sales and reports.",
+  "storesSearch": "Search by name or address",
+  "storesEmptyTitle": "No stores yet",
+  "storesEmptyMessage": "Add your first store to record its sales.",
+  "storeNewTitle": "New store",
+  "storeEditTitle": "Edit store",
+  "storeSaved": "Store saved",
+  "storeDeleted": "Store deleted. Its sales stay in reports.",
+  "storeDeleteTitle": "Delete the store?",
+  "storeDeleteMessage": "Its sales history is kept. A store with working employees cannot be deleted.",
+  "storeLatestSales": "Latest sales",
+  "storeNoEmployees": "No employees in this store.",
+  "employeesSearch": "Search by name or phone",
+  "employeesActive": "Working",
+  "employeesSalaryFund": "Salaries per month",
+  "employeesAverage": "Average {amount}",
+  "@employeesAverage": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "employeesEmptyTitle": "No employees yet",
+  "employeesEmptyMessage": "Add employees to keep track of their salaries.",
+  "employeeNewTitle": "New employee",
+  "employeeEditTitle": "Employee",
+  "employeeSaved": "Employee saved",
+  "employeeDeleted": "Employee deleted. Their salary history stays.",
+  "employeeDeleteTitle": "Delete the employee?",
+  "employeeDeleteMessage": "The salary history is kept.",
+  "payrollPaid": "Paid",
+  "payrollPartial": "Partly paid",
+  "payrollUnpaid": "Not paid",
+  "payrollDue": "Due",
+  "payrollDueTotal": "Due in total",
+  "payrollPaidAmount": "Paid",
+  "payrollRemaining": "Remaining",
+  "payrollCounts": "Paid {paid} · partly {partial} · not paid {unpaid}",
+  "@payrollCounts": {
+    "placeholders": {
+      "paid": {
+        "type": "int"
+      },
+      "partial": {
+        "type": "int"
+      },
+      "unpaid": {
+        "type": "int"
+      }
+    }
+  },
+  "payrollLeft": "{amount} left",
+  "@payrollLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "payrollEmptyTitle": "No salaries this month",
+  "payrollEmptyMessage": "Employees who worked this month appear here.",
+  "payrollHistory": "Salary history",
+  "payrollMonths": "Months",
+  "payrollPayments": "Payments",
+  "payrollNoPayments": "No payments yet.",
+  "payrollPaidOf": "{paid} of {due}",
+  "@payrollPaidOf": {
+    "placeholders": {
+      "paid": {
+        "type": "String"
+      },
+      "due": {
+        "type": "String"
+      }
+    }
+  },
+  "payrollPaidSoFar": "Paid {amount}",
+  "@payrollPaidSoFar": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "payrollMonthlySalary": "Salary {amount} per month",
+  "@payrollMonthlySalary": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "payrollWorkedDays": "{count, plural, one{{count} day worked} other{{count} days worked}}",
+  "@payrollWorkedDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "payrollMonthsWorked": "{count, plural, one{{count} month} other{{count} months}}",
+  "@payrollMonthsWorked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "paymentTitle": "Salary payment",
+  "paymentSubmit": "Pay",
+  "paymentSaved": "Payment recorded",
+  "paymentAlreadyPaid": "This month is already paid in full.",
+  "paymentFor": "for {period}",
+  "@paymentFor": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentCancel": "Cancel payment",
+  "paymentCancelTitle": "Cancel the payment?",
+  "paymentCancelMessage": "{amount} will count as not paid again.",
+  "@paymentCancelMessage": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentCancelled": "Payment cancelled",
+  "reportStores": "Stores this month",
+  "reportStoresPeriod": "Sales {start} – {end}",
+  "@reportStoresPeriod": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "reportPayroll": "Salaries by year",
+  "reportEmployees": "Employees by store and position",
+  "reportEmployeesCount": "{active} working of {total}",
+  "@reportEmployeesCount": {
+    "placeholders": {
+      "active": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "moreBusiness": "Business",
+  "moreAccount": "Account",
+  "moreStoresHint": "Add, edit, see sales and staff",
+  "moreEmployeesHint": "Staff, positions and salaries",
+  "moreReportsHint": "Stores compared, salaries by year",
+  "profileEdit": "Edit profile",
+  "profileSaved": "Profile saved",
+  "profileChangePhoto": "Change photo",
+  "profileAvatarSaved": "Photo updated",
+  "profileDetails": "Business and contacts",
+  "profileSettings": "Settings",
+  "profileCurrency": "Currency",
+  "profileLanguage": "Language",
+  "profileLanguageSystem": "As on the phone",
+  "profileNotSet": "Not set",
+  "passwordTitle": "Change password",
+  "passwordCurrent": "Current password",
+  "passwordNew": "New password",
+  "passwordNote": "Other devices will be signed out. This one stays signed in.",
+  "passwordChanged": "Password changed",
+  "errNetwork": "No connection to the server. Check the internet and try again.",
+  "errInvalidCredentials": "Wrong e-mail or password.",
+  "errAccountLocked": "Too many attempts. Try again in 15 minutes.",
+  "errAccountDisabled": "This account is disabled.",
+  "errSessionEnded": "The session has ended. Please sign in again.",
+  "errEmailTaken": "An account with this e-mail already exists.",
+  "errPasswordWeak": "The password is too weak. Use a longer one with letters and digits.",
+  "errCurrentPassword": "The current password is wrong.",
+  "errAvatarTooLarge": "The photo is too large (at most 5 MB).",
+  "errAvatarType": "Choose a JPEG, PNG or WebP photo.",
+  "errStoreNotFound": "The store was not found. It may have been deleted.",
+  "errStoreNameTaken": "A store with this name already exists.",
+  "errStoreHasEmployees": "This store has working employees. Move them to another store or mark them inactive first.",
+  "errSaleNotFound": "The sale was not found. It may have been deleted.",
+  "errSaleDateFuture": "A sale cannot be dated in the future.",
+  "errEmployeeNotFound": "The employee was not found. They may have been deleted.",
+  "errEmploymentDates": "The leaving date must be after the hiring date.",
+  "errNotEmployedInPeriod": "The employee did not work in this month.",
+  "errPaymentNotFound": "The payment was not found. It may have been cancelled.",
+  "errPayrollExceeds": "The amount is more than is left to pay for this month.",
+  "errPayrollAlreadyPaid": "This month is already paid in full.",
+  "errPayrollFuture": "A future month cannot be paid yet.",
+  "errPaymentDateFuture": "The payment date cannot be in the future.",
+  "errDateRange": "The start date must not be after the end date.",
+  "errValidation": "Some fields are filled in wrongly. Check them and try again.",
+  "errPermission": "You are not allowed to do this.",
+  "errNotFound": "Not found. It may have been deleted.",
+  "errConflict": "This conflicts with the current data. Refresh and try again.",
+  "errRateLimited": "Too many requests. Wait a little and try again.",
+  "errServer": "The server is not responding properly. Try again later.",
+  "errUnknown": "Something went wrong. Try again."
+}

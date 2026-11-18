@@ -1,9 +1,14 @@
 import 'package:subhon_app/main.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('shows home', (tester) async {
+    // The first screen of the app: with no saved session it is the login
+    // screen (the placeholder "App home" was replaced by the real app).
+    FlutterSecureStorage.setMockInitialValues({});
     await tester.pumpWidget(const MobileApp());
-    expect(find.text('App home'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(find.text('Sign in'), findsWidgets);
   });
 }

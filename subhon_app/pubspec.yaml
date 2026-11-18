@@ -36,6 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   provider: ^6.1.5+1
   http: ^1.6.0
+  flutter_secure_storage: ^11.2.0
+  intl: any
+  flutter_localizations:
+    sdk: flutter
+  image_picker: ^1.2.4
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +63,23 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
+
+  # OFAR typeface (SIL Open Font License, assets/fonts/onest/OFL.txt).
+  fonts:
+    - family: Onest
+      fonts:
+        - asset: assets/fonts/onest/Onest-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/onest/Onest-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/onest/Onest-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/onest/Onest-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/onest/Onest-ExtraBold.ttf
+          weight: 800
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
