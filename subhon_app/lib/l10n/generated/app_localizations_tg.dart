@@ -119,12 +119,6 @@ class AppLocalizationsTg extends AppLocalizations {
   String get validationPasswordMin => 'Ҳадди ақал 8 аломат';
 
   @override
-  String get registerChartIncome => 'Даромад';
-
-  @override
-  String get registerChartProfit => 'Фоида';
-
-  @override
   String get authNoAccount => 'Аккаунт надоред?';
 
   @override

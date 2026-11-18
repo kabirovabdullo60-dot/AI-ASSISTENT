@@ -5,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/views/shell_view.dart';
 import 'package:subhon_app/widgets/jelly_blob.dart';
-import 'package:subhon_app/widgets/register_chart_card.dart';
 
 import '../helpers/app_harness.dart';
 import '../helpers/fake_backend.dart';
@@ -25,12 +24,9 @@ Future<void> _fill(WidgetTester tester, {required String password}) async {
 void main() {
   setUp(() => FlutterSecureStorage.setMockInitialValues({}));
 
-  testWidgets('the new design: mascot, illustration, texts, 3 fields', (
-    tester,
-  ) async {
+  testWidgets('the new design: mascot, texts, 3 fields', (tester) async {
     await _openRegister(tester, FakeBackend());
     expect(find.byType(JellyBlob), findsOneWidget);
-    expect(find.byType(RegisterChartCard), findsOneWidget);
     expect(find.text('Создайте аккаунт'), findsOneWidget);
     expect(
       find.text('ИИ-бухгалтер для учёта доходов и расходов'),

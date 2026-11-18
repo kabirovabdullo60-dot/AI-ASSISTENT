@@ -17,7 +17,6 @@ import '../widgets/auth_scaffold.dart';
 import '../widgets/jelly_blob.dart';
 import '../widgets/look_at_pointer.dart';
 import '../widgets/register_background.dart';
-import '../widgets/register_chart_card.dart';
 
 /// `POST /api/auth/register`: name, work e-mail and password (the API's
 /// required fields). Phone and business name are optional in the API and
@@ -25,8 +24,7 @@ import '../widgets/register_chart_card.dart';
 /// owner until then.
 ///
 /// A dark screen: the jelly mascot (looks where the screen is pressed,
-/// closes its eyes while the password is typed) above an illustration of
-/// income and profit curves.
+/// closes its eyes while the password is typed) above the form.
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -83,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
     final l10n = context.l10n;
     final session = context.watch<SessionViewModel>();
     final busy = session.isSubmitting;
-    const gap = SizedBox(height: AppSpacing.md);
+    const gap = SizedBox(height: AppSpacing.lg);
     final theme = Theme.of(context);
     // The button keeps the vivid brand purple with white text, as on the
     // design (the dark theme's accent is lighter, for text).
@@ -101,19 +99,10 @@ class _RegisterViewState extends State<RegisterView> {
         background: const RegisterBackground(),
         title: l10n.authRegisterTitle,
         subtitle: l10n.authRegisterSubtitle,
-        hero: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: JellyBlob(
-                lookAt: _lookAt,
-                eyesClosed: _passwordFocus.hasFocus,
-                size: 116,
-              ),
-            ),
-            const RegisterChartCard(),
-            const SizedBox(height: AppSpacing.md),
-          ],
+        hero: JellyBlob(
+          lookAt: _lookAt,
+          eyesClosed: _passwordFocus.hasFocus,
+          size: 150,
         ),
         footer: AuthFooterLink(
           question: l10n.authHaveAccount,

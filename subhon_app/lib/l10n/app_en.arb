@@ -36,8 +36,6 @@
   "fieldWorkEmail": "Work e-mail",
   "authPasswordMinHint": "At least 8 characters",
   "validationPasswordMin": "At least 8 characters",
-  "registerChartIncome": "Income",
-  "registerChartProfit": "Profit",
   "authNoAccount": "No account?",
   "authHaveAccount": "Already have an account?",
   "authCreateAccount": "Create account",

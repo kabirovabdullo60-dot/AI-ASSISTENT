@@ -316,18 +316,6 @@ abstract class AppLocalizations {
   /// **'At least 8 characters'**
   String get validationPasswordMin;
 
-  /// No description provided for @registerChartIncome.
-  ///
-  /// In en, this message translates to:
-  /// **'Income'**
-  String get registerChartIncome;
-
-  /// No description provided for @registerChartProfit.
-  ///
-  /// In en, this message translates to:
-  /// **'Profit'**
-  String get registerChartProfit;
-
   /// No description provided for @authNoAccount.
   ///
   /// In en, this message translates to:

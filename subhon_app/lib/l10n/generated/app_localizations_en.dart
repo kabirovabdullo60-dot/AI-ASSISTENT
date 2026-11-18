@@ -119,12 +119,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validationPasswordMin => 'At least 8 characters';
 
   @override
-  String get registerChartIncome => 'Income';
-
-  @override
-  String get registerChartProfit => 'Profit';
-
-  @override
   String get authNoAccount => 'No account?';
 
   @override

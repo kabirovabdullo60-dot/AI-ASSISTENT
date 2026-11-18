@@ -36,8 +36,6 @@
   "fieldWorkEmail": "E-mail-и корӣ",
   "authPasswordMinHint": "Ҳадди ақал 8 аломат",
   "validationPasswordMin": "Ҳадди ақал 8 аломат",
-  "registerChartIncome": "Даромад",
-  "registerChartProfit": "Фоида",
   "authNoAccount": "Аккаунт надоред?",
   "authHaveAccount": "Аллакай аккаунт доред?",
   "authCreateAccount": "Бақайд гирифтан",

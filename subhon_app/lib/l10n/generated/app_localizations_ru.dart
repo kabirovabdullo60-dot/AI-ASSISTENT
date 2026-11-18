@@ -119,12 +119,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get validationPasswordMin => 'Минимум 8 символов';
 
   @override
-  String get registerChartIncome => 'Доходы';
-
-  @override
-  String get registerChartProfit => 'Прибыль';
-
-  @override
   String get authNoAccount => 'Нет аккаунта?';
 
   @override
