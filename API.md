@@ -1,6 +1,6 @@
 # Business Management System — API for the Flutter apps
 
-> Generated from the live Swagger (`/openapi.json`) of Mehroj's backend. The web (Abdullo) is already connected to every endpoint below.
+> Generated from the live Swagger (`/openapi.json`) of Mehroj's backend (regenerated 2026-11-18). The web (Abdullo) is connected to every endpoint below.
 > **Mobile app:** give this file to Claude and say: *"Connect the app to this API following API.md"*.
 
 - **Base URL:** `https://api-production-86caefb2.up.railway.app`
@@ -39,7 +39,7 @@
 ### Suggested Flutter structure (MVVM, same as the web)
 
 - `core/network/api_client.dart` — base URL, adds the token, refresh-once-and-retry on `AUTH_TOKEN_EXPIRED`, turns error bodies into `ApiException(statusCode, code, message, details)`.
-- One service per tag below: `AuthService`, `ProfileService`, `StoreService`, `SalesService`, `EmployeeService`, `PayrollService`, `ReportsService`.
+- One service per tag below: `AuthService`, `ProfileService`, `StoreService`, `SalesService`, `EmployeeService`, `PayrollService`, `ExpenseService`, `TargetService`, `ReportsService`, `ActivityService`, `NotificationService`, `AssistantService`, `ExchangeRateService`.
 - Models with `fromJson` that parse money strings with `double.parse` and dates as local dates.
 - ViewModels call services; views never call `http` directly.
 
@@ -48,12 +48,16 @@
 | Screen | Endpoints |
 |---|---|
 | Login / Register | `POST /api/auth/login`, `POST /api/auth/register`, `GET /api/auth/me` |
-| Dashboard | `GET /api/reports/dashboard`, `GET /api/sales/daily`, `GET /api/sales/weekly`, `GET /api/reports/monthly-sales`, `GET /api/reports/store-comparison` |
+| Dashboard | `GET /api/reports/dashboard` (incl. `monthProfit`, `weekTarget`, `monthTarget`), `GET /api/sales/daily`, `GET /api/sales/weekly`, `GET /api/reports/monthly-sales`, `GET /api/reports/store-comparison`, `GET /api/activity`, `PUT /api/targets` |
 | Stores | `GET/POST /api/stores`, `PUT/DELETE /api/stores/{id}`, `GET /api/sales/store/{storeId}`, `GET /api/employees/store/{storeId}` |
 | Sales | `GET/POST /api/sales`, `PUT/DELETE /api/sales/{id}` |
 | Employees | `GET/POST /api/employees`, `PUT/DELETE /api/employees/{id}`, `GET /api/reports/employees` |
 | Salaries | `GET /api/payroll/monthly?month=&year=`, `POST /api/payroll`, `GET /api/payroll`, `GET /api/payroll/employee/{employeeId}`, `DELETE /api/payroll/{id}` |
+| Expenses & profit | `GET/POST /api/expenses`, `PUT/DELETE /api/expenses/{id}`, `GET /api/reports/profit` |
 | Reports | `GET /api/reports/store-comparison`, `GET /api/reports/payroll?year=`, `GET /api/reports/employees` |
+| AI assistant | `POST /api/assistant/chat` (`language` en / ru / tg, last 20 messages; `429 RATE_LIMITED`, `503 ASSISTANT_UNAVAILABLE`) |
+| Notifications (bell) | `GET /api/notifications`, `POST /api/notifications/read-all` |
+| Currency (USD) | `GET /api/settings/exchange-rates` |
 | Profile | `GET/PUT /api/profile`, `PATCH /api/profile/password`, `PATCH /api/profile/avatar` (multipart, field `file`) |
 
 ## Endpoints overview
@@ -96,12 +100,25 @@
 | 🔒 | `GET` | `/api/payroll/employee/{employeeId}` | Salary history of one employee |
 | 🔒 | `GET` | `/api/payroll/{id}` | Get a salary payment |
 | 🔒 | `DELETE` | `/api/payroll/{id}` | Cancel a salary payment (soft delete) |
+| 🔒 | `POST` | `/api/expenses` | Record an expense |
+| 🔒 | `GET` | `/api/expenses` | List expenses |
+| 🔒 | `GET` | `/api/expenses/{id}` | Get an expense |
+| 🔒 | `PUT` | `/api/expenses/{id}` | Update an expense |
+| 🔒 | `DELETE` | `/api/expenses/{id}` | Delete an expense (soft delete) |
+| 🔒 | `PUT` | `/api/targets` | Set a sales target |
+| 🔒 | `GET` | `/api/targets` | List sales targets |
 | 🔒 | `GET` | `/api/reports/dashboard` | Business dashboard |
 | 🔒 | `GET` | `/api/reports/weekly-sales` | Weekly sales of all stores |
 | 🔒 | `GET` | `/api/reports/monthly-sales` | Monthly sales of all stores |
 | 🔒 | `GET` | `/api/reports/store-comparison` | Compare stores |
+| 🔒 | `GET` | `/api/reports/profit` | Profit for a period |
 | 🔒 | `GET` | `/api/reports/employees` | Employees report |
 | 🔒 | `GET` | `/api/reports/payroll` | Payroll report for a year |
+| 🔒 | `GET` | `/api/activity` | Business activity log |
+| 🔒 | `GET` | `/api/notifications` | My notifications |
+| 🔒 | `POST` | `/api/notifications/read-all` | Mark all notifications as read |
+| 🔒 | `POST` | `/api/assistant/chat` | Ask the AI business assistant |
+| 🔒 | `GET` | `/api/settings/exchange-rates` | Exchange rates |
 |  | `GET` | `/health/live` | The process is running |
 |  | `GET` | `/health/ready` | The database is reachable |
 
@@ -260,9 +277,11 @@ Deleted stores are hidden unless `includeDeleted=true`.
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
 | `status` | query | StoreStatus \| null |  | Only this status.  |
-| `search` | query | string \| null |  | Part of the name or address. maxLength=`100` |
-| `includeDeleted` | query | boolean |  |  default=`False` |
+| `search` | query | string \| null |  | Part of the name, address, city, region, type, opening hours or status note.  |
+| `includeDeleted` | query | boolean |  |  default=`false` |
 | `sort` | query | string \| null |  | `name` (default), `createdAt`, `status`; `-` = descending.  |
+| `city` | query | string \| null |  | Only this city (case-insensitive).  |
+| `region` | query | string \| null |  | Only this region (case-insensitive).  |
 | `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
 | `limit` | query | integer |  | Items per page (max 100). minimum=`1`, maximum=`100`, default=`20` |
 
@@ -333,7 +352,7 @@ Sales records of each store, plus daily, weekly and monthly reports (all stores,
 
 **Record a sale**
 
-`saleDate` defaults to today. The store must exist and not be deleted.
+`saleDate` defaults to today. The store must exist and not be deleted. Optional: `paymentMethod`, `receiptNumber`, and a split into `cashAmount` + `cardAmount` that must add up to `amount` (`422 SALE_SPLIT_MISMATCH`). `registeredById` / `registeredByName` are set from your login, don't send them.
 
 Body (`application/json`): **SaleCreate**
 
@@ -342,7 +361,7 @@ Responses:
 - `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
 - `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
 - `404` Not found (records of another business are also reported as not found): `STORE_NOT_FOUND` → **ErrorResponse**
-- `422` Validation or business-rule error: `SALE_DATE_IN_FUTURE`, `VALIDATION_ERROR` → **ErrorResponse**
+- `422` Validation or business-rule error: `SALE_DATE_IN_FUTURE`, `SALE_SPLIT_MISMATCH`, `VALIDATION_ERROR` → **ErrorResponse**
 
 ### `GET /api/sales` 🔒
 
@@ -369,7 +388,7 @@ Responses:
 
 **Daily sales report**
 
-Sales of every store on one day, compared with the day before.
+Sales of every store on one day, compared with the day before. Also `byPaymentMethod` and `byHour` (24 entries, by the hour each sale was entered).
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
@@ -385,7 +404,7 @@ Responses:
 
 **Weekly sales report (all stores)**
 
-Same report as `GET /api/reports/weekly-sales`. Defaults to the current Monday–Sunday week. With only `startDate` (or only `endDate`) the range is 7 days.
+Same report as `GET /api/reports/weekly-sales`. Defaults to the current Monday–Sunday week. With only `startDate` (or only `endDate`) the range is 7 days. **Range: 1 to 366 days**; longer or reversed ranges answer `422 INVALID_DATE_RANGE`.
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
@@ -406,8 +425,8 @@ Same report as `GET /api/reports/monthly-sales`: one calendar month, compared wi
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
-| `month` | query | integer \| null |  | 1–12. Defaults to the current month. minimum=`1`, maximum=`12` |
-| `year` | query | integer \| null |  | Defaults to the current year. minimum=`2000`, maximum=`2100` |
+| `month` | query | integer \| null |  | 1–12. Defaults to the current month.  |
+| `year` | query | integer \| null |  | Defaults to the current year.  |
 
 Responses:
 - `200` Successful Response → **SalesReportOut**
@@ -456,7 +475,7 @@ Responses:
 
 **Update a sale**
 
-Send only the fields you want to change.
+Send only the fields you want to change. Changing `amount` without `cashAmount` / `cardAmount` clears a split that no longer adds up.
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
@@ -469,7 +488,7 @@ Responses:
 - `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
 - `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
 - `404` Not found (records of another business are also reported as not found): `SALE_NOT_FOUND`, `STORE_NOT_FOUND` → **ErrorResponse**
-- `422` Validation or business-rule error: `SALE_DATE_IN_FUTURE`, `VALIDATION_ERROR` → **ErrorResponse**
+- `422` Validation or business-rule error: `SALE_DATE_IN_FUTURE`, `SALE_SPLIT_MISMATCH`, `VALIDATION_ERROR` → **ErrorResponse**
 
 ### `DELETE /api/sales/{id}` 🔒
 
@@ -515,8 +534,8 @@ Responses:
 |---|---|---|---|---|
 | `storeId` | query | string (uuid) \| null |  |   |
 | `status` | query | EmployeeStatus \| null |  | Only this status.  |
-| `search` | query | string \| null |  | Part of the name, position or phone. maxLength=`100` |
-| `includeDeleted` | query | boolean |  |  default=`False` |
+| `search` | query | string \| null |  | Part of the name, position or phone.  |
+| `includeDeleted` | query | boolean |  |  default=`false` |
 | `sort` | query | string \| null |  | `fullName` (default), `position`, `hiredAt`, `monthlySalary`, `createdAt`; `-` = descending.  |
 | `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
 | `limit` | query | integer |  | Items per page (max 100). minimum=`1`, maximum=`100`, default=`20` |
@@ -535,8 +554,8 @@ Responses:
 |---|---|---|---|---|
 | `storeId` | path | string (uuid) | yes | The store ID.  |
 | `status` | query | EmployeeStatus \| null |  | Only this status.  |
-| `search` | query | string \| null |  | Part of the name, position or phone. maxLength=`100` |
-| `includeDeleted` | query | boolean |  |  default=`False` |
+| `search` | query | string \| null |  | Part of the name, position or phone.  |
+| `includeDeleted` | query | boolean |  |  default=`false` |
 | `sort` | query | string \| null |  | `fullName` (default), `position`, `hiredAt`, `monthlySalary`, `createdAt`; `-` = descending.  |
 | `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
 | `limit` | query | integer |  | Items per page (max 100). minimum=`1`, maximum=`100`, default=`20` |
@@ -640,8 +659,8 @@ Newest first. `totalAmount` is the sum of all matching payments.
 |---|---|---|---|---|
 | `employeeId` | query | string (uuid) \| null |  |   |
 | `storeId` | query | string (uuid) \| null |  | Only this store.  |
-| `month` | query | integer \| null |  |  minimum=`1`, maximum=`12` |
-| `year` | query | integer \| null |  |  minimum=`2000`, maximum=`2100` |
+| `month` | query | integer \| null |  |   |
+| `year` | query | integer \| null |  |   |
 | `startDate` | query | string (date) \| null |  | Payment date from (included).  |
 | `endDate` | query | string (date) \| null |  | Payment date to (included).  |
 | `sort` | query | string \| null |  | `paymentDate`, `amount`, `createdAt`; `-` = descending.  |
@@ -662,8 +681,8 @@ For one month: every employee who worked in it, with the salary due, paid and re
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
-| `month` | query | integer \| null |  |  minimum=`1`, maximum=`12` |
-| `year` | query | integer \| null |  |  minimum=`2000`, maximum=`2100` |
+| `month` | query | integer \| null |  |   |
+| `year` | query | integer \| null |  |   |
 | `storeId` | query | string (uuid) \| null |  | Only this store.  |
 
 Responses:
@@ -739,6 +758,135 @@ Responses:
 - `404` Not found (records of another business are also reported as not found): `PAYROLL_NOT_FOUND` → **ErrorResponse**
 - `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
 
+## Expenses
+
+Business expenses (rent, utilities, delivery, …) of a store or the whole business, for profit and margin. Хароҷот.
+
+### `POST /api/expenses` 🔒
+
+**Record an expense**
+
+For one store (`storeId`) or the whole business (`storeId: null`). `expenseDate` defaults to today and can't be in the future.
+
+Body (`application/json`): **ExpenseCreate**
+
+Responses:
+- `201` Successful Response → **ExpenseOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `STORE_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `EXPENSE_DATE_IN_FUTURE`, `VALIDATION_ERROR` → **ErrorResponse**
+
+### `GET /api/expenses` 🔒
+
+**List expenses**
+
+Newest first. `totalAmount` is the sum of all matching expenses (all pages).
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `storeId` | query | string (uuid) \| null |  | Only this store.  |
+| `category` | query | ExpenseCategory \| null |  |   |
+| `startDate` | query | string (date) \| null |  | `YYYY-MM-DD`, included.  |
+| `endDate` | query | string (date) \| null |  | `YYYY-MM-DD`, included.  |
+| `sort` | query | string \| null |  | `expenseDate`, `amount`, `createdAt`; `-` = descending. Default `-expenseDate,-createdAt`.  |
+| `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
+| `limit` | query | integer |  | Items per page (max 100). minimum=`1`, maximum=`100`, default=`20` |
+
+Responses:
+- `200` Successful Response → **ExpensePage**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `STORE_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `INVALID_DATE_RANGE`, `VALIDATION_ERROR` → **ErrorResponse**
+
+### `GET /api/expenses/{id}` 🔒
+
+**Get an expense**
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The expense ID.  |
+
+Responses:
+- `200` Successful Response → **ExpenseOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `EXPENSE_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `PUT /api/expenses/{id}` 🔒
+
+**Update an expense**
+
+Send only the fields you want to change. `storeId: null` makes it an expense of the whole business.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The expense ID.  |
+
+Body (`application/json`): **ExpenseUpdate**
+
+Responses:
+- `200` Successful Response → **ExpenseOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `EXPENSE_NOT_FOUND`, `STORE_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `EXPENSE_DATE_IN_FUTURE`, `VALIDATION_ERROR` → **ErrorResponse**
+
+### `DELETE /api/expenses/{id}` 🔒
+
+**Delete an expense (soft delete)**
+
+It no longer counts in lists and the profit report, but stays in the database.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The expense ID.  |
+
+Responses:
+- `204` Successful Response
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `EXPENSE_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+## Targets
+
+Weekly and monthly sales targets for a store or the whole business. Нақшаи фурӯш.
+
+### `PUT /api/targets` 🔒
+
+**Set a sales target**
+
+Creates the target, or changes its amount when one already exists for the same `period` and `storeId` (`null` = the whole business). Always answers 200 with the target. The business-wide targets also appear on the dashboard (`weekTarget`, `monthTarget`).
+
+Body (`application/json`): **TargetPut**
+
+Responses:
+- `200` Successful Response → **TargetOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `STORE_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `GET /api/targets` 🔒
+
+**List sales targets**
+
+The whole business first, then stores by name; WEEK before MONTH.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
+| `limit` | query | integer |  | Items per page (max 100). minimum=`1`, maximum=`100`, default=`20` |
+
+Responses:
+- `200` Successful Response → **Page_TargetOut_**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
 ## Reports
 
 Dashboard and management reports. Ҳисоботҳо.
@@ -758,7 +906,9 @@ Responses:
 
 **Weekly sales of all stores**
 
-Example: `?startDate=2026-11-09&endDate=2026-11-15`. Returns the total of all stores and every store separately (name, total, number of sales), compared with the previous week. **All stores count, ACTIVE and INACTIVE**, and deleted stores that sold in the period, so no sales history is lost. Defaults to the current Monday–Sunday week.
+Example: `?startDate=2026-11-09&endDate=2026-11-15`. Returns the total of all stores and every store separately (name, total, number of sales), compared with the previous period of the same length, plus `byDay` (one entry per day, for charts). **All stores count, ACTIVE and INACTIVE**, and deleted stores that sold in the period, so no sales history is lost. Defaults to the current Monday–Sunday week; with only `startDate` (or only `endDate`) the range is 7 days.
+
+**Range: 1 to 366 days** (both dates included), so longer ranges such as the last 24 or 31 days work too. `startDate` after `endDate`, or a range longer than 366 days, answers `422 INVALID_DATE_RANGE`.
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
@@ -779,8 +929,8 @@ One calendar month, per store and in total, compared with the previous month, wi
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
-| `month` | query | integer \| null |  |  minimum=`1`, maximum=`12` |
-| `year` | query | integer \| null |  |  minimum=`2000`, maximum=`2100` |
+| `month` | query | integer \| null |  |   |
+| `year` | query | integer \| null |  |   |
 
 Responses:
 - `200` Successful Response → **SalesReportOut**
@@ -805,6 +955,34 @@ Responses:
 - `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
 - `422` Validation or business-rule error: `INVALID_DATE_RANGE`, `VALIDATION_ERROR` → **ErrorResponse**
 
+### `GET /api/reports/profit` 🔒
+
+**Profit for a period**
+
+Sales minus expenses minus salary due, in total, per expense category and per
+store. Defaults to the current month; `?startDate=&endDate=` for any range of up to
+366 days (`422 INVALID_DATE_RANGE` otherwise).
+
+* `salaryDue`: salary due for the period. A month only partly inside the range counts in
+  proportion to its days (15 of 30 days = half); whole months count in full; months after
+  the current one count as 0.
+* `grossProfit = salesTotal - expensesTotal - salaryDue`; `marginPercent = grossProfit /
+  salesTotal` in % (`null` without sales).
+* `byStore`: every store (profit = its sales - its expenses - its employees' salary), then
+  one row with `storeId: null` for expenses of the whole business. The rows add up to the
+  totals. The current month's figures equal the dashboard's `monthProfit`.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `startDate` | query | string (date) \| null |  | `YYYY-MM-DD`, included.  |
+| `endDate` | query | string (date) \| null |  | `YYYY-MM-DD`, included.  |
+
+Responses:
+- `200` Successful Response → **ProfitOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `422` Validation or business-rule error: `INVALID_DATE_RANGE`, `VALIDATION_ERROR` → **ErrorResponse**
+
 ### `GET /api/reports/employees` 🔒
 
 **Employees report**
@@ -824,13 +1002,142 @@ Per month: salary due, paid and remaining for all employees. Defaults to the cur
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
-| `year` | query | integer \| null |  |  minimum=`2000`, maximum=`2100` |
+| `year` | query | integer \| null |  |   |
 
 Responses:
 - `200` Successful Response → **PayrollYearOut**
 - `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
 - `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
 - `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+## Activity
+
+The log of every change in the business (recent activity, a store's operations log). Таърихи амалиётҳо.
+
+### `GET /api/activity` 🔒
+
+**Business activity log**
+
+Every change in your business, newest first: the dashboard's "Recent Business
+Activity" and a store's "Operations Log" (`?storeId=…`).
+
+Written automatically, in the same transaction as the change, when:
+* a store is created, updated, deleted or its status changes (`STORE`);
+* a sale is created, updated or deleted (`SALE`);
+* an employee is created, updated, deleted or their status changes (`EMPLOYEE`);
+* a salary payment is made or cancelled (`PAYROLL`: `PAID`, `CANCELLED`);
+* the profile or the business name changes (`PROFILE`: `UPDATED`).
+
+The response contains codes, not sentences: build the text in the app from `type` + `action`.
+An update that changes the status and other fields gives two rows (`UPDATED` and
+`STATUS_CHANGED`). `startDate` / `endDate` are business-calendar days (Asia/Dushanbe).
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `type` | query | ActivityType \| null |  |   |
+| `action` | query | ActivityAction \| null |  |   |
+| `storeId` | query | string (uuid) \| null |  | Only this store (its operations log).  |
+| `employeeId` | query | string (uuid) \| null |  | Only this employee (EMPLOYEE and PAYROLL rows).  |
+| `startDate` | query | string (date) \| null |  | From this day (included).  |
+| `endDate` | query | string (date) \| null |  | Until this day (included).  |
+| `sort` | query | string \| null |  | `-createdAt` (default, newest first) or `createdAt`.  |
+| `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
+| `limit` | query | integer |  | Items per page (max 100). minimum=`1`, maximum=`100`, default=`20` |
+
+Responses:
+- `200` Successful Response → **Page_ActivityOut_**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `STORE_NOT_FOUND`, `EMPLOYEE_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `INVALID_DATE_RANGE`, `VALIDATION_ERROR` → **ErrorResponse**
+
+## Notifications
+
+Things that need attention: unpaid and overdue salaries, stores without sales today. Огоҳиномаҳо.
+
+### `GET /api/notifications` 🔒
+
+**My notifications**
+
+Calculated on every request from your own data:
+
+| kind | severity | count | amount | link |
+|---|---|---|---|---|
+| `SALARY_OVERDUE` | WARNING | unpaid employee-months before now | their unpaid salary | PAYROLL |
+| `UNPAID_SALARIES` | INFO | employees still to be paid this month | the rest of it | PAYROLL |
+| `STORE_NO_SALES_TODAY` | INFO | 1 (one per ACTIVE store without a sale today) | `null` | SALES |
+
+A situation that is over disappears by itself (all paid, a sale recorded).
+`unreadCount` counts the items that started after your last `POST /api/notifications/read-all`.
+
+Responses:
+- `200` Successful Response → **NotificationsOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+
+### `POST /api/notifications/read-all` 🔒
+
+**Mark all notifications as read**
+
+Everything shown now counts as read for you (`unreadCount` becomes 0). New situations (tomorrow's stores without sales, a month that becomes overdue) are unread again.
+
+Responses:
+- `204` Successful Response
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+
+## Assistant
+
+AI business assistant: answers questions about your own sales, stores, employees and payroll in English, Russian or Tajik, using the real figures of your business. Ёрдамчии зеҳни сунъӣ.
+
+### `POST /api/assistant/chat` 🔒
+
+**Ask the AI business assistant**
+
+Answers questions about **your own business** ("How are my sales today?",
+"Which store sells best?", "How much salary is still unpaid?") in the requested `language`.
+
+The backend calculates the figures (the same ones as `/api/reports/dashboard`,
+`/api/reports/store-comparison`, `/api/reports/employees` and `/api/payroll/monthly`) and
+gives them to the language model, which is told to use only those numbers.
+Data of other businesses is never used.
+
+* Send the conversation oldest first, ending with the user's new message (`role: "user"`).
+  At most 200 messages of 1–2000 characters each; only the
+  last 20 are used. Answers are at most 2000 characters, so
+  they can be sent back as they are.
+* Per user: at most 10 questions a minute and 200 a day by default
+  (`429 RATE_LIMITED` with `Retry-After` and `meta.retryAfter` in seconds).
+* The model is Google Gemini (`GEMINI_MODEL`). When it is overloaded or out of quota the
+  server retries once with a lighter model (`GEMINI_FALLBACK_MODEL`).
+* `503 ASSISTANT_UNAVAILABLE` only when every model fails (the cause is logged on the server)
+  or no key is configured: show a "try again later" message. An answer usually takes a few
+  seconds, at most about 60.
+
+Body (`application/json`): **ChatRequest**
+
+Responses:
+- `200` Successful Response → **ChatReplyOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+- `429` Too many attempts: `RATE_LIMITED` → **ErrorResponse**
+- `503` Temporarily unavailable: `ASSISTANT_UNAVAILABLE` → **ErrorResponse**
+
+## Settings
+
+Values the apps read from the server: exchange rates.
+
+### `GET /api/settings/exchange-rates` 🔒
+
+**Exchange rates**
+
+How many TJS one unit of each currency is worth, for showing amounts in other currencies. Amounts in the API stay in TJS. The values are set on the server (`EXCHANGE_RATES`, `EXCHANGE_RATES_UPDATED_AT`).
+
+Responses:
+- `200` Successful Response → **ExchangeRatesOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
 
 ## Health
 
@@ -853,13 +1160,44 @@ Responses:
 
 ## Schemas
 
+### ActivityAction
+
+Enum: `CREATED`, `UPDATED`, `DELETED`, `STATUS_CHANGED`, `PAID`, `CANCELLED`
+
+### ActivityOut
+
+One change. Build the sentence in the app from `type` + `action` (translated).
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string (uuid) | yes |   |
+| `type` | ActivityType | yes |   |
+| `action` | ActivityAction | yes | `CREATED`, `UPDATED`, `DELETED`, `STATUS_CHANGED` (stores, employees), `PAID` / `CANCELLED` (salary payments).  |
+| `entityId` | string (uuid) | yes | The store, sale, employee, payment or user ID.  |
+| `entityName` | string | yes | Name at the time of the change: the store name (STORE, SALE), the employee's name (EMPLOYEE, PAYROLL) or the user's name (PROFILE).  |
+| `storeId` | string (uuid) \| null | yes |   |
+| `storeName` | string \| null | yes |   |
+| `employeeId` | string (uuid) \| null | yes | Set for EMPLOYEE and PAYROLL rows.  |
+| `amount` | string \| null | yes | The record's amount, signed by money direction: sales are positive (`"1250.50"`), salary payments negative (`"-3000.00"`), also when deleted or cancelled. `null` for stores, employees and the profile.  |
+| `note` | string \| null | yes | The record's own note (sale description, payment note).  |
+| `changedFields` | string[] \| null | yes | For `UPDATED`: the fields that changed (camelCase), e.g. `["name"]`.  |
+| `status` | string \| null | yes | For `STATUS_CHANGED`: the new status (`ACTIVE` / `INACTIVE`).  |
+| `period` | string \| null | yes | For PAYROLL: the salary month, `YYYY-MM`.  |
+| `actorId` | string (uuid) | yes | The user who made the change.  |
+| `actorName` | string | yes |   |
+| `createdAt` | string (date-time) | yes |   |
+
+### ActivityType
+
+Enum: `STORE`, `SALE`, `EMPLOYEE`, `PAYROLL`, `PROFILE`
+
 ### AuthResponse
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `accessToken` | string | yes | Send as `Authorization: Bearer <accessToken>`.  |
 | `refreshToken` | string | yes | Works once. Store the new one after each refresh.  |
-| `tokenType` | string |  |  default=`Bearer` |
+| `tokenType` | string |  |  default=`Bearer`, const=`Bearer` |
 | `expiresIn` | integer | yes | Seconds until the access token expires.  |
 | `refreshExpiresIn` | integer | yes | Seconds until the refresh token expires.  |
 | `user` | ProfileOut | yes |   |
@@ -876,6 +1214,36 @@ Responses:
 |---|---|---|---|
 | `id` | string (uuid) | yes |   |
 | `name` | string | yes |   |
+
+### CategoryExpenseOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `category` | ExpenseCategory | yes |   |
+| `totalAmount` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+
+### ChatMessage
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `role` | string | yes | `user` (the person) or `assistant` (an earlier answer). one of `user`, `assistant` |
+| `text` | string | yes | 1–2000 characters. minLength=`1`, maxLength=`2000` |
+| `time` | string (date-time) \| null |  | When the message was written (ISO 8601). Optional, not used for answers.  |
+
+### ChatReplyOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `role` | string |  |  default=`assistant`, const=`assistant` |
+| `text` | string | yes | The answer, plain text, at most 2000 characters, so it can be sent back in `messages` as it is.  |
+| `time` | string (date-time) | yes | When the answer was made, ISO 8601 UTC.  |
+
+### ChatRequest
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `language` | string | yes | Answer language: `en` English, `ru` Russian, `tg` Tajik (Cyrillic). one of `en`, `ru`, `tg` |
+| `messages` | ChatMessage[] | yes | The conversation, oldest first, ending with the user's new question. Only the last 20 messages are used. maxItems=`200`, minItems=`1` |
 
 ### DashboardOut
 
@@ -902,6 +1270,11 @@ Responses:
 | `remainingSalaryThisMonth` | string | yes | Маоши боқимонда (this month). pattern=`^-?\d+\.\d{2}$` |
 | `remainingSalaryTotal` | string | yes | Unpaid salary of all months up to now, all employees. pattern=`^-?\d+\.\d{2}$` |
 | `topStore` | TopStoreOut \| null | yes | Мағозаи аз ҳама серфурӯш: best store this month (`null` with no sales).  |
+| `monthExpenses` | string |  | Expenses this month (`GET /api/expenses`). pattern=`^-?\d+\.\d{2}$`, default=`0.00` |
+| `monthProfit` | string |  | This month's sales - expenses - salary due (= `GET /api/reports/profit`). pattern=`^-?\d+\.\d{2}$`, default=`0.00` |
+| `monthMarginPercent` | number \| null |  | `monthProfit / monthSales` in %; `null` without sales.  |
+| `weekTarget` | string \| null |  | Business-wide weekly sales target (`PUT /api/targets`).  |
+| `monthTarget` | string \| null |  | Business-wide monthly sales target.  |
 
 ### DaySalesOut
 
@@ -950,7 +1323,7 @@ Responses:
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `fullName` | string | yes |  minLength=`1`, maxLength=`150` |
-| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
+| `phone` | string \| null |  |   |
 | `position` | string | yes |  minLength=`1`, maxLength=`100` |
 | `storeId` | string (uuid) | yes |   |
 | `monthlySalary` | string | yes | Monthly salary in TJS. pattern=`^\d{1,12}(\.\d{1,2})?$` |
@@ -1000,11 +1373,11 @@ Enum: `ACTIVE`, `INACTIVE`
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `fullName` | string \| null |  |  minLength=`1`, maxLength=`150` |
-| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
-| `position` | string \| null |  |  minLength=`1`, maxLength=`100` |
+| `fullName` | string \| null |  |   |
+| `phone` | string \| null |  |   |
+| `position` | string \| null |  |   |
 | `storeId` | string (uuid) \| null |  |   |
-| `monthlySalary` | string \| null |  | A new salary applies from the current month on; past months keep the salary they had. pattern=`^\d{1,12}(\.\d{1,2})?$` |
+| `monthlySalary` | string \| null |  | A new salary applies from the current month on; past months keep the salary they had.  |
 | `hiredAt` | string (date) \| null |  | First working day, `YYYY-MM-DD`. Can't be in the future.  |
 | `terminatedAt` | string (date) \| null |  | Last working day, or `null` while employed. Salary stops being due after this day. Setting `status` to `INACTIVE` without it uses today.  |
 | `status` | EmployeeStatus \| null |  | `INACTIVE` → `ACTIVE` clears `terminatedAt` (unless you send it).  |
@@ -1044,12 +1417,106 @@ Enum: `ACTIVE`, `INACTIVE`
 | `byStore` | EmployeesByStoreOut[] | yes |   |
 | `byPosition` | EmployeesByPositionOut[] | yes |   |
 
+### ErrorBody
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `code` | string | yes |   |
+| `message` | string | yes | For developers. Show a translated text based on `code`.  |
+| `details` | ErrorDetail[] | yes | Field-level problems (validation errors).  |
+| `meta` | object | yes | Extra machine-readable data for some errors.  |
+| `requestId` | string \| null | yes | Quote this when reporting a problem.  |
+
+### ErrorDetail
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `location` | string | yes |   |
+| `field` | string | yes |   |
+| `code` | string | yes |   |
+| `message` | string | yes |   |
+
+### ErrorResponse
+
+Every error response uses this envelope. Switch on `error.code`.
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `error` | ErrorBody | yes |   |
+
+### ExchangeRatesOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `base` | string |  |  default=`TJS` |
+| `rates` | object | yes | 1 unit of each currency in TJS, as decimal strings.  |
+| `updatedAt` | string (date-time) | yes | When the rates were last set (UTC).  |
+
+### ExpenseCategory
+
+Enum: `RENT`, `UTILITIES`, `DELIVERY`, `SUPPLIES`, `MARKETING`, `TAXES`, `OTHER`
+
+### ExpenseCreate
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `storeId` | string (uuid) \| null |  | The store the expense belongs to, or `null` for the whole business.  |
+| `category` | ExpenseCategory | yes |   |
+| `amount` | string | yes | Amount in TJS, greater than 0. Send a string like `"1250.50"` (a JSON number is also accepted). pattern=`^\d{1,12}(\.\d{1,2})?$` |
+| `expenseDate` | string (date) \| null |  | `YYYY-MM-DD`. Defaults to today. Can't be in the future.  |
+| `description` | string \| null |  |   |
+
+### ExpenseOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string (uuid) | yes |   |
+| `storeId` | string (uuid) \| null | yes |   |
+| `storeName` | string \| null | yes |   |
+| `category` | ExpenseCategory | yes |   |
+| `amount` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `expenseDate` | string (date) | yes |   |
+| `description` | string \| null | yes |   |
+| `registeredById` | string (uuid) \| null | yes | The user who recorded it.  |
+| `registeredByName` | string \| null | yes |   |
+| `createdAt` | string (date-time) | yes |   |
+| `updatedAt` | string (date-time) | yes |   |
+
+### ExpensePage
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `items` | ExpenseOut[] | yes |   |
+| `total` | integer | yes | Number of items matching the filters (all pages).  |
+| `page` | integer | yes |   |
+| `limit` | integer | yes |   |
+| `pages` | integer | yes | Total number of pages.  |
+| `totalAmount` | string | yes | Sum of all expenses matching the filters. pattern=`^-?\d+\.\d{2}$` |
+
+### ExpenseUpdate
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `storeId` | string (uuid) \| null |  | The store the expense belongs to, or `null` for the whole business.  |
+| `category` | ExpenseCategory \| null |  |   |
+| `amount` | string \| null |  |   |
+| `expenseDate` | string (date) \| null |  | `YYYY-MM-DD`. Defaults to today. Can't be in the future.  |
+| `description` | string \| null |  |   |
+
 ### HealthOut
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `status` | string | yes |   |
 | `checks` | object |  |  default=`{}` |
+
+### HourSalesOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `hour` | integer | yes | Hour the sale was entered, Asia/Dushanbe. minimum=`0.0`, maximum=`23.0` |
+| `totalAmount` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `salesCount` | integer | yes |   |
 
 ### LoginRequest
 
@@ -1103,6 +1570,47 @@ Enum: `ACTIVE`, `INACTIVE`
 | `status` | PayrollStatus | yes | Status of this employee's salary for that month: `PAID` (fully paid), `PARTIAL` (partly paid) or `UNPAID` (nothing paid yet).  |
 | `paymentsCount` | integer | yes |   |
 
+### NotificationKind
+
+Enum: `UNPAID_SALARIES`, `STORE_NO_SALES_TODAY`, `SALARY_OVERDUE`
+
+### NotificationLink
+
+Enum: `STORES`, `SALES`, `PAYROLL`
+
+### NotificationOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string (uuid) | yes | Stable while the situation lasts (same kind, store and start), so the app can remember it.  |
+| `kind` | NotificationKind | yes | `UNPAID_SALARIES`: employees with salary still to pay this month. `SALARY_OVERDUE`: unpaid salary of earlier months. `STORE_NO_SALES_TODAY`: an ACTIVE store without a sale today (one per store).  |
+| `severity` | Severity | yes |   |
+| `count` | integer | yes | UNPAID_SALARIES: employees; SALARY_OVERDUE: unpaid employee-months (2 employees × 3 months = 6); STORE_NO_SALES_TODAY: 1.  |
+| `amount` | string \| null | yes | Salary still to pay; `null` for stores.  |
+| `storeId` | string (uuid) \| null | yes |   |
+| `storeName` | string \| null | yes |   |
+| `link` | NotificationLink | yes | The app screen to open.  |
+| `read` | boolean | yes | `false` until `POST /api/notifications/read-all`.  |
+| `createdAt` | string (date-time) | yes | When the situation started: the start of this month (UNPAID_SALARIES), of the month after the newest overdue month (SALARY_OVERDUE) or of today (STORE_NO_SALES_TODAY), business calendar.  |
+
+### NotificationsOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `items` | NotificationOut[] | yes | WARNING first, then newest first.  |
+| `unreadCount` | integer | yes | Items newer than the last read-all.  |
+| `lastReadAt` | string (date-time) \| null | yes | The last read-all, or `null`.  |
+
+### Page_ActivityOut_
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `items` | ActivityOut[] | yes |   |
+| `total` | integer | yes | Number of items matching the filters (all pages).  |
+| `page` | integer | yes |   |
+| `limit` | integer | yes |   |
+| `pages` | integer | yes | Total number of pages.  |
+
 ### Page_EmployeeOut_
 
 | Field | Type | Required | Notes |
@@ -1118,6 +1626,16 @@ Enum: `ACTIVE`, `INACTIVE`
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `items` | StoreOut[] | yes |   |
+| `total` | integer | yes | Number of items matching the filters (all pages).  |
+| `page` | integer | yes |   |
+| `limit` | integer | yes |   |
+| `pages` | integer | yes | Total number of pages.  |
+
+### Page_TargetOut_
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `items` | TargetOut[] | yes |   |
 | `total` | integer | yes | Number of items matching the filters (all pages).  |
 | `page` | integer | yes |   |
 | `limit` | integer | yes |   |
@@ -1139,7 +1657,21 @@ Enum: `ACTIVE`, `INACTIVE`
 | `month` | integer | yes | The month the salary is for. minimum=`1.0`, maximum=`12.0` |
 | `year` | integer | yes |  minimum=`2000.0`, maximum=`2100.0` |
 | `paymentDate` | string (date) \| null |  | When the money was paid, `YYYY-MM-DD`. Defaults to today.  |
-| `note` | string \| null |  |  maxLength=`500` |
+| `note` | string \| null |  |   |
+| `method` | SalaryPaymentMethod \| null |  | How it was paid: `BANK_TRANSFER` or `CASH` (optional).  |
+
+### PaymentMethod
+
+Enum: `CASH`, `CARD`, `QR`, `MIXED`
+
+### PaymentMethodSalesOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `paymentMethod` | PaymentMethod \| null | yes | `null`: sales recorded without a payment method.  |
+| `totalAmount` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `salesCount` | integer | yes |   |
+| `sharePercent` | number | yes | Share of the period's total, in %.  |
 
 ### PaymentOut
 
@@ -1154,6 +1686,7 @@ Enum: `ACTIVE`, `INACTIVE`
 | `paymentDate` | string (date) | yes |   |
 | `status` | PayrollStatus | yes | Status of this employee's salary for that month: `PAID` (fully paid), `PARTIAL` (partly paid) or `UNPAID` (nothing paid yet).  |
 | `note` | string \| null | yes |   |
+| `method` | SalaryPaymentMethod \| null |  |   |
 | `period` | PeriodBalanceOut | yes |   |
 | `createdAt` | string (date-time) | yes |   |
 
@@ -1247,7 +1780,7 @@ The employee's salary for the payment's month, after all payments so far.
 | `fullName` | string | yes |   |
 | `email` | string | yes |   |
 | `phone` | string \| null | yes |   |
-| `avatar` | string \| null | yes | Public URL of the avatar image, or `null`.  |
+| `avatar` | string \| null | yes | Absolute public URL of the avatar image (on the team server `https://…/media/avatars/…`), or `null`. Use it as it is.  |
 | `role` | UserRole | yes |   |
 | `business` | BusinessOut | yes |   |
 | `createdAt` | string (date-time) | yes |   |
@@ -1256,16 +1789,40 @@ The employee's salary for the payment's month, after all payments so far.
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `fullName` | string \| null |  |  minLength=`1`, maxLength=`150` |
-| `email` | string (email) \| null |  |  maxLength=`320` |
-| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
-| `businessName` | string \| null |  | Renames your business. minLength=`1`, maxLength=`150` |
+| `fullName` | string \| null |  |   |
+| `email` | string (email) \| null |  |   |
+| `phone` | string \| null |  |   |
+| `businessName` | string \| null |  | Renames your business.  |
+
+### ProfitOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `currency` | string |  |  default=`TJS` |
+| `period` | PeriodOut | yes |   |
+| `salesTotal` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `expensesTotal` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `salaryDue` | string | yes | Salary due for the period. A month only partly inside the period counts in proportion to its days; months after the current one count as 0. pattern=`^-?\d+\.\d{2}$` |
+| `grossProfit` | string | yes | `salesTotal - expensesTotal - salaryDue`. pattern=`^-?\d+\.\d{2}$` |
+| `marginPercent` | number \| null | yes | `grossProfit / salesTotal` in %; `null` when there are no sales.  |
+| `byCategory` | CategoryExpenseOut[] | yes | Expenses per category, largest first.  |
+| `byStore` | StoreProfitOut[] | yes | Every store, most profitable first, then one row with `storeId: null` for expenses of the whole business (when there are any). The rows add up to the totals.  |
 
 ### RefreshRequest
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `refreshToken` | string | yes |  minLength=`1`, maxLength=`512` |
+
+### RegionSalesOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `region` | string \| null | yes | `null` groups the stores without a region.  |
+| `storesCount` | integer | yes |   |
+| `inactiveStores` | integer | yes | INACTIVE stores (deleted ones included).  |
+| `totalAmount` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `sharePercent` | number | yes | Share of the total of all stores, in %.  |
 
 ### RegisterRequest
 
@@ -1274,8 +1831,8 @@ The employee's salary for the payment's month, after all payments so far.
 | `fullName` | string | yes |  minLength=`1`, maxLength=`150` |
 | `email` | string (email) | yes |  maxLength=`320` |
 | `password` | string | yes | 8–128 characters, not a commonly used password. minLength=`1`, maxLength=`128` |
-| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
-| `businessName` | string \| null |  | Name of your business. Defaults to your full name. minLength=`1`, maxLength=`150` |
+| `phone` | string \| null |  |   |
+| `businessName` | string \| null |  | Name of your business. Defaults to your full name.  |
 
 ### SalaryChangeOut
 
@@ -1285,6 +1842,10 @@ The employee's salary for the payment's month, after all payments so far.
 | `effectiveFrom` | string (date) | yes | 1st day of the month this salary applies from.  |
 | `createdAt` | string (date-time) | yes |   |
 
+### SalaryPaymentMethod
+
+Enum: `BANK_TRANSFER`, `CASH`
+
 ### SaleCreate
 
 | Field | Type | Required | Notes |
@@ -1292,7 +1853,11 @@ The employee's salary for the payment's month, after all payments so far.
 | `storeId` | string (uuid) | yes |   |
 | `amount` | string | yes | Amount in TJS, greater than 0. Send a string like `"1250.50"` (a JSON number is also accepted). pattern=`^\d{1,12}(\.\d{1,2})?$` |
 | `saleDate` | string (date) \| null |  | `YYYY-MM-DD`. Defaults to today. Can't be in the future.  |
-| `description` | string \| null |  |  maxLength=`500` |
+| `description` | string \| null |  |   |
+| `paymentMethod` | PaymentMethod \| null |  | `CASH`, `CARD`, `QR` or `MIXED` (optional).  |
+| `cashAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`).  |
+| `cardAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`).  |
+| `receiptNumber` | string \| null |  |   |
 
 ### SaleOut
 
@@ -1304,7 +1869,13 @@ The employee's salary for the payment's month, after all payments so far.
 | `amount` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
 | `saleDate` | string (date) | yes |   |
 | `description` | string \| null | yes |   |
-| `createdAt` | string (date-time) | yes |   |
+| `paymentMethod` | PaymentMethod \| null |  |   |
+| `cashAmount` | string \| null |  |   |
+| `cardAmount` | string \| null |  |   |
+| `receiptNumber` | string \| null |  |   |
+| `registeredById` | string (uuid) \| null |  | The user who recorded the sale (set by the server).  |
+| `registeredByName` | string \| null |  |   |
+| `createdAt` | string (date-time) | yes | When the sale was entered (UTC).  |
 | `updatedAt` | string (date-time) | yes |   |
 
 ### SalePage
@@ -1323,9 +1894,13 @@ The employee's salary for the payment's month, after all payments so far.
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `storeId` | string (uuid) \| null |  |   |
-| `amount` | string \| null |  |  pattern=`^\d{1,12}(\.\d{1,2})?$` |
+| `amount` | string \| null |  | Changing `amount` without sending `cashAmount` / `cardAmount` clears a split that no longer adds up.  |
 | `saleDate` | string (date) \| null |  |   |
-| `description` | string \| null |  |  maxLength=`500` |
+| `description` | string \| null |  |   |
+| `paymentMethod` | PaymentMethod \| null |  | `CASH`, `CARD`, `QR` or `MIXED` (optional).  |
+| `cashAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`).  |
+| `cardAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`).  |
+| `receiptNumber` | string \| null |  |   |
 
 ### SalesReportOut
 
@@ -1346,6 +1921,12 @@ Sales of all stores (ACTIVE, INACTIVE and deleted ones that sold in the period).
 | `storesCount` | integer | yes |   |
 | `stores` | StoreSalesOut[] | yes | Every store, best first.  |
 | `byDay` | DaySalesOut[] | yes | One entry per day of the period (for charts).  |
+| `byPaymentMethod` | PaymentMethodSalesOut[] |  | Always CASH, CARD, QR, MIXED (in this order, zeros included), plus a `null` row when some sales have no payment method.  |
+| `byHour` | HourSalesOut[] \| null |  | Daily reports only (`null` otherwise): 24 entries, hours 0–23, by the time the sale was entered (`createdAt`) in Asia/Dushanbe.  |
+
+### Severity
+
+Enum: `INFO`, `WARNING`
 
 ### StoreComparisonOut
 
@@ -1359,6 +1940,7 @@ Sales of all stores (ACTIVE, INACTIVE and deleted ones that sold in the period).
 | `storesCount` | integer | yes |   |
 | `bestStore` | StoreComparisonRow \| null | yes |   |
 | `stores` | StoreComparisonRow[] | yes | Ranked, best first.  |
+| `regions` | RegionSalesOut[] |  | The same stores grouped by region (case-insensitive), best first.  |
 
 ### StoreComparisonRow
 
@@ -1378,16 +1960,24 @@ Sales of all stores (ACTIVE, INACTIVE and deleted ones that sold in the period).
 | `changePercent` | number \| null | yes | Change vs the previous period in %; `null` when the previous total is 0.  |
 | `rank` | integer | yes | 1 = highest sales in the period.  |
 | `activeEmployees` | integer | yes |   |
+| `city` | string \| null |  |   |
+| `region` | string \| null |  |   |
 
 ### StoreCreate
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `name` | string | yes |  minLength=`1`, maxLength=`150` |
-| `address` | string \| null |  |  maxLength=`255` |
-| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
-| `description` | string \| null |  |  maxLength=`1000` |
+| `address` | string \| null |  |   |
+| `phone` | string \| null |  |   |
+| `description` | string \| null |  |   |
 | `status` | StoreStatus |  |  default=`ACTIVE` |
+| `city` | string \| null |  |   |
+| `region` | string \| null |  | Region, e.g. `Dushanbe`, `Sughd`, `Khatlon`, `GBAO`, `RRS`. Groups the store comparison.  |
+| `type` | string \| null |  | Store format, e.g. `Flagship`, `Supermarket`, `Kiosk`.  |
+| `counters` | integer \| null |  | Number of checkout counters, 0–999.  |
+| `openingHours` | string \| null |  |   |
+| `statusNote` | string \| null |  | Why the store has its status, e.g. `Renovation`.  |
 
 ### StoreOut
 
@@ -1399,9 +1989,26 @@ Sales of all stores (ACTIVE, INACTIVE and deleted ones that sold in the period).
 | `phone` | string \| null | yes |   |
 | `description` | string \| null | yes |   |
 | `status` | StoreStatus | yes |   |
+| `city` | string \| null |  |   |
+| `region` | string \| null |  |   |
+| `type` | string \| null |  |   |
+| `counters` | integer \| null |  |   |
+| `openingHours` | string \| null |  |   |
+| `statusNote` | string \| null |  |   |
 | `createdAt` | string (date-time) | yes |   |
 | `updatedAt` | string (date-time) | yes |   |
 | `deletedAt` | string (date-time) \| null | yes | Set when the store was deleted (soft delete).  |
+
+### StoreProfitOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `storeId` | string (uuid) \| null | yes | `null`: expenses of the whole business.  |
+| `storeName` | string \| null | yes |   |
+| `salesTotal` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `expensesTotal` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `salaryDue` | string | yes | Salary due for the store's employees. pattern=`^-?\d+\.\d{2}$` |
+| `profit` | string | yes | `salesTotal - expensesTotal - salaryDue` (may be < 0). pattern=`^-?\d+\.\d{2}$` |
 
 ### StoreSalesOut
 
@@ -1428,11 +2035,41 @@ Enum: `ACTIVE`, `INACTIVE`
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `name` | string \| null |  |  minLength=`1`, maxLength=`150` |
-| `address` | string \| null |  |  maxLength=`255` |
-| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
-| `description` | string \| null |  |  maxLength=`1000` |
+| `name` | string \| null |  |   |
+| `address` | string \| null |  |   |
+| `phone` | string \| null |  |   |
+| `description` | string \| null |  |   |
 | `status` | StoreStatus \| null |  |   |
+| `city` | string \| null |  |   |
+| `region` | string \| null |  | Region, e.g. `Dushanbe`, `Sughd`, `Khatlon`, `GBAO`, `RRS`. Groups the store comparison.  |
+| `type` | string \| null |  | Store format, e.g. `Flagship`, `Supermarket`, `Kiosk`.  |
+| `counters` | integer \| null |  | Number of checkout counters, 0–999.  |
+| `openingHours` | string \| null |  |   |
+| `statusNote` | string \| null |  | Why the store has its status, e.g. `Renovation`.  |
+
+### TargetOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string (uuid) | yes |   |
+| `period` | TargetPeriod | yes |   |
+| `storeId` | string (uuid) \| null | yes |   |
+| `storeName` | string \| null | yes |   |
+| `amount` | string | yes | Amount in TJS as a decimal string with 2 decimals. pattern=`^-?\d+\.\d{2}$` |
+| `createdAt` | string (date-time) | yes |   |
+| `updatedAt` | string (date-time) | yes |   |
+
+### TargetPeriod
+
+Enum: `WEEK`, `MONTH`
+
+### TargetPut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `period` | TargetPeriod | yes | `WEEK` (Monday–Sunday) or `MONTH`.  |
+| `storeId` | string (uuid) \| null |  | The store, or `null` for the whole business.  |
+| `amount` | string | yes | The sales goal in TJS. pattern=`^\d{1,12}(\.\d{1,2})?$` |
 
 ### TokenPair
 
@@ -1440,7 +2077,7 @@ Enum: `ACTIVE`, `INACTIVE`
 |---|---|---|---|
 | `accessToken` | string | yes | Send as `Authorization: Bearer <accessToken>`.  |
 | `refreshToken` | string | yes | Works once. Store the new one after each refresh.  |
-| `tokenType` | string |  |  default=`Bearer` |
+| `tokenType` | string |  |  default=`Bearer`, const=`Bearer` |
 | `expiresIn` | integer | yes | Seconds until the access token expires.  |
 | `refreshExpiresIn` | integer | yes | Seconds until the refresh token expires.  |
 
@@ -1467,23 +2104,20 @@ Enum: `OWNER`
 | 401 | `AUTH_TOKEN_EXPIRED` | The access token has expired. Refresh it and retry. |
 | 401 | `AUTH_TOKEN_INVALID` | The token is invalid. Please log in again. |
 | 403 | `AUTH_ACCOUNT_DISABLED` | This account has been disabled. |
-| 403 | `PERMISSION_DENIED` | You do not have permission to perform this action. |
 | 404 | `EMPLOYEE_NOT_FOUND` | Employee not found. |
-| 404 | `NOT_FOUND` | Resource not found. |
+| 404 | `EXPENSE_NOT_FOUND` | Expense not found. |
 | 404 | `PAYROLL_NOT_FOUND` | Payroll payment not found. |
 | 404 | `SALE_NOT_FOUND` | Sale not found. |
 | 404 | `STORE_NOT_FOUND` | Store not found. |
-| 409 | `CONFLICT` | The request conflicts with the current state of the resource. |
 | 409 | `EMAIL_ALREADY_REGISTERED` | An account with this email already exists. |
 | 409 | `PAYROLL_ALREADY_PAID` | The salary for this month is already fully paid. |
 | 409 | `STORE_HAS_ACTIVE_EMPLOYEES` | The store still has active employees. Move or deactivate them first. |
 | 409 | `STORE_NAME_TAKEN` | A store with this name already exists. |
 | 413 | `AVATAR_TOO_LARGE` | The avatar image is too large. |
-| 413 | `PAYLOAD_TOO_LARGE` | The request body is too large. |
 | 415 | `AVATAR_INVALID_TYPE` | The avatar must be a JPEG, PNG or WebP image. |
-| 415 | `UNSUPPORTED_MEDIA_TYPE` | This file type is not supported. |
 | 422 | `CURRENT_PASSWORD_INCORRECT` | The current password is incorrect. |
 | 422 | `EMPLOYEE_NOT_EMPLOYED_IN_PERIOD` | The employee did not work in this month, so no salary is due. |
+| 422 | `EXPENSE_DATE_IN_FUTURE` | The expense date cannot be in the future. |
 | 422 | `INVALID_DATE_RANGE` | The date range is invalid. |
 | 422 | `INVALID_EMPLOYMENT_DATES` | The employment dates are invalid. |
 | 422 | `PASSWORD_TOO_WEAK` | The password is too weak. |
@@ -1491,10 +2125,11 @@ Enum: `OWNER`
 | 422 | `PAYROLL_AMOUNT_EXCEEDS_REMAINING` | The amount is larger than the salary that remains to be paid for this month. |
 | 422 | `PAYROLL_PERIOD_IN_FUTURE` | Salary can't be paid for a future month. |
 | 422 | `SALE_DATE_IN_FUTURE` | The sale date cannot be in the future. |
+| 422 | `SALE_SPLIT_MISMATCH` | cashAmount + cardAmount must equal amount, and neither can be larger than it. |
 | 422 | `VALIDATION_ERROR` | Request validation failed. |
 | 429 | `AUTH_ACCOUNT_LOCKED` | Too many failed login attempts. Try again later. |
 | 429 | `RATE_LIMITED` | Too many requests. Try again later. |
-| 500 | `INTERNAL_ERROR` | An unexpected error occurred. |
+| 503 | `ASSISTANT_UNAVAILABLE` | The AI assistant is temporarily unavailable. Try again later. |
 
 ---
 Questions about the API → Mehroj (backend). If something here differs from the live Swagger, the Swagger wins — regenerate this file.
