@@ -121,12 +121,21 @@ class _Header extends StatelessWidget {
                 ],
               ),
             ),
-            OutlinedButton.icon(
-              key: const Key('profile-logout'),
-              onPressed: () => context.read<AuthViewModel>().logout(),
-              icon: const Icon(Icons.logout, size: 18),
-              label: Text(tr.signOut),
-            ),
+            // Narrow phones: icon only, so long translations ("Баромадан") never overflow.
+            if (MediaQuery.sizeOf(context).width < 480)
+              IconButton.outlined(
+                key: const Key('profile-logout'),
+                tooltip: tr.signOut,
+                onPressed: () => context.read<AuthViewModel>().logout(),
+                icon: const Icon(Icons.logout, size: 18),
+              )
+            else
+              OutlinedButton.icon(
+                key: const Key('profile-logout'),
+                onPressed: () => context.read<AuthViewModel>().logout(),
+                icon: const Icon(Icons.logout, size: 18),
+                label: Text(tr.signOut),
+              ),
           ],
         ),
       ),

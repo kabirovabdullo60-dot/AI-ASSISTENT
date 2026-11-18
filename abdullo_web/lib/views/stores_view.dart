@@ -335,16 +335,26 @@ class _StoreActions extends StatelessWidget {
       mainAxisSize: showAnalytics ? MainAxisSize.max : MainAxisSize.min,
       children: [
         if (showAnalytics) ...[
-          TextButton(
-            key: Key('analytics-${store.id}'),
-            style: TextButton.styleFrom(
-              foregroundColor: store.isActive ? AppColors.orange : AppColors.muted,
-              padding: EdgeInsets.zero,
+          // Flexible: on narrow cards the label shortens (…) instead of pushing the icons out.
+          Flexible(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                key: Key('analytics-${store.id}'),
+                style: TextButton.styleFrom(
+                  foregroundColor: store.isActive ? AppColors.orange : AppColors.muted,
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () => StoreDetailSheet.show(context, store.id),
+                child: Text(
+                  tr.viewAnalytics,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
             ),
-            onPressed: () => StoreDetailSheet.show(context, store.id),
-            child: Text(tr.viewAnalytics, style: const TextStyle(fontWeight: FontWeight.w600)),
           ),
-          const Spacer(),
         ],
         IconButton(
           key: Key('edit-${store.id}'),
