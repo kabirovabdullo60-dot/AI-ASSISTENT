@@ -37,6 +37,19 @@
 - A hook (`.claude/hooks/branch_guard.sh`) enforces this for Read, Glob, Grep, Bash, Edit and Write.
   Never try to get around it (other paths, symlinks, scripts, `cat`, `cp`, `find` ...).
 
+## Backend API — connect every screen automatically
+- Mehroj's backend is live: `https://api-production-86caefb2.up.railway.app` (Swagger: `/docs`).
+  The full contract — every endpoint, request/response field, error code and the auth flow — is in **`API.md`** at the repo root. Read it before touching data.
+- **Whenever you build or change a screen (from a design, a screenshot or a description), connect it to the real
+  endpoints from `API.md` in the same task.** No demo/hard-coded data. Use the table "Which endpoint for which screen".
+- If a design shows data the API doesn't have, show what the API does have and tell the user what is missing (so they can ask Mehroj) — never invent fields.
+- Data path stays MVVM: View → ViewModel → Service (`lib/services/`) → `ApiClient` (`lib/core/network/`).
+  `ApiClient` adds `Authorization: Bearer`, refreshes once on `401 AUTH_TOKEN_EXPIRED`, and turns errors into `ApiException(code)`.
+- Money comes as strings (`"1250.50"`) → `double.parse`; send `amount.toStringAsFixed(2)`. Dates `YYYY-MM-DD` → local dates.
+- Show translated messages for `error.code` (en / ru / tg), not the backend `message`.
+- Tests: fake the backend with `MockClient` (package `http/testing`) returning the same JSON as `API.md`; never call the live server from tests.
+- If `API.md` and the live Swagger disagree, the Swagger wins — tell the user so `API.md` can be regenerated on `main`.
+
 ## Architecture — MVVM (provider + ChangeNotifier), same in both projects
 ```
 lib/

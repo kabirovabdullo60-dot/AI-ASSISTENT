@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The backend API (API.md) is reached over the internet. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="subhon_app"
         android:name="${applicationName}"
