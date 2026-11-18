@@ -110,11 +110,11 @@ class AppTheme {
       ),
       tooltipTheme: TooltipThemeData(
         waitDuration: Duration(milliseconds: 450),
-        decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.all(Radius.circular(8))),
+        decoration: BoxDecoration(color: AppColors.tooltip, borderRadius: BorderRadius.all(Radius.circular(8))),
         textStyle: TextStyle(fontFamily: 'Onest', color: Colors.white, fontSize: 12),
       ),
       // Fixed (not floating): a floating bar would cover buttons at the bottom of phone screens.
-      snackBarTheme: SnackBarThemeData(backgroundColor: AppColors.navy),
+      snackBarTheme: SnackBarThemeData(backgroundColor: AppColors.tooltip),
       progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.teal),
       scaffoldBackgroundColor: AppColors.background,
       dividerColor: AppColors.border,

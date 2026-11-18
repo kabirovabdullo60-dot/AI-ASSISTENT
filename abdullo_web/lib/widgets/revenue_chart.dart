@@ -117,7 +117,7 @@ class _Tooltip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.strong,
+        color: AppColors.tooltip,
         borderRadius: BorderRadius.circular(8),
         boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 2))],
       ),
@@ -282,7 +282,7 @@ class _RevenueChartPainter extends CustomPainter {
         Rect.fromCenter(center: Offset(cx, _top - h / 2 - 2), width: w, height: h),
         const Radius.circular(4),
       );
-      canvas.drawRRect(r, Paint()..color = AppColors.strong);
+      canvas.drawRRect(r, Paint()..color = AppColors.tooltip);
       tp.paint(canvas, Offset(cx - tp.width / 2, r.top + 3));
       tp.dispose();
     }

@@ -1,10 +1,31 @@
-# Apex Suite web: design system ("Pamir stone")
+# Apex Suite web: design system
 
-An operating tool for shop owners in Tajikistan, so precision comes before decoration.
-The surfaces are cool stone, the text is deep ink, and there is a single teal accent for
-actions and the current place. Gold belongs only to the AI assistant, amber marks what
-needs attention, green is money in and red is money out. The Pamir ridgeline is the one
-signature: it appears in the logo, and on the login page it draws itself once.
+The web has three looks, which the owner switches in **Settings → Theme** or from the palette
+button in the top bar. The choice is saved in the browser. Every color role lives in
+`lib/core/theme/app_palette.dart`, and widgets read the current palette through `AppColors`.
+
+| Look | Mood | Background / card | Accent / AI accent |
+|---|---|---|---|
+| **Midnight Aurora** (default, dark) | Night navy lit by aurora glows | #0A0E1A / #121829 | violet #7C5CFF / cyan #22D3EE |
+| **Zinc** (light) | shadcn-style zinc neutrals | #FAFAFA / #FFFFFF | indigo #4F46E5 / violet #A855F7 |
+| **Emerald** (light) | Private-bank calm | #FAFAF7 / #FFFFFF | emerald #065F46 / champagne #C9A227 |
+
+Roles include `strong` (chart marks: dark on light looks, light on dark) and `tooltip`
+(dark label behind white text in every look).
+
+## Premium motion (Magic UI ideas, rebuilt in Flutter)
+
+| Effect | Widget | Where |
+|---|---|---|
+| Number ticker | `NumberTicker` | Money KPIs count up from 0 |
+| Magic card spotlight | `Pressable` | An accent glow follows the cursor on cards; lift 2px; press 0.98 |
+| Border beam | `BorderBeam` | Unpaid salaries KPI (2 laps), AI input bar (runs while the AI answers) |
+| Shimmer button | `ShimmerSweep` | Record sale and Add expense: one sweep on show, again on hover |
+| Aurora | `AuroraBackground` | AI start screen and login: three glows drift for 14s, then rest |
+| Animated gradient text | `AnimatedGradientText` | The AI heading only |
+
+Rule: nothing loops forever on an idle screen. Effects run a few laps and rest, and they wake up on
+hover or while work is happening. Reduced motion removes all movement.
 
 ## Tokens
 

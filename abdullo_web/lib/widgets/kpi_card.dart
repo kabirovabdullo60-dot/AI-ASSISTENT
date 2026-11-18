@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
+import 'motion/border_beam.dart';
+import 'motion/number_ticker.dart';
 import 'icon_box.dart';
 import 'status_badge.dart';
 
@@ -18,7 +20,13 @@ class KpiCard extends StatelessWidget {
     this.badgeDot = false,
     this.caption,
     this.highlight = false,
+    this.number,
+    this.format,
   });
+
+  /// When set, [value] is ignored and the number counts up to this (formatted by [format]).
+  final double? number;
+  final String Function(double)? format;
 
   static const height = 172.0;
 
@@ -40,7 +48,7 @@ class KpiCard extends StatelessWidget {
     final theme = Theme.of(context);
     final accent = highlight ? AppColors.amber : AppColors.ink;
 
-    return SizedBox(
+    final card = SizedBox(
       height: height,
       child: Card(
         clipBehavior: Clip.antiAlias,
@@ -73,15 +81,26 @@ class KpiCard extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  value,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: accent,
-                    letterSpacing: -0.6,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                ),
+                child: number != null && format != null
+                    ? NumberTicker(
+                        value: number!,
+                        format: format!,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: accent,
+                          letterSpacing: -0.6,
+                          fontFeatures: const [FontFeature.tabularFigures()],
+                        ),
+                      )
+                    : Text(
+                        value,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: accent,
+                          letterSpacing: -0.6,
+                          fontFeatures: const [FontFeature.tabularFigures()],
+                        ),
+                      ),
               ),
               if (unit != null) Text(unit!, style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted)),
               const SizedBox(height: 8),
@@ -100,5 +119,7 @@ class KpiCard extends StatelessWidget {
         ),
       ),
     );
+    // Needs attention → a beam of light runs around it twice.
+    return highlight ? BorderBeam(radius: 14, loops: 2, child: card) : card;
   }
 }

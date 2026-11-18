@@ -14,6 +14,7 @@ import '../widgets/app_table.dart';
 import '../widgets/async_content.dart';
 import '../widgets/card_grid.dart';
 import '../widgets/mini_stat_tile.dart';
+import '../widgets/motion/shimmer_sweep.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
 import 'expense_form_dialog.dart';
@@ -66,11 +67,13 @@ class ExpensesView extends StatelessWidget {
           title: tr.navExpenses,
           subtitle: tr.expensesSubtitle,
           actions: [
-            FilledButton.icon(
-              key: const Key('add-expense'),
-              onPressed: () => ExpenseFormDialog.show(context),
-              icon: const Icon(Icons.add, size: 18),
-              label: Text(tr.addExpense),
+            ShimmerSweep(
+              child: FilledButton.icon(
+                key: const Key('add-expense'),
+                onPressed: () => ExpenseFormDialog.show(context),
+                icon: const Icon(Icons.add, size: 18),
+                label: Text(tr.addExpense),
+              ),
             ),
           ],
           children: [

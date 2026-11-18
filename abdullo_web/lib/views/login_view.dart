@@ -5,6 +5,7 @@ import '../core/l10n/app_language.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../widgets/brand_mark.dart';
+import '../widgets/motion/aurora.dart';
 import '../widgets/pamir_ridge.dart';
 import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
@@ -221,6 +222,7 @@ class _LoginHero extends StatelessWidget {
       color: AppColors.navy,
       child: Stack(
         children: [
+          const Positioned.fill(child: AuroraBackground()),
           const Positioned(left: 0, right: 0, bottom: 0, height: 260, child: PamirRidges(color: Colors.white)),
           Padding(
             padding: const EdgeInsets.fromLTRB(48, 44, 48, 48),

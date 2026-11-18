@@ -7,6 +7,9 @@ import '../core/theme/app_colors.dart';
 import '../viewmodels/assistant_view_model.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/motion/ai_orb.dart';
+import '../widgets/motion/aurora.dart';
+import '../widgets/motion/border_beam.dart';
+import '../widgets/motion/gradient_text.dart';
 import '../widgets/motion/fade_slide_in.dart';
 import '../widgets/motion/pressable.dart';
 import '../widgets/motion/typing_indicator.dart';
@@ -157,6 +160,7 @@ class _EmptyChat extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, viewport) => Stack(
         children: [
+          const Positioned.fill(child: AuroraBackground()),
           // Ridges only where there is room — on phones they would sit behind the cards.
           if (viewport.maxWidth >= 600 && viewport.maxHeight >= 640)
             Positioned(
@@ -185,7 +189,7 @@ class _EmptyChat extends StatelessWidget {
                       const SizedBox(height: 18),
                       FadeSlideIn(
                         delay: Motion.staggerAt(1),
-                        child: Text(
+                        child: AnimatedGradientText(
                           tr.askAssistant,
                           textAlign: TextAlign.center,
                           style: theme.textTheme.headlineMedium?.copyWith(
@@ -366,82 +370,87 @@ class _InputBar extends StatelessWidget {
     final tr = context.l10n;
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 14),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(4, 4, 6, 4),
-        decoration: BoxDecoration(
-          color: AppColors.card,
-          borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: AppColors.border),
-          boxShadow: [
-            BoxShadow(color: AppColors.navy.withValues(alpha: 0.06), blurRadius: 18, offset: const Offset(0, 6)),
-          ],
-        ),
-        child: Row(
-          children: [
-            IconButton(
-              tooltip: tr.newChat,
-              onPressed: canClear ? onClear : null,
-              icon: Icon(Icons.add_comment_outlined, color: AppColors.muted),
-            ),
-            Expanded(
-              child: TextField(
-                key: const Key('chat-input'),
-                controller: controller,
-                enabled: enabled,
-                minLines: 1,
-                maxLines: 4,
-                textInputAction: TextInputAction.send,
-                onSubmitted: (_) => onSend(),
-                decoration: InputDecoration(
-                  hintText: tr.askHint,
-                  filled: false,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+      child: BorderBeam(
+        radius: 28,
+        loops: 1,
+        active: sending,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(4, 4, 6, 4),
+          decoration: BoxDecoration(
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: AppColors.border),
+            boxShadow: [
+              BoxShadow(color: AppColors.navy.withValues(alpha: 0.06), blurRadius: 18, offset: const Offset(0, 6)),
+            ],
+          ),
+          child: Row(
+            children: [
+              IconButton(
+                tooltip: tr.newChat,
+                onPressed: canClear ? onClear : null,
+                icon: Icon(Icons.add_comment_outlined, color: AppColors.muted),
+              ),
+              Expanded(
+                child: TextField(
+                  key: const Key('chat-input'),
+                  controller: controller,
+                  enabled: enabled,
+                  minLines: 1,
+                  maxLines: 4,
+                  textInputAction: TextInputAction.send,
+                  onSubmitted: (_) => onSend(),
+                  decoration: InputDecoration(
+                    hintText: tr.askHint,
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 6),
-            Pressable(
-              lift: false,
-              radius: 22,
-              child: Tooltip(
-                message: tr.send,
-                child: Material(
-                  shape: const CircleBorder(),
-                  clipBehavior: Clip.antiAlias,
-                  child: Ink(
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.teal),
-                    child: InkWell(
-                      key: const Key('chat-send'),
-                      onTap: enabled ? onSend : null,
-                      child: SizedBox(
-                        width: 44,
-                        height: 44,
-                        child: AnimatedSwitcher(
-                          duration: Motion.fast,
-                          transitionBuilder: (child, a) => FadeTransition(
-                            opacity: a,
-                            child: ScaleTransition(scale: Tween(begin: 0.8, end: 1.0).animate(a), child: child),
+              const SizedBox(width: 6),
+              Pressable(
+                lift: false,
+                radius: 22,
+                child: Tooltip(
+                  message: tr.send,
+                  child: Material(
+                    shape: const CircleBorder(),
+                    clipBehavior: Clip.antiAlias,
+                    child: Ink(
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.teal),
+                      child: InkWell(
+                        key: const Key('chat-send'),
+                        onTap: enabled ? onSend : null,
+                        child: SizedBox(
+                          width: 44,
+                          height: 44,
+                          child: AnimatedSwitcher(
+                            duration: Motion.fast,
+                            transitionBuilder: (child, a) => FadeTransition(
+                              opacity: a,
+                              child: ScaleTransition(scale: Tween(begin: 0.8, end: 1.0).animate(a), child: child),
+                            ),
+                            child: sending
+                                ? const SizedBox(
+                                    key: ValueKey('busy'),
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                  )
+                                : const Icon(Icons.arrow_upward_rounded, key: ValueKey('send'), color: Colors.white),
                           ),
-                          child: sending
-                              ? const SizedBox(
-                                  key: ValueKey('busy'),
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                                )
-                              : const Icon(Icons.arrow_upward_rounded, key: ValueKey('send'), color: Colors.white),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

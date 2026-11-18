@@ -25,6 +25,7 @@ import '../widgets/status_badge.dart';
 import '../core/motion/motion.dart';
 import '../widgets/motion/fade_slide_in.dart';
 import '../widgets/motion/pressable.dart';
+import '../widgets/motion/shimmer_sweep.dart';
 import 'record_sale_dialog.dart';
 import 'targets_dialog.dart';
 
@@ -53,6 +54,8 @@ class _DashboardContent extends StatelessWidget {
   KpiCard _money(String title, double tjs, double? change, String caption, IconData icon, Currency cur) => KpiCard(
     title: title,
     value: cur.amount(tjs),
+    number: tjs,
+    format: cur.amount,
     unit: cur.code,
     icon: icon,
     badge: change == null ? null : formatPercent(change),
@@ -108,6 +111,8 @@ class _DashboardContent extends StatelessWidget {
       KpiCard(
         title: tr.kpiUnpaidSalaries,
         value: cur.amount(d.remainingSalaryThisMonth),
+        number: d.remainingSalaryThisMonth,
+        format: cur.amount,
         unit: cur.code,
         icon: Icons.account_balance_wallet_outlined,
         badge: tr.cycle(formatMonth(d.today)),
@@ -124,11 +129,13 @@ class _DashboardContent extends StatelessWidget {
       actions: [
         const _DateChip(),
         _CurrencyToggle(selected: cur),
-        FilledButton.icon(
-          key: const Key('record-sale'),
-          onPressed: () => RecordSaleDialog.show(context),
-          icon: const Icon(Icons.add, size: 18),
-          label: Text(tr.recordSale),
+        ShimmerSweep(
+          child: FilledButton.icon(
+            key: const Key('record-sale'),
+            onPressed: () => RecordSaleDialog.show(context),
+            icon: const Icon(Icons.add, size: 18),
+            label: Text(tr.recordSale),
+          ),
         ),
       ],
       children: [

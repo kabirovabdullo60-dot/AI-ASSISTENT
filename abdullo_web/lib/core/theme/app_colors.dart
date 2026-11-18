@@ -47,6 +47,9 @@ class AppColors {
   /// Strong mark on the page (chart highlight, sparkline): dark on light themes, light on dark.
   static Color get strong => _c.dark ? _c.ink : _c.navy;
 
+  /// Background of small dark labels with white text (chart tooltips): dark in every look.
+  static Color get tooltip => _c.dark ? _c.navyLight : _c.navy;
+
   // Second accent — the AI
   static Color get gold => _c.accent2;
   static Color get goldSoft => _c.accent2Soft;
