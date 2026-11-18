@@ -4,22 +4,26 @@ import 'package:flutter/services.dart';
 import '../core/theme/app_colors.dart';
 import 'accounting_rain.dart';
 
-/// The purple header of the register screen: soft rings of light around
-/// [child] (the jelly mascot) and the rain of accountant's things.
+/// The header of the auth screens: soft rings of light around [child]
+/// (the jelly mascot) and the rain of accountant's things. Purple
+/// (register) or, with [light], soft lavender (login).
 class AuthHero extends StatelessWidget {
-  const AuthHero({required this.child, super.key});
+  const AuthHero({required this.child, this.light = false, super.key});
 
   final Widget child;
+  final bool light;
 
   @override
   Widget build(BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
-    value: SystemUiOverlayStyle.light,
+    value: light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
     child: DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF8D6BFA), AppColors.primary, Color(0xFF5A35D6)],
+          colors: light
+              ? const [Color(0xFFF6F3FF), Color(0xFFEAE3FF), Color(0xFFDCD1FF)]
+              : const [Color(0xFF8D6BFA), AppColors.primary, Color(0xFF5A35D6)],
         ),
       ),
       child: Stack(
@@ -40,7 +44,8 @@ class AuthHero extends StatelessWidget {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withValues(alpha: alpha),
+                      color: (light ? AppColors.primary : Colors.white)
+                          .withValues(alpha: light ? alpha * 0.8 : alpha),
                     ),
                   ),
                 ),

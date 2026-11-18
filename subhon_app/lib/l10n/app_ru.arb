@@ -33,6 +33,7 @@
   "authLoginTitle": "Вход",
   "authLoginSubtitle": "Войдите, чтобы продолжить работу с финансами компании",
   "authRegisterTitle": "Создайте аккаунт",
+  "authRegisterTab": "Регистрация",
   "authRegisterSubtitle": "ИИ-бухгалтер для учёта доходов и расходов",
   "fieldWorkEmail": "Рабочий e-mail",
   "authPasswordMinHint": "Минимум 8 символов",

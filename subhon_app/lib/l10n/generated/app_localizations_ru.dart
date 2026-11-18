@@ -109,6 +109,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authRegisterTitle => 'Создайте аккаунт';
 
   @override
+  String get authRegisterTab => 'Регистрация';
+
+  @override
   String get authRegisterSubtitle =>
       'ИИ-бухгалтер для учёта доходов и расходов';
 

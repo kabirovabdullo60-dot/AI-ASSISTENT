@@ -109,6 +109,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authRegisterTitle => 'Create an account';
 
   @override
+  String get authRegisterTab => 'Sign up';
+
+  @override
   String get authRegisterSubtitle =>
       'AI accountant for tracking income and expenses';
 

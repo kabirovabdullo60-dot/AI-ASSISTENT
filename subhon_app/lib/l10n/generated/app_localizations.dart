@@ -298,6 +298,12 @@ abstract class AppLocalizations {
   /// **'Create an account'**
   String get authRegisterTitle;
 
+  /// No description provided for @authRegisterTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get authRegisterTab;
+
   /// No description provided for @authRegisterSubtitle.
   ///
   /// In en, this message translates to:

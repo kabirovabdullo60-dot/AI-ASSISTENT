@@ -33,6 +33,7 @@
   "authLoginTitle": "Ворид шудан",
   "authLoginSubtitle": "Барои идомаи кор бо молияи ширкат ворид шавед",
   "authRegisterTitle": "Аккаунт созед",
+  "authRegisterTab": "Бақайдгирӣ",
   "authRegisterSubtitle": "ИИ-муҳосиб барои ҳисоби даромад ва хароҷот",
   "fieldWorkEmail": "E-mail-и корӣ",
   "authPasswordMinHint": "Ҳадди ақал 8 аломат",

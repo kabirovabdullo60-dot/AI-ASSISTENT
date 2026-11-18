@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/theme/app_dimensions.dart';
-import '../core/theme/app_theme.dart';
 import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../l10n/validators.dart';
@@ -10,16 +9,16 @@ import '../viewmodels/session_view_model.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_inline_message.dart';
 import '../widgets/app_text_field.dart';
-import '../widgets/auth_footer_link.dart';
-import '../widgets/auth_night_background.dart';
-import '../widgets/auth_scaffold.dart';
+import '../widgets/auth_hero.dart';
+import '../widgets/auth_mode_switch.dart';
+import '../widgets/auth_sheet_layout.dart';
 import '../widgets/jelly_blob.dart';
 import '../widgets/look_at_pointer.dart';
-import '../widgets/vivid_button_theme.dart';
 import 'register_view.dart';
 
-/// `POST /api/auth/login` (email + password). Dark, like the register
-/// screen.
+/// `POST /api/auth/login` (email + password). A lavender header with the
+/// mascot and the falling things; a white sheet with the
+/// "Регистрация | Вход" switch and the form.
 ///
 /// A jelly mascot sits on top. Its eyes look where the screen is pressed
 /// (finger or mouse click) and, a moment after it is released, look
@@ -88,27 +87,23 @@ class _LoginViewState extends State<LoginView> {
   }
 
   @override
-  Widget build(BuildContext context) => Theme(
-    data: AppTheme.dark,
-    child: Builder(builder: _build),
-  );
-
-  Widget _build(BuildContext context) {
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
     final session = context.watch<SessionViewModel>();
     final busy = session.isSubmitting;
-    final scaffold = AuthScaffold(
-      background: const AuthNightBackground(),
+    final scaffold = AuthSheetLayout(
       title: l10n.authLoginTitle,
-      hero: JellyBlob(
-        lookAt: _lookAt,
-        eyesClosed: _passwordFocus.hasFocus,
-        size: 150,
+      hero: AuthHero(
+        light: true,
+        child: JellyBlob(
+          lookAt: _lookAt,
+          eyesClosed: _passwordFocus.hasFocus,
+          size: 150,
+        ),
       ),
-      footer: AuthFooterLink(
-        question: l10n.authNoAccount,
-        action: l10n.authCreateAccount,
-        onPressed: () {
+      top: AuthModeSwitch(
+        isLogin: true,
+        onRegister: () {
           session.clearError();
           Navigator.of(
             context,
@@ -161,12 +156,10 @@ class _LoginViewState extends State<LoginView> {
           ),
           const SizedBox(height: AppSpacing.lg),
         ],
-        VividButtonTheme(
-          child: AppButton(
-            label: l10n.authSignInButton,
-            isLoading: busy,
-            onPressed: _signIn,
-          ),
+        AppButton(
+          label: l10n.authSignInButton,
+          isLoading: busy,
+          onPressed: _signIn,
         ),
       ],
     );

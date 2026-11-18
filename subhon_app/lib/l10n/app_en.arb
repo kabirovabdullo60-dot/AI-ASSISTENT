@@ -33,6 +33,7 @@
   "authLoginTitle": "Sign in",
   "authLoginSubtitle": "Sign in to keep working with your business finances",
   "authRegisterTitle": "Create an account",
+  "authRegisterTab": "Sign up",
   "authRegisterSubtitle": "AI accountant for tracking income and expenses",
   "fieldWorkEmail": "Work e-mail",
   "authPasswordMinHint": "At least 8 characters",

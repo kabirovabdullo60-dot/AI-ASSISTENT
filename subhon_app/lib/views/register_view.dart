@@ -10,8 +10,8 @@ import '../viewmodels/session_view_model.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_inline_message.dart';
 import '../widgets/app_text_field.dart';
-import '../widgets/auth_footer_link.dart';
 import '../widgets/auth_hero.dart';
+import '../widgets/auth_mode_switch.dart';
 import '../widgets/auth_sheet_layout.dart';
 import '../widgets/jelly_blob.dart';
 import '../widgets/look_at_pointer.dart';
@@ -88,10 +88,9 @@ class _RegisterViewState extends State<RegisterView> {
             size: 150,
           ),
         ),
-        footer: AuthFooterLink(
-          question: l10n.authHaveAccount,
-          action: l10n.authSignInButton,
-          onPressed: () {
+        top: AuthModeSwitch(
+          isLogin: false,
+          onLogin: () {
             session.clearError();
             Navigator.of(context).pop();
           },

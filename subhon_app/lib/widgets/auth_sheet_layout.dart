@@ -6,7 +6,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 
 /// Auth screen laid out as a [hero] header on top and a white sheet with
-/// rounded top corners under it: title, subtitle, the form ([children]) and
+/// rounded top corners under it: an optional [top] widget, title, subtitle, the form ([children]) and
 /// a [footer] pinned to the bottom when there is room. The sheet scrolls
 /// over the header when the keyboard needs the space. A back button shows
 /// when the screen can go back.
@@ -17,6 +17,7 @@ class AuthSheetLayout extends StatelessWidget {
     required this.children,
     this.subtitle,
     this.footer,
+    this.top,
     super.key,
   });
 
@@ -25,6 +26,9 @@ class AuthSheetLayout extends StatelessWidget {
   final String? subtitle;
   final List<Widget> children;
   final Widget? footer;
+
+  /// Shown above the title (the "Регистрация | Вход" switch).
+  final Widget? top;
 
   /// The sheet's corner radius; it overlaps the header by this much.
   static const double _radius = 28;
@@ -94,6 +98,10 @@ class AuthSheetLayout extends StatelessWidget {
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
+                                    if (top != null) ...[
+                                      top!,
+                                      const SizedBox(height: AppSpacing.xl),
+                                    ],
                                     Semantics(
                                       header: true,
                                       child: Text(

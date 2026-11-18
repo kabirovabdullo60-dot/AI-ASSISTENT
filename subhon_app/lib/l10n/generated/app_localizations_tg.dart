@@ -109,6 +109,9 @@ class AppLocalizationsTg extends AppLocalizations {
   String get authRegisterTitle => 'Аккаунт созед';
 
   @override
+  String get authRegisterTab => 'Бақайдгирӣ';
+
+  @override
   String get authRegisterSubtitle =>
       'ИИ-муҳосиб барои ҳисоби даромад ва хароҷот';
 
