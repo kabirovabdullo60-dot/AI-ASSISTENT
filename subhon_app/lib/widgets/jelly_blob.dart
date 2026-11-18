@@ -9,7 +9,8 @@ import 'jelly_blob_painter.dart';
 
 /// The animated mascot of the login screen: a wobbling purple jelly with
 /// two eyes that follow [lookAt] (a point in global coordinates: the
-/// finger, the mouse or the text cursor) and blink now and then.
+/// finger, the mouse or the text cursor), glance around when it is null
+/// and blink now and then.
 ///
 /// With [eyesClosed] it shuts its eyes (while the password is typed).
 /// With "reduce motion" on it does not wobble or blink, only looks.
@@ -42,6 +43,20 @@ class _JellyBlobState extends State<JellyBlob>
   /// Seconds between blinks, and how long one lasts.
   static const double _blinkEvery = 3.6;
   static const double _blinkLength = 0.16;
+
+  /// With nothing to look at, the eyes glance around: one spot every
+  /// [_glanceEvery] seconds.
+  static const double _glanceEvery = 1.3;
+  static const _glances = <Offset>[
+    Offset(0, 0.15),
+    Offset(-0.7, 0.1),
+    Offset(-0.4, -0.45),
+    Offset(0.6, -0.2),
+    Offset(0.75, 0.3),
+    Offset(0, 0.4),
+    Offset(-0.6, 0.35),
+    Offset(0.3, -0.5),
+  ];
 
   @override
   void initState() {
@@ -94,8 +109,8 @@ class _JellyBlobState extends State<JellyBlob>
     final target = widget.lookAt.value;
     final box = context.findRenderObject() as RenderBox?;
     if (target == null || box == null || !box.hasSize) {
-      final t = _pose.time;
-      return Offset(math.sin(t * 0.6) * 0.35, 0.15 + math.sin(t * 0.4) * 0.1);
+      final step = (_pose.time / _glanceEvery).floor() % _glances.length;
+      return _glances[step];
     }
     final d = target - box.localToGlobal(box.size.center(Offset.zero));
     final distance = d.distance;

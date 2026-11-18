@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +19,10 @@ import 'register_view.dart';
 
 /// `POST /api/auth/login` (email + password).
 ///
-/// A jelly mascot sits on top: its eyes follow the finger (or mouse)
-/// anywhere on the screen, follow the text while the e-mail is typed and
-/// close while the password is typed.
+/// A jelly mascot sits on top. Its eyes follow a mouse / trackpad cursor
+/// without a click; on a phone they look where the finger touches and,
+/// a moment after it lifts, look around on their own again. They follow
+/// the text while the e-mail is typed and close while the password is.
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -37,6 +41,10 @@ class _LoginViewState extends State<LoginView> {
   /// Where the mascot looks, in global coordinates.
   final _lookAt = ValueNotifier<Offset?>(null);
 
+  /// After a touch ends, the eyes go back to looking around.
+  Timer? _release;
+  static const _releaseAfter = Duration(milliseconds: 1200);
+
   @override
   void initState() {
     super.initState();
@@ -52,10 +60,23 @@ class _LoginViewState extends State<LoginView> {
     _emailFocus.dispose();
     _passwordFocus.dispose();
     _lookAt.dispose();
+    _release?.cancel();
     super.dispose();
   }
 
-  void _lookAtPointer(PointerEvent event) => _lookAt.value = event.position;
+  void _lookAtPointer(PointerEvent event) {
+    _release?.cancel();
+    _lookAt.value = event.position;
+  }
+
+  /// A finger lifted: keep looking there for a moment, then look around.
+  void _touchEnded(PointerEvent event) {
+    if (event.kind == PointerDeviceKind.mouse) return; // the cursor stays
+    _release?.cancel();
+    _release = Timer(_releaseAfter, () {
+      if (mounted && !_emailFocus.hasFocus) _lookAt.value = null;
+    });
+  }
 
   /// While the e-mail is typed, look at the end of the text.
   void _lookAtEmailText() {
@@ -159,7 +180,9 @@ class _LoginViewState extends State<LoginView> {
       onPointerDown: _lookAtPointer,
       onPointerMove: _lookAtPointer,
       onPointerHover: _lookAtPointer,
-      child: scaffold,
+      onPointerUp: _touchEnded,
+      onPointerCancel: _touchEnded,
+      child: MouseRegion(onExit: (_) => _lookAt.value = null, child: scaffold),
     );
   }
 }

@@ -74,4 +74,20 @@ void main() {
     await tester.pump();
     expect(_painter(tester).pose.look.dx, closeTo(1, 0.01));
   });
+
+  testWidgets('with nothing to look at, the eyes glance around', (
+    tester,
+  ) async {
+    final lookAt = ValueNotifier<Offset?>(null);
+    addTearDown(lookAt.dispose);
+    await tester.pumpWidget(_host(lookAt));
+    final seen = <double>{};
+    for (var i = 0; i < 300; i++) {
+      await tester.pump(const Duration(milliseconds: 16));
+      seen.add((_painter(tester).pose.look.dx * 10).roundToDouble());
+    }
+    // Over ~5 s the eyes visit both sides.
+    expect(seen.any((x) => x <= -5), isTrue);
+    expect(seen.any((x) => x >= 5), isTrue);
+  });
 }
