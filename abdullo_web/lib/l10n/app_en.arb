@@ -1129,5 +1129,35 @@
   "createdLabel": "Created:",
   "addressLabel": "Address:",
   "searchEntries": "Search store or description…",
-  "today2": "Today"
+  "today2": "Today",
+  "noticeUnpaid": "{count} employees still to be paid this month · {amount} TJS",
+  "@noticeUnpaid": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "noticeOverdue": "Overdue salaries: {count} unpaid months · {amount} TJS",
+  "@noticeOverdue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "noticeNoSales": "{store}: no sales today",
+  "@noticeNoSales": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  }
 }

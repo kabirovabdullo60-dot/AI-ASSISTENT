@@ -1607,4 +1607,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get today2 => 'Сегодня';
+
+  @override
+  String noticeUnpaid(int count, String amount) {
+    return 'Ещё не выплачено $count сотрудникам за месяц · $amount TJS';
+  }
+
+  @override
+  String noticeOverdue(int count, String amount) {
+    return 'Просроченные зарплаты: $count неоплаченных месяцев · $amount TJS';
+  }
+
+  @override
+  String noticeNoSales(String store) {
+    return '$store: сегодня нет продаж';
+  }
 }

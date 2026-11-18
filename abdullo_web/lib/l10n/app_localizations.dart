@@ -2901,6 +2901,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today'**
   String get today2;
+
+  /// No description provided for @noticeUnpaid.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} employees still to be paid this month · {amount} TJS'**
+  String noticeUnpaid(int count, String amount);
+
+  /// No description provided for @noticeOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue salaries: {count} unpaid months · {amount} TJS'**
+  String noticeOverdue(int count, String amount);
+
+  /// No description provided for @noticeNoSales.
+  ///
+  /// In en, this message translates to:
+  /// **'{store}: no sales today'**
+  String noticeNoSales(String store);
 }
 
 class _AppLocalizationsDelegate

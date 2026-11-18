@@ -1618,4 +1618,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get today2 => 'Today';
+
+  @override
+  String noticeUnpaid(int count, String amount) {
+    return '$count employees still to be paid this month · $amount TJS';
+  }
+
+  @override
+  String noticeOverdue(int count, String amount) {
+    return 'Overdue salaries: $count unpaid months · $amount TJS';
+  }
+
+  @override
+  String noticeNoSales(String store) {
+    return '$store: no sales today';
+  }
 }

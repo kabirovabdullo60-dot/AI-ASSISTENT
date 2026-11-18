@@ -466,5 +466,8 @@
   "createdLabel": "Создан:",
   "addressLabel": "Адрес:",
   "searchEntries": "Поиск по магазину или описанию…",
-  "today2": "Сегодня"
+  "today2": "Сегодня",
+  "noticeUnpaid": "Ещё не выплачено {count} сотрудникам за месяц · {amount} TJS",
+  "noticeOverdue": "Просроченные зарплаты: {count} неоплаченных месяцев · {amount} TJS",
+  "noticeNoSales": "{store}: сегодня нет продаж"
 }

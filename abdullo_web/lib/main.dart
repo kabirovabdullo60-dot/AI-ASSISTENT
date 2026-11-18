@@ -11,6 +11,7 @@ import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
 import 'services/employee_service.dart';
+import 'services/notification_service.dart';
 import 'services/payroll_service.dart';
 import 'services/preferences_service.dart';
 import 'services/profile_service.dart';
@@ -22,6 +23,7 @@ import 'viewmodels/auth_view_model.dart';
 import 'viewmodels/dashboard_view_model.dart';
 import 'viewmodels/employees_view_model.dart';
 import 'viewmodels/home_view_model.dart';
+import 'viewmodels/notifications_view_model.dart';
 import 'viewmodels/payroll_view_model.dart';
 import 'viewmodels/reports_view_model.dart';
 import 'viewmodels/sales_view_model.dart';
@@ -95,14 +97,26 @@ class _WebAppState extends State<WebApp> {
 }
 
 /// Data ViewModels live only while signed in, so logging out clears every page.
-class _SignedIn extends StatelessWidget {
+class _SignedIn extends StatefulWidget {
   const _SignedIn({super.key, required this.api, required this.child});
 
   final ApiClient api;
   final Widget child;
 
   @override
+  State<_SignedIn> createState() => _SignedInState();
+}
+
+class _SignedInState extends State<_SignedIn> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<SettingsViewModel>().loadRates();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final api = widget.api;
     final reports = context.read<ReportsService>();
     final sales = SalesService(api);
     final payroll = PayrollService(api);
@@ -112,6 +126,7 @@ class _SignedIn extends StatelessWidget {
         Provider.value(value: sales),
         Provider.value(value: employees),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => NotificationsViewModel(NotificationService(api))..load()),
         ChangeNotifierProvider(create: (_) => DashboardViewModel(reports, sales, payroll, ActivityService(api))..load()),
         ChangeNotifierProvider(create: (_) => StoresViewModel(StoreService(api), sales, reports)..load()),
         ChangeNotifierProvider(create: (_) => SalesViewModel(sales)..load()),
@@ -120,7 +135,7 @@ class _SignedIn extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ReportsViewModel(reports)..load()),
         ChangeNotifierProvider(create: (_) => AssistantViewModel(AssistantService(api, reports))),
       ],
-      child: child,
+      child: widget.child,
     );
   }
 }

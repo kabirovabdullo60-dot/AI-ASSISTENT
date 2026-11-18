@@ -49,10 +49,21 @@ class ApiConstants {
   static const String reportStoreComparison = '/api/reports/store-comparison';
   static const String reportEmployees = '/api/reports/employees';
   static const String reportPayroll = '/api/reports/payroll';
+  static const String reportProfit = '/api/reports/profit';
 
-  // activity log + AI assistant
+  // expenses
+  static const String expenses = '/api/expenses';
+  static String expense(String id) => '/api/expenses/$id';
+
+  // sales targets (PUT creates or changes)
+  static const String targets = '/api/targets';
+
+  // activity log, notifications, AI assistant, server settings
   static const String activity = '/api/activity';
+  static const String notifications = '/api/notifications';
+  static const String notificationsReadAll = '/api/notifications/read-all';
   static const String assistantChat = '/api/assistant/chat';
+  static const String exchangeRates = '/api/settings/exchange-rates';
 
   // health (no auth)
   static const String healthLive = '/health/live';
@@ -78,7 +89,14 @@ class ApiConstants {
     ('GET', '/api/payroll/employee/{employeeId}', 'Salary history'),
     ('GET/DELETE', '/api/payroll/{id}', 'One payment'),
     ('GET', '/api/reports/*', 'Dashboard, sales, stores, employees, payroll'),
+    ('GET/POST', expenses, 'Expenses'),
+    ('GET/PUT/DELETE', '/api/expenses/{id}', 'One expense'),
+    ('GET/PUT', targets, 'Sales targets'),
+    ('GET', reportProfit, 'Profit'),
     ('GET', activity, 'Activity log'),
+    ('GET', notifications, 'Notifications'),
+    ('POST', notificationsReadAll, 'Mark notifications read'),
+    ('GET', exchangeRates, 'Exchange rates'),
     ('POST', assistantChat, 'AI assistant'),
     ('GET', healthReady, 'Server health'),
   ];

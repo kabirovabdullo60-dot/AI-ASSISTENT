@@ -4,6 +4,7 @@ import '../core/l10n/app_language.dart';
 import '../core/network/api_client.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
+import '../services/exchange_rate_service.dart';
 import '../services/preferences_service.dart';
 
 /// Language + display currency (the business name lives in the profile on the server).
@@ -40,6 +41,18 @@ class SettingsViewModel extends ChangeNotifier {
     _language = language;
     setFormatLanguage(language.name);
     _api?.language = language.name;
+  }
+
+  /// GET /api/settings/exchange-rates (after sign-in) — USD amounts use the server rate.
+  Future<void> loadRates() async {
+    final api = _api;
+    if (api == null) return;
+    try {
+      Currency.setRates(await ExchangeRateService(api).rates());
+      notifyListeners();
+    } on ApiException {
+      // Keep the fallback rate.
+    }
   }
 
   void setCurrency(Currency currency) {

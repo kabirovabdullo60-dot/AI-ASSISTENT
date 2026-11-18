@@ -466,5 +466,8 @@
   "createdLabel": "Сохта шуд:",
   "addressLabel": "Суроға:",
   "searchEntries": "Ҷустуҷӯ аз рӯи мағоза ё тавсиф…",
-  "today2": "Имрӯз"
+  "today2": "Имрӯз",
+  "noticeUnpaid": "Ба {count} корманд музди ин моҳ ҳанӯз пардохт нашудааст · {amount} TJS",
+  "noticeOverdue": "Музди дерпардохт: {count} моҳи пардохтнашуда · {amount} TJS",
+  "noticeNoSales": "{store}: имрӯз фурӯш нест"
 }

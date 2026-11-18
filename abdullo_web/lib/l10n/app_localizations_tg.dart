@@ -1600,4 +1600,19 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get today2 => 'Имрӯз';
+
+  @override
+  String noticeUnpaid(int count, String amount) {
+    return 'Ба $count корманд музди ин моҳ ҳанӯз пардохт нашудааст · $amount TJS';
+  }
+
+  @override
+  String noticeOverdue(int count, String amount) {
+    return 'Музди дерпардохт: $count моҳи пардохтнашуда · $amount TJS';
+  }
+
+  @override
+  String noticeNoSales(String store) {
+    return '$store: имрӯз фурӯш нест';
+  }
 }

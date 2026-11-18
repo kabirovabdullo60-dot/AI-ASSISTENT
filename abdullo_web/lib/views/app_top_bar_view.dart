@@ -8,10 +8,11 @@ import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/format.dart';
 import '../models/activity_model.dart';
+import '../models/notification_model.dart';
 import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/home_view_model.dart';
-import '../viewmodels/payroll_view_model.dart';
+import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
 import '../widgets/status_badge.dart';
 
@@ -191,28 +192,60 @@ class _NotificationsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
-    final pending = context.select<PayrollViewModel, int>((p) => p.isCurrentMonth ? p.pendingCount : 0);
-    final recent = context.watch<DashboardViewModel>().activity('').take(4).toList();
+    final vm = context.watch<NotificationsViewModel>();
+    final recent = context.watch<DashboardViewModel>().activity('').take(3).toList();
+
+    String text(NotificationModel n) => switch (n.kind) {
+      NotificationKind.unpaidSalaries => tr.noticeUnpaid(n.count, formatAmount(n.amount ?? 0)),
+      NotificationKind.salaryOverdue => tr.noticeOverdue(n.count, formatAmount(n.amount ?? 0)),
+      NotificationKind.storeNoSalesToday => tr.noticeNoSales(n.storeName ?? ''),
+    };
 
     return PopupMenuButton<AppSection>(
       key: const Key('notifications'),
       tooltip: tr.notifications,
+      onOpened: () {
+        vm.load().then((_) => vm.markAllRead());
+      },
       onSelected: context.read<HomeViewModel>().select,
       icon: Badge(
-        isLabelVisible: pending > 0,
+        key: const Key('notifications-badge'),
+        isLabelVisible: vm.unreadCount > 0,
         backgroundColor: AppColors.orange,
-        label: Text('$pending'),
+        label: Text('${vm.unreadCount}'),
         child: const Icon(Icons.notifications_none, color: AppColors.navy),
       ),
       itemBuilder: (_) => [
-        if (pending > 0)
+        for (final n in vm.items)
           PopupMenuItem(
-            value: AppSection.salaries,
-            child: Text(
-              tr.salariesWaiting(pending),
-              style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.orange),
+            value: switch (n.link) {
+              NotificationLink.stores => AppSection.stores,
+              NotificationLink.sales => AppSection.sales,
+              NotificationLink.payroll => AppSection.salaries,
+            },
+            child: SizedBox(
+              width: 280,
+              child: Row(
+                children: [
+                  Icon(
+                    n.warning ? Icons.warning_amber_rounded : Icons.info_outline,
+                    size: 18,
+                    color: n.warning ? AppColors.red : AppColors.orange,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      text(n),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: n.read ? FontWeight.w400 : FontWeight.w600),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
+        if (vm.items.isNotEmpty && recent.isNotEmpty) const PopupMenuDivider(),
         for (final a in recent)
           PopupMenuItem(
             value: switch (a.type) {
@@ -241,7 +274,7 @@ class _NotificationsButton extends StatelessWidget {
               ),
             ),
           ),
-        if (pending == 0 && recent.isEmpty) PopupMenuItem(enabled: false, child: Text(tr.noNotifications)),
+        if (vm.items.isEmpty && recent.isEmpty) PopupMenuItem(enabled: false, child: Text(tr.noNotifications)),
       ],
     );
   }

@@ -27,6 +27,12 @@ class FakeBackend {
   /// When true, POST /api/assistant/chat answers `429 RATE_LIMITED`.
   bool assistantRateLimited = false;
 
+  /// GET /api/notifications rows (`NotificationOut`); read-all marks them read.
+  final notifications = <Map<String, dynamic>>[];
+
+  /// GET /api/settings/exchange-rates.
+  String usdRate = '10.95';
+
   /// Last body sent to POST /api/assistant/chat.
   Map<String, dynamic>? lastChatRequest;
 
@@ -759,6 +765,28 @@ class FakeBackend {
       final rows = activity.where((a) => storeId == null || a['storeId'] == storeId).toList();
       final limit = int.tryParse(q['limit'] ?? '') ?? 20;
       return _json({'items': rows.take(limit).toList(), 'total': rows.length, 'page': 1, 'limit': limit, 'pages': 1});
+    }
+
+    if (path == '/api/notifications' && m == 'GET') {
+      return _json({
+        'items': notifications,
+        'unreadCount': notifications.where((n) => n['read'] != true).length,
+        'lastReadAt': null,
+      });
+    }
+    if (path == '/api/notifications/read-all' && m == 'POST') {
+      for (final n in notifications) {
+        n['read'] = true;
+      }
+      return http.Response('', 204);
+    }
+
+    if (path == '/api/settings/exchange-rates') {
+      return _json({
+        'base': 'TJS',
+        'rates': {'USD': usdRate},
+        'updatedAt': '2026-11-18T00:00:00Z',
+      });
     }
 
     if (path == '/api/assistant/chat' && m == 'POST') {
