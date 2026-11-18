@@ -19,6 +19,8 @@ class AuthScaffold extends StatelessWidget {
     this.footer,
     this.showLogo = true,
     this.hero,
+    this.centerTitle = false,
+    this.background,
     super.key,
   });
 
@@ -28,17 +30,24 @@ class AuthScaffold extends StatelessWidget {
   final Widget? footer;
   final bool showLogo;
 
-  /// Shown centred instead of the logo (the login mascot); the title is
-  /// centred under it.
+  /// Shown centred instead of the logo (the mascot).
   final Widget? hero;
+
+  /// Centres the title and the subtitle.
+  final bool centerTitle;
+
+  /// Painted behind the whole screen instead of the plain surface colour
+  /// (the dark register screen).
+  final Widget? background;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final p = context.palette;
-    return Scaffold(
-      backgroundColor: p.surface,
-      appBar: AppBar(backgroundColor: p.surface, toolbarHeight: 48),
+    final barColor = background == null ? p.surface : Colors.transparent;
+    final scaffold = Scaffold(
+      backgroundColor: barColor,
+      appBar: AppBar(backgroundColor: barColor, toolbarHeight: 48),
       body: SafeArea(
         top: false,
         child: LayoutBuilder(
@@ -73,7 +82,7 @@ class AuthScaffold extends StatelessWidget {
                       child: Text(
                         title,
                         style: theme.textTheme.headlineMedium,
-                        textAlign: hero != null
+                        textAlign: centerTitle
                             ? TextAlign.center
                             : TextAlign.start,
                       ),
@@ -82,6 +91,9 @@ class AuthScaffold extends StatelessWidget {
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         subtitle!,
+                        textAlign: centerTitle
+                            ? TextAlign.center
+                            : TextAlign.start,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: p.textSecondary,
                         ),
@@ -107,6 +119,13 @@ class AuthScaffold extends StatelessWidget {
           ),
         ),
       ),
+    );
+    if (background == null) return scaffold;
+    return Stack(
+      children: [
+        Positioned.fill(child: background!),
+        scaffold,
+      ],
     );
   }
 }

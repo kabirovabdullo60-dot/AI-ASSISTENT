@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +12,7 @@ import '../widgets/app_text_field.dart';
 import '../widgets/auth_footer_link.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/jelly_blob.dart';
+import '../widgets/look_at_pointer.dart';
 import 'register_view.dart';
 
 /// `POST /api/auth/login` (email + password).
@@ -40,10 +39,6 @@ class _LoginViewState extends State<LoginView> {
   /// Where the mascot looks, in global coordinates.
   final _lookAt = ValueNotifier<Offset?>(null);
 
-  /// After a touch ends, the eyes go back to looking around.
-  Timer? _release;
-  static const _releaseAfter = Duration(milliseconds: 1200);
-
   @override
   void initState() {
     super.initState();
@@ -59,21 +54,7 @@ class _LoginViewState extends State<LoginView> {
     _emailFocus.dispose();
     _passwordFocus.dispose();
     _lookAt.dispose();
-    _release?.cancel();
     super.dispose();
-  }
-
-  void _lookAtPointer(PointerEvent event) {
-    _release?.cancel();
-    _lookAt.value = event.position;
-  }
-
-  /// Released: keep looking there for a moment, then look ahead.
-  void _touchEnded(PointerEvent event) {
-    _release?.cancel();
-    _release = Timer(_releaseAfter, () {
-      if (mounted && !_emailFocus.hasFocus) _lookAt.value = null;
-    });
   }
 
   /// While the e-mail is typed, look at the end of the text.
@@ -109,6 +90,7 @@ class _LoginViewState extends State<LoginView> {
     final busy = session.isSubmitting;
     final scaffold = AuthScaffold(
       title: l10n.authLoginTitle,
+      centerTitle: true,
       hero: JellyBlob(lookAt: _lookAt, eyesClosed: _passwordFocus.hasFocus),
       footer: AuthFooterLink(
         question: l10n.authNoAccount,
@@ -173,12 +155,9 @@ class _LoginViewState extends State<LoginView> {
         ),
       ],
     );
-    return Listener(
-      behavior: HitTestBehavior.translucent,
-      onPointerDown: _lookAtPointer,
-      onPointerMove: _lookAtPointer,
-      onPointerUp: _touchEnded,
-      onPointerCancel: _touchEnded,
+    return LookAtPointer(
+      lookAt: _lookAt,
+      keep: () => _emailFocus.hasFocus,
       child: scaffold,
     );
   }

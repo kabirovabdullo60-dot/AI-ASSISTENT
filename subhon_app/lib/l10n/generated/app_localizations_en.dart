@@ -107,7 +107,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authRegisterSubtitle =>
-      'Your account and your business — in a couple of minutes';
+      'AI accountant for tracking income and expenses';
+
+  @override
+  String get fieldWorkEmail => 'Work e-mail';
+
+  @override
+  String get authPasswordMinHint => 'At least 8 characters';
+
+  @override
+  String get validationPasswordMin => 'At least 8 characters';
+
+  @override
+  String get registerChartIncome => 'Income';
+
+  @override
+  String get registerChartProfit => 'Profit';
 
   @override
   String get authNoAccount => 'No account?';

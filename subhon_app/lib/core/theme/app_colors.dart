@@ -110,26 +110,27 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color warningText;
 
   @override
-  AppPalette copyWith({Color? primary, Color? textPrimary}) => AppPalette(
-    primary: primary ?? this.primary,
-    secondary: secondary,
-    primaryLight: primaryLight,
-    background: background,
-    surface: surface,
-    surfaceMuted: surfaceMuted,
-    textPrimary: textPrimary ?? this.textPrimary,
-    textSecondary: textSecondary,
-    border: border,
-    success: success,
-    successLight: successLight,
-    error: error,
-    errorLight: errorLight,
-    warning: warning,
-    warningLight: warningLight,
-    shadow: shadow,
-    onPrimary: onPrimary,
-    warningText: warningText,
-  );
+  AppPalette copyWith({Color? primary, Color? textPrimary, Color? onPrimary}) =>
+      AppPalette(
+        primary: primary ?? this.primary,
+        secondary: secondary,
+        primaryLight: primaryLight,
+        background: background,
+        surface: surface,
+        surfaceMuted: surfaceMuted,
+        textPrimary: textPrimary ?? this.textPrimary,
+        textSecondary: textSecondary,
+        border: border,
+        success: success,
+        successLight: successLight,
+        error: error,
+        errorLight: errorLight,
+        warning: warning,
+        warningLight: warningLight,
+        shadow: shadow,
+        onPrimary: onPrimary ?? this.onPrimary,
+        warningText: warningText,
+      );
 
   @override
   AppPalette lerp(AppPalette? other, double t) {

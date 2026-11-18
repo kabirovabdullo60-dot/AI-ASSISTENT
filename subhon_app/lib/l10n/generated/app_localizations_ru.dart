@@ -103,10 +103,26 @@ class AppLocalizationsRu extends AppLocalizations {
       'Войдите, чтобы продолжить работу с финансами компании';
 
   @override
-  String get authRegisterTitle => 'Регистрация';
+  String get authRegisterTitle => 'Создайте аккаунт';
 
   @override
-  String get authRegisterSubtitle => 'Аккаунт и ваш бизнес — за пару минут';
+  String get authRegisterSubtitle =>
+      'ИИ-бухгалтер для учёта доходов и расходов';
+
+  @override
+  String get fieldWorkEmail => 'Рабочий e-mail';
+
+  @override
+  String get authPasswordMinHint => 'Минимум 8 символов';
+
+  @override
+  String get validationPasswordMin => 'Минимум 8 символов';
+
+  @override
+  String get registerChartIncome => 'Доходы';
+
+  @override
+  String get registerChartProfit => 'Прибыль';
 
   @override
   String get authNoAccount => 'Нет аккаунта?';

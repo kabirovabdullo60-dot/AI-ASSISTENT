@@ -295,8 +295,38 @@ abstract class AppLocalizations {
   /// No description provided for @authRegisterSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your account and your business — in a couple of minutes'**
+  /// **'AI accountant for tracking income and expenses'**
   String get authRegisterSubtitle;
+
+  /// No description provided for @fieldWorkEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Work e-mail'**
+  String get fieldWorkEmail;
+
+  /// No description provided for @authPasswordMinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters'**
+  String get authPasswordMinHint;
+
+  /// No description provided for @validationPasswordMin.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters'**
+  String get validationPasswordMin;
+
+  /// No description provided for @registerChartIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get registerChartIncome;
+
+  /// No description provided for @registerChartProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit'**
+  String get registerChartProfit;
 
   /// No description provided for @authNoAccount.
   ///

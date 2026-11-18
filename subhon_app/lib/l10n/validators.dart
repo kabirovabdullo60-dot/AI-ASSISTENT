@@ -14,6 +14,13 @@ abstract final class Validators {
         : l10n.validationEmail;
   }
 
+  /// A new password: 8–128 characters (`RegisterRequest.password`).
+  static String? newPassword(String? value, AppLocalizations l10n) {
+    final v = value ?? '';
+    if (v.isEmpty) return l10n.validationRequired;
+    return v.length < 8 ? l10n.validationPasswordMin : null;
+  }
+
   /// Optional phone: empty, or `^\+?[0-9]{7,15}$` after removing spaces.
   static String? phone(String? value, AppLocalizations l10n) =>
       (value ?? '').trim().isEmpty || isValidPhone(value!)

@@ -103,10 +103,26 @@ class AppLocalizationsTg extends AppLocalizations {
       'Барои идомаи кор бо молияи ширкат ворид шавед';
 
   @override
-  String get authRegisterTitle => 'Бақайдгирӣ';
+  String get authRegisterTitle => 'Аккаунт созед';
 
   @override
-  String get authRegisterSubtitle => 'Аккаунт ва тиҷорати шумо — дар ду дақиқа';
+  String get authRegisterSubtitle =>
+      'ИИ-муҳосиб барои ҳисоби даромад ва хароҷот';
+
+  @override
+  String get fieldWorkEmail => 'E-mail-и корӣ';
+
+  @override
+  String get authPasswordMinHint => 'Ҳадди ақал 8 аломат';
+
+  @override
+  String get validationPasswordMin => 'Ҳадди ақал 8 аломат';
+
+  @override
+  String get registerChartIncome => 'Даромад';
+
+  @override
+  String get registerChartProfit => 'Фоида';
 
   @override
   String get authNoAccount => 'Аккаунт надоред?';
