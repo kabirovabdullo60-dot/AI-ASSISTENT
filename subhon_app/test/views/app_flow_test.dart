@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:subhon_app/views/login_view.dart';
+import 'package:subhon_app/views/auth_view.dart';
 import 'package:subhon_app/views/shell_view.dart';
 import 'package:subhon_app/widgets/app_button.dart';
 
@@ -38,7 +38,7 @@ void main() {
     await _signIn(tester, 'wrong');
     expect(find.text('Неверный e-mail или пароль.'), findsOneWidget);
     expect(find.text('Email or password is incorrect.'), findsNothing);
-    expect(find.byType(LoginView), findsOneWidget);
+    expect(find.byType(AuthView), findsOneWidget);
   });
 
   testWidgets('the same error in English', (tester) async {
@@ -107,7 +107,7 @@ void main() {
       (_) => FakeBackend.error(401, 'AUTH_SESSION_REVOKED', 'Revoked.'),
     );
     await pumpApp(tester, backend, tokens: tokens);
-    expect(find.byType(LoginView), findsOneWidget);
+    expect(find.byType(AuthView), findsOneWidget);
     expect(tokens.refreshToken, isNull);
   });
 

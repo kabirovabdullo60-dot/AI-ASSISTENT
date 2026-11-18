@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:subhon_app/views/register_view.dart';
+import 'package:subhon_app/views/register_form_view.dart';
 import 'package:subhon_app/views/shell_view.dart';
 import 'package:subhon_app/widgets/jelly_blob.dart';
 
@@ -36,9 +36,11 @@ void main() {
     expect(find.text('Рабочий e-mail'), findsOneWidget);
     expect(find.text('Минимум 8 символов'), findsOneWidget); // the hint
     expect(find.byType(EditableText), findsNWidgets(3));
-    // The switch: back to the login screen.
+    // Same page, no new route: the switch swaps the form back.
+    expect(find.byType(BackButton), findsNothing);
     await tapText(tester, 'Вход');
-    expect(find.byType(RegisterView), findsNothing);
+    expect(find.byType(RegisterFormView), findsNothing);
+    expect(find.byType(EditableText), findsNWidgets(2));
   });
 
   testWidgets('a password under 8 characters is not sent', (tester) async {

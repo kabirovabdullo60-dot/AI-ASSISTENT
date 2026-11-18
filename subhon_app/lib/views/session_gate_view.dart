@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../core/theme/app_colors.dart';
 import '../viewmodels/session_view_model.dart';
 import '../widgets/ofar_logo.dart';
-import 'login_view.dart';
+import 'auth_view.dart';
 import 'shell_view.dart';
 
 /// Splash while the saved session is checked, then the login screen or the
@@ -35,7 +35,7 @@ class _SessionGateViewState extends State<SessionGateView> {
         backgroundColor: context.palette.surface,
         body: const Center(child: OfarLogo(size: 88)),
       ),
-      SessionStatus.signedOut => const LoginView(),
+      SessionStatus.signedOut => const AuthView(),
       SessionStatus.signedIn => const ShellView(),
     };
   }

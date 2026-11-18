@@ -9,29 +9,28 @@ import '../viewmodels/session_view_model.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_inline_message.dart';
 import '../widgets/app_text_field.dart';
-import '../widgets/auth_hero.dart';
-import '../widgets/auth_mode_switch.dart';
-import '../widgets/auth_sheet_layout.dart';
-import '../widgets/jelly_blob.dart';
-import '../widgets/look_at_pointer.dart';
-import 'register_view.dart';
 
-/// `POST /api/auth/login` (email + password). A lavender header with the
-/// mascot and the falling things; a white sheet with the
-/// "Регистрация | Вход" switch and the form.
+/// The sign-in form of [AuthView]: `POST /api/auth/login` (email +
+/// password).
 ///
-/// A jelly mascot sits on top. Its eyes look where the screen is pressed
-/// (finger or mouse click) and, a moment after it is released, look
-/// straight ahead again. They follow
-/// the text while the e-mail is typed and close while the password is.
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+/// While the e-mail is typed the mascot looks at the end of the text
+/// ([lookAt]); [onPasswordFocus] tells the page when the password field is
+/// focused, so the mascot closes its eyes.
+class LoginFormView extends StatefulWidget {
+  const LoginFormView({
+    required this.lookAt,
+    required this.onPasswordFocus,
+    super.key,
+  });
+
+  final ValueNotifier<Offset?> lookAt;
+  final ValueChanged<bool> onPasswordFocus;
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<LoginFormView> createState() => _LoginFormViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginFormViewState extends State<LoginFormView> {
   final _form = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
@@ -39,15 +38,14 @@ class _LoginViewState extends State<LoginView> {
   final _passwordFocus = FocusNode();
   final _emailKey = GlobalKey();
 
-  /// Where the mascot looks, in global coordinates.
-  final _lookAt = ValueNotifier<Offset?>(null);
-
   @override
   void initState() {
     super.initState();
     _email.addListener(_lookAtEmailText);
     _emailFocus.addListener(_lookAtEmailText);
-    _passwordFocus.addListener(() => setState(() {}));
+    _passwordFocus.addListener(
+      () => widget.onPasswordFocus(_passwordFocus.hasFocus),
+    );
   }
 
   @override
@@ -56,7 +54,6 @@ class _LoginViewState extends State<LoginView> {
     _password.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
-    _lookAt.dispose();
     super.dispose();
   }
 
@@ -76,7 +73,7 @@ class _LoginViewState extends State<LoginView> {
     const padding = AppSpacing.lg;
     final x = (padding + text.width).clamp(padding, box.size.width - padding);
     // The field is the lower part of the box (the label is above it).
-    _lookAt.value = box.localToGlobal(Offset(x, box.size.height - 22));
+    widget.lookAt.value = box.localToGlobal(Offset(x, box.size.height - 22));
     text.dispose();
   }
 
@@ -91,25 +88,8 @@ class _LoginViewState extends State<LoginView> {
     final l10n = context.l10n;
     final session = context.watch<SessionViewModel>();
     final busy = session.isSubmitting;
-    final scaffold = AuthSheetLayout(
-      title: l10n.authLoginTitle,
-      hero: AuthHero(
-        light: true,
-        child: JellyBlob(
-          lookAt: _lookAt,
-          eyesClosed: _passwordFocus.hasFocus,
-          size: 150,
-        ),
-      ),
-      top: AuthModeSwitch(
-        isLogin: true,
-        onRegister: () {
-          session.clearError();
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute<void>(builder: (_) => const RegisterView()));
-        },
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Form(
           key: _form,
@@ -162,11 +142,6 @@ class _LoginViewState extends State<LoginView> {
           onPressed: _signIn,
         ),
       ],
-    );
-    return LookAtPointer(
-      lookAt: _lookAt,
-      keep: () => _emailFocus.hasFocus,
-      child: scaffold,
     );
   }
 }
