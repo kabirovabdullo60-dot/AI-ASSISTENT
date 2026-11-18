@@ -43,7 +43,9 @@ class ApiClient {
   Future<dynamic> get(String path, {Map<String, Object?>? query, bool auth = true}) =>
       _send('GET', path, query: query, auth: auth);
 
-  Future<dynamic> post(String path, [Object? body, bool auth = true]) => _send('POST', path, body: body, auth: auth);
+  /// [timeout] overrides [ApiConstants.timeout] (e.g. the AI assistant can take up to ~60 s).
+  Future<dynamic> post(String path, [Object? body, bool auth = true, Duration? timeout]) =>
+      _send('POST', path, body: body, auth: auth, timeout: timeout);
 
   Future<dynamic> put(String path, [Object? body]) => _send('PUT', path, body: body);
 
@@ -74,14 +76,17 @@ class ApiClient {
     Object? body,
     bool auth = true,
     bool retried = false,
+    Duration? timeout,
   }) => _guard(
     () async {
       final req = http.Request(method, _uri(path, query))..headers.addAll(_headers(auth));
       if (body != null) req.body = jsonEncode(body);
-      return http.Response.fromStream(await _client.send(req).timeout(ApiConstants.timeout));
+      return http.Response.fromStream(await _client.send(req).timeout(timeout ?? ApiConstants.timeout));
     },
     auth: auth,
-    retry: auth && !retried ? () => _send(method, path, query: query, body: body, retried: true) : null,
+    retry: auth && !retried
+        ? () => _send(method, path, query: query, body: body, retried: true, timeout: timeout)
+        : null,
   );
 
   Future<dynamic> _guard(

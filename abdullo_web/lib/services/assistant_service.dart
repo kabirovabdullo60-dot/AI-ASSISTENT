@@ -28,10 +28,18 @@ class AssistantService {
           {'role': m.role.name, 'text': m.text.length > maxChars ? m.text.substring(0, maxChars) : m.text},
     ];
     try {
-      final json = asJsonMap(await _api.post(ApiConstants.assistantChat, {'language': language, 'messages': messages}));
+      final json = asJsonMap(
+        await _api.post(
+          ApiConstants.assistantChat,
+          {'language': language, 'messages': messages},
+          true,
+          ApiConstants.assistantTimeout,
+        ),
+      );
       return ChatMessageModel(role: ChatRole.assistant, text: asString(json['text']), time: asDate(json['time']));
     } on ApiException catch (e) {
-      if (e.statusCode != 503 && e.code != 'ASSISTANT_UNAVAILABLE') rethrow;
+      // AI down or too slow → answer from the reports instead.
+      if (e.statusCode != 503 && e.code != 'ASSISTANT_UNAVAILABLE' && e.code != 'NETWORK_ERROR') rethrow;
       return _localReply(history, language);
     }
   }

@@ -6,6 +6,9 @@ class ApiConstants {
   static const String docsUrl = '$baseUrl/docs';
   static const Duration timeout = Duration(seconds: 25);
 
+  /// POST /api/assistant/chat answers in a few seconds, at most about 60.
+  static const Duration assistantTimeout = Duration(seconds: 75);
+
   // auth
   static const String register = '/api/auth/register';
   static const String login = '/api/auth/login';
