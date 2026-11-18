@@ -23,6 +23,7 @@ import 'services/store_service.dart';
 import 'viewmodels/locale_view_model.dart';
 import 'viewmodels/session_view_model.dart';
 import 'views/session_gate_view.dart';
+import 'widgets/intro_overlay.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -107,7 +108,7 @@ class _MobileAppState extends State<MobileApp> {
             // Accept-Language follows the language on screen.
             final language = Localizations.localeOf(context).languageCode;
             _api.language = () => language;
-            return child!;
+            return IntroOverlay(child: child!);
           },
           home: const SessionGateView(),
         );
