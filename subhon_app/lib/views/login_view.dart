@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +18,9 @@ import 'register_view.dart';
 
 /// `POST /api/auth/login` (email + password).
 ///
-/// A jelly mascot sits on top. Its eyes follow a mouse / trackpad cursor
-/// without a click; on a phone they look where the finger touches and,
-/// a moment after it lifts, look around on their own again. They follow
+/// A jelly mascot sits on top. Its eyes look where the screen is pressed
+/// (finger or mouse click) and, a moment after it is released, look around
+/// on their own again. They follow
 /// the text while the e-mail is typed and close while the password is.
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -69,9 +68,8 @@ class _LoginViewState extends State<LoginView> {
     _lookAt.value = event.position;
   }
 
-  /// A finger lifted: keep looking there for a moment, then look around.
+  /// Released: keep looking there for a moment, then look around.
   void _touchEnded(PointerEvent event) {
-    if (event.kind == PointerDeviceKind.mouse) return; // the cursor stays
     _release?.cancel();
     _release = Timer(_releaseAfter, () {
       if (mounted && !_emailFocus.hasFocus) _lookAt.value = null;
@@ -179,10 +177,9 @@ class _LoginViewState extends State<LoginView> {
       behavior: HitTestBehavior.translucent,
       onPointerDown: _lookAtPointer,
       onPointerMove: _lookAtPointer,
-      onPointerHover: _lookAtPointer,
       onPointerUp: _touchEnded,
       onPointerCancel: _touchEnded,
-      child: MouseRegion(onExit: (_) => _lookAt.value = null, child: scaffold),
+      child: scaffold,
     );
   }
 }

@@ -28,17 +28,13 @@ void main() {
     expect(_lookAt(tester).value, isNull); // back to glancing around
   });
 
-  testWidgets('a mouse: the eyes follow the cursor without a click', (
-    tester,
-  ) async {
+  testWidgets('moving the mouse without a click does nothing', (tester) async {
     await pumpApp(tester, FakeBackend());
     final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
     addTearDown(mouse.removePointer);
     await mouse.addPointer(location: const Offset(10, 10));
     await mouse.moveTo(const Offset(300, 500));
     await tester.pump();
-    expect(_lookAt(tester).value, const Offset(300, 500));
-    await tester.pump(const Duration(seconds: 2));
-    expect(_lookAt(tester).value, const Offset(300, 500)); // stays on it
+    expect(_lookAt(tester).value, isNull);
   });
 }
