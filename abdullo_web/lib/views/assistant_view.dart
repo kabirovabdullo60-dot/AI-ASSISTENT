@@ -188,10 +188,10 @@ class _EmptyChat extends StatelessWidget {
                         child: Text(
                           tr.askAssistant,
                           textAlign: TextAlign.center,
-                          style: theme.textTheme.headlineSmall?.copyWith(
+                          style: theme.textTheme.headlineMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                             color: AppColors.ink,
-                            letterSpacing: -0.5,
+                            letterSpacing: -0.8,
                           ),
                         ),
                       ),

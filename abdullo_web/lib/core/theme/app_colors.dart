@@ -9,28 +9,28 @@ class AppColors {
   AppColors._();
 
   // Surfaces
-  static const background = Color(0xFFEEF1F4); // stone
+  static const background = Color(0xFFEDF2F6);
   static const card = Colors.white;
-  static const surfaceSoft = Color(0xFFF5F7F9);
-  static const border = Color(0xFFDCE2E8);
+  static const surfaceSoft = Color(0xFFF6F9FB);
+  static const border = Color(0xFFDCE4EC);
 
   // Text
-  static const ink = Color(0xFF0D1B2A);
-  static const muted = Color(0xFF5B6878); // 5.6:1 on white
+  static const ink = Color(0xFF142235);
+  static const muted = Color(0xFF64748B); // 4.8:1 on white
 
   // Accent (teal) — actions, selection, the brand
-  static const orange = Color(0xFF0B6E6E);
-  static const orangeSoft = Color(0xFFE2F0EF);
+  static const orange = Color(0xFF087F80);
+  static const orangeSoft = Color(0xFFE1F0EF);
   static const teal = orange;
   static const tealSoft = orangeSoft;
 
   // Dark surface — user chat bubble, tooltips, dark badges, chart bars
-  static const navy = Color(0xFF0D1B2A);
-  static const navyLight = Color(0xFF1E3044);
+  static const navy = Color(0xFF142235);
+  static const navyLight = Color(0xFF22344A);
 
   // AI only
-  static const gold = Color(0xFFD4A017);
-  static const goldSoft = Color(0xFFFBF3DC);
+  static const gold = Color(0xFFE9A23B); // secondary accent (fills, never small text)
+  static const goldSoft = Color(0xFFFCF3E3);
 
   // Meaning
   static const amber = Color(0xFFB25E09); // needs attention

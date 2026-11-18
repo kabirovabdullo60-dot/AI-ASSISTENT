@@ -44,8 +44,8 @@ class _PressableState extends State<Pressable> {
               borderRadius: BorderRadius.circular(widget.radius),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF0F1B3D).withValues(alpha: lifted ? 0.10 : 0),
-                  blurRadius: lifted ? 22 : 0,
+                  color: const Color(0xFF142235).withValues(alpha: lifted ? 0.08 : 0),
+                  blurRadius: lifted ? 24 : 0,
                   offset: Offset(0, lifted ? 8 : 0),
                 ),
               ],

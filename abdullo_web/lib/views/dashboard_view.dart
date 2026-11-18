@@ -317,8 +317,6 @@ class _CurrencyToggle extends StatelessWidget {
       showSelectedIcon: false,
       style: SegmentedButton.styleFrom(
         visualDensity: VisualDensity.compact,
-        selectedBackgroundColor: AppColors.navy,
-        selectedForegroundColor: Colors.white,
         textStyle: const TextStyle(fontFamily: 'Onest', fontSize: 12, fontWeight: FontWeight.w600),
       ),
       segments: [for (final c in Currency.values) ButtonSegment(value: c, label: Text(c.label))],

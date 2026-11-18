@@ -17,7 +17,7 @@ class AppTheme {
     );
     // Onest everywhere (bundled, full Tajik Cyrillic).
     final base = ThemeData(useMaterial3: true, colorScheme: scheme, fontFamily: 'Onest').textTheme;
-    const radius = BorderRadius.all(Radius.circular(10));
+    const radius = BorderRadius.all(Radius.circular(12));
     const buttonShape = RoundedRectangleBorder(borderRadius: radius);
     return ThemeData(
       useMaterial3: true,
@@ -55,6 +55,7 @@ class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           shape: buttonShape,
+          minimumSize: const Size(0, 44),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           textStyle: const TextStyle(fontFamily: 'Onest', fontWeight: FontWeight.w600, letterSpacing: 0.1),
           animationDuration: Motion.fast,
@@ -74,16 +75,24 @@ class AppTheme {
       dialogTheme: const DialogThemeData(
         backgroundColor: AppColors.card,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(18))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        titleTextStyle: TextStyle(
+          fontFamily: 'Onest',
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.3,
+          color: AppColors.ink,
+        ),
       ),
       popupMenuTheme: const PopupMenuThemeData(
         color: AppColors.card,
         surfaceTintColor: Colors.transparent,
         elevation: 8,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(14)),
           side: BorderSide(color: AppColors.border),
         ),
+        shadowColor: Color(0x29142235),
       ),
       tooltipTheme: const TooltipThemeData(
         waitDuration: Duration(milliseconds: 450),
@@ -110,23 +119,59 @@ class AppTheme {
           side: BorderSide(color: AppColors.border),
         ),
       ),
+      // Inputs: white field, hairline border, teal focus.
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceSoft,
+        fillColor: AppColors.card,
         isDense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        labelStyle: const TextStyle(color: AppColors.muted),
+        hintStyle: const TextStyle(color: AppColors.muted),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.border),
         ),
-        // Clear keyboard focus ring.
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.teal, width: 1.6),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.red, width: 1.6),
+        ),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          side: const WidgetStatePropertyAll(BorderSide(color: AppColors.border)),
+          shape: const WidgetStatePropertyAll(
+            RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+          ),
+          backgroundColor: WidgetStateProperty.resolveWith(
+            (s) => s.contains(WidgetState.selected) ? AppColors.tealSoft : AppColors.card,
+          ),
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (s) => s.contains(WidgetState.selected) ? AppColors.teal : AppColors.ink,
+          ),
+        ),
+      ),
+      chipTheme: const ChipThemeData(
+        backgroundColor: AppColors.card,
+        selectedColor: AppColors.tealSoft,
+        side: BorderSide(color: AppColors.border),
+        shape: StadiumBorder(),
+        labelStyle: TextStyle(fontFamily: 'Onest', color: AppColors.ink, fontSize: 13),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? Colors.white : null),
+        trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? AppColors.teal : null),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.card,
@@ -135,10 +180,21 @@ class AppTheme {
           (s) => IconThemeData(color: s.contains(WidgetState.selected) ? AppColors.orange : AppColors.muted),
         ),
       ),
-      dataTableTheme: const DataTableThemeData(
-        headingTextStyle: TextStyle(color: AppColors.muted, fontWeight: FontWeight.w600, fontSize: 12),
-        dividerThickness: 0.6,
+      dataTableTheme: DataTableThemeData(
+        headingTextStyle: const TextStyle(
+          fontFamily: 'Onest',
+          color: AppColors.muted,
+          fontWeight: FontWeight.w600,
+          fontSize: 12.5,
+        ),
+        dataTextStyle: const TextStyle(fontFamily: 'Onest', color: AppColors.ink, fontSize: 13.5),
+        dividerThickness: 1,
+        headingRowColor: const WidgetStatePropertyAll(AppColors.surfaceSoft),
+        dataRowColor: WidgetStateProperty.resolveWith(
+          (s) => s.contains(WidgetState.hovered) ? AppColors.tealSoft.withValues(alpha: 0.45) : null,
+        ),
       ),
+      dividerTheme: const DividerThemeData(color: AppColors.border, thickness: 1, space: 1),
     );
   }
 }

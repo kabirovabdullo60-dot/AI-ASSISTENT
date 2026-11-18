@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'core/l10n/l10n.dart';
 import 'core/network/api_client.dart';
 import 'core/network/token_storage.dart';
-import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'services/activity_service.dart';
+import 'widgets/brand_mark.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
 import 'services/employee_service.dart';
@@ -155,16 +155,7 @@ class _Splash extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(color: AppColors.orange, borderRadius: BorderRadius.circular(14)),
-              child: const Icon(Icons.auto_awesome, color: Colors.white),
-            ),
-            const SizedBox(height: 16),
-            const CircularProgressIndicator(),
-          ],
+          children: [const BrandMark(size: 48), const SizedBox(height: 16), const CircularProgressIndicator()],
         ),
       ),
     );
