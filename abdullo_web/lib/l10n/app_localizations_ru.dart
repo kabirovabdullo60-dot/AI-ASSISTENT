@@ -361,6 +361,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noActivity => 'Событий нет';
 
   @override
+  String get activityStores => 'Магазины';
+
+  @override
+  String get activityProfile => 'Профиль';
+
+  @override
+  String get actCreated => 'создано';
+
+  @override
+  String get actUpdated => 'изменено';
+
+  @override
+  String get actDeleted => 'удалено';
+
+  @override
+  String get actStatusChanged => 'статус изменён';
+
+  @override
+  String get actPaid => 'выплачено';
+
+  @override
+  String get actCancelled => 'отменено';
+
+  @override
+  String get assistantBusy =>
+      'Слишком много вопросов. Подождите минуту и спросите снова.';
+
+  @override
   String connectedTo(String endpoints) {
     return 'Подключено к $endpoints';
   }

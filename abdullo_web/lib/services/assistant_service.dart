@@ -1,18 +1,42 @@
+import '../core/constants/api_constants.dart';
+import '../core/network/api_client.dart';
 import '../core/utils/format.dart';
+import '../core/utils/json.dart';
 import '../models/chat_message_model.dart';
 import '../models/dashboard_model.dart';
 import '../models/sales_report_model.dart';
 import 'reports_service.dart';
 
-/// The backend has no AI endpoint yet, so the assistant answers with rules built from the
-/// real numbers of /api/reports/dashboard and /api/reports/store-comparison.
-/// When Mehroj adds an AI endpoint, only [sendMessage] has to change.
+/// AI business assistant — POST /api/assistant/chat (Mehroj's backend asks the language model
+/// with this business's own numbers). If the AI is down (`503 ASSISTANT_UNAVAILABLE`), the web
+/// answers itself with [reply], built from /api/reports/dashboard and /api/reports/store-comparison.
 class AssistantService {
-  AssistantService(this._reports);
+  AssistantService(this._api, this._reports);
 
+  final ApiClient _api;
   final ReportsService _reports;
 
+  /// The backend reads only the last 20 messages; each text is 1–2000 characters.
+  static const maxMessages = 20;
+  static const maxChars = 2000;
+
+  /// Throws [ApiException] — e.g. `429 RATE_LIMITED` (10 questions a minute, 200 a day).
   Future<ChatMessageModel> sendMessage(List<ChatMessageModel> history, {String language = 'en'}) async {
+    final messages = [
+      for (final m in history.length > maxMessages ? history.sublist(history.length - maxMessages) : history)
+        if (m.text.trim().isNotEmpty)
+          {'role': m.role.name, 'text': m.text.length > maxChars ? m.text.substring(0, maxChars) : m.text},
+    ];
+    try {
+      final json = asJsonMap(await _api.post(ApiConstants.assistantChat, {'language': language, 'messages': messages}));
+      return ChatMessageModel(role: ChatRole.assistant, text: asString(json['text']), time: asDate(json['time']));
+    } on ApiException catch (e) {
+      if (e.statusCode != 503 && e.code != 'ASSISTANT_UNAVAILABLE') rethrow;
+      return _localReply(history, language);
+    }
+  }
+
+  Future<ChatMessageModel> _localReply(List<ChatMessageModel> history, String language) async {
     final last = history.lastWhere((m) => m.isUser, orElse: () => history.last);
     final now = DateTime.now();
     final (dashboard, stores) = await (

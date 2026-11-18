@@ -7,6 +7,7 @@ import 'core/network/api_client.dart';
 import 'core/network/token_storage.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
+import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
 import 'services/employee_service.dart';
@@ -111,13 +112,13 @@ class _SignedIn extends StatelessWidget {
         Provider.value(value: sales),
         Provider.value(value: employees),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
-        ChangeNotifierProvider(create: (_) => DashboardViewModel(reports, sales, payroll)..load()),
+        ChangeNotifierProvider(create: (_) => DashboardViewModel(reports, sales, payroll, ActivityService(api))..load()),
         ChangeNotifierProvider(create: (_) => StoresViewModel(StoreService(api), sales, reports)..load()),
         ChangeNotifierProvider(create: (_) => SalesViewModel(sales)..load()),
         ChangeNotifierProvider(create: (_) => EmployeesViewModel(employees, reports)..load()),
         ChangeNotifierProvider(create: (_) => PayrollViewModel(payroll)..load()),
         ChangeNotifierProvider(create: (_) => ReportsViewModel(reports)..load()),
-        ChangeNotifierProvider(create: (_) => AssistantViewModel(AssistantService(reports))),
+        ChangeNotifierProvider(create: (_) => AssistantViewModel(AssistantService(api, reports))),
       ],
       child: child,
     );

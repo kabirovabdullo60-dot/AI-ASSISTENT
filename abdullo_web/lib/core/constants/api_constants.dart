@@ -50,6 +50,10 @@ class ApiConstants {
   static const String reportEmployees = '/api/reports/employees';
   static const String reportPayroll = '/api/reports/payroll';
 
+  // activity log + AI assistant
+  static const String activity = '/api/activity';
+  static const String assistantChat = '/api/assistant/chat';
+
   // health (no auth)
   static const String healthLive = '/health/live';
   static const String healthReady = '/health/ready';
@@ -74,8 +78,10 @@ class ApiConstants {
     ('GET', '/api/payroll/employee/{employeeId}', 'Salary history'),
     ('GET/DELETE', '/api/payroll/{id}', 'One payment'),
     ('GET', '/api/reports/*', 'Dashboard, sales, stores, employees, payroll'),
+    ('GET', activity, 'Activity log'),
+    ('POST', assistantChat, 'AI assistant'),
     ('GET', healthReady, 'Server health'),
   ];
 
-  static const List<String> mainEndpoints = [stores, sales, payroll];
+  static const List<String> mainEndpoints = [activity, sales, payroll];
 }

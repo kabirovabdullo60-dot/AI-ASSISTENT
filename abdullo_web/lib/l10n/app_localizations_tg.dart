@@ -361,6 +361,34 @@ class AppLocalizationsTg extends AppLocalizations {
   String get noActivity => 'Фаъолият ёфт нашуд';
 
   @override
+  String get activityStores => 'Мағозаҳо';
+
+  @override
+  String get activityProfile => 'Профил';
+
+  @override
+  String get actCreated => 'сохта шуд';
+
+  @override
+  String get actUpdated => 'тағйир ёфт';
+
+  @override
+  String get actDeleted => 'нест карда шуд';
+
+  @override
+  String get actStatusChanged => 'ҳолат иваз шуд';
+
+  @override
+  String get actPaid => 'пардохт шуд';
+
+  @override
+  String get actCancelled => 'бекор карда шуд';
+
+  @override
+  String get assistantBusy =>
+      'Саволҳо хеле зиёданд. Як дақиқа сабр карда, боз пурсед.';
+
+  @override
   String connectedTo(String endpoints) {
     return 'Пайваст ба $endpoints';
   }

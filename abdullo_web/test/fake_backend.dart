@@ -18,6 +18,18 @@ class FakeBackend {
   final payments = <Map<String, dynamic>>[];
   final requests = <String>[];
 
+  /// Rows of GET /api/activity (`ActivityOut`), newest first. Empty → the dashboard falls back to sales + payments.
+  final activity = <Map<String, dynamic>>[];
+
+  /// Answer of POST /api/assistant/chat. Null → `503 ASSISTANT_UNAVAILABLE` (AI not configured).
+  String? assistantReply;
+
+  /// When true, POST /api/assistant/chat answers `429 RATE_LIMITED`.
+  bool assistantRateLimited = false;
+
+  /// Last body sent to POST /api/assistant/chat.
+  Map<String, dynamic>? lastChatRequest;
+
   String? accessToken;
   String? refreshToken;
   int _n = 100;
@@ -740,6 +752,25 @@ class FakeBackend {
         'totalRemaining': money(sum('remainingAmount')),
         'months': months,
       });
+    }
+
+    if (path == '/api/activity' && m == 'GET') {
+      final storeId = q['storeId'];
+      final rows = activity.where((a) => storeId == null || a['storeId'] == storeId).toList();
+      final limit = int.tryParse(q['limit'] ?? '') ?? 20;
+      return _json({'items': rows.take(limit).toList(), 'total': rows.length, 'page': 1, 'limit': limit, 'pages': 1});
+    }
+
+    if (path == '/api/assistant/chat' && m == 'POST') {
+      final b = body();
+      lastChatRequest = b;
+      final messages = b['messages'];
+      if (messages is! List || messages.isEmpty || !['en', 'ru', 'tg'].contains(b['language'])) {
+        return _error(422, 'VALIDATION_ERROR');
+      }
+      if (assistantRateLimited) return _error(429, 'RATE_LIMITED');
+      if (assistantReply == null) return _error(503, 'ASSISTANT_UNAVAILABLE');
+      return _json({'role': 'assistant', 'text': assistantReply, 'time': DateTime.now().toUtc().toIso8601String()});
     }
 
     return _error(404, 'NOT_FOUND');

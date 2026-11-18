@@ -215,14 +215,24 @@ class _NotificationsButton extends StatelessWidget {
           ),
         for (final a in recent)
           PopupMenuItem(
-            value: a.type == ActivityType.sale ? AppSection.sales : AppSection.salaries,
+            value: switch (a.type) {
+              ActivityType.sale => AppSection.sales,
+              ActivityType.payroll => AppSection.salaries,
+              ActivityType.store => AppSection.stores,
+              ActivityType.employee => AppSection.employees,
+              ActivityType.profile => AppSection.profile,
+            },
             child: SizedBox(
               width: 280,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${tr.activityType(a.type)}: ${a.title} · ${formatAmount(a.amount.abs())} TJS',
+                    [
+                      '${tr.activityType(a.type)}: ${a.title}',
+                      if (a.action != null) tr.activityAction(a.action!),
+                      if (a.amount != null) '${formatAmount(a.amount!.abs())} TJS',
+                    ].join(' · '),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

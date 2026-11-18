@@ -258,6 +258,15 @@
   "activityAudits": "Audits",
   "activityStaff": "Staff",
   "noActivity": "No activity found",
+  "activityStores": "Stores",
+  "activityProfile": "Profile",
+  "actCreated": "created",
+  "actUpdated": "updated",
+  "actDeleted": "deleted",
+  "actStatusChanged": "status changed",
+  "actPaid": "paid",
+  "actCancelled": "cancelled",
+  "assistantBusy": "Too many questions. Wait a minute and ask again.",
   "connectedTo": "Connected to {endpoints}",
   "@connectedTo": {
     "placeholders": {

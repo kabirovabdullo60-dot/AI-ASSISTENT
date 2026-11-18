@@ -4,6 +4,7 @@ import '../models/activity_model.dart';
 import '../models/chart_point_model.dart';
 import '../models/dashboard_model.dart';
 import '../models/sales_report_model.dart';
+import '../services/activity_service.dart';
 import '../services/payroll_service.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
@@ -12,13 +13,14 @@ import 'base_view_model.dart';
 enum ChartRange { weekly, monthly }
 
 class DashboardViewModel extends BaseViewModel {
-  DashboardViewModel(this._reports, this._sales, this._payroll);
+  DashboardViewModel(this._reports, this._sales, this._payroll, this._activityLog);
 
   static const chartDays = 24;
 
   final ReportsService _reports;
   final SalesService _sales;
   final PayrollService _payroll;
+  final ActivityService _activityLog;
 
   DashboardModel? _dashboard;
   SalesReportModel? _today;
@@ -76,14 +78,13 @@ class DashboardViewModel extends BaseViewModel {
     });
     final now = DateTime.now();
     final today = dateOnly(now);
-    final (dashboard, daily, week, month, comparison, recentSales, recentPayments) = await (
+    final (dashboard, daily, week, month, comparison, log) = await (
       _reports.dashboard(),
       _sales.daily(),
       _sales.weekly(),
       _reports.monthlySales(month: now.month, year: now.year),
       _reports.storeComparison(startDate: DateTime(now.year, now.month), endDate: today),
-      _sales.list(limit: 6, sort: '-createdAt'),
-      _payroll.payments(limit: 6),
+      _loadActivityLog(),
     ).wait;
     _dashboard = dashboard;
     _today = daily;
@@ -91,7 +92,25 @@ class DashboardViewModel extends BaseViewModel {
     _month = month;
     _comparison = comparison;
     _daily = await _loadChart(today, month);
-    _activity = [
+    _activity = log.isNotEmpty ? log : await _recentMoney();
+  });
+
+  /// GET /api/activity. Empty (or failing) → the feed is built from sales + payments instead.
+  Future<List<ActivityModel>> _loadActivityLog() async {
+    try {
+      return (await _activityLog.list(limit: 20)).items;
+    } on ApiException {
+      return const [];
+    }
+  }
+
+  /// Fallback feed: latest sales (+) and salary payments (-), newest first.
+  Future<List<ActivityModel>> _recentMoney() async {
+    final (recentSales, recentPayments) = await (
+      _sales.list(limit: 6, sort: '-createdAt'),
+      _payroll.payments(limit: 6),
+    ).wait;
+    return [
       for (final s in recentSales.items)
         ActivityModel(
           id: 's${s.id}',
@@ -111,7 +130,7 @@ class DashboardViewModel extends BaseViewModel {
           detail: p.note ?? '',
         ),
     ]..sort((a, b) => b.time.compareTo(a.time));
-  });
+  }
 
   /// Last [chartDays] days; falls back to this month's report if the backend limits the range.
   Future<List<ChartPointModel>> _loadChart(DateTime today, SalesReportModel month) async {

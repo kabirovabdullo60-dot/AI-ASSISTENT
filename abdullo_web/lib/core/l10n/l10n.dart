@@ -67,6 +67,18 @@ extension EnumLabels on AppLocalizations {
   String activityType(ActivityType t) => switch (t) {
     ActivityType.sale => activitySales,
     ActivityType.payroll => activityPayroll,
+    ActivityType.store => activityStores,
+    ActivityType.employee => activityStaff,
+    ActivityType.profile => activityProfile,
+  };
+
+  String activityAction(ActivityAction a) => switch (a) {
+    ActivityAction.created => actCreated,
+    ActivityAction.updated => actUpdated,
+    ActivityAction.deleted => actDeleted,
+    ActivityAction.statusChanged => actStatusChanged,
+    ActivityAction.paid => actPaid,
+    ActivityAction.cancelled => actCancelled,
   };
 
   String salesRange(SalesRange r) => switch (r) {

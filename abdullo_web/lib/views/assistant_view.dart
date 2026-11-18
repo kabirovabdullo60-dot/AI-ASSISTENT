@@ -74,7 +74,7 @@ class _AssistantViewState extends State<AssistantView> {
               if (vm.error != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(tr.assistantError, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                  child: Text(vm.rateLimited ? tr.assistantBusy : tr.assistantError, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 ),
               _InputBar(
                 controller: _input,

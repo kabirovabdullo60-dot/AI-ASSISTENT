@@ -362,6 +362,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noActivity => 'No activity found';
 
   @override
+  String get activityStores => 'Stores';
+
+  @override
+  String get activityProfile => 'Profile';
+
+  @override
+  String get actCreated => 'created';
+
+  @override
+  String get actUpdated => 'updated';
+
+  @override
+  String get actDeleted => 'deleted';
+
+  @override
+  String get actStatusChanged => 'status changed';
+
+  @override
+  String get actPaid => 'paid';
+
+  @override
+  String get actCancelled => 'cancelled';
+
+  @override
+  String get assistantBusy =>
+      'Too many questions. Wait a minute and ask again.';
+
+  @override
   String connectedTo(String endpoints) {
     return 'Connected to $endpoints';
   }

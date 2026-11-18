@@ -560,7 +560,15 @@ class _ActivityRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final a = activity;
-    final sale = a.type == ActivityType.sale;
+    final (icon, color, background) = switch (a.type) {
+      ActivityType.sale => (Icons.receipt_long_outlined, AppColors.green, AppColors.greenSoft),
+      ActivityType.payroll => (Icons.payments_outlined, AppColors.orange, AppColors.orangeSoft),
+      ActivityType.store => (Icons.storefront_outlined, AppColors.blue, AppColors.blueSoft),
+      ActivityType.employee => (Icons.badge_outlined, AppColors.purple, AppColors.purpleSoft),
+      ActivityType.profile => (Icons.person_outline, AppColors.muted, AppColors.surfaceSoft),
+    };
+    final amount = a.amount;
+    final detail = [if (a.action != null) tr.activityAction(a.action!), if (a.detail.isNotEmpty) a.detail].join(' · ');
     final time = Text(formatTimeAgo(a.time), style: const TextStyle(fontSize: 11, color: AppColors.muted));
 
     return Padding(
@@ -568,11 +576,7 @@ class _ActivityRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconBox(
-            sale ? Icons.receipt_long_outlined : Icons.payments_outlined,
-            color: sale ? AppColors.green : AppColors.orange,
-            background: sale ? AppColors.greenSoft : AppColors.orangeSoft,
-          ),
+          IconBox(icon, color: color, background: background),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -587,25 +591,26 @@ class _ActivityRow extends StatelessWidget {
                         text: a.title,
                         style: const TextStyle(fontWeight: FontWeight.w700),
                       ),
-                      TextSpan(
-                        text: ': ${a.amount >= 0 ? '+' : '-'}${currency.format(a.amount.abs())}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: a.amount >= 0 ? AppColors.green : AppColors.red,
+                      if (amount != null)
+                        TextSpan(
+                          text: ': ${amount >= 0 ? '+' : '-'}${currency.format(amount.abs())}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: amount >= 0 ? AppColors.green : AppColors.red,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
-                if (a.detail.isNotEmpty || compact) ...[
+                if (detail.isNotEmpty || compact) ...[
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
                     runSpacing: 4,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      if (a.detail.isNotEmpty)
-                        Text(a.detail, style: const TextStyle(fontSize: 11.5, color: AppColors.muted)),
+                      if (detail.isNotEmpty)
+                        Text(detail, style: const TextStyle(fontSize: 11.5, color: AppColors.muted)),
                       if (compact) time,
                     ],
                   ),

@@ -718,6 +718,60 @@ abstract class AppLocalizations {
   /// **'No activity found'**
   String get noActivity;
 
+  /// No description provided for @activityStores.
+  ///
+  /// In en, this message translates to:
+  /// **'Stores'**
+  String get activityStores;
+
+  /// No description provided for @activityProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get activityProfile;
+
+  /// No description provided for @actCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created'**
+  String get actCreated;
+
+  /// No description provided for @actUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'updated'**
+  String get actUpdated;
+
+  /// No description provided for @actDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted'**
+  String get actDeleted;
+
+  /// No description provided for @actStatusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'status changed'**
+  String get actStatusChanged;
+
+  /// No description provided for @actPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'paid'**
+  String get actPaid;
+
+  /// No description provided for @actCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'cancelled'**
+  String get actCancelled;
+
+  /// No description provided for @assistantBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many questions. Wait a minute and ask again.'**
+  String get assistantBusy;
+
   /// No description provided for @connectedTo.
   ///
   /// In en, this message translates to:
