@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../core/theme/app_colors.dart';
 import 'drip_painter.dart';
 import 'intro_eyes.dart';
+import 'intro_title.dart';
 
 /// Length of the launch intro, in seconds.
 const double _total = 2.6;
@@ -90,10 +91,6 @@ class _IntroOverlayState extends State<IntroOverlay>
   static double _ramp(double s, double from, double to) =>
       ((s - from) / (to - from)).clamp(0.0, 1.0);
 
-  /// The title fades in after the eyes open and out as they close.
-  static double _titleOpacity(double s) =>
-      _ramp(s, 0.35, 0.7) * (1 - _ramp(s, 1.75, 1.92));
-
   static double _openness(double s) {
     final open = Curves.easeOutBack.transform(_ramp(s, 0.1, 0.35));
     // One quick blink, then the eyes close just before the drain.
@@ -128,23 +125,10 @@ class _IntroOverlayState extends State<IntroOverlay>
                           IntroEyes(look: _look(s), openness: _openness(s)),
                           if (widget.title != null)
                             Transform.translate(
-                              offset: Offset(
-                                0,
-                                36 + 8 * (1 - _titleOpacity(s)),
-                              ),
-                              child: Opacity(
-                                opacity: _titleOpacity(s),
-                                child: Text(
-                                  widget.title!,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 0.2,
-                                        decoration: TextDecoration.none,
-                                      ),
-                                ),
+                              offset: const Offset(0, 48),
+                              child: IntroTitle(
+                                text: widget.title!,
+                                seconds: s,
                               ),
                             ),
                         ],

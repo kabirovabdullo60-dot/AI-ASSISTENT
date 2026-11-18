@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/widgets/drip_painter.dart';
 import 'package:subhon_app/widgets/intro_eyes.dart';
 import 'package:subhon_app/widgets/intro_overlay.dart';
+import 'package:subhon_app/widgets/intro_title.dart';
 
 Widget _host({bool reduceMotion = false}) => MediaQuery(
   data: MediaQueryData(disableAnimations: reduceMotion),
@@ -24,7 +25,11 @@ void main() {
     final eyes = tester.widget<IntroEyes>(find.byType(IntroEyes));
     expect(eyes.look, lessThan(-0.5)); // looking left
     expect(eyes.openness, greaterThan(0.9));
-    expect(find.text('ИИ бухгалтер'), findsOneWidget);
+    expect(
+      tester.widget<IntroTitle>(find.byType(IntroTitle)).text,
+      'ИИ бухгалтер',
+    );
+    expect(find.text('б'), findsOneWidget); // letter by letter
 
     await tester.pump(const Duration(milliseconds: 600)); // 1.4 s
     expect(
@@ -34,7 +39,7 @@ void main() {
 
     await tester.pumpAndSettle();
     expect(find.byType(IntroEyes), findsNothing);
-    expect(find.text('ИИ бухгалтер'), findsNothing);
+    expect(find.byType(IntroTitle), findsNothing);
     expect(
       find.byWidgetPredicate(
         (w) => w is CustomPaint && w.painter is DripPainter,
