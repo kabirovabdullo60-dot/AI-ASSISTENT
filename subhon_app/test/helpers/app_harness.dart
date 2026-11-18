@@ -21,6 +21,14 @@ void stubHome(FakeBackend backend) {
     ..json('GET', '/api/payroll/monthly', ApiJson.monthlyPayroll());
 }
 
+/// Turns on "reduce motion" for this test: the launch intro is skipped and
+/// the login mascot stands still, so `pumpAndSettle` can settle.
+void reduceMotion(WidgetTester tester) {
+  tester.platformDispatcher.accessibilityFeaturesTestValue =
+      const FakeAccessibilityFeatures(disableAnimations: true);
+  addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+}
+
 /// The whole app against [backend], in [locale].
 Future<void> pumpApp(
   WidgetTester tester,
@@ -28,6 +36,7 @@ Future<void> pumpApp(
   MemoryTokenStorage? tokens,
   Locale locale = const Locale('ru'),
 }) async {
+  reduceMotion(tester);
   await tester.pumpWidget(
     MobileApp(
       httpClient: backend.client,

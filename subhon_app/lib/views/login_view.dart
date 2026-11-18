@@ -11,9 +11,14 @@ import '../widgets/app_inline_message.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/auth_footer_link.dart';
 import '../widgets/auth_scaffold.dart';
+import '../widgets/jelly_blob.dart';
 import 'register_view.dart';
 
 /// `POST /api/auth/login` (email + password).
+///
+/// A jelly mascot sits on top: its eyes follow the finger (or mouse)
+/// anywhere on the screen, follow the text while the e-mail is typed and
+/// close while the password is typed.
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -25,12 +30,51 @@ class _LoginViewState extends State<LoginView> {
   final _form = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _emailKey = GlobalKey();
+
+  /// Where the mascot looks, in global coordinates.
+  final _lookAt = ValueNotifier<Offset?>(null);
+
+  @override
+  void initState() {
+    super.initState();
+    _email.addListener(_lookAtEmailText);
+    _emailFocus.addListener(_lookAtEmailText);
+    _passwordFocus.addListener(() => setState(() {}));
+  }
 
   @override
   void dispose() {
     _email.dispose();
     _password.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _lookAt.dispose();
     super.dispose();
+  }
+
+  void _lookAtPointer(PointerEvent event) => _lookAt.value = event.position;
+
+  /// While the e-mail is typed, look at the end of the text.
+  void _lookAtEmailText() {
+    if (!_emailFocus.hasFocus) return;
+    final box = _emailKey.currentContext?.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+    final text = TextPainter(
+      text: TextSpan(
+        text: _email.text,
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+    const padding = AppSpacing.lg;
+    final x = (padding + text.width).clamp(padding, box.size.width - padding);
+    // The field is the lower part of the box (the label is above it).
+    _lookAt.value = box.localToGlobal(Offset(x, box.size.height - 22));
+    text.dispose();
   }
 
   Future<void> _signIn() async {
@@ -44,9 +88,9 @@ class _LoginViewState extends State<LoginView> {
     final l10n = context.l10n;
     final session = context.watch<SessionViewModel>();
     final busy = session.isSubmitting;
-    return AuthScaffold(
+    final scaffold = AuthScaffold(
       title: l10n.authLoginTitle,
-      subtitle: l10n.authLoginSubtitle,
+      hero: JellyBlob(lookAt: _lookAt, eyesClosed: _passwordFocus.hasFocus),
       footer: AuthFooterLink(
         question: l10n.authNoAccount,
         action: l10n.authCreateAccount,
@@ -65,7 +109,10 @@ class _LoginViewState extends State<LoginView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 AppTextField(
+                  key: _emailKey,
                   controller: _email,
+                  focusNode: _emailFocus,
+                  compact: true,
                   label: l10n.fieldEmail,
                   hint: l10n.fieldEmailHint,
                   keyboardType: TextInputType.emailAddress,
@@ -77,6 +124,8 @@ class _LoginViewState extends State<LoginView> {
                 const SizedBox(height: AppSpacing.lg),
                 AppTextField(
                   controller: _password,
+                  focusNode: _passwordFocus,
+                  compact: true,
                   label: l10n.authPasswordLabel,
                   hint: l10n.authPasswordHint,
                   obscureText: true,
@@ -104,6 +153,13 @@ class _LoginViewState extends State<LoginView> {
           onPressed: _signIn,
         ),
       ],
+    );
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: _lookAtPointer,
+      onPointerMove: _lookAtPointer,
+      onPointerHover: _lookAtPointer,
+      child: scaffold,
     );
   }
 }

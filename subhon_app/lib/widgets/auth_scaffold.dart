@@ -18,6 +18,7 @@ class AuthScaffold extends StatelessWidget {
     this.subtitle,
     this.footer,
     this.showLogo = true,
+    this.hero,
     super.key,
   });
 
@@ -26,6 +27,10 @@ class AuthScaffold extends StatelessWidget {
   final List<Widget> children;
   final Widget? footer;
   final bool showLogo;
+
+  /// Shown centred instead of the logo (the login mascot); the title is
+  /// centred under it.
+  final Widget? hero;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +58,10 @@ class AuthScaffold extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (showLogo) ...[
+                    if (hero != null) ...[
+                      Center(child: hero),
+                      const SizedBox(height: AppSpacing.md),
+                    ] else if (showLogo) ...[
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: OfarLogo(size: 44),
@@ -62,7 +70,13 @@ class AuthScaffold extends StatelessWidget {
                     ],
                     Semantics(
                       header: true,
-                      child: Text(title, style: theme.textTheme.headlineMedium),
+                      child: Text(
+                        title,
+                        style: theme.textTheme.headlineMedium,
+                        textAlign: hero != null
+                            ? TextAlign.center
+                            : TextAlign.start,
+                      ),
                     ),
                     if (subtitle != null) ...[
                       const SizedBox(height: AppSpacing.sm),
