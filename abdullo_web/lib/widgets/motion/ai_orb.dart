@@ -57,11 +57,11 @@ class _AiOrbState extends State<AiOrb> with SingleTickerProviderStateMixin {
             shape: BoxShape.circle,
             gradient: SweepGradient(
               transform: GradientRotation(t * 2 * math.pi),
-              colors: const [AppColors.orange, AppColors.purple, AppColors.blue, AppColors.orange],
+              colors: const [AppColors.gold, AppColors.teal, AppColors.navyLight, AppColors.gold],
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.orange.withValues(alpha: 0.18 + 0.22 * breath),
+                color: AppColors.gold.withValues(alpha: 0.20 + 0.25 * breath),
                 blurRadius: s * (0.25 + 0.35 * breath),
                 spreadRadius: s * 0.02 * breath,
               ),

@@ -532,7 +532,7 @@ class _ShareCard extends StatelessWidget {
         decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(6)),
         child: Text(
           '${tr.endpoint}:\n${ApiConstants.reportStoreComparison}',
-          style: const TextStyle(fontSize: 10.5, fontFamily: 'monospace', color: AppColors.navy),
+          style: const TextStyle(fontSize: 10.5, color: AppColors.navy),
         ),
       ),
       child: Column(

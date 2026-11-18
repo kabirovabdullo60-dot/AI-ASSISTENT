@@ -360,9 +360,14 @@ class _EntriesColumn extends StatelessWidget {
                       TextSpan(
                         style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                         children: [
-                          const TextSpan(
-                            text: '● ',
-                            style: TextStyle(color: AppColors.orange),
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Container(
+                              width: 7,
+                              height: 7,
+                              margin: const EdgeInsets.only(right: 6),
+                              decoration: BoxDecoration(color: AppColors.orange, shape: BoxShape.circle),
+                            ),
                           ),
                           TextSpan(text: minutes < 1 ? tr.updatedJustNow : tr.updatedMinutesAgo(minutes)),
                         ],

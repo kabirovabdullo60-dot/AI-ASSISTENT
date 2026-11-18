@@ -8,24 +8,39 @@ class AppTheme {
 
   static ThemeData get light {
     final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.orange,
+      seedColor: AppColors.teal,
       primary: AppColors.orange,
       onPrimary: Colors.white,
       surface: AppColors.card,
       onSurface: AppColors.ink,
       error: AppColors.red,
     );
-    final base = ThemeData(useMaterial3: true, colorScheme: scheme).textTheme;
+    // Onest everywhere (bundled, full Tajik Cyrillic).
+    final base = ThemeData(useMaterial3: true, colorScheme: scheme, fontFamily: 'Onest').textTheme;
     const radius = BorderRadius.all(Radius.circular(10));
     const buttonShape = RoundedRectangleBorder(borderRadius: radius);
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
+      fontFamily: 'Onest',
+      // Browser surfaces carry the palette too: selection, caret, scrollbars.
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: AppColors.teal,
+        selectionColor: AppColors.teal.withValues(alpha: 0.22),
+        selectionHandleColor: AppColors.teal,
+      ),
+      scrollbarTheme: ScrollbarThemeData(
+        thickness: const WidgetStatePropertyAll(6),
+        radius: const Radius.circular(6),
+        thumbColor: WidgetStatePropertyAll(AppColors.muted.withValues(alpha: 0.35)),
+      ),
+      focusColor: AppColors.teal.withValues(alpha: 0.14),
+      hoverColor: AppColors.ink.withValues(alpha: 0.04),
       // Tighter, heavier headings; calm body text.
       textTheme: base.copyWith(
         headlineMedium: base.headlineMedium?.copyWith(
           fontWeight: FontWeight.w700,
-          letterSpacing: -0.8,
+          letterSpacing: -0.7,
           color: AppColors.ink,
         ),
         headlineSmall: base.headlineSmall?.copyWith(
@@ -41,7 +56,7 @@ class AppTheme {
         style: FilledButton.styleFrom(
           shape: buttonShape,
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          textStyle: const TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.1),
+          textStyle: const TextStyle(fontFamily: 'Onest', fontWeight: FontWeight.w600, letterSpacing: 0.1),
           animationDuration: Motion.fast,
         ),
       ),
@@ -73,11 +88,11 @@ class AppTheme {
       tooltipTheme: const TooltipThemeData(
         waitDuration: Duration(milliseconds: 450),
         decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.all(Radius.circular(8))),
-        textStyle: TextStyle(color: Colors.white, fontSize: 12),
+        textStyle: TextStyle(fontFamily: 'Onest', color: Colors.white, fontSize: 12),
       ),
       // Fixed (not floating): a floating bar would cover buttons at the bottom of phone screens.
       snackBarTheme: const SnackBarThemeData(backgroundColor: AppColors.navy),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppColors.orange),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppColors.teal),
       scaffoldBackgroundColor: AppColors.background,
       dividerColor: AppColors.border,
       appBarTheme: const AppBarTheme(
@@ -110,12 +125,12 @@ class AppTheme {
         // Clear keyboard focus ring.
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.orange, width: 1.6),
+          borderSide: const BorderSide(color: AppColors.teal, width: 1.6),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.card,
-        indicatorColor: AppColors.orangeSoft,
+        indicatorColor: AppColors.tealSoft,
         iconTheme: WidgetStateProperty.resolveWith(
           (s) => IconThemeData(color: s.contains(WidgetState.selected) ? AppColors.orange : AppColors.muted),
         ),

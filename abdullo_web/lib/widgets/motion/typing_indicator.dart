@@ -93,7 +93,7 @@ class _TypingIndicatorState extends State<TypingIndicator> with SingleTickerProv
       child: Container(
         width: 7,
         height: 7,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: Color.lerp(AppColors.barGray, AppColors.orange, v)),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: Color.lerp(AppColors.barGray, AppColors.gold, v)),
       ),
     ),
   );

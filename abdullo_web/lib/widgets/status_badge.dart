@@ -5,7 +5,7 @@ import '../core/theme/app_colors.dart';
 enum BadgeTone {
   positive(AppColors.green, AppColors.greenSoft),
   negative(AppColors.red, AppColors.redSoft),
-  warning(AppColors.orange, AppColors.orangeSoft),
+  warning(AppColors.amber, AppColors.amberSoft),
   info(AppColors.blue, AppColors.blueSoft),
   neutral(AppColors.muted, AppColors.surfaceSoft),
   dark(Colors.white, AppColors.navy);
@@ -28,7 +28,7 @@ class StatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-      decoration: BoxDecoration(color: tone.background, borderRadius: BorderRadius.circular(6)),
+      decoration: BoxDecoration(color: tone.background, borderRadius: BorderRadius.circular(20)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -46,7 +46,7 @@ class StatusBadge extends StatelessWidget {
               text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: tone.foreground, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.2),
+              style: TextStyle(color: tone.foreground, fontSize: 11, fontWeight: FontWeight.w600),
             ),
           ),
         ],

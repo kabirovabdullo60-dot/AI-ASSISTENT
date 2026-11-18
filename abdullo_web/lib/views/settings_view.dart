@@ -105,9 +105,7 @@ class SettingsView extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(path, style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
-                              ),
+                              Expanded(child: Text(path, style: const TextStyle(fontSize: 12))),
                               const SizedBox(width: 8),
                               Flexible(
                                 child: Text(

@@ -244,7 +244,7 @@ class _SuggestionCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
-          hoverColor: AppColors.orangeSoft.withValues(alpha: 0.5),
+          hoverColor: AppColors.goldSoft.withValues(alpha: 0.6),
           child: Padding(
             padding: const EdgeInsets.all(14),
             child: Row(
@@ -252,8 +252,8 @@ class _SuggestionCard extends StatelessWidget {
                 Container(
                   width: 34,
                   height: 34,
-                  decoration: BoxDecoration(color: AppColors.orangeSoft, borderRadius: BorderRadius.circular(10)),
-                  child: Icon(icon, size: 18, color: AppColors.orange),
+                  decoration: BoxDecoration(color: AppColors.goldSoft, borderRadius: BorderRadius.circular(10)),
+                  child: Icon(icon, size: 18, color: AppColors.amber),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -341,14 +341,7 @@ class _InputBar extends StatelessWidget {
                   shape: const CircleBorder(),
                   clipBehavior: Clip.antiAlias,
                   child: Ink(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Color(0xFFFF8A57), AppColors.orange],
-                      ),
-                    ),
+                    decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.teal),
                     child: InkWell(
                       key: const Key('chat-send'),
                       onTap: enabled ? onSend : null,

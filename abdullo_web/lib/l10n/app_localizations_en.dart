@@ -173,7 +173,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessOverview => 'Business Overview';
 
   @override
-  String get liveAudit => 'LIVE AUDIT';
+  String get liveAudit => 'Live audit';
 
   @override
   String get overviewSubtitle =>
@@ -328,7 +328,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentActivity => 'Recent Business Activity';
 
   @override
-  String get liveFeed => 'LIVE FEED';
+  String get liveFeed => 'Live feed';
 
   @override
   String get activitySubtitle =>
@@ -398,7 +398,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoBackend => 'Demo data — backend not connected yet';
 
   @override
-  String get salesEyebrow => 'FINANCIAL OPERATIONS · TAJIKISTAN ZONE';
+  String get salesEyebrow => 'Financial operations · tajikistan zone';
 
   @override
   String get salesTitle => 'Sales & Daily Entries';
@@ -408,10 +408,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Log daily store turnover in Tajikistani Somoni (TJS) and monitor real-time transaction logs.';
 
   @override
-  String get totalToday => 'TOTAL TODAY';
+  String get totalToday => 'Total today';
 
   @override
-  String get totalThisMonth => 'TOTAL THIS MONTH';
+  String get totalThisMonth => 'Total this month';
 
   @override
   String get successPrefix => 'Success: ';
@@ -442,7 +442,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get activeFilterVolume => 'ACTIVE FILTER VOLUME';
+  String get activeFilterVolume => 'Active filter volume';
 
   @override
   String get filteredTotal => 'Filtered Total: ';
@@ -458,19 +458,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get colDateTime => 'DATE & TIME';
+  String get colDateTime => 'Date & time';
 
   @override
-  String get colStoreName => 'STORE NAME';
+  String get colStoreName => 'Store name';
 
   @override
-  String get colSalesAmount => 'SALES AMOUNT';
+  String get colSalesAmount => 'Sales amount';
 
   @override
-  String get colRegisteredBy => 'REGISTERED BY';
+  String get colRegisteredBy => 'Registered by';
 
   @override
-  String get colNotesMethod => 'NOTES / METHOD';
+  String get colNotesMethod => 'Notes / method';
 
   @override
   String get noEntries => 'No entries for this filter';
@@ -561,10 +561,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get storesEyebrow1 => 'ENTERPRISE FLEET';
+  String get storesEyebrow1 => 'Enterprise fleet';
 
   @override
-  String get storesEyebrow2 => 'STORE DIRECTORY';
+  String get storesEyebrow2 => 'Store directory';
 
   @override
   String get storesTitle => 'Store Management';
@@ -842,7 +842,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noSalesYet => 'No sales yet';
 
   @override
-  String get payrollEyebrow => 'ENTERPRISE PORTAL';
+  String get payrollEyebrow => 'Enterprise portal';
 
   @override
   String fiscalYear(String year) {
@@ -907,28 +907,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeContracts => '100% active contracts';
 
   @override
-  String get colEmployee => 'EMPLOYEE & POSITION';
+  String get colEmployee => 'Employee & position';
 
   @override
-  String get colAssignedStore => 'ASSIGNED STORE';
+  String get colAssignedStore => 'Assigned store';
 
   @override
-  String get colTenure => 'TENURE';
+  String get colTenure => 'Tenure';
 
   @override
-  String get colMonthlySalary => 'MONTHLY SALARY';
+  String get colMonthlySalary => 'Monthly salary';
 
   @override
-  String get colDisbursed => 'DISBURSED';
+  String get colDisbursed => 'Disbursed';
 
   @override
-  String get colRemaining => 'REMAINING';
+  String get colRemaining => 'Remaining';
 
   @override
-  String get colStatus => 'STATUS';
+  String get colStatus => 'Status';
 
   @override
-  String get colActions => 'ACTIONS';
+  String get colActions => 'Actions';
 
   @override
   String noPayrollFor(String month) {
@@ -1602,7 +1602,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantNote =>
-      'Answers use your real numbers. A full AI model can be connected when the backend adds it.';
+      'Answers come from your real numbers, worked out by the AI on the server.';
 
   @override
   String get staffInStore => 'Staff';
@@ -1743,4 +1743,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantThinking => 'Thinking…';
+
+  @override
+  String get loginHeadline => 'Every store, sale and salary in one calm place.';
+
+  @override
+  String get loginHeroBody =>
+      'Ask the assistant about your numbers. It answers in Tajik, Russian or English.';
 }

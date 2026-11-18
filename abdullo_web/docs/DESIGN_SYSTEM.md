@@ -1,18 +1,27 @@
-# Apex Suite web: design system
+# Apex Suite web: design system ("Pamir stone")
 
-A calm, data-first business dashboard. Navy is the base and carries trust. Orange is the
-single accent and marks actions and attention. Motion is quick and quiet, with one
-exception: the AI assistant has a little more life.
+An operating tool for shop owners in Tajikistan, so precision comes before decoration.
+The surfaces are cool stone, the text is deep ink, and there is a single teal accent for
+actions and the current place. Gold belongs only to the AI assistant, amber marks what
+needs attention, green is money in and red is money out. The Pamir ridgeline is the one
+signature: it appears in the logo, and on the login page it draws itself once.
 
 ## Tokens
 
 | What | Where | Notes |
 |---|---|---|
-| Colors | `lib/core/theme/app_colors.dart` | `navy` base, `orange` accent, `green` / `red` money up / down, `blue` / `purple` for categories, `muted` secondary text, `border`, `surfaceSoft` |
-| Theme | `lib/core/theme/app_theme.dart` | Material 3. Tight headings (`w700`, negative letter-spacing), 10px button radius, 18px dialogs, 12px menus, orange focus ring on inputs |
-| Motion | `lib/core/motion/motion.dart` | `fast` 150ms (press, hover), `base` 240ms (page switch, popovers), `slow` 380ms (bubbles, cards), `reveal` 700ms (progress bars), `stagger` 45ms |
-| Curves | `Motion.easeOut` = `Cubic(0.23, 1, 0.32, 1)` | Strong ease-out for anything entering. `Motion.easeInOut` for movement on screen. Never ease-in. |
-| Breakpoints | `lib/core/responsive/breakpoints.dart` | `< 600` phone (bottom bar), `600–1023` tablet (compact rail), `>= 1024` desktop |
+| Colors | `lib/core/theme/app_colors.dart` | `background` stone #EEF1F4, `ink` #0D1B2A, `muted` #5B6878 (5.6:1), `teal` #0B6E6E accent, `gold` #D4A017 AI only, `amber` #B25E09 attention, `green` / `red` money. Old names `orange` / `navy` are aliases of the accent and the dark surface. |
+| Type | `assets/fonts/Onest.ttf` (OFL) | Onest, a variable font with full Tajik Cyrillic (ҳ ҷ қ ғ ӣ ӯ), bundled so it works offline. Headings use w700 and −0.02em tracking. KPI numbers use tabular figures. Sentence case everywhere, with no all-caps labels and no eyebrows above headings. |
+| Surfaces | `lib/core/theme/app_theme.dart` | Cards have a 1px stone border and no shadow (elevation is declared once), with a 14px radius. Pills are only for small badges. Selection, caret, scrollbar and focus ring are themed teal. |
+| Brand | `lib/widgets/brand_mark.dart`, `pamir_ridge.dart` | A teal tile with a two-peak ridge drawn as vector lines. On the login page, layered ridgelines draw themselves once. |
+| Motion | `lib/core/motion/motion.dart` | `fast` 150ms, `base` 240ms, `slow` 380ms, `reveal` 700ms, `stagger` 45ms. `Motion.easeOut` = `Cubic(0.23, 1, 0.32, 1)`. |
+| Breakpoints | `lib/core/responsive/breakpoints.dart` | `< 600` phone (bottom bar), `600–1023` tablet (compact rail), `>= 1024` desktop. The login splits into two halves at `>= 900`. |
+
+## Visual review
+
+`test/capture/screens_test.dart` renders every page with the real Onest font to PNG
+(desktop 1440 and phone 400):
+`flutter test test/capture/screens_test.dart --dart-define=CAPTURE=true --dart-define=OUT=build/screens`
 
 ## Motion rules
 

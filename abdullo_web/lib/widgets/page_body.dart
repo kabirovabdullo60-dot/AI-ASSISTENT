@@ -43,30 +43,6 @@ class PageBody extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (eyebrow.isNotEmpty) ...[
-                      Text.rich(
-                        TextSpan(
-                          style: const TextStyle(
-                            fontSize: 11.5,
-                            letterSpacing: 0.8,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.muted,
-                          ),
-                          children: [
-                            for (var i = 0; i < eyebrow.length; i++) ...[
-                              if (i > 0) const TextSpan(text: '  /  '),
-                              TextSpan(
-                                text: eyebrow[i],
-                                style: i == eyebrow.length - 1 && eyebrow.length > 1
-                                    ? const TextStyle(color: AppColors.orange)
-                                    : null,
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                    ],
                     Wrap(
                       spacing: 10,
                       crossAxisAlignment: WrapCrossAlignment.center,

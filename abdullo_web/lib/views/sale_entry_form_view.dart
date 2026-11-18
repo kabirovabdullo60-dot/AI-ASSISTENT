@@ -211,7 +211,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
                 TextSpan(text: tr.syncsTo),
                 const TextSpan(
                   text: ApiConstants.sales,
-                  style: TextStyle(fontFamily: 'monospace', color: AppColors.ink),
+                  style: TextStyle(color: AppColors.ink),
                 ),
               ],
             ),

@@ -120,7 +120,6 @@ class _DashboardContent extends StatelessWidget {
 
     return PageBody(
       title: tr.businessOverview,
-      badge: StatusBadge(tr.liveAudit, tone: BadgeTone.info),
       subtitle: tr.overviewSubtitle,
       actions: [
         const _DateChip(),
@@ -320,7 +319,7 @@ class _CurrencyToggle extends StatelessWidget {
         visualDensity: VisualDensity.compact,
         selectedBackgroundColor: AppColors.navy,
         selectedForegroundColor: Colors.white,
-        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        textStyle: const TextStyle(fontFamily: 'Onest', fontSize: 12, fontWeight: FontWeight.w600),
       ),
       segments: [for (final c in Currency.values) ButtonSegment(value: c, label: Text(c.label))],
       selected: {selected},
@@ -383,7 +382,7 @@ class _RevenueCard extends StatelessWidget {
                     showSelectedIcon: false,
                     style: SegmentedButton.styleFrom(
                       visualDensity: VisualDensity.compact,
-                      textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      textStyle: const TextStyle(fontFamily: 'Onest', fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                     segments: [
                       ButtonSegment(value: ChartRange.weekly, label: Text(tr.weekly)),
@@ -412,9 +411,14 @@ class _RevenueCard extends StatelessWidget {
                   TextSpan(
                     style: const TextStyle(fontSize: 12, color: AppColors.muted),
                     children: [
-                      const TextSpan(
-                        text: '● ',
-                        style: TextStyle(color: AppColors.green),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Container(
+                          width: 7,
+                          height: 7,
+                          margin: const EdgeInsets.only(right: 6),
+                          decoration: const BoxDecoration(color: AppColors.green, shape: BoxShape.circle),
+                        ),
                       ),
                       TextSpan(text: tr.averageDaily),
                       TextSpan(
@@ -656,7 +660,7 @@ class _ActivityCard extends StatelessWidget {
               const Divider(height: 24),
               Text(
                 tr.connectedTo(ApiConstants.mainEndpoints.join(', ')),
-                style: const TextStyle(fontSize: 11, fontFamily: 'monospace', color: AppColors.muted),
+                style: const TextStyle(fontSize: 11, color: AppColors.muted),
               ),
             ],
           );

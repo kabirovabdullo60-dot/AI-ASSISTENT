@@ -4,8 +4,9 @@ import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
 import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
+import 'brand_mark.dart';
 
-/// Dark navy side menu from the Figma design.
+/// Side menu: white panel with a hairline edge; the current page is a soft teal pill.
 /// [extended] = desktop (icons + labels), otherwise tablet (compact).
 class AppSidebar extends StatelessWidget {
   const AppSidebar({
@@ -32,7 +33,10 @@ class AppSidebar extends StatelessWidget {
     return Container(
       key: const Key('app-sidebar'),
       width: extended ? extendedWidth : compactWidth,
-      color: AppColors.navy,
+      decoration: const BoxDecoration(
+        color: AppColors.card,
+        border: Border(right: BorderSide(color: AppColors.border)),
+      ),
       child: SafeArea(
         child: Column(
           children: [
@@ -43,7 +47,7 @@ class AppSidebar extends StatelessWidget {
                 children: [for (final s in AppSection.main) item(s)],
               ),
             ),
-            const Divider(color: AppColors.navyLight, height: 1),
+            const Divider(color: AppColors.border, height: 1),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
               child: Column(children: [for (final s in AppSection.footer) item(s)]),
@@ -63,12 +67,7 @@ class _Brand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logo = Container(
-      width: 34,
-      height: 34,
-      decoration: BoxDecoration(color: AppColors.orange, borderRadius: BorderRadius.circular(10)),
-      child: const Icon(Icons.auto_awesome, color: Colors.white, size: 18),
-    );
+    final logo = const BrandMark();
     return Padding(
       padding: EdgeInsets.fromLTRB(extended ? 20 : 0, 20, extended ? 16 : 0, 20),
       child: extended
@@ -81,7 +80,12 @@ class _Brand extends StatelessWidget {
                     name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w700),
+                    style: const TextStyle(
+                      color: AppColors.ink,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.3,
+                    ),
                   ),
                 ),
               ],
@@ -103,7 +107,7 @@ class _SidebarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? Colors.white : Colors.white.withValues(alpha: 0.66);
+    final color = selected ? AppColors.teal : AppColors.muted;
     final icon = Icon(selected ? section.selectedIcon : section.icon, size: 19, color: color);
 
     return Padding(
@@ -112,22 +116,15 @@ class _SidebarItem extends StatelessWidget {
         duration: Motion.base,
         curve: Motion.easeOut,
         decoration: BoxDecoration(
-          color: selected ? AppColors.orange : Colors.transparent,
+          color: selected ? AppColors.tealSoft : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.orange.withValues(alpha: selected ? 0.35 : 0),
-              blurRadius: selected ? 14 : 0,
-              offset: const Offset(0, 4),
-            ),
-          ],
         ),
         child: Material(
           type: MaterialType.transparency,
           child: InkWell(
             key: Key('nav-${section.name}'),
             borderRadius: BorderRadius.circular(8),
-            hoverColor: Colors.white.withValues(alpha: 0.06),
+            hoverColor: AppColors.ink.withValues(alpha: 0.04),
             onTap: onTap,
             child: Semantics(
               selected: selected,

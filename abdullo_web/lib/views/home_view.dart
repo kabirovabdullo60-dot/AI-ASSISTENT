@@ -8,6 +8,7 @@ import '../core/theme/app_colors.dart';
 import '../viewmodels/home_view_model.dart';
 import '../viewmodels/auth_view_model.dart';
 import '../widgets/app_sidebar.dart';
+import '../widgets/brand_mark.dart';
 import '../widgets/responsive_layout.dart';
 import 'app_top_bar_view.dart';
 import 'assistant_view.dart';
@@ -82,12 +83,7 @@ class HomeView extends StatelessWidget {
           titleSpacing: 16,
           title: Row(
             children: [
-              Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(color: AppColors.orange, borderRadius: BorderRadius.circular(8)),
-                child: const Icon(Icons.auto_awesome, color: Colors.white, size: 16),
-              ),
+              const BrandMark(size: 28),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(

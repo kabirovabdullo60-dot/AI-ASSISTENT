@@ -173,7 +173,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get businessOverview => 'Обзор бизнеса';
 
   @override
-  String get liveAudit => 'LIVE-АУДИТ';
+  String get liveAudit => 'Live-аудит';
 
   @override
   String get overviewSubtitle =>
@@ -327,7 +327,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recentActivity => 'Последние события';
 
   @override
-  String get liveFeed => 'ЛЕНТА';
+  String get liveFeed => 'Лента';
 
   @override
   String get activitySubtitle =>
@@ -397,7 +397,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get demoBackend => 'Демо-данные — сервер ещё не подключён';
 
   @override
-  String get salesEyebrow => 'ФИНАНСОВЫЕ ОПЕРАЦИИ · ТАДЖИКИСТАН';
+  String get salesEyebrow => 'Финансовые операции · таджикистан';
 
   @override
   String get salesTitle => 'Продажи и ежедневные записи';
@@ -407,10 +407,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Записывайте дневной оборот магазинов в сомони (TJS) и следите за операциями в реальном времени.';
 
   @override
-  String get totalToday => 'ИТОГО СЕГОДНЯ';
+  String get totalToday => 'Итого сегодня';
 
   @override
-  String get totalThisMonth => 'ИТОГО ЗА МЕСЯЦ';
+  String get totalThisMonth => 'Итого за месяц';
 
   @override
   String get successPrefix => 'Успешно: ';
@@ -441,7 +441,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get activeFilterVolume => 'ОБЪЁМ ПО ФИЛЬТРУ';
+  String get activeFilterVolume => 'Объём по фильтру';
 
   @override
   String get filteredTotal => 'Итого по фильтру: ';
@@ -457,19 +457,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get colDateTime => 'ДАТА И ВРЕМЯ';
+  String get colDateTime => 'Дата и время';
 
   @override
-  String get colStoreName => 'МАГАЗИН';
+  String get colStoreName => 'Магазин';
 
   @override
-  String get colSalesAmount => 'СУММА ПРОДАЖ';
+  String get colSalesAmount => 'Сумма продаж';
 
   @override
-  String get colRegisteredBy => 'ЗАПИСАЛ';
+  String get colRegisteredBy => 'Записал';
 
   @override
-  String get colNotesMethod => 'ЗАМЕТКИ / СПОСОБ';
+  String get colNotesMethod => 'Заметки / способ';
 
   @override
   String get noEntries => 'Нет записей по фильтру';
@@ -559,10 +559,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get storesEyebrow1 => 'СЕТЬ МАГАЗИНОВ';
+  String get storesEyebrow1 => 'Сеть магазинов';
 
   @override
-  String get storesEyebrow2 => 'СПРАВОЧНИК';
+  String get storesEyebrow2 => 'Справочник';
 
   @override
   String get storesTitle => 'Управление магазинами';
@@ -841,7 +841,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noSalesYet => 'Продаж пока нет';
 
   @override
-  String get payrollEyebrow => 'КОРПОРАТИВНЫЙ ПОРТАЛ';
+  String get payrollEyebrow => 'Корпоративный портал';
 
   @override
   String fiscalYear(String year) {
@@ -906,28 +906,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get activeContracts => '100% действующих договоров';
 
   @override
-  String get colEmployee => 'СОТРУДНИК И ДОЛЖНОСТЬ';
+  String get colEmployee => 'Сотрудник и должность';
 
   @override
-  String get colAssignedStore => 'МАГАЗИН';
+  String get colAssignedStore => 'Магазин';
 
   @override
-  String get colTenure => 'СТАЖ';
+  String get colTenure => 'Стаж';
 
   @override
-  String get colMonthlySalary => 'ОКЛАД';
+  String get colMonthlySalary => 'Оклад';
 
   @override
-  String get colDisbursed => 'ВЫПЛАЧЕНО';
+  String get colDisbursed => 'Выплачено';
 
   @override
-  String get colRemaining => 'ОСТАТОК';
+  String get colRemaining => 'Остаток';
 
   @override
-  String get colStatus => 'СТАТУС';
+  String get colStatus => 'Статус';
 
   @override
-  String get colActions => 'ДЕЙСТВИЯ';
+  String get colActions => 'Действия';
 
   @override
   String noPayrollFor(String month) {
@@ -1591,7 +1591,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get assistantNote =>
-      'Ответы строятся на ваших реальных данных. Полноценный ИИ подключим, когда он появится на сервере.';
+      'Ответы строятся на ваших реальных цифрах, их считает ИИ на сервере.';
 
   @override
   String get staffInStore => 'Сотрудники';
@@ -1732,4 +1732,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get assistantThinking => 'Думаю…';
+
+  @override
+  String get loginHeadline => 'Все магазины, продажи и зарплаты в одном месте.';
+
+  @override
+  String get loginHeroBody =>
+      'Спросите ассистента о своих цифрах. Он отвечает по-таджикски, по-русски или по-английски.';
 }

@@ -38,19 +38,14 @@ class KpiCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final accent = highlight ? AppColors.orange : AppColors.ink;
+    final accent = highlight ? AppColors.amber : AppColors.ink;
 
     return SizedBox(
       height: height,
       child: Card(
         clipBehavior: Clip.antiAlias,
         child: Container(
-          decoration: highlight
-              ? const BoxDecoration(
-                  border: Border(left: BorderSide(color: AppColors.orange, width: 3)),
-                )
-              : null,
-          padding: const EdgeInsets.fromLTRB(14, 14, 12, 12),
+          padding: const EdgeInsets.fromLTRB(16, 16, 14, 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,8 +64,8 @@ class KpiCard extends StatelessWidget {
                   IconBox(
                     icon,
                     size: 28,
-                    color: highlight ? AppColors.orange : AppColors.navy,
-                    background: highlight ? AppColors.orangeSoft : AppColors.surfaceSoft,
+                    color: highlight ? AppColors.amber : AppColors.teal,
+                    background: highlight ? AppColors.amberSoft : AppColors.tealSoft,
                   ),
                 ],
               ),
@@ -80,7 +75,12 @@ class KpiCard extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   value,
-                  style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, color: accent),
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: accent,
+                    letterSpacing: -0.6,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
                 ),
               ),
               if (unit != null) Text(unit!, style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted)),

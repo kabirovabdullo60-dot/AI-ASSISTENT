@@ -409,7 +409,7 @@ abstract class AppLocalizations {
   /// No description provided for @liveAudit.
   ///
   /// In en, this message translates to:
-  /// **'LIVE AUDIT'**
+  /// **'Live audit'**
   String get liveAudit;
 
   /// No description provided for @overviewSubtitle.
@@ -655,7 +655,7 @@ abstract class AppLocalizations {
   /// No description provided for @liveFeed.
   ///
   /// In en, this message translates to:
-  /// **'LIVE FEED'**
+  /// **'Live feed'**
   String get liveFeed;
 
   /// No description provided for @activitySubtitle.
@@ -787,7 +787,7 @@ abstract class AppLocalizations {
   /// No description provided for @salesEyebrow.
   ///
   /// In en, this message translates to:
-  /// **'FINANCIAL OPERATIONS · TAJIKISTAN ZONE'**
+  /// **'Financial operations · tajikistan zone'**
   String get salesEyebrow;
 
   /// No description provided for @salesTitle.
@@ -805,13 +805,13 @@ abstract class AppLocalizations {
   /// No description provided for @totalToday.
   ///
   /// In en, this message translates to:
-  /// **'TOTAL TODAY'**
+  /// **'Total today'**
   String get totalToday;
 
   /// No description provided for @totalThisMonth.
   ///
   /// In en, this message translates to:
-  /// **'TOTAL THIS MONTH'**
+  /// **'Total this month'**
   String get totalThisMonth;
 
   /// No description provided for @successPrefix.
@@ -865,7 +865,7 @@ abstract class AppLocalizations {
   /// No description provided for @activeFilterVolume.
   ///
   /// In en, this message translates to:
-  /// **'ACTIVE FILTER VOLUME'**
+  /// **'Active filter volume'**
   String get activeFilterVolume;
 
   /// No description provided for @filteredTotal.
@@ -889,31 +889,31 @@ abstract class AppLocalizations {
   /// No description provided for @colDateTime.
   ///
   /// In en, this message translates to:
-  /// **'DATE & TIME'**
+  /// **'Date & time'**
   String get colDateTime;
 
   /// No description provided for @colStoreName.
   ///
   /// In en, this message translates to:
-  /// **'STORE NAME'**
+  /// **'Store name'**
   String get colStoreName;
 
   /// No description provided for @colSalesAmount.
   ///
   /// In en, this message translates to:
-  /// **'SALES AMOUNT'**
+  /// **'Sales amount'**
   String get colSalesAmount;
 
   /// No description provided for @colRegisteredBy.
   ///
   /// In en, this message translates to:
-  /// **'REGISTERED BY'**
+  /// **'Registered by'**
   String get colRegisteredBy;
 
   /// No description provided for @colNotesMethod.
   ///
   /// In en, this message translates to:
-  /// **'NOTES / METHOD'**
+  /// **'Notes / method'**
   String get colNotesMethod;
 
   /// No description provided for @noEntries.
@@ -1081,13 +1081,13 @@ abstract class AppLocalizations {
   /// No description provided for @storesEyebrow1.
   ///
   /// In en, this message translates to:
-  /// **'ENTERPRISE FLEET'**
+  /// **'Enterprise fleet'**
   String get storesEyebrow1;
 
   /// No description provided for @storesEyebrow2.
   ///
   /// In en, this message translates to:
-  /// **'STORE DIRECTORY'**
+  /// **'Store directory'**
   String get storesEyebrow2;
 
   /// No description provided for @storesTitle.
@@ -1549,7 +1549,7 @@ abstract class AppLocalizations {
   /// No description provided for @payrollEyebrow.
   ///
   /// In en, this message translates to:
-  /// **'ENTERPRISE PORTAL'**
+  /// **'Enterprise portal'**
   String get payrollEyebrow;
 
   /// No description provided for @fiscalYear.
@@ -1657,49 +1657,49 @@ abstract class AppLocalizations {
   /// No description provided for @colEmployee.
   ///
   /// In en, this message translates to:
-  /// **'EMPLOYEE & POSITION'**
+  /// **'Employee & position'**
   String get colEmployee;
 
   /// No description provided for @colAssignedStore.
   ///
   /// In en, this message translates to:
-  /// **'ASSIGNED STORE'**
+  /// **'Assigned store'**
   String get colAssignedStore;
 
   /// No description provided for @colTenure.
   ///
   /// In en, this message translates to:
-  /// **'TENURE'**
+  /// **'Tenure'**
   String get colTenure;
 
   /// No description provided for @colMonthlySalary.
   ///
   /// In en, this message translates to:
-  /// **'MONTHLY SALARY'**
+  /// **'Monthly salary'**
   String get colMonthlySalary;
 
   /// No description provided for @colDisbursed.
   ///
   /// In en, this message translates to:
-  /// **'DISBURSED'**
+  /// **'Disbursed'**
   String get colDisbursed;
 
   /// No description provided for @colRemaining.
   ///
   /// In en, this message translates to:
-  /// **'REMAINING'**
+  /// **'Remaining'**
   String get colRemaining;
 
   /// No description provided for @colStatus.
   ///
   /// In en, this message translates to:
-  /// **'STATUS'**
+  /// **'Status'**
   String get colStatus;
 
   /// No description provided for @colActions.
   ///
   /// In en, this message translates to:
-  /// **'ACTIONS'**
+  /// **'Actions'**
   String get colActions;
 
   /// No description provided for @noPayrollFor.
@@ -2869,7 +2869,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantNote.
   ///
   /// In en, this message translates to:
-  /// **'Answers use your real numbers. A full AI model can be connected when the backend adds it.'**
+  /// **'Answers come from your real numbers, worked out by the AI on the server.'**
   String get assistantNote;
 
   /// No description provided for @staffInStore.
@@ -3135,6 +3135,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Thinking…'**
   String get assistantThinking;
+
+  /// No description provided for @loginHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Every store, sale and salary in one calm place.'**
+  String get loginHeadline;
+
+  /// No description provided for @loginHeroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the assistant about your numbers. It answers in Tajik, Russian or English.'**
+  String get loginHeroBody;
 }
 
 class _AppLocalizationsDelegate

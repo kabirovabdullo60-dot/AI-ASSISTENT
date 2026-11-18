@@ -59,7 +59,13 @@ class SectionCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (trailing != null) ...[const SizedBox(width: 8), Flexible(child: trailing!)],
+                if (trailing != null) ...[
+                  const SizedBox(width: 8),
+                  // Actions hug the right edge instead of taking half the row.
+                  Flexible(
+                    child: Align(alignment: Alignment.topRight, child: trailing!),
+                  ),
+                ],
               ],
             ),
             const SizedBox(height: 16),

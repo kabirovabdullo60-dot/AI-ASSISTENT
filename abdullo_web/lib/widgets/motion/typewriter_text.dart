@@ -55,9 +55,14 @@ class _TypewriterTextState extends State<TypewriterText> with SingleTickerProvid
             style: widget.style,
             children: [
               TextSpan(text: _chars.take(n).join()),
-              TextSpan(
-                text: '▍',
-                style: TextStyle(color: widget.style.color?.withValues(alpha: caretOn ? 0.8 : 0.15)),
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Container(
+                  width: 2,
+                  height: (widget.style.fontSize ?? 14) * 1.15,
+                  margin: const EdgeInsets.only(left: 2),
+                  color: widget.style.color?.withValues(alpha: caretOn ? 0.8 : 0.15),
+                ),
               ),
             ],
           ),
