@@ -1,94 +1,150 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/l10n/l10n.dart';
+import '../core/navigation/app_section.dart';
+import '../core/theme/app_colors.dart';
 import '../viewmodels/home_view_model.dart';
+import '../viewmodels/auth_view_model.dart';
+import '../widgets/app_sidebar.dart';
 import '../widgets/responsive_layout.dart';
+import 'app_top_bar_view.dart';
+import 'assistant_view.dart';
+import 'dashboard_view.dart';
+import 'employees_view.dart';
+import 'expenses_view.dart';
+import 'profile_view.dart';
+import 'reports_view.dart';
+import 'salaries_view.dart';
+import 'sales_view.dart';
+import 'settings_view.dart';
+import 'stores_view.dart';
 
-class _Section {
-  const _Section(this.label, this.icon);
-  final String label;
-  final IconData icon;
-}
-
-const _sections = [
-  _Section('Home', Icons.home_outlined),
-  _Section('Assistant', Icons.smart_toy_outlined),
-  _Section('Reports', Icons.bar_chart_outlined),
-  _Section('Settings', Icons.settings_outlined),
-];
-
+/// App shell. Desktop: wide navy sidebar. Tablet: compact sidebar. Phone: bottom bar + "More".
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final vm = context.watch<HomeViewModel>();
-    final body = _HomeBody(vm: vm);
-
-    return ResponsiveLayout(
-      mobile: (_) => Scaffold(
-        appBar: AppBar(title: const Text('AI Business Assistant')),
-        body: body,
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: vm.selectedIndex,
-          onDestinationSelected: vm.select,
-          destinations: [
-            for (final s in _sections)
-              NavigationDestination(icon: Icon(s.icon), label: s.label),
-          ],
-        ),
-      ),
-      tablet: (_) => _WideScaffold(vm: vm, extended: false, body: body),
-      desktop: (_) => _WideScaffold(vm: vm, extended: true, body: body),
-    );
-  }
-}
-
-class _WideScaffold extends StatelessWidget {
-  const _WideScaffold({required this.vm, required this.extended, required this.body});
-
-  final HomeViewModel vm;
-  final bool extended;
-  final Widget body;
+  Widget _page(AppSection section) => switch (section) {
+    AppSection.dashboard => const DashboardView(),
+    AppSection.stores => const StoresView(),
+    AppSection.sales => const SalesView(),
+    AppSection.employees => const EmployeesView(),
+    AppSection.salaries => const SalariesView(),
+    AppSection.expenses => const ExpensesView(),
+    AppSection.reports => const ReportsView(),
+    AppSection.assistant => const AssistantView(),
+    AppSection.profile => const ProfileView(),
+    AppSection.settings => const SettingsView(),
+  };
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('AI Business Assistant — Web')),
+    final home = context.watch<HomeViewModel>();
+    final brand = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? 'Apex Suite');
+    final page = KeyedSubtree(key: ValueKey(home.section), child: _page(home.section));
+
+    Widget wide(bool extended) => Scaffold(
       body: Row(
         children: [
-          NavigationRail(
-            extended: extended,
-            labelType: extended ? null : NavigationRailLabelType.all,
-            selectedIndex: vm.selectedIndex,
-            onDestinationSelected: vm.select,
-            destinations: [
-              for (final s in _sections)
-                NavigationRailDestination(icon: Icon(s.icon), label: Text(s.label)),
-            ],
+          AppSidebar(selected: home.section, onSelect: home.select, extended: extended, brandName: brand),
+          Expanded(
+            child: Column(
+              children: [
+                const AppTopBarView(),
+                Expanded(child: page),
+              ],
+            ),
           ),
-          const VerticalDivider(width: 1),
-          Expanded(child: body),
         ],
       ),
     );
+
+    return ResponsiveLayout(
+      mobile: (_) => Scaffold(
+        appBar: AppBar(
+          titleSpacing: 16,
+          title: Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(color: AppColors.orange, borderRadius: BorderRadius.circular(8)),
+                child: const Icon(Icons.auto_awesome, color: Colors.white, size: 16),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  brand,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+        ),
+        body: Column(
+          children: [
+            const AppTopBarView(compact: true),
+            Expanded(child: page),
+          ],
+        ),
+        bottomNavigationBar: _MobileNavBar(section: home.section, onSelect: home.select),
+      ),
+      tablet: (_) => wide(false),
+      desktop: (_) => wide(true),
+    );
   }
 }
 
-class _HomeBody extends StatelessWidget {
-  const _HomeBody({required this.vm});
+class _MobileNavBar extends StatelessWidget {
+  const _MobileNavBar({required this.section, required this.onSelect});
 
-  final HomeViewModel vm;
+  final AppSection section;
+  final ValueChanged<AppSection> onSelect;
+
+  static const _moreIndex = 4;
+
+  void _openMore(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            for (final s in AppSection.values)
+              if (!AppSection.mobileBar.contains(s))
+                ListTile(
+                  key: Key('more-${s.name}'),
+                  leading: Icon(s == section ? s.selectedIcon : s.icon),
+                  title: Text(context.l10n.section(s)),
+                  selected: s == section,
+                  selectedColor: AppColors.orange,
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    onSelect(s);
+                  },
+                ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (vm.isLoading) return const Center(child: CircularProgressIndicator());
-    return Center(
-      child: Text(
-        vm.error ?? _sections[vm.selectedIndex].label,
-        key: const Key('home-title'),
-        style: Theme.of(context).textTheme.headlineMedium,
-      ),
+    final tr = context.l10n;
+    final index = AppSection.mobileBar.indexOf(section);
+    return NavigationBar(
+      selectedIndex: index < 0 ? _moreIndex : index,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      onDestinationSelected: (i) => i == _moreIndex ? _openMore(context) : onSelect(AppSection.mobileBar[i]),
+      destinations: [
+        for (final s in AppSection.mobileBar)
+          NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: tr.section(s)),
+        NavigationDestination(icon: Icon(Icons.more_horiz), label: tr.navMore),
+      ],
     );
   }
 }
