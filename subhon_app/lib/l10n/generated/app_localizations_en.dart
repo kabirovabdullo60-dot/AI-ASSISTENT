@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'OFAR';
 
   @override
+  String get introTitle => 'AI accountant';
+
+  @override
   String get commonLoading => 'Loading…';
 
   @override

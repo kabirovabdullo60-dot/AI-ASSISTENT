@@ -23,14 +23,18 @@ const _lookKeys = <(double, double)>[
 
 /// The launch intro, played once over [child] when the app opens: a full
 /// screen of the brand colour with two eyes in the middle that look left
-/// and right and blink, then the colour drains upward with drips and shows
-/// the app (login or home) underneath.
+/// and right and blink, with [title] ("ИИ бухгалтер") under them, then the
+/// colour drains upward with drips and shows the app (login or home)
+/// underneath.
 ///
 /// Taps go straight to [child]; with "reduce motion" on it is skipped.
 class IntroOverlay extends StatefulWidget {
-  const IntroOverlay({required this.child, super.key});
+  const IntroOverlay({required this.child, this.title, super.key});
 
   final Widget child;
+
+  /// Shown under the eyes.
+  final String? title;
 
   @override
   State<IntroOverlay> createState() => _IntroOverlayState();
@@ -86,6 +90,10 @@ class _IntroOverlayState extends State<IntroOverlay>
   static double _ramp(double s, double from, double to) =>
       ((s - from) / (to - from)).clamp(0.0, 1.0);
 
+  /// The title fades in after the eyes open and out as they close.
+  static double _titleOpacity(double s) =>
+      _ramp(s, 0.35, 0.7) * (1 - _ramp(s, 1.75, 1.92));
+
   static double _openness(double s) {
     final open = Curves.easeOutBack.transform(_ramp(s, 0.1, 0.35));
     // One quick blink, then the eyes close just before the drain.
@@ -110,17 +118,38 @@ class _IntroOverlayState extends State<IntroOverlay>
                     progress: _drain,
                     color: AppColors.primary,
                   ),
-                  child: Center(
-                    child: AnimatedBuilder(
-                      animation: _clock,
-                      builder: (context, _) {
-                        final s = _clock.value * _total;
-                        return IntroEyes(
-                          look: _look(s),
-                          openness: _openness(s),
-                        );
-                      },
-                    ),
+                  child: AnimatedBuilder(
+                    animation: _clock,
+                    builder: (context, _) {
+                      final s = _clock.value * _total;
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          IntroEyes(look: _look(s), openness: _openness(s)),
+                          if (widget.title != null)
+                            Transform.translate(
+                              offset: Offset(
+                                0,
+                                36 + 8 * (1 - _titleOpacity(s)),
+                              ),
+                              child: Opacity(
+                                opacity: _titleOpacity(s),
+                                child: Text(
+                                  widget.title!,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0.2,
+                                        decoration: TextDecoration.none,
+                                      ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),

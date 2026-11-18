@@ -12,6 +12,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'OFAR';
 
   @override
+  String get introTitle => 'ИИ бухгалтер';
+
+  @override
   String get commonLoading => 'Загрузка…';
 
   @override

@@ -12,6 +12,9 @@ class AppLocalizationsTg extends AppLocalizations {
   String get appTitle => 'OFAR';
 
   @override
+  String get introTitle => 'ИИ-муҳосиб';
+
+  @override
   String get commonLoading => 'Боркунӣ…';
 
   @override

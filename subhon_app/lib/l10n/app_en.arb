@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
   "appTitle": "OFAR",
+  "introTitle": "AI accountant",
   "commonLoading": "Loading…",
   "commonEmptyTitle": "Nothing here yet",
   "commonErrorTitle": "Could not load",

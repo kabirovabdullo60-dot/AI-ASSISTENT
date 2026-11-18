@@ -106,6 +106,12 @@ abstract class AppLocalizations {
   /// **'OFAR'**
   String get appTitle;
 
+  /// No description provided for @introTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI accountant'**
+  String get introTitle;
+
   /// No description provided for @commonLoading.
   ///
   /// In en, this message translates to:

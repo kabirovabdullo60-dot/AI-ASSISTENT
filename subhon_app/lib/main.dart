@@ -108,7 +108,7 @@ class _MobileAppState extends State<MobileApp> {
             // Accept-Language follows the language on screen.
             final language = Localizations.localeOf(context).languageCode;
             _api.language = () => language;
-            return IntroOverlay(child: child!);
+            return IntroOverlay(title: context.l10n.introTitle, child: child!);
           },
           home: const SessionGateView(),
         );

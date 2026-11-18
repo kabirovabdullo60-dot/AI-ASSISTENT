@@ -8,7 +8,7 @@ Widget _host({bool reduceMotion = false}) => MediaQuery(
   data: MediaQueryData(disableAnimations: reduceMotion),
   child: const Directionality(
     textDirection: TextDirection.ltr,
-    child: IntroOverlay(child: Text('app')),
+    child: IntroOverlay(title: 'ИИ бухгалтер', child: Text('app')),
   ),
 );
 
@@ -24,6 +24,7 @@ void main() {
     final eyes = tester.widget<IntroEyes>(find.byType(IntroEyes));
     expect(eyes.look, lessThan(-0.5)); // looking left
     expect(eyes.openness, greaterThan(0.9));
+    expect(find.text('ИИ бухгалтер'), findsOneWidget);
 
     await tester.pump(const Duration(milliseconds: 600)); // 1.4 s
     expect(
@@ -33,6 +34,7 @@ void main() {
 
     await tester.pumpAndSettle();
     expect(find.byType(IntroEyes), findsNothing);
+    expect(find.text('ИИ бухгалтер'), findsNothing);
     expect(
       find.byWidgetPredicate(
         (w) => w is CustomPaint && w.painter is DripPainter,
