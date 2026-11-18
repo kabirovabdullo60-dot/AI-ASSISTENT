@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// The dark night backdrop of the login and register screens: deep indigo fading to
-/// near-black, with a soft purple glow behind the mascot.
+import 'accounting_rain.dart';
+
+/// The dark night backdrop of the login and register screens: deep indigo
+/// fading to near-black, a soft purple glow behind the mascot and a slow
+/// rain of 3D accountant's things.
 class AuthNightBackground extends StatelessWidget {
   const AuthNightBackground({super.key});
 
@@ -23,7 +26,7 @@ class AuthNightBackground extends StatelessWidget {
           colors: [Color(0x667048E8), Color(0x007048E8)],
         ),
       ),
-      child: SizedBox.expand(),
+      child: SizedBox.expand(child: AccountingRain()),
     ),
   );
 }
