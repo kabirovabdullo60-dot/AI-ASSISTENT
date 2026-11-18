@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// The dark night backdrop of the register screen: deep indigo fading to
+/// The dark night backdrop of the login and register screens: deep indigo fading to
 /// near-black, with a soft purple glow behind the mascot.
-class RegisterBackground extends StatelessWidget {
-  const RegisterBackground({super.key});
+class AuthNightBackground extends StatelessWidget {
+  const AuthNightBackground({super.key});
 
   @override
   Widget build(BuildContext context) => const DecoratedBox(

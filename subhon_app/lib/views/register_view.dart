@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../core/theme/app_theme.dart';
 import '../l10n/error_text.dart';
@@ -16,7 +15,8 @@ import '../widgets/auth_footer_link.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/jelly_blob.dart';
 import '../widgets/look_at_pointer.dart';
-import '../widgets/register_background.dart';
+import '../widgets/vivid_button_theme.dart';
+import '../widgets/auth_night_background.dart';
 
 /// `POST /api/auth/register`: name, work e-mail and password (the API's
 /// required fields). Phone and business name are optional in the API and
@@ -82,21 +82,10 @@ class _RegisterViewState extends State<RegisterView> {
     final session = context.watch<SessionViewModel>();
     final busy = session.isSubmitting;
     const gap = SizedBox(height: AppSpacing.lg);
-    final theme = Theme.of(context);
-    // The button keeps the vivid brand purple with white text, as on the
-    // design (the dark theme's accent is lighter, for text).
-    final vivid = theme.copyWith(
-      extensions: [
-        context.palette.copyWith(
-          primary: AppColors.primary,
-          onPrimary: Colors.white,
-        ),
-      ],
-    );
     return LookAtPointer(
       lookAt: _lookAt,
       child: AuthScaffold(
-        background: const RegisterBackground(),
+        background: const AuthNightBackground(),
         title: l10n.authRegisterTitle,
         subtitle: l10n.authRegisterSubtitle,
         hero: JellyBlob(
@@ -166,8 +155,7 @@ class _RegisterViewState extends State<RegisterView> {
             ),
             gap,
           ],
-          Theme(
-            data: vivid,
+          VividButtonTheme(
             child: AppButton(
               label: l10n.authCreateAccount,
               isLoading: busy,
