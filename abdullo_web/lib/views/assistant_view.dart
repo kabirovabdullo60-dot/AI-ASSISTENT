@@ -10,6 +10,7 @@ import '../widgets/motion/ai_orb.dart';
 import '../widgets/motion/fade_slide_in.dart';
 import '../widgets/motion/pressable.dart';
 import '../widgets/motion/typing_indicator.dart';
+import '../widgets/pamir_ridge.dart';
 
 /// AI assistant — POST /api/assistant/chat (answers in the selected language).
 class AssistantView extends StatefulWidget {
@@ -62,7 +63,7 @@ class _AssistantViewState extends State<AssistantView> {
 
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 920),
+        constraints: const BoxConstraints(maxWidth: _chatWidth + 40),
         child: LayoutBuilder(
           builder: (context, constraints) => Column(
             children: [
@@ -116,13 +117,16 @@ class _AssistantViewState extends State<AssistantView> {
                         ),
                       ),
               ),
-              _InputBar(
-                controller: _input,
-                enabled: !vm.isSending,
-                sending: vm.isSending,
-                canClear: messages.isNotEmpty && !vm.isSending,
-                onSend: () => _send(vm),
-                onClear: vm.clear,
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: _chatWidth + 40),
+                child: _InputBar(
+                  controller: _input,
+                  enabled: !vm.isSending,
+                  sending: vm.isSending,
+                  canClear: messages.isNotEmpty && !vm.isSending,
+                  onSend: () => _send(vm),
+                  onClear: vm.clear,
+                ),
               ),
             ],
           ),
@@ -132,6 +136,8 @@ class _AssistantViewState extends State<AssistantView> {
   }
 }
 
+/// Empty chat: orb + one line of intro + a "live data" pill, then four example questions
+/// in a 2×2 grid (one column on phones). Faint Pamir ridgelines sit at the bottom.
 class _EmptyChat extends StatelessWidget {
   const _EmptyChat({super.key, required this.onSuggestion});
 
@@ -142,80 +148,126 @@ class _EmptyChat extends StatelessWidget {
     final tr = context.l10n;
     final theme = Theme.of(context);
     final suggestions = [
-      (Icons.trending_up, tr.suggestSales),
-      (Icons.storefront_outlined, tr.suggestStores),
-      (Icons.account_balance_wallet_outlined, tr.suggestSalaries),
-      (Icons.campaign_outlined, tr.suggestMarketing),
+      (Icons.trending_up, tr.suggestSales, tr.askSales),
+      (Icons.storefront_outlined, tr.suggestStores, tr.askStores),
+      (Icons.account_balance_wallet_outlined, tr.suggestSalaries, tr.askSalaries),
+      (Icons.campaign_outlined, tr.suggestMarketing, tr.askMarketing),
     ];
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
-      child: Column(
+    return LayoutBuilder(
+      builder: (context, viewport) => Stack(
         children: [
-          const SizedBox(height: 12),
-          const FadeSlideIn(beginScale: 0.9, offset: Offset(0, 6), duration: Motion.slow, child: AiOrb(size: 76)),
-          const SizedBox(height: 20),
-          FadeSlideIn(
-            delay: Motion.staggerAt(1),
-            child: Text(
-              tr.askAssistant,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: AppColors.ink,
-                letterSpacing: -0.4,
-              ),
+          // Ridges only where there is room — on phones they would sit behind the cards.
+          if (viewport.maxWidth >= 600 && viewport.maxHeight >= 640)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: 150,
+              child: IgnorePointer(child: PamirRidges(color: AppColors.teal.withValues(alpha: 0.45))),
             ),
-          ),
-          const SizedBox(height: 8),
-          FadeSlideIn(
-            delay: Motion.staggerAt(2),
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 520),
-              child: Column(
-                children: [
-                  Text(
-                    tr.assistantIntro,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted, height: 1.5),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    tr.assistantNote,
-                    key: const Key('assistant-note'),
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 28),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 620),
-            child: LayoutBuilder(
-              builder: (context, c) {
-                final two = c.maxWidth >= 480;
-                final cardWidth = two ? (c.maxWidth - 12) / 2 : c.maxWidth;
-                return Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    for (var i = 0; i < suggestions.length; i++)
-                      SizedBox(
-                        width: cardWidth,
-                        child: FadeSlideIn(
-                          delay: Motion.staggerAt(3 + i),
-                          child: _SuggestionCard(
-                            icon: suggestions[i].$1,
-                            text: suggestions[i].$2,
-                            onTap: () => onSuggestion(suggestions[i].$2),
+              constraints: BoxConstraints(minHeight: viewport.maxHeight - 48),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: _chatWidth),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const FadeSlideIn(
+                        beginScale: 0.9,
+                        offset: Offset(0, 6),
+                        duration: Motion.slow,
+                        child: AiOrb(size: 64),
+                      ),
+                      const SizedBox(height: 18),
+                      FadeSlideIn(
+                        delay: Motion.staggerAt(1),
+                        child: Text(
+                          tr.askAssistant,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.ink,
+                            letterSpacing: -0.5,
                           ),
                         ),
                       ),
-                  ],
-                );
-              },
+                      const SizedBox(height: 8),
+                      FadeSlideIn(
+                        delay: Motion.staggerAt(2),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 480),
+                          child: Text(
+                            tr.assistantIntro,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted, height: 1.5),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      FadeSlideIn(
+                        delay: Motion.staggerAt(2),
+                        child: Container(
+                          key: const Key('assistant-note'),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(color: AppColors.goldSoft, borderRadius: BorderRadius.circular(20)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 6,
+                                height: 6,
+                                decoration: const BoxDecoration(color: AppColors.amber, shape: BoxShape.circle),
+                              ),
+                              const SizedBox(width: 7),
+                              Flexible(
+                                child: Text(
+                                  tr.assistantLiveData,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.amber,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      LayoutBuilder(
+                        builder: (context, c) {
+                          final two = c.maxWidth >= 520;
+                          final cardWidth = two ? (c.maxWidth - 12) / 2 : c.maxWidth;
+                          return Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: [
+                              for (var i = 0; i < suggestions.length; i++)
+                                SizedBox(
+                                  width: cardWidth,
+                                  child: FadeSlideIn(
+                                    delay: Motion.staggerAt(3 + i),
+                                    child: _SuggestionCard(
+                                      icon: suggestions[i].$1,
+                                      title: suggestions[i].$2,
+                                      question: suggestions[i].$3,
+                                      onTap: () => onSuggestion(suggestions[i].$3),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 56),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -224,11 +276,16 @@ class _EmptyChat extends StatelessWidget {
   }
 }
 
+/// Max width of the chat column — the empty screen, messages and input bar line up on it.
+const double _chatWidth = 720;
+
+/// One example: topic on top, the actual question it sends underneath.
 class _SuggestionCard extends StatelessWidget {
-  const _SuggestionCard({required this.icon, required this.text, required this.onTap});
+  const _SuggestionCard({required this.icon, required this.title, required this.question, required this.onTap});
 
   final IconData icon;
-  final String text;
+  final String title;
+  final String question;
   final VoidCallback onTap;
 
   @override
@@ -244,26 +301,45 @@ class _SuggestionCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
-          hoverColor: AppColors.goldSoft.withValues(alpha: 0.6),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Row(
-              children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(color: AppColors.goldSoft, borderRadius: BorderRadius.circular(10)),
-                  child: Icon(icon, size: 18, color: AppColors.amber),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    text,
-                    style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: AppColors.ink),
+          hoverColor: AppColors.tealSoft.withValues(alpha: 0.45),
+          child: SizedBox(
+            height: 76,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(color: AppColors.tealSoft, borderRadius: BorderRadius.circular(10)),
+                    child: Icon(icon, size: 19, color: AppColors.teal),
                   ),
-                ),
-                const Icon(Icons.arrow_outward, size: 16, color: AppColors.muted),
-              ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.ink),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          question,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(Icons.north_east, size: 16, color: AppColors.muted),
+                ],
+              ),
             ),
           ),
         ),

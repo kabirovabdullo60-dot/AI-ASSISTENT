@@ -1167,7 +1167,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantIntro =>
-      'Sales, stores, staff, salaries or marketing — ask in Tajik, Russian or English.';
+      'Ask about sales, stores, staff, salaries or marketing in Tajik, Russian or English.';
 
   @override
   String get newChat => 'New chat';
@@ -1750,4 +1750,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get loginHeroBody =>
       'Ask the assistant about your numbers. It answers in Tajik, Russian or English.';
+
+  @override
+  String get assistantLiveData => 'Uses your real numbers';
+
+  @override
+  String get askSales => 'How much did I sell today?';
+
+  @override
+  String get askStores => 'Which store sells best this month?';
+
+  @override
+  String get askSalaries => 'Who is still waiting for salary?';
+
+  @override
+  String get askMarketing => 'Ideas to bring in more customers';
 }

@@ -1158,7 +1158,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get assistantIntro =>
-      'Продажи, магазины, персонал, зарплаты или маркетинг — спрашивайте на таджикском, русском или английском.';
+      'Спрашивайте о продажах, магазинах, сотрудниках, зарплатах или маркетинге по-таджикски, по-русски или по-английски.';
 
   @override
   String get newChat => 'Новый чат';
@@ -1739,4 +1739,19 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get loginHeroBody =>
       'Спросите ассистента о своих цифрах. Он отвечает по-таджикски, по-русски или по-английски.';
+
+  @override
+  String get assistantLiveData => 'На ваших реальных данных';
+
+  @override
+  String get askSales => 'Сколько я продал сегодня?';
+
+  @override
+  String get askStores => 'Какой магазин лучше продаёт в этом месяце?';
+
+  @override
+  String get askSalaries => 'Кто ещё ждёт зарплату?';
+
+  @override
+  String get askMarketing => 'Идеи, как привлечь больше клиентов';
 }

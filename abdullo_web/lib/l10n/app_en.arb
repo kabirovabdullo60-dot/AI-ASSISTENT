@@ -840,7 +840,7 @@
   "demoData": "Demo data",
   "demoNote": "The web shows demo data until the endpoints below are connected.",
   "askAssistant": "Ask your business assistant",
-  "assistantIntro": "Sales, stores, staff, salaries or marketing — ask in Tajik, Russian or English.",
+  "assistantIntro": "Ask about sales, stores, staff, salaries or marketing in Tajik, Russian or English.",
   "newChat": "New chat",
   "askHint": "Ask about your business…",
   "send": "Send",
@@ -1197,5 +1197,10 @@
   "targetsSaved": "Targets saved",
   "assistantThinking": "Thinking…",
   "loginHeadline": "Every store, sale and salary in one calm place.",
-  "loginHeroBody": "Ask the assistant about your numbers. It answers in Tajik, Russian or English."
+  "loginHeroBody": "Ask the assistant about your numbers. It answers in Tajik, Russian or English.",
+  "assistantLiveData": "Uses your real numbers",
+  "askSales": "How much did I sell today?",
+  "askStores": "Which store sells best this month?",
+  "askSalaries": "Who is still waiting for salary?",
+  "askMarketing": "Ideas to bring in more customers"
 }

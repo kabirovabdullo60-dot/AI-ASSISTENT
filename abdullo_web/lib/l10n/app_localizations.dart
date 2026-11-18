@@ -2101,7 +2101,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantIntro.
   ///
   /// In en, this message translates to:
-  /// **'Sales, stores, staff, salaries or marketing — ask in Tajik, Russian or English.'**
+  /// **'Ask about sales, stores, staff, salaries or marketing in Tajik, Russian or English.'**
   String get assistantIntro;
 
   /// No description provided for @newChat.
@@ -3147,6 +3147,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ask the assistant about your numbers. It answers in Tajik, Russian or English.'**
   String get loginHeroBody;
+
+  /// No description provided for @assistantLiveData.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses your real numbers'**
+  String get assistantLiveData;
+
+  /// No description provided for @askSales.
+  ///
+  /// In en, this message translates to:
+  /// **'How much did I sell today?'**
+  String get askSales;
+
+  /// No description provided for @askStores.
+  ///
+  /// In en, this message translates to:
+  /// **'Which store sells best this month?'**
+  String get askStores;
+
+  /// No description provided for @askSalaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Who is still waiting for salary?'**
+  String get askSalaries;
+
+  /// No description provided for @askMarketing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ideas to bring in more customers'**
+  String get askMarketing;
 }
 
 class _AppLocalizationsDelegate

@@ -81,4 +81,15 @@ void main() {
       await _shot(tester, '$label-${i++}-assistant-chat');
     }, skip: !_capture);
   }
+
+  testWidgets('capture assistant in tg', (tester) async {
+    final backend = setUpBackend(language: 'tg');
+    tester.view.physicalSize = const Size(1440, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(RepaintBoundary(key: const Key('capture-root'), child: WebApp(httpClient: backend.client)));
+    await tester.pumpAndSettle();
+    await openSection(tester, AppSection.assistant);
+    await _shot(tester, 'tg-assistant-empty');
+  }, skip: !_capture);
 }

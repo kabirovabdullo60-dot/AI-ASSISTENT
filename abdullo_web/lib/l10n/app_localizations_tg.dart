@@ -1151,7 +1151,7 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get assistantIntro =>
-      'Фурӯш, мағозаҳо, кормандон, музд ё маркетинг — бо тоҷикӣ, русӣ ё англисӣ пурсед.';
+      'Дар бораи фурӯш, мағозаҳо, кормандон, музд ё маркетинг бо тоҷикӣ, русӣ ё англисӣ пурсед.';
 
   @override
   String get newChat => 'Чати нав';
@@ -1733,4 +1733,19 @@ class AppLocalizationsTg extends AppLocalizations {
   @override
   String get loginHeroBody =>
       'Аз ёрдамчӣ дар бораи рақамҳои худ пурсед. Ӯ бо тоҷикӣ, русӣ ё англисӣ ҷавоб медиҳад.';
+
+  @override
+  String get assistantLiveData => 'Аз рақамҳои воқеии шумо';
+
+  @override
+  String get askSales => 'Имрӯз чӣ қадар фурӯхтам?';
+
+  @override
+  String get askStores => 'Кадом мағоза дар ин моҳ беҳтар мефурӯшад?';
+
+  @override
+  String get askSalaries => 'Кӣ ҳанӯз музд нагирифтааст?';
+
+  @override
+  String get askMarketing => 'Ғояҳо барои ҷалби мизоҷони бештар';
 }
