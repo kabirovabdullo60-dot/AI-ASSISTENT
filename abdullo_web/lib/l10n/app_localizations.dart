@@ -3129,6 +3129,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Targets saved'**
   String get targetsSaved;
+
+  /// No description provided for @assistantThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking…'**
+  String get assistantThinking;
 }
 
 class _AppLocalizationsDelegate

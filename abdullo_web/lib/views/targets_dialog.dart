@@ -12,8 +12,10 @@ class TargetsDialog extends StatefulWidget {
 
   final DashboardModel dashboard;
 
-  static Future<void> show(BuildContext context, DashboardModel d) =>
-      showDialog<void>(context: context, builder: (_) => TargetsDialog(dashboard: d));
+  static Future<void> show(BuildContext context, DashboardModel d) => showDialog<void>(
+    context: context,
+    builder: (_) => TargetsDialog(dashboard: d),
+  );
 
   @override
   State<TargetsDialog> createState() => _TargetsDialogState();

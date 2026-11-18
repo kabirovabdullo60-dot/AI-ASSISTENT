@@ -1740,4 +1740,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get targetsSaved => 'Targets saved';
+
+  @override
+  String get assistantThinking => 'Thinking…';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
+import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
 
 /// Dark navy side menu from the Figma design.
@@ -107,51 +108,65 @@ class _SidebarItem extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Material(
-        color: selected ? AppColors.orange : Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
-        child: InkWell(
-          key: Key('nav-${section.name}'),
+      child: AnimatedContainer(
+        duration: Motion.base,
+        curve: Motion.easeOut,
+        decoration: BoxDecoration(
+          color: selected ? AppColors.orange : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          hoverColor: Colors.white.withValues(alpha: 0.06),
-          onTap: onTap,
-          child: Semantics(
-            selected: selected,
-            button: true,
-            label: context.l10n.section(section),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: extended ? 12 : 4, vertical: extended ? 11 : 9),
-              child: extended
-                  ? Row(
-                      children: [
-                        icon,
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.orange.withValues(alpha: selected ? 0.35 : 0),
+              blurRadius: selected ? 14 : 0,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            key: Key('nav-${section.name}'),
+            borderRadius: BorderRadius.circular(8),
+            hoverColor: Colors.white.withValues(alpha: 0.06),
+            onTap: onTap,
+            child: Semantics(
+              selected: selected,
+              button: true,
+              label: context.l10n.section(section),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: extended ? 12 : 4, vertical: extended ? 11 : 9),
+                child: extended
+                    ? Row(
+                        children: [
+                          icon,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              context.l10n.section(section),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: color,
+                                fontSize: 14,
+                                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          icon,
+                          const SizedBox(height: 4),
+                          Text(
                             context.l10n.section(section),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: color,
-                              fontSize: 14,
-                              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                            ),
+                            style: TextStyle(color: color, fontSize: 10.5),
                           ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        icon,
-                        const SizedBox(height: 4),
-                        Text(
-                          context.l10n.section(section),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: color, fontSize: 10.5),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+              ),
             ),
           ),
         ),

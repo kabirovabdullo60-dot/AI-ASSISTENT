@@ -504,5 +504,6 @@
   "monthlyTarget": "Цель продаж на месяц",
   "noTarget": "Цель не задана",
   "setTargets": "Задать цели",
-  "targetsSaved": "Цели сохранены"
+  "targetsSaved": "Цели сохранены",
+  "assistantThinking": "Думаю…"
 }

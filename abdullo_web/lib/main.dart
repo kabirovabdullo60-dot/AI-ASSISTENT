@@ -130,7 +130,9 @@ class _SignedInState extends State<_SignedIn> {
         Provider.value(value: employees),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => NotificationsViewModel(NotificationService(api))..load()),
-        ChangeNotifierProvider(create: (_) => DashboardViewModel(reports, sales, payroll, ActivityService(api), TargetService(api))..load()),
+        ChangeNotifierProvider(
+          create: (_) => DashboardViewModel(reports, sales, payroll, ActivityService(api), TargetService(api))..load(),
+        ),
         ChangeNotifierProvider(create: (_) => StoresViewModel(StoreService(api), sales, reports)..load()),
         ChangeNotifierProvider(create: (_) => SalesViewModel(sales)..load()),
         ChangeNotifierProvider(create: (_) => EmployeesViewModel(employees, reports)..load()),

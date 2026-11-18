@@ -1729,4 +1729,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get targetsSaved => 'Цели сохранены';
+
+  @override
+  String get assistantThinking => 'Думаю…';
 }

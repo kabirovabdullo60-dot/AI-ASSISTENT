@@ -1722,4 +1722,7 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get targetsSaved => 'Нақша сабт шуд';
+
+  @override
+  String get assistantThinking => 'Фикр мекунам…';
 }

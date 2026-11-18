@@ -22,6 +22,9 @@ import '../widgets/page_body.dart';
 import '../widgets/revenue_chart.dart';
 import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
+import '../core/motion/motion.dart';
+import '../widgets/motion/fade_slide_in.dart';
+import '../widgets/motion/pressable.dart';
 import 'record_sale_dialog.dart';
 import 'targets_dialog.dart';
 
@@ -131,8 +134,17 @@ class _DashboardContent extends StatelessWidget {
       ],
       children: [
         LayoutBuilder(
-          builder: (context, c) =>
-              CardGrid(columns: c.maxWidth >= 1100 ? 6 : (c.maxWidth >= 620 ? 3 : 2), children: kpis),
+          builder: (context, c) => CardGrid(
+            columns: c.maxWidth >= 1100 ? 6 : (c.maxWidth >= 620 ? 3 : 2),
+            children: [
+              // Cards cascade in one after another, and lift under the mouse.
+              for (var i = 0; i < kpis.length; i++)
+                FadeSlideIn(
+                  delay: Motion.staggerAt(i),
+                  child: Pressable(child: kpis[i]),
+                ),
+            ],
+          ),
         ),
         const SizedBox(height: 16),
         _GoalsCard(d: d, currency: cur),
@@ -186,11 +198,17 @@ class _GoalsCard extends StatelessWidget {
           const SizedBox(height: 6),
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
-            child: LinearProgressIndicator(
-              value: ratio.clamp(0, 1).toDouble(),
-              minHeight: 8,
-              backgroundColor: AppColors.surfaceSoft,
-              color: ratio >= 1 ? AppColors.green : AppColors.orange,
+            // The bar fills up from 0 when the dashboard opens or a target changes.
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: ratio.clamp(0, 1).toDouble()),
+              duration: Motion.reveal,
+              curve: Motion.easeOut,
+              builder: (context, v, _) => LinearProgressIndicator(
+                value: v,
+                minHeight: 8,
+                backgroundColor: AppColors.surfaceSoft,
+                color: ratio >= 1 ? AppColors.green : AppColors.orange,
+              ),
             ),
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/l10n/l10n.dart';
+import '../core/motion/motion.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../viewmodels/home_view_model.dart';
@@ -41,7 +42,23 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final home = context.watch<HomeViewModel>();
     final brand = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? 'Apex Suite');
-    final page = KeyedSubtree(key: ValueKey(home.section), child: _page(home.section));
+    // Page switch: the new page fades in while rising 8px (old one fades out quickly).
+    final page = AnimatedSwitcher(
+      duration: Motion.base,
+      reverseDuration: Motion.fast,
+      switchInCurve: Motion.easeOut,
+      switchOutCurve: Curves.easeOut,
+      transitionBuilder: (child, a) => FadeTransition(
+        opacity: a,
+        child: Motion.reduced(context)
+            ? child
+            : SlideTransition(
+                position: Tween(begin: const Offset(0, 0.012), end: Offset.zero).animate(a),
+                child: child,
+              ),
+      ),
+      child: KeyedSubtree(key: ValueKey(home.section), child: _page(home.section)),
+    );
 
     Widget wide(bool extended) => Scaffold(
       body: Row(

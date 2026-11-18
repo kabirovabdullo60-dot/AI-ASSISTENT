@@ -1194,5 +1194,6 @@
   "monthlyTarget": "Monthly sales target",
   "noTarget": "No target set",
   "setTargets": "Set targets",
-  "targetsSaved": "Targets saved"
+  "targetsSaved": "Targets saved",
+  "assistantThinking": "Thinking…"
 }
