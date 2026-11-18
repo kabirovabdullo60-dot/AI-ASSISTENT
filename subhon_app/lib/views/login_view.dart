@@ -19,8 +19,8 @@ import 'register_view.dart';
 /// `POST /api/auth/login` (email + password).
 ///
 /// A jelly mascot sits on top. Its eyes look where the screen is pressed
-/// (finger or mouse click) and, a moment after it is released, look around
-/// on their own again. They follow
+/// (finger or mouse click) and, a moment after it is released, look
+/// straight ahead again. They follow
 /// the text while the e-mail is typed and close while the password is.
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -68,7 +68,7 @@ class _LoginViewState extends State<LoginView> {
     _lookAt.value = event.position;
   }
 
-  /// Released: keep looking there for a moment, then look around.
+  /// Released: keep looking there for a moment, then look ahead.
   void _touchEnded(PointerEvent event) {
     _release?.cancel();
     _release = Timer(_releaseAfter, () {

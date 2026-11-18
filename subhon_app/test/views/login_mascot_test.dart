@@ -14,7 +14,7 @@ ValueNotifier<Offset?> _lookAt(WidgetTester tester) =>
 void main() {
   setUp(() => FlutterSecureStorage.setMockInitialValues({}));
 
-  testWidgets('a touch: look there, then look around again', (tester) async {
+  testWidgets('a touch: look there, then straight ahead again', (tester) async {
     await pumpApp(tester, FakeBackend());
     const spot = Offset(40, 500);
     final gesture = await tester.startGesture(spot);
@@ -25,7 +25,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expect(_lookAt(tester).value, spot); // still looking for a moment
     await tester.pump(const Duration(milliseconds: 800));
-    expect(_lookAt(tester).value, isNull); // back to glancing around
+    expect(_lookAt(tester).value, isNull); // back to looking straight ahead
   });
 
   testWidgets('moving the mouse without a click does nothing', (tester) async {
