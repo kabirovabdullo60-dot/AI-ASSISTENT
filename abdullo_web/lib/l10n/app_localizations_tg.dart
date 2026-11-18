@@ -1704,4 +1704,22 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get errExpenseNotFound => 'Ин хароҷот дигар вуҷуд надорад.';
+
+  @override
+  String get goalsTitle => 'Нақша ва фоида';
+
+  @override
+  String get weeklyTarget => 'Нақшаи фурӯши ҳафта';
+
+  @override
+  String get monthlyTarget => 'Нақшаи фурӯши моҳ';
+
+  @override
+  String get noTarget => 'Нақша муайян нашудааст';
+
+  @override
+  String get setTargets => 'Муайян кардани нақша';
+
+  @override
+  String get targetsSaved => 'Нақша сабт шуд';
 }

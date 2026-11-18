@@ -1722,4 +1722,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errExpenseNotFound => 'This expense no longer exists.';
+
+  @override
+  String get goalsTitle => 'Targets & profit';
+
+  @override
+  String get weeklyTarget => 'Weekly sales target';
+
+  @override
+  String get monthlyTarget => 'Monthly sales target';
+
+  @override
+  String get noTarget => 'No target set';
+
+  @override
+  String get setTargets => 'Set targets';
+
+  @override
+  String get targetsSaved => 'Targets saved';
 }

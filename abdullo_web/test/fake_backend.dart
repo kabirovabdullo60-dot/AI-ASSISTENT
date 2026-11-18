@@ -33,6 +33,9 @@ class FakeBackend {
   /// /api/expenses rows (`ExpenseOut` + `deleted`).
   final expenses = <Map<String, dynamic>>[];
 
+  /// Business-wide sales targets set with PUT /api/targets: `{'WEEK': '5000.00'}`.
+  final targets = <String, String>{};
+
   /// GET /api/settings/exchange-rates.
   String usdRate = '10.95';
 
@@ -697,6 +700,26 @@ class FakeBackend {
                 'totalAmount': top['totalAmount'],
                 'salesCount': top['salesCount'],
               },
+        'monthExpenses': '0.00',
+        'monthProfit': money(double.parse('${month['totalAmount']}') - 250),
+        'monthMarginPercent': 12.5,
+        'weekTarget': targets['WEEK'],
+        'monthTarget': targets['MONTH'],
+      });
+    }
+    if (path == '/api/targets' && m == 'PUT') {
+      final b = body();
+      final amount = double.tryParse('${b['amount']}') ?? 0;
+      if (!['WEEK', 'MONTH'].contains(b['period']) || amount <= 0) return _error(422, 'VALIDATION_ERROR');
+      targets[b['period'] as String] = money(amount);
+      return _json({
+        'id': 't-${b['period']}',
+        'period': b['period'],
+        'storeId': b['storeId'],
+        'storeName': null,
+        'amount': money(amount),
+        'createdAt': '2026-11-18T00:00:00Z',
+        'updatedAt': '2026-11-18T00:00:00Z',
       });
     }
     if (path == '/api/reports/employees') {

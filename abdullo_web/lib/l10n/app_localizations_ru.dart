@@ -1711,4 +1711,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get errExpenseNotFound => 'Этот расход больше не существует.';
+
+  @override
+  String get goalsTitle => 'Цели и прибыль';
+
+  @override
+  String get weeklyTarget => 'Цель продаж на неделю';
+
+  @override
+  String get monthlyTarget => 'Цель продаж на месяц';
+
+  @override
+  String get noTarget => 'Цель не задана';
+
+  @override
+  String get setTargets => 'Задать цели';
+
+  @override
+  String get targetsSaved => 'Цели сохранены';
 }

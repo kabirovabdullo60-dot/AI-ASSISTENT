@@ -3093,6 +3093,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This expense no longer exists.'**
   String get errExpenseNotFound;
+
+  /// No description provided for @goalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Targets & profit'**
+  String get goalsTitle;
+
+  /// No description provided for @weeklyTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly sales target'**
+  String get weeklyTarget;
+
+  /// No description provided for @monthlyTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly sales target'**
+  String get monthlyTarget;
+
+  /// No description provided for @noTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'No target set'**
+  String get noTarget;
+
+  /// No description provided for @setTargets.
+  ///
+  /// In en, this message translates to:
+  /// **'Set targets'**
+  String get setTargets;
+
+  /// No description provided for @targetsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Targets saved'**
+  String get targetsSaved;
 }
 
 class _AppLocalizationsDelegate

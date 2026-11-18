@@ -498,5 +498,11 @@
   "salaryDueLabel": "Музди ҳисобшуда",
   "byCategory": "Аз рӯи категория",
   "profitByStore": "Фоида аз рӯи мағоза",
-  "errExpenseNotFound": "Ин хароҷот дигар вуҷуд надорад."
+  "errExpenseNotFound": "Ин хароҷот дигар вуҷуд надорад.",
+  "goalsTitle": "Нақша ва фоида",
+  "weeklyTarget": "Нақшаи фурӯши ҳафта",
+  "monthlyTarget": "Нақшаи фурӯши моҳ",
+  "noTarget": "Нақша муайян нашудааст",
+  "setTargets": "Муайян кардани нақша",
+  "targetsSaved": "Нақша сабт шуд"
 }

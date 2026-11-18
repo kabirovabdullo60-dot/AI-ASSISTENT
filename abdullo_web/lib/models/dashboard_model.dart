@@ -20,6 +20,11 @@ class DashboardModel {
     required this.remainingSalaryTotal,
     this.topStoreName,
     this.topStoreAmount = 0,
+    this.monthExpenses = 0,
+    this.monthProfit = 0,
+    this.monthMarginPercent,
+    this.weekTarget,
+    this.monthTarget,
   });
 
   factory DashboardModel.fromJson(Map<String, dynamic> json) {
@@ -42,6 +47,11 @@ class DashboardModel {
       remainingSalaryTotal: asDouble(json['remainingSalaryTotal']),
       topStoreName: top == null ? null : asString(top['storeName']),
       topStoreAmount: top == null ? 0 : asDouble(top['totalAmount']),
+      monthExpenses: asDouble(json['monthExpenses']),
+      monthProfit: asDouble(json['monthProfit']),
+      monthMarginPercent: asDoubleOrNull(json['monthMarginPercent']),
+      weekTarget: asDoubleOrNull(json['weekTarget']),
+      monthTarget: asDoubleOrNull(json['monthTarget']),
     );
   }
 
@@ -62,4 +72,13 @@ class DashboardModel {
   final double remainingSalaryTotal;
   final String? topStoreName;
   final double topStoreAmount;
+
+  /// This month: expenses, and sales − expenses − salary due (= /api/reports/profit).
+  final double monthExpenses;
+  final double monthProfit;
+  final double? monthMarginPercent;
+
+  /// Business-wide sales targets (PUT /api/targets); null = not set.
+  final double? weekTarget;
+  final double? monthTarget;
 }

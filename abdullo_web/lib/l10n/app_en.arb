@@ -1188,5 +1188,11 @@
   "salaryDueLabel": "Salary due",
   "byCategory": "By category",
   "profitByStore": "Profit by store",
-  "errExpenseNotFound": "This expense no longer exists."
+  "errExpenseNotFound": "This expense no longer exists.",
+  "goalsTitle": "Targets & profit",
+  "weeklyTarget": "Weekly sales target",
+  "monthlyTarget": "Monthly sales target",
+  "noTarget": "No target set",
+  "setTargets": "Set targets",
+  "targetsSaved": "Targets saved"
 }

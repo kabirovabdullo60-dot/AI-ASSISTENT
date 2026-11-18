@@ -23,6 +23,7 @@ import '../widgets/revenue_chart.dart';
 import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
 import 'record_sale_dialog.dart';
+import 'targets_dialog.dart';
 
 /// "Business Overview" — GET /api/reports/dashboard + sales reports.
 class DashboardView extends StatelessWidget {
@@ -134,6 +135,8 @@ class _DashboardContent extends StatelessWidget {
               CardGrid(columns: c.maxWidth >= 1100 ? 6 : (c.maxWidth >= 620 ? 3 : 2), children: kpis),
         ),
         const SizedBox(height: 16),
+        _GoalsCard(d: d, currency: cur),
+        const SizedBox(height: 16),
         LayoutBuilder(
           builder: (context, c) {
             final chart = _RevenueCard(vm: vm, d: d, currency: cur);
@@ -152,6 +155,102 @@ class _DashboardContent extends StatelessWidget {
         const SizedBox(height: 16),
         _ActivityCard(vm: vm, currency: cur),
       ],
+    );
+  }
+}
+
+/// Weekly / monthly sales targets (PUT /api/targets) and this month's profit (dashboard fields).
+class _GoalsCard extends StatelessWidget {
+  const _GoalsCard({required this.d, required this.currency});
+
+  final DashboardModel d;
+  final Currency currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final tr = context.l10n;
+    Widget progress(Key key, String label, double done, double? target) {
+      final ratio = target == null || target <= 0 ? 0.0 : done / target;
+      return Column(
+        key: key,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          const SizedBox(height: 4),
+          Text(
+            target == null
+                ? tr.noTarget
+                : '${currency.format(done)} / ${currency.format(target)} · ${(ratio * 100).round()}%',
+            style: const TextStyle(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: LinearProgressIndicator(
+              value: ratio.clamp(0, 1).toDouble(),
+              minHeight: 8,
+              backgroundColor: AppColors.surfaceSoft,
+              color: ratio >= 1 ? AppColors.green : AppColors.orange,
+            ),
+          ),
+        ],
+      );
+    }
+
+    final profit = Column(
+      key: const Key('month-profit'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(tr.profitThisMonth, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        const SizedBox(height: 4),
+        Text(
+          currency.format(d.monthProfit),
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            fontSize: 18,
+            color: d.monthProfit >= 0 ? AppColors.green : AppColors.red,
+          ),
+        ),
+        Text(
+          [
+            '${tr.navExpenses}: ${currency.format(d.monthExpenses)}',
+            if (d.monthMarginPercent != null) formatPercent(d.monthMarginPercent!),
+          ].join(' · '),
+          style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+        ),
+      ],
+    );
+
+    final parts = [
+      progress(const Key('week-target'), tr.weeklyTarget, d.weekSales, d.weekTarget),
+      progress(const Key('month-target'), tr.monthlyTarget, d.monthSales, d.monthTarget),
+      profit,
+    ];
+
+    return SectionCard(
+      title: tr.goalsTitle,
+      trailing: TextButton.icon(
+        key: const Key('set-targets'),
+        onPressed: () => TargetsDialog.show(context, d),
+        icon: const Icon(Icons.flag_outlined, size: 18),
+        label: Text(tr.setTargets),
+      ),
+      child: LayoutBuilder(
+        builder: (context, c) => c.maxWidth < 700
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [for (final p in parts) Padding(padding: const EdgeInsets.only(bottom: 14), child: p)],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (var i = 0; i < parts.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 24),
+                    Expanded(child: parts[i]),
+                  ],
+                ],
+              ),
+      ),
     );
   }
 }

@@ -498,5 +498,11 @@
   "salaryDueLabel": "Начислено зарплат",
   "byCategory": "По категориям",
   "profitByStore": "Прибыль по магазинам",
-  "errExpenseNotFound": "Этот расход больше не существует."
+  "errExpenseNotFound": "Этот расход больше не существует.",
+  "goalsTitle": "Цели и прибыль",
+  "weeklyTarget": "Цель продаж на неделю",
+  "monthlyTarget": "Цель продаж на месяц",
+  "noTarget": "Цель не задана",
+  "setTargets": "Задать цели",
+  "targetsSaved": "Цели сохранены"
 }

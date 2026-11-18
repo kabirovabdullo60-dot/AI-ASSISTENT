@@ -8,12 +8,13 @@ import '../services/activity_service.dart';
 import '../services/payroll_service.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
+import '../services/target_service.dart';
 import 'base_view_model.dart';
 
 enum ChartRange { weekly, monthly }
 
 class DashboardViewModel extends BaseViewModel {
-  DashboardViewModel(this._reports, this._sales, this._payroll, this._activityLog);
+  DashboardViewModel(this._reports, this._sales, this._payroll, this._activityLog, this._targets);
 
   static const chartDays = 24;
 
@@ -21,6 +22,7 @@ class DashboardViewModel extends BaseViewModel {
   final SalesService _sales;
   final PayrollService _payroll;
   final ActivityService _activityLog;
+  final TargetService _targets;
 
   DashboardModel? _dashboard;
   SalesReportModel? _today;
@@ -148,6 +150,15 @@ class DashboardViewModel extends BaseViewModel {
         ChartPointModel(date: d, revenue: byDate[d]?.totalAmount ?? 0, count: byDate[d]?.salesCount ?? 0),
     ];
   }
+
+  /// Business-wide targets → PUT /api/targets (only the ones given), then reload.
+  Future<String?> saveTargets({double? week, double? month}) => runAction(() async {
+    await (
+      week == null ? Future<void>.value() : _targets.put(TargetPeriod.week, week),
+      month == null ? Future<void>.value() : _targets.put(TargetPeriod.month, month),
+    ).wait;
+    _dashboard = await _reports.dashboard();
+  });
 
   void setRange(ChartRange range) {
     if (range == _range) return;
