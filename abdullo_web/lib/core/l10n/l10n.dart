@@ -143,6 +143,8 @@ extension EnumLabels on AppLocalizations {
     'VALIDATION_ERROR' => errValidationShort,
     'NETWORK_ERROR' => errNetwork,
     'RATE_LIMITED' => errRateLimited,
+    'ASSISTANT_UNAVAILABLE' => assistantError,
+    'SALE_SPLIT_MISMATCH' => errSplitMismatch,
     'INTERNAL_ERROR' => errServer,
     _ => errUnknown(code),
   };

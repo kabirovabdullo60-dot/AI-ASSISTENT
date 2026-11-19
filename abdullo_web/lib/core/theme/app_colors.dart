@@ -35,6 +35,9 @@ class AppColors {
   static Color get orange => _c.accent;
   static Color get orangeSoft => _c.accentSoft;
   static Color get teal => _c.accent;
+
+  /// Accent for text, links and icons on the page or on [tealSoft] (≥ 4.5:1 in every look).
+  static Color get accentText => _c.accentText ?? _c.accent;
   static Color get tealSoft => _c.accentSoft;
 
   /// Text / icons on the accent (always light: every accent is dark enough).

@@ -1748,4 +1748,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get greetingNoName => 'Здравствуйте';
+
+  @override
+  String get errSplitMismatch => 'Наличные и карта вместе должны равняться сумме продажи.';
+
+  @override
+  String get clearDate => 'Очистить дату';
+
+  @override
+  String get showPassword => 'Показать пароль';
+
+  @override
+  String get hidePassword => 'Скрыть пароль';
 }

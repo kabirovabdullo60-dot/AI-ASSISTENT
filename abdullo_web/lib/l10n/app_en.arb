@@ -1212,5 +1212,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "errSplitMismatch": "Cash and card must add up to the sale amount.",
+  "clearDate": "Clear date",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password"
 }

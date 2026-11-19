@@ -150,7 +150,7 @@ class _Content extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 currency.format(value),
-                style: TextStyle(fontWeight: FontWeight.w800, color: accent ? AppColors.orange : AppColors.ink),
+                style: TextStyle(fontWeight: FontWeight.w800, color: accent ? AppColors.accentText : AppColors.ink),
               ),
             ),
             if (change != null)

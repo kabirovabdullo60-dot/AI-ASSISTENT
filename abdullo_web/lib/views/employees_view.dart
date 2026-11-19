@@ -125,7 +125,10 @@ class EmployeesView extends StatelessWidget {
                           CircleAvatar(
                             radius: 14,
                             backgroundColor: AppColors.orangeSoft,
-                            child: Text(initials(e.fullName), style: TextStyle(fontSize: 11, color: AppColors.orange)),
+                            child: Text(
+                              initials(e.fullName),
+                              style: TextStyle(fontSize: 11, color: AppColors.accentText),
+                            ),
                           ),
                           const SizedBox(width: 8),
                           Column(

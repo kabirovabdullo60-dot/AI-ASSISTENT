@@ -132,7 +132,7 @@ class _MobileNavBar extends StatelessWidget {
                   leading: Icon(s == section ? s.selectedIcon : s.icon),
                   title: Text(context.l10n.section(s)),
                   selected: s == section,
-                  selectedColor: AppColors.orange,
+                  selectedColor: AppColors.accentText,
                   onTap: () {
                     Navigator.of(sheetContext).pop();
                     onSelect(s);

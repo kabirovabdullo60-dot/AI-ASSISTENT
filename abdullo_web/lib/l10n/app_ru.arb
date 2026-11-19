@@ -515,5 +515,9 @@
   "askMarketing": "Идеи, как привлечь больше клиентов",
   "themeLabel": "Тема",
   "greeting": "Здравствуйте, {name}",
-  "greetingNoName": "Здравствуйте"
+  "greetingNoName": "Здравствуйте",
+  "errSplitMismatch": "Наличные и карта вместе должны равняться сумме продажи.",
+  "clearDate": "Очистить дату",
+  "showPassword": "Показать пароль",
+  "hidePassword": "Скрыть пароль"
 }

@@ -81,7 +81,7 @@ class _Header extends StatelessWidget {
                   foregroundImage: url == null ? null : NetworkImage(url),
                   child: Text(
                     initials(user.fullName),
-                    style: TextStyle(fontSize: 22, color: AppColors.orange, fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 22, color: AppColors.accentText, fontWeight: FontWeight.w700),
                   ),
                 ),
                 Positioned(

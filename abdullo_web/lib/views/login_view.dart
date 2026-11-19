@@ -135,6 +135,7 @@ class _LoginViewState extends State<LoginView> {
                           labelText: tr.password,
                           prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
+                            tooltip: _showPassword ? tr.hidePassword : tr.showPassword,
                             onPressed: () => setState(() => _showPassword = !_showPassword),
                             icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
                           ),

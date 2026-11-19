@@ -88,7 +88,7 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
                     children: [
                       Text(
                         tr.payFor(formatMonthYear(vm.month)),
-                        style: TextStyle(color: AppColors.orange, fontWeight: FontWeight.w600),
+                        style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 8),
                       if (widget.payroll == null)

@@ -1740,4 +1740,16 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get greetingNoName => 'Салом';
+
+  @override
+  String get errSplitMismatch => 'Нақд ва корт якҷоя бояд ба маблағи фурӯш баробар бошанд.';
+
+  @override
+  String get clearDate => 'Тоза кардани сана';
+
+  @override
+  String get showPassword => 'Нишон додани парол';
+
+  @override
+  String get hidePassword => 'Пинҳон кардани парол';
 }

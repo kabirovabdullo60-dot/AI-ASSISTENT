@@ -3188,6 +3188,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello'**
   String get greetingNoName;
+
+  /// No description provided for @errSplitMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash and card must add up to the sale amount.'**
+  String get errSplitMismatch;
+
+  /// No description provided for @clearDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear date'**
+  String get clearDate;
+
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// No description provided for @hidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePassword;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

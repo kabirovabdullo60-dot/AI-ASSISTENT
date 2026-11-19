@@ -515,5 +515,9 @@
   "askMarketing": "Ғояҳо барои ҷалби мизоҷони бештар",
   "themeLabel": "Намуди зоҳирӣ",
   "greeting": "Салом, {name}",
-  "greetingNoName": "Салом"
+  "greetingNoName": "Салом",
+  "errSplitMismatch": "Нақд ва корт якҷоя бояд ба маблағи фурӯш баробар бошанд.",
+  "clearDate": "Тоза кардани сана",
+  "showPassword": "Нишон додани парол",
+  "hidePassword": "Пинҳон кардани парол"
 }

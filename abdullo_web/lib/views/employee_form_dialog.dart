@@ -111,7 +111,11 @@ class _EmployeeFormDialogState extends State<EmployeeFormDialog> {
         decoration: InputDecoration(
           labelText: label,
           suffixIcon: clearable && value != null
-              ? IconButton(icon: const Icon(Icons.clear, size: 18), onPressed: () => setState(() => onChanged(null)))
+              ? IconButton(
+                  tooltip: tr.clearDate,
+                  icon: const Icon(Icons.clear, size: 18),
+                  onPressed: () => setState(() => onChanged(null)),
+                )
               : const Icon(Icons.calendar_today_outlined, size: 18),
         ),
         child: Text(value == null ? '—' : formatNumericDate(value)),

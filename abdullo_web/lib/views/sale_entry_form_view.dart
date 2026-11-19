@@ -111,7 +111,7 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
               Expanded(child: Text(tr.selectStore, style: label)),
               Text(
                 tr.activeBranches(stores.activeCount),
-                style: TextStyle(fontSize: 11.5, color: AppColors.orange, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 11.5, color: AppColors.accentText, fontWeight: FontWeight.w600),
               ),
             ],
           ),

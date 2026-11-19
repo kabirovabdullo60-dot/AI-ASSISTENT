@@ -390,7 +390,7 @@ class _UserMenu extends StatelessWidget {
               backgroundColor: AppColors.orangeSoft,
               child: Text(
                 initials(name),
-                style: TextStyle(color: AppColors.orange, fontWeight: FontWeight.w700, fontSize: 13),
+                style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.w700, fontSize: 13),
               ),
             ),
             if (showName && user != null) ...[

@@ -1742,4 +1742,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get greetingNoName => 'Hello';
+
+  @override
+  String get errSplitMismatch => 'Cash and card must add up to the sale amount.';
+
+  @override
+  String get clearDate => 'Clear date';
+
+  @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
 }

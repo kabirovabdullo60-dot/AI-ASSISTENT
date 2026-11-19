@@ -343,7 +343,7 @@ class _StoreActions extends StatelessWidget {
               child: TextButton(
                 key: Key('analytics-${store.id}'),
                 style: TextButton.styleFrom(
-                  foregroundColor: store.isActive ? AppColors.orange : AppColors.muted,
+                  foregroundColor: store.isActive ? AppColors.accentText : AppColors.muted,
                   padding: EdgeInsets.zero,
                 ),
                 onPressed: () => StoreDetailSheet.show(context, store.id),

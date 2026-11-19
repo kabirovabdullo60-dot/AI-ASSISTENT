@@ -433,7 +433,7 @@ class _DisbursementsCard extends StatelessWidget {
       title: tr.recentDisbursements,
       subtitle: tr.disbursementsSubtitle,
       trailing: TextButton(
-        style: TextButton.styleFrom(foregroundColor: AppColors.orange),
+        style: TextButton.styleFrom(foregroundColor: AppColors.accentText),
         onPressed: () => context.read<HomeViewModel>().select(AppSection.dashboard),
         child: Text(tr.viewFullAudit, style: TextStyle(fontWeight: FontWeight.w600)),
       ),

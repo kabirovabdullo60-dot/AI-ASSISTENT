@@ -107,7 +107,11 @@ class AppTheme {
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(shape: buttonShape, animationDuration: Motion.fast),
+        style: TextButton.styleFrom(
+          shape: buttonShape,
+          animationDuration: Motion.fast,
+          foregroundColor: AppColors.accentText,
+        ),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: AppColors.card,
@@ -198,7 +202,7 @@ class AppTheme {
             (s) => s.contains(WidgetState.selected) ? AppColors.tealSoft : AppColors.card,
           ),
           foregroundColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected) ? AppColors.teal : AppColors.ink,
+            (s) => s.contains(WidgetState.selected) ? AppColors.accentText : AppColors.ink,
           ),
         ),
       ),

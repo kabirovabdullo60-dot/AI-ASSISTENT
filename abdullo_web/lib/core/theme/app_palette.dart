@@ -14,7 +14,8 @@ enum AppPalette {
       border: Color(0xFF232B42),
       ink: Color(0xFFE6E9F2),
       muted: Color(0xFF9AA3B8),
-      accent: Color(0xFF7C5CFF),
+      accent: Color(0xFF7152F7),
+      accentText: Color(0xFFA48BFF),
       accentSoft: Color(0xFF231E48),
       accent2: Color(0xFF22D3EE),
       accent2Soft: Color(0xFF0E3340),
@@ -56,7 +57,7 @@ enum AppPalette {
       greenSoft: Color(0xFFDCFCE7),
       red: Color(0xFFDC2626),
       redSoft: Color(0xFFFEE2E2),
-      blue: Color(0xFF2563EB),
+      blue: Color(0xFF1D4ED8),
       blueSoft: Color(0xFFDBEAFE),
       purple: Color(0xFF7C3AED),
       purpleSoft: Color(0xFFEDE9FE),
@@ -80,7 +81,7 @@ enum AppPalette {
       accent2Soft: Color(0xFFF8F1DB),
       navy: Color(0xFF0B2F25),
       navyLight: Color(0xFF134236),
-      amber: Color(0xFFB45309),
+      amber: Color(0xFFA84F07),
       amberSoft: Color(0xFFFDF0DC),
       green: Color(0xFF15803D),
       greenSoft: Color(0xFFE3F4E8),
@@ -112,6 +113,7 @@ class PaletteColors {
     required this.muted,
     required this.accent,
     required this.accentSoft,
+    this.accentText,
     required this.accent2,
     required this.accent2Soft,
     required this.navy,
@@ -132,5 +134,9 @@ class PaletteColors {
   final bool dark;
   final Color background, card, surfaceSoft, border, ink, muted;
   final Color accent, accentSoft, accent2, accent2Soft, navy, navyLight;
+
+  /// Accent for text and links when [accent] itself is too dark to read on the page
+  /// (dark look). Null = use [accent].
+  final Color? accentText;
   final Color amber, amberSoft, green, greenSoft, red, redSoft, blue, blueSoft, purple, purpleSoft, barGray;
 }
