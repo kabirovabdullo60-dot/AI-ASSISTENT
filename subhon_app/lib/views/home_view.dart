@@ -372,7 +372,7 @@ class _StoresStrip extends StatelessWidget {
           onAction: () => _open(context, const StoresView()),
         ),
         SizedBox(
-          height: 150,
+          height: 128,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             // Full width: the cards scroll from edge to edge.
@@ -383,7 +383,7 @@ class _StoresStrip extends StatelessWidget {
               if (i == stores.length) {
                 // A round "+" to add a store, centred in the strip.
                 return SizedBox(
-                  width: 96,
+                  width: 80,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -394,11 +394,11 @@ class _StoresStrip extends StatelessWidget {
                         child: InkWell(
                           onTap: () => _open(context, const StoreFormView()),
                           child: SizedBox.square(
-                            dimension: 60,
+                            dimension: 46,
                             child: Icon(
                               Icons.add_rounded,
                               color: p.onPrimary,
-                              size: 30,
+                              size: 24,
                             ),
                           ),
                         ),
