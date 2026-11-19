@@ -43,7 +43,7 @@ Future<FakeBackend> pumpApp(
   tester.view.physicalSize = Size(width, height);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(WebApp(httpClient: api.client));
+  await tester.pumpWidget(WebApp(httpClient: api.client, splashDuration: Duration.zero));
   await tester.pumpAndSettle();
   return api;
 }

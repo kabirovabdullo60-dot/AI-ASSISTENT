@@ -25,7 +25,10 @@ void main() {
           _notice('STORE_NO_SALES_TODAY', store: 'Central Plaza', link: 'SALES'),
         ]);
       await pumpApp(tester, width, backend: backend);
-      expect(find.descendant(of: find.byKey(const Key('notifications-badge')), matching: find.text('2')), findsOneWidget);
+      expect(
+        find.descendant(of: find.byKey(const Key('notifications-badge')), matching: find.text('2')),
+        findsOneWidget,
+      );
 
       await tester.tap(find.byKey(const Key('notifications')));
       await tester.pumpAndSettle();

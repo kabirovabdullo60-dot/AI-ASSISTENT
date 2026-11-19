@@ -48,7 +48,12 @@ void main() {
     ByteData f(String path) => ByteData.sublistView(File(path).readAsBytesSync());
     await (FontLoader('Onest')..addFont(Future.value(f('assets/fonts/Onest.ttf')))).load();
     await (FontLoader('Raleway')..addFont(Future.value(f('assets/fonts/Raleway.ttf')))).load();
-    await (FontLoader('MaterialIcons')..addFont(Future.value(f('/Users/abdullo/Documents/flutter/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf')))).load();
+    await (FontLoader('MaterialIcons')..addFont(
+          Future.value(
+            f('/Users/abdullo/Documents/flutter/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf'),
+          ),
+        ))
+        .load();
   });
   setUp(() => AppColors.use(AppPalette.fromName(_paletteName)));
 
@@ -59,9 +64,14 @@ void main() {
       addTearDown(tester.view.reset);
       // Signed in + slow server → the splash stays up while the session is checked.
       final backend = setUpBackend()..latency = const Duration(seconds: 3);
-      await tester.pumpWidget(RepaintBoundary(key: const Key('capture-root'), child: WebApp(httpClient: backend.client)));
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: const Key('capture-root'),
+          child: WebApp(httpClient: backend.client),
+        ),
+      );
       await _precache(tester);
-      await tester.pump(const Duration(milliseconds: 1400));
+      await tester.pump(const Duration(milliseconds: 2500));
       await _shot(tester, '$label-splash');
       await tester.pumpAndSettle();
     }, skip: !_capture);
@@ -71,7 +81,12 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       final backend2 = setUpBackend(signedIn: false);
-      await tester.pumpWidget(RepaintBoundary(key: const Key('capture-root'), child: WebApp(httpClient: backend2.client)));
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: const Key('capture-root'),
+          child: WebApp(httpClient: backend2.client),
+        ),
+      );
       await _precache(tester);
       await tester.pump(const Duration(milliseconds: 2500));
       await _shot(tester, '$label-login');

@@ -15,8 +15,16 @@ void main() {
         final backend = setUpBackend(language: lang)
           ..targets.addAll({'WEEK': '3000.00', 'MONTH': '12000.00'})
           ..notifications.add({
-            'id': 'n1', 'kind': 'UNPAID_SALARIES', 'severity': 'INFO', 'count': 2, 'amount': '4200.00',
-            'storeId': null, 'storeName': null, 'link': 'PAYROLL', 'read': false, 'createdAt': '2026-11-01T00:00:00Z',
+            'id': 'n1',
+            'kind': 'UNPAID_SALARIES',
+            'severity': 'INFO',
+            'count': 2,
+            'amount': '4200.00',
+            'storeId': null,
+            'storeName': null,
+            'link': 'PAYROLL',
+            'read': false,
+            'createdAt': '2026-11-01T00:00:00Z',
           });
         await pumpApp(tester, width, height: 900, backend: backend);
         for (final s in AppSection.values) {

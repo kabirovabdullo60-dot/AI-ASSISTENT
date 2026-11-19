@@ -13,7 +13,7 @@ void main() {
     tester.view.physicalSize = const Size(desktopWidth, 1000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    await tester.pumpWidget(WebApp(httpClient: backend.client));
+    await tester.pumpWidget(WebApp(httpClient: backend.client, splashDuration: Duration.zero));
     for (var i = 0; i < 4 && find.byKey(const Key('page-skeleton')).evaluate().isEmpty; i++) {
       await tester.pump(const Duration(milliseconds: 320));
     }
@@ -56,5 +56,23 @@ void main() {
     await tester.tap(find.byKey(const Key('chat-send')));
     await tester.pumpAndSettle();
     expect(find.text('Done.'), findsOneWidget);
+  });
+
+  testWidgets('the splash stays 5 seconds with a filling progress line, then the app opens', (tester) async {
+    final backend = setUpBackend();
+    tester.view.physicalSize = const Size(desktopWidth, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(WebApp(httpClient: backend.client));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.byKey(const Key('splash-progress')), findsOneWidget); // session already checked, still waiting
+    final bar = tester.widget<LinearProgressIndicator>(find.byKey(const Key('splash-progress')));
+    expect(bar.value, isNotNull);
+    expect(bar.value!, greaterThan(0.2));
+    expect(bar.value!, lessThan(0.8));
+    await tester.pump(const Duration(seconds: 3, milliseconds: 100));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('splash-progress')), findsNothing);
+    expect(find.byKey(const Key('dashboard-hero')), findsOneWidget);
   });
 }

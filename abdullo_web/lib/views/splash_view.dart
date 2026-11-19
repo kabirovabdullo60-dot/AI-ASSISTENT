@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/l10n/l10n.dart';
 import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
 import '../widgets/brand_mark.dart';
@@ -12,7 +13,10 @@ import '../widgets/pamir_ridge.dart';
 /// tint of the current palette, aurora light, the Pamir ridgeline drawing itself, the logo
 /// and name rising in, and a thin glowing progress line.
 class SplashView extends StatelessWidget {
-  const SplashView({super.key});
+  const SplashView({super.key, this.duration = Duration.zero});
+
+  /// How long the splash is held; the progress line fills over exactly this time.
+  final Duration duration;
 
   static const photo = 'assets/images/money_stack.jpg';
 
@@ -59,19 +63,47 @@ class SplashView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 26),
+                const SizedBox(height: 10),
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 650),
+                  duration: const Duration(milliseconds: 700),
+                  offset: const Offset(0, 6),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: Text(
+                      context.l10n.loginHeadline,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Color(0xFFD5DEE8), fontSize: 15, height: 1.45),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 28),
                 FadeSlideIn(
                   delay: Motion.staggerAt(5),
                   child: SizedBox(
                     width: 168,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
-                      child: LinearProgressIndicator(
-                        key: const Key('splash-progress'),
-                        minHeight: 3,
-                        backgroundColor: Colors.white.withValues(alpha: 0.14),
-                        color: AppColors.gold,
-                      ),
+                      child: duration == Duration.zero
+                          ? LinearProgressIndicator(
+                              key: const Key('splash-progress'),
+                              minHeight: 3,
+                              backgroundColor: Colors.white.withValues(alpha: 0.14),
+                              color: AppColors.gold,
+                            )
+                          // Fills from 0 to 100% over the splash time, with a slow start and a soft end.
+                          : TweenAnimationBuilder<double>(
+                              tween: Tween(begin: 0, end: 1),
+                              duration: duration,
+                              curve: Curves.easeInOutCubic,
+                              builder: (context, v, _) => LinearProgressIndicator(
+                                key: const Key('splash-progress'),
+                                value: v,
+                                minHeight: 3,
+                                backgroundColor: Colors.white.withValues(alpha: 0.14),
+                                color: AppColors.gold,
+                              ),
+                            ),
                     ),
                   ),
                 ),

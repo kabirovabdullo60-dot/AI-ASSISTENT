@@ -38,9 +38,15 @@ Future<void> _shot(WidgetTester tester, String name) async {
 }
 
 Map<String, dynamic> _expense(String id, String cat, String amount, String desc) => {
-  'id': id, 'storeId': null, 'storeName': null, 'category': cat, 'amount': amount,
-  'expenseDate': FakeBackend.day(DateTime.now()), 'description': desc,
-  'createdAt': '2026-11-18T08:00:00Z', 'updatedAt': '2026-11-18T08:00:00Z',
+  'id': id,
+  'storeId': null,
+  'storeName': null,
+  'category': cat,
+  'amount': amount,
+  'expenseDate': FakeBackend.day(DateTime.now()),
+  'description': desc,
+  'createdAt': '2026-11-18T08:00:00Z',
+  'updatedAt': '2026-11-18T08:00:00Z',
 };
 
 void main() {
@@ -52,7 +58,8 @@ void main() {
   for (final (label, size) in [('desktop', const Size(1440, 1000)), ('mobile', const Size(400, 860))]) {
     testWidgets('capture $label', (tester) async {
       final backend = setUpBackend(signedIn: false)
-        ..assistantReply = 'This month you sold 1,500 TJS in 2 sales. Central Plaza sold the most (1,000 TJS). '
+        ..assistantReply =
+            'This month you sold 1,500 TJS in 2 sales. Central Plaza sold the most (1,000 TJS). '
             'Salaries still to pay: 4,200 TJS — open Salaries to pay them.'
         ..targets.addAll({'WEEK': '3000.00', 'MONTH': '12000.00'})
         ..expenses.addAll([
@@ -60,13 +67,26 @@ void main() {
           _expense('x2', 'DELIVERY', '320.00', 'Courier'),
         ])
         ..notifications.add({
-          'id': 'n1', 'kind': 'SALARY_OVERDUE', 'severity': 'WARNING', 'count': 2, 'amount': '4200.00',
-          'storeId': null, 'storeName': null, 'link': 'PAYROLL', 'read': false, 'createdAt': '2026-11-01T00:00:00Z',
+          'id': 'n1',
+          'kind': 'SALARY_OVERDUE',
+          'severity': 'WARNING',
+          'count': 2,
+          'amount': '4200.00',
+          'storeId': null,
+          'storeName': null,
+          'link': 'PAYROLL',
+          'read': false,
+          'createdAt': '2026-11-01T00:00:00Z',
         });
       tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
-      await tester.pumpWidget(RepaintBoundary(key: const Key('capture-root'), child: WebApp(httpClient: backend.client)));
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: const Key('capture-root'),
+          child: WebApp(httpClient: backend.client),
+        ),
+      );
       await _shot(tester, '$label-0-login');
 
       await tester.enterText(find.byKey(const Key('login-email')), 'owner@test.tj');
@@ -75,7 +95,13 @@ void main() {
       await _shot(tester, '$label-1-dashboard');
 
       var i = 2;
-      for (final s in [AppSection.stores, AppSection.sales, AppSection.salaries, AppSection.expenses, AppSection.reports]) {
+      for (final s in [
+        AppSection.stores,
+        AppSection.sales,
+        AppSection.salaries,
+        AppSection.expenses,
+        AppSection.reports,
+      ]) {
         await openSection(tester, s);
         await _shot(tester, '$label-${i++}-${s.name}');
       }
@@ -92,7 +118,12 @@ void main() {
     tester.view.physicalSize = const Size(1440, 1000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    await tester.pumpWidget(RepaintBoundary(key: const Key('capture-root'), child: WebApp(httpClient: backend.client)));
+    await tester.pumpWidget(
+      RepaintBoundary(
+        key: const Key('capture-root'),
+        child: WebApp(httpClient: backend.client),
+      ),
+    );
     await tester.pumpAndSettle();
     await openSection(tester, AppSection.assistant);
     await _shot(tester, 'tg-assistant-empty');

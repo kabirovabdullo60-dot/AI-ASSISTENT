@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -42,9 +44,13 @@ void main() {
 
 class WebApp extends StatefulWidget {
   /// [httpClient] can be replaced in tests with a fake backend.
-  const WebApp({super.key, this.httpClient});
+  const WebApp({super.key, this.httpClient, this.splashDuration = const Duration(seconds: 5)});
 
   final http.Client? httpClient;
+
+  /// The splash stays at least this long on every visit (its animation plays in full),
+  /// and longer if the session check is still running. Tests pass [Duration.zero].
+  final Duration splashDuration;
 
   @override
   State<WebApp> createState() => _WebAppState();
@@ -54,10 +60,39 @@ class _WebAppState extends State<WebApp> {
   late final ApiClient _api = ApiClient(client: widget.httpClient, tokens: TokenStorage());
   late final AuthViewModel _auth = AuthViewModel(AuthService(_api), ProfileService(_api))..restore();
 
+  late bool _splashDone = widget.splashDuration == Duration.zero;
+  AuthStatus? _lastStatus;
+  int _generation = 0;
+  GlobalKey _appKey = GlobalKey();
+  (AppPalette, int)? _appKeyTag;
+
+  /// One global key per (palette, sign-in generation): the same key moves the app without
+  /// rebuilding it; a new palette or a sign-out gets a new key and so a fresh app.
+  GlobalKey _appKeyFor(AppPalette palette) {
+    final tag = (palette, _generation);
+    if (tag != _appKeyTag) {
+      _appKeyTag = tag;
+      _appKey = GlobalKey();
+    }
+    return _appKey;
+  }
+  Timer? _splashTimer;
+
   @override
   void initState() {
     super.initState();
     _api.onSessionExpired = _auth.sessionExpired;
+    if (!_splashDone) {
+      _splashTimer = Timer(widget.splashDuration, () {
+        if (mounted) setState(() => _splashDone = true);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _splashTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -81,8 +116,13 @@ class _WebAppState extends State<WebApp> {
           // A new palette remounts the app below the providers so every color repaints
           // (data and the open page stay — they live in the providers above).
           final palette = context.select<SettingsViewModel, AppPalette>((s) => s.palette);
+          // Signing out starts a fresh app (the signed-in pages must not outlive their data).
+          if (status == AuthStatus.signedOut && _lastStatus == AuthStatus.signedIn) _generation++;
+          _lastStatus = status;
           final app = MaterialApp(
-            key: ValueKey(palette),
+            // Global key: moving under the signed-in providers keeps the app (and the running splash)
+            // alive instead of rebuilding it; a new palette still rebuilds it.
+            key: _appKeyFor(palette),
             title: context.select<AuthViewModel, String?>((a) => a.user?.businessName) ?? 'Apex Suite',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
@@ -93,11 +133,11 @@ class _WebAppState extends State<WebApp> {
             home: AnimatedSwitcher(
               duration: const Duration(milliseconds: 520),
               switchInCurve: Curves.easeOut,
-              child: switch (status) {
-                AuthStatus.checking => const SplashView(key: ValueKey('splash')),
-                AuthStatus.signedOut => const LoginView(key: ValueKey('login')),
-                AuthStatus.signedIn => const HomeView(key: ValueKey('home')),
-              },
+              child: !_splashDone || status == AuthStatus.checking
+                  ? SplashView(key: const ValueKey('splash'), duration: widget.splashDuration)
+                  : status == AuthStatus.signedOut
+                  ? const LoginView(key: ValueKey('login'))
+                  : const HomeView(key: ValueKey('home')),
             ),
           );
           // Data providers sit ABOVE MaterialApp so dialogs (which open on the root navigator) see them too.
