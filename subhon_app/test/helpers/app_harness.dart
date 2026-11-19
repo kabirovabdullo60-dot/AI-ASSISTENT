@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/core/storage/chat_history_storage.dart';
+import 'package:subhon_app/core/storage/statement_history_storage.dart';
 import 'package:subhon_app/main.dart';
+import 'package:subhon_app/services/file_share_service.dart';
 import 'package:subhon_app/services/voice_service.dart';
 
 import 'fake_backend.dart';
@@ -39,6 +41,8 @@ Future<void> pumpApp(
   Locale locale = const Locale('ru'),
   VoiceService? voice,
   ChatHistoryStorage? chatHistory,
+  StatementHistoryStorage? statementHistory,
+  FileShareService? fileShare,
 }) async {
   reduceMotion(tester);
   await tester.pumpWidget(
@@ -49,6 +53,8 @@ Future<void> pumpApp(
       locale: locale,
       voice: voice,
       chatHistory: chatHistory,
+      statementHistory: statementHistory,
+      fileShare: fileShare,
     ),
   );
   await tester.pumpAndSettle();

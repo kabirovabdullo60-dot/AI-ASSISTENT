@@ -11,7 +11,7 @@ import '../widgets/load_more_button.dart';
 import '../widgets/operation_card.dart';
 import '../widgets/search_field.dart';
 import 'expenses_view.dart';
-import 'reports_view.dart';
+import 'statements_view.dart';
 
 /// The "История" tab, laid out like a bank's history: "Расходы за <месяц>"
 /// (can be hidden) next to "Выписка", period chips (all, today, yesterday,
@@ -98,7 +98,7 @@ class _HistoryViewState extends State<HistoryView> {
                     Expanded(
                       flex: 3,
                       child: _Tile(
-                        onTap: () => _open(const ReportsView()),
+                        onTap: () => _open(const StatementsView()),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

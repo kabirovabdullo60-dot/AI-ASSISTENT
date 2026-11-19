@@ -1373,4 +1373,208 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get opOther => 'Изменение';
+
+  @override
+  String get stmtTitle => 'Выписки и справки';
+
+  @override
+  String get stmtAvailable => 'Доступные';
+
+  @override
+  String get stmtMine => 'Мои выписки';
+
+  @override
+  String get stmtCertificates => 'Справки';
+
+  @override
+  String get stmtStatements => 'Выписки';
+
+  @override
+  String get stmtForPeriod => 'Все операции за период';
+
+  @override
+  String get stmtSales => 'По продажам';
+
+  @override
+  String get stmtStore => 'По магазину';
+
+  @override
+  String get stmtStoreHint => 'Продажи одного магазина за период';
+
+  @override
+  String get stmtCash => 'Наличные';
+
+  @override
+  String get stmtCashHint => 'Только наличные, смешанные оплаты разделены';
+
+  @override
+  String get stmtCard => 'Карта и QR';
+
+  @override
+  String get stmtCardHint => 'Только безналичные оплаты';
+
+  @override
+  String get stmtExpenses => 'По расходам';
+
+  @override
+  String get stmtSalaries => 'По выплатам зарплаты';
+
+  @override
+  String get stmtOperations => 'Все операции';
+
+  @override
+  String get stmtOperationsHint => 'Каждое изменение в бизнесе';
+
+  @override
+  String get stmtSalaryDebt => 'Кому должны по зарплате';
+
+  @override
+  String get stmtSalaryDebtHint =>
+      'Сотрудники с невыплаченной зарплатой на сегодня';
+
+  @override
+  String get stmtProfit => 'О прибыли';
+
+  @override
+  String get stmtProfitHint => 'Продажи − расходы − зарплаты за период';
+
+  @override
+  String get stmtStores => 'Сводка по магазинам';
+
+  @override
+  String get stmtStoresHint => 'Магазины по продажам';
+
+  @override
+  String get stmtMineEmpty =>
+      'Здесь сохраняются выписки, которые вы открывали.';
+
+  @override
+  String get stmtPeriodLastMonth => 'Прошлый месяц';
+
+  @override
+  String get stmtPeriodCustom => 'Выбрать даты';
+
+  @override
+  String get stmtChooseStore => 'Выберите магазин';
+
+  @override
+  String stmtAsOf(String date) {
+    return 'На $date';
+  }
+
+  @override
+  String get stmtEmpty => 'За этот период ничего нет.';
+
+  @override
+  String get stmtTruncated =>
+      'Слишком много строк: показаны самые новые. Выберите период короче.';
+
+  @override
+  String get stmtExcel => 'Скачать Excel';
+
+  @override
+  String get stmtShared => 'Файл Excel готов';
+
+  @override
+  String get stmtTotal => 'Итого';
+
+  @override
+  String get stmtCount => 'Операций';
+
+  @override
+  String get stmtCashTotal => 'Наличные';
+
+  @override
+  String get stmtCardTotal => 'Карта';
+
+  @override
+  String get stmtQrTotal => 'QR';
+
+  @override
+  String get stmtNoMethod => 'Способ не указан';
+
+  @override
+  String get stmtSalesTotal => 'Продажи';
+
+  @override
+  String get stmtExpensesTotal => 'Расходы';
+
+  @override
+  String get stmtSalariesTotal => 'Зарплаты';
+
+  @override
+  String get stmtProfitTotal => 'Прибыль';
+
+  @override
+  String get stmtDue => 'Начислено';
+
+  @override
+  String get stmtPaid => 'Выплачено';
+
+  @override
+  String get stmtRemaining => 'Долг';
+
+  @override
+  String get colDate => 'Дата';
+
+  @override
+  String get colStore => 'Магазин';
+
+  @override
+  String get colMethod => 'Способ оплаты';
+
+  @override
+  String get colCash => 'Наличные';
+
+  @override
+  String get colCard => 'Карта / QR';
+
+  @override
+  String get colAmount => 'Сумма, TJS';
+
+  @override
+  String get colReceipt => 'Чек';
+
+  @override
+  String get colDescription => 'Описание';
+
+  @override
+  String get colCategory => 'Категория';
+
+  @override
+  String get colEmployee => 'Сотрудник';
+
+  @override
+  String get colForMonth => 'За месяц';
+
+  @override
+  String get colNote => 'Комментарий';
+
+  @override
+  String get colWhat => 'Что';
+
+  @override
+  String get colWho => 'Магазин / сотрудник';
+
+  @override
+  String get colUser => 'Кто внёс';
+
+  @override
+  String get colUnpaidMonths => 'Месяцев не выплачено';
+
+  @override
+  String get colItem => 'Статья';
+
+  @override
+  String get colPlace => 'Место';
+
+  @override
+  String get colShare => 'Доля, %';
+
+  @override
+  String get colSalesCount => 'Продаж';
+
+  @override
+  String get moreStatementsHint =>
+      'Выписки в Excel: продажи, наличные, карта, расходы…';
 }

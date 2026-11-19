@@ -1367,4 +1367,208 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get opOther => 'Тағйирот';
+
+  @override
+  String get stmtTitle => 'Хулосаҳо ва маълумотномаҳо';
+
+  @override
+  String get stmtAvailable => 'Дастрас';
+
+  @override
+  String get stmtMine => 'Хулосаҳои ман';
+
+  @override
+  String get stmtCertificates => 'Маълумотномаҳо';
+
+  @override
+  String get stmtStatements => 'Хулосаҳо';
+
+  @override
+  String get stmtForPeriod => 'Ҳамаи амалиётҳо дар давра';
+
+  @override
+  String get stmtSales => 'Аз рӯи фурӯш';
+
+  @override
+  String get stmtStore => 'Аз рӯи мағоза';
+
+  @override
+  String get stmtStoreHint => 'Фурӯши як мағоза дар давра';
+
+  @override
+  String get stmtCash => 'Нақд';
+
+  @override
+  String get stmtCashHint => 'Танҳо нақд, пардохтҳои омехта ҷудо';
+
+  @override
+  String get stmtCard => 'Корт ва QR';
+
+  @override
+  String get stmtCardHint => 'Танҳо пардохтҳои ғайринақдӣ';
+
+  @override
+  String get stmtExpenses => 'Аз рӯи хароҷот';
+
+  @override
+  String get stmtSalaries => 'Аз рӯи пардохти маош';
+
+  @override
+  String get stmtOperations => 'Ҳамаи амалиётҳо';
+
+  @override
+  String get stmtOperationsHint => 'Ҳар тағйирот дар тиҷорат';
+
+  @override
+  String get stmtSalaryDebt => 'Қарзи маош ба кӣ';
+
+  @override
+  String get stmtSalaryDebtHint =>
+      'Кормандони маошашон пурра пардохтнашуда, то имрӯз';
+
+  @override
+  String get stmtProfit => 'Дар бораи фоида';
+
+  @override
+  String get stmtProfitHint => 'Фурӯш − хароҷот − маош дар давра';
+
+  @override
+  String get stmtStores => 'Ҷамъбасти мағозаҳо';
+
+  @override
+  String get stmtStoresHint => 'Мағозаҳо аз рӯи фурӯш';
+
+  @override
+  String get stmtMineEmpty =>
+      'Хулосаҳое, ки кушодед, дар ин ҷо нигоҳ дошта мешаванд.';
+
+  @override
+  String get stmtPeriodLastMonth => 'Моҳи гузашта';
+
+  @override
+  String get stmtPeriodCustom => 'Интихоби санаҳо';
+
+  @override
+  String get stmtChooseStore => 'Мағозаро интихоб кунед';
+
+  @override
+  String stmtAsOf(String date) {
+    return 'То $date';
+  }
+
+  @override
+  String get stmtEmpty => 'Дар ин давра чизе нест.';
+
+  @override
+  String get stmtTruncated =>
+      'Сатрҳо аз ҳад зиёданд: танҳо навтаринҳо. Давраи кӯтоҳтар интихоб кунед.';
+
+  @override
+  String get stmtExcel => 'Боргирии Excel';
+
+  @override
+  String get stmtShared => 'Файли Excel тайёр аст';
+
+  @override
+  String get stmtTotal => 'Ҳамагӣ';
+
+  @override
+  String get stmtCount => 'Амалиётҳо';
+
+  @override
+  String get stmtCashTotal => 'Нақд';
+
+  @override
+  String get stmtCardTotal => 'Корт';
+
+  @override
+  String get stmtQrTotal => 'QR';
+
+  @override
+  String get stmtNoMethod => 'Тарз нишон дода нашудааст';
+
+  @override
+  String get stmtSalesTotal => 'Фурӯш';
+
+  @override
+  String get stmtExpensesTotal => 'Хароҷот';
+
+  @override
+  String get stmtSalariesTotal => 'Маош';
+
+  @override
+  String get stmtProfitTotal => 'Фоида';
+
+  @override
+  String get stmtDue => 'Ҳисобшуда';
+
+  @override
+  String get stmtPaid => 'Пардохтшуда';
+
+  @override
+  String get stmtRemaining => 'Қарз';
+
+  @override
+  String get colDate => 'Сана';
+
+  @override
+  String get colStore => 'Мағоза';
+
+  @override
+  String get colMethod => 'Тарзи пардохт';
+
+  @override
+  String get colCash => 'Нақд';
+
+  @override
+  String get colCard => 'Корт / QR';
+
+  @override
+  String get colAmount => 'Маблағ, TJS';
+
+  @override
+  String get colReceipt => 'Чек';
+
+  @override
+  String get colDescription => 'Тавсиф';
+
+  @override
+  String get colCategory => 'Категория';
+
+  @override
+  String get colEmployee => 'Корманд';
+
+  @override
+  String get colForMonth => 'Барои моҳ';
+
+  @override
+  String get colNote => 'Шарҳ';
+
+  @override
+  String get colWhat => 'Чӣ';
+
+  @override
+  String get colWho => 'Мағоза / корманд';
+
+  @override
+  String get colUser => 'Кӣ ворид кард';
+
+  @override
+  String get colUnpaidMonths => 'Моҳҳои пардохтнашуда';
+
+  @override
+  String get colItem => 'Модда';
+
+  @override
+  String get colPlace => 'Ҷой';
+
+  @override
+  String get colShare => 'Ҳисса, %';
+
+  @override
+  String get colSalesCount => 'Фурӯшҳо';
+
+  @override
+  String get moreStatementsHint =>
+      'Хулосаҳо дар Excel: фурӯш, нақд, корт, хароҷот…';
 }

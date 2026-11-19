@@ -14,6 +14,7 @@ import 'employees_view.dart';
 import 'expenses_view.dart';
 import 'profile_view.dart';
 import 'reports_view.dart';
+import 'statements_view.dart';
 import 'stores_view.dart';
 
 /// "Ещё": stores, employees, reports, profile and settings, sign out.
@@ -83,6 +84,12 @@ class MoreView extends StatelessWidget {
                 title: l10n.assistantTitle,
                 hint: l10n.moreAssistantHint,
                 onTap: () => _open(context, const ChatView()),
+              ),
+              SettingsRow(
+                icon: Icons.description_outlined,
+                title: l10n.stmtTitle,
+                hint: l10n.moreStatementsHint,
+                onTap: () => _open(context, const StatementsView()),
               ),
               SettingsRow(
                 icon: Icons.insights_outlined,

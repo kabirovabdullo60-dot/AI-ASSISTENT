@@ -1367,4 +1367,206 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get opOther => 'Change';
+
+  @override
+  String get stmtTitle => 'Statements and certificates';
+
+  @override
+  String get stmtAvailable => 'Available';
+
+  @override
+  String get stmtMine => 'My statements';
+
+  @override
+  String get stmtCertificates => 'Certificates';
+
+  @override
+  String get stmtStatements => 'Statements';
+
+  @override
+  String get stmtForPeriod => 'All operations for a period';
+
+  @override
+  String get stmtSales => 'Sales';
+
+  @override
+  String get stmtStore => 'By store';
+
+  @override
+  String get stmtStoreHint => 'Sales of one store for a period';
+
+  @override
+  String get stmtCash => 'Cash';
+
+  @override
+  String get stmtCashHint => 'Only cash, mixed payments split';
+
+  @override
+  String get stmtCard => 'Card and QR';
+
+  @override
+  String get stmtCardHint => 'Only non-cash payments';
+
+  @override
+  String get stmtExpenses => 'Expenses';
+
+  @override
+  String get stmtSalaries => 'Salary payments';
+
+  @override
+  String get stmtOperations => 'All operations';
+
+  @override
+  String get stmtOperationsHint => 'Every change in the business';
+
+  @override
+  String get stmtSalaryDebt => 'Unpaid salaries';
+
+  @override
+  String get stmtSalaryDebtHint => 'Employees not fully paid, as of today';
+
+  @override
+  String get stmtProfit => 'Profit';
+
+  @override
+  String get stmtProfitHint => 'Sales − expenses − salaries for a period';
+
+  @override
+  String get stmtStores => 'Stores summary';
+
+  @override
+  String get stmtStoresHint => 'Stores ranked by sales';
+
+  @override
+  String get stmtMineEmpty => 'Statements you open are kept here.';
+
+  @override
+  String get stmtPeriodLastMonth => 'Last month';
+
+  @override
+  String get stmtPeriodCustom => 'Choose dates';
+
+  @override
+  String get stmtChooseStore => 'Choose a store';
+
+  @override
+  String stmtAsOf(String date) {
+    return 'As of $date';
+  }
+
+  @override
+  String get stmtEmpty => 'Nothing for this period.';
+
+  @override
+  String get stmtTruncated =>
+      'Too many lines: only the newest are shown. Choose a shorter period.';
+
+  @override
+  String get stmtExcel => 'Download Excel';
+
+  @override
+  String get stmtShared => 'Excel file is ready';
+
+  @override
+  String get stmtTotal => 'Total';
+
+  @override
+  String get stmtCount => 'Operations';
+
+  @override
+  String get stmtCashTotal => 'Cash';
+
+  @override
+  String get stmtCardTotal => 'Card';
+
+  @override
+  String get stmtQrTotal => 'QR';
+
+  @override
+  String get stmtNoMethod => 'Method not set';
+
+  @override
+  String get stmtSalesTotal => 'Sales';
+
+  @override
+  String get stmtExpensesTotal => 'Expenses';
+
+  @override
+  String get stmtSalariesTotal => 'Salaries';
+
+  @override
+  String get stmtProfitTotal => 'Profit';
+
+  @override
+  String get stmtDue => 'Due';
+
+  @override
+  String get stmtPaid => 'Paid';
+
+  @override
+  String get stmtRemaining => 'Owed';
+
+  @override
+  String get colDate => 'Date';
+
+  @override
+  String get colStore => 'Store';
+
+  @override
+  String get colMethod => 'Payment method';
+
+  @override
+  String get colCash => 'Cash';
+
+  @override
+  String get colCard => 'Card / QR';
+
+  @override
+  String get colAmount => 'Amount, TJS';
+
+  @override
+  String get colReceipt => 'Receipt';
+
+  @override
+  String get colDescription => 'Description';
+
+  @override
+  String get colCategory => 'Category';
+
+  @override
+  String get colEmployee => 'Employee';
+
+  @override
+  String get colForMonth => 'For month';
+
+  @override
+  String get colNote => 'Note';
+
+  @override
+  String get colWhat => 'What';
+
+  @override
+  String get colWho => 'Store / employee';
+
+  @override
+  String get colUser => 'By';
+
+  @override
+  String get colUnpaidMonths => 'Unpaid months';
+
+  @override
+  String get colItem => 'Item';
+
+  @override
+  String get colPlace => 'Place';
+
+  @override
+  String get colShare => 'Share, %';
+
+  @override
+  String get colSalesCount => 'Sales';
+
+  @override
+  String get moreStatementsHint =>
+      'Excel statements: sales, cash, card, expenses…';
 }

@@ -9,6 +9,8 @@ import 'core/network/api_client.dart';
 import 'core/storage/chat_history_storage.dart';
 import 'core/storage/locale_storage.dart';
 import 'core/storage/secure_chat_history_storage.dart';
+import 'core/storage/secure_statement_history_storage.dart';
+import 'core/storage/statement_history_storage.dart';
 import 'core/storage/secure_locale_storage.dart';
 import 'core/storage/secure_token_storage.dart';
 import 'core/storage/token_storage.dart';
@@ -18,14 +20,17 @@ import 'l10n/l10n.dart';
 import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
+import 'services/device_file_share_service.dart';
 import 'services/device_voice_service.dart';
 import 'services/employee_service.dart';
 import 'services/expense_service.dart';
+import 'services/file_share_service.dart';
 import 'services/notification_service.dart';
 import 'services/payroll_service.dart';
 import 'services/profile_service.dart';
 import 'services/reports_service.dart';
 import 'services/sales_service.dart';
+import 'services/statement_service.dart';
 import 'services/store_service.dart';
 import 'services/voice_service.dart';
 import 'services/target_service.dart';
@@ -50,6 +55,8 @@ class MobileApp extends StatefulWidget {
     this.locale,
     this.voice,
     this.chatHistory,
+    this.statementHistory,
+    this.fileShare,
     super.key,
   });
 
@@ -66,6 +73,10 @@ class MobileApp extends StatefulWidget {
 
   /// Where AI chats are kept; tests pass one in memory.
   final ChatHistoryStorage? chatHistory;
+
+  /// "Мои выписки" and the share sheet; tests pass fakes.
+  final StatementHistoryStorage? statementHistory;
+  final FileShareService? fileShare;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -94,13 +105,30 @@ class _MobileAppState extends State<MobileApp> {
       Provider(create: (_) => ActivityService(_api)),
       Provider(create: (_) => NotificationService(_api)),
       Provider(create: (_) => AssistantService(_api)),
+      // Before StatementService, which reads it.
+      Provider(create: (_) => ReportsService(_api)),
+      Provider(
+        create: (c) => StatementService(
+          c.read<SalesService>(),
+          c.read<ExpenseService>(),
+          c.read<PayrollService>(),
+          c.read<ActivityService>(),
+          c.read<ReportsService>(),
+        ),
+      ),
+      Provider<StatementHistoryStorage>(
+        create: (_) =>
+            widget.statementHistory ?? const SecureStatementHistoryStorage(),
+      ),
+      Provider<FileShareService>(
+        create: (_) => widget.fileShare ?? DeviceFileShareService(),
+      ),
       Provider<ChatHistoryStorage>(
         create: (_) => widget.chatHistory ?? const SecureChatHistoryStorage(),
       ),
       Provider<VoiceService>(
         create: (_) => widget.voice ?? DeviceVoiceService(),
       ),
-      Provider(create: (_) => ReportsService(_api)),
       ChangeNotifierProvider(
         create: (_) => SessionViewModel(_auth, _api)..restore(),
       ),

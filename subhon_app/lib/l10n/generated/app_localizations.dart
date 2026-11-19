@@ -2487,6 +2487,402 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change'**
   String get opOther;
+
+  /// No description provided for @stmtTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statements and certificates'**
+  String get stmtTitle;
+
+  /// No description provided for @stmtAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get stmtAvailable;
+
+  /// No description provided for @stmtMine.
+  ///
+  /// In en, this message translates to:
+  /// **'My statements'**
+  String get stmtMine;
+
+  /// No description provided for @stmtCertificates.
+  ///
+  /// In en, this message translates to:
+  /// **'Certificates'**
+  String get stmtCertificates;
+
+  /// No description provided for @stmtStatements.
+  ///
+  /// In en, this message translates to:
+  /// **'Statements'**
+  String get stmtStatements;
+
+  /// No description provided for @stmtForPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'All operations for a period'**
+  String get stmtForPeriod;
+
+  /// No description provided for @stmtSales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get stmtSales;
+
+  /// No description provided for @stmtStore.
+  ///
+  /// In en, this message translates to:
+  /// **'By store'**
+  String get stmtStore;
+
+  /// No description provided for @stmtStoreHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales of one store for a period'**
+  String get stmtStoreHint;
+
+  /// No description provided for @stmtCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get stmtCash;
+
+  /// No description provided for @stmtCashHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only cash, mixed payments split'**
+  String get stmtCashHint;
+
+  /// No description provided for @stmtCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card and QR'**
+  String get stmtCard;
+
+  /// No description provided for @stmtCardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only non-cash payments'**
+  String get stmtCardHint;
+
+  /// No description provided for @stmtExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get stmtExpenses;
+
+  /// No description provided for @stmtSalaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary payments'**
+  String get stmtSalaries;
+
+  /// No description provided for @stmtOperations.
+  ///
+  /// In en, this message translates to:
+  /// **'All operations'**
+  String get stmtOperations;
+
+  /// No description provided for @stmtOperationsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Every change in the business'**
+  String get stmtOperationsHint;
+
+  /// No description provided for @stmtSalaryDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid salaries'**
+  String get stmtSalaryDebt;
+
+  /// No description provided for @stmtSalaryDebtHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Employees not fully paid, as of today'**
+  String get stmtSalaryDebtHint;
+
+  /// No description provided for @stmtProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit'**
+  String get stmtProfit;
+
+  /// No description provided for @stmtProfitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales − expenses − salaries for a period'**
+  String get stmtProfitHint;
+
+  /// No description provided for @stmtStores.
+  ///
+  /// In en, this message translates to:
+  /// **'Stores summary'**
+  String get stmtStores;
+
+  /// No description provided for @stmtStoresHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Stores ranked by sales'**
+  String get stmtStoresHint;
+
+  /// No description provided for @stmtMineEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Statements you open are kept here.'**
+  String get stmtMineEmpty;
+
+  /// No description provided for @stmtPeriodLastMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Last month'**
+  String get stmtPeriodLastMonth;
+
+  /// No description provided for @stmtPeriodCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose dates'**
+  String get stmtPeriodCustom;
+
+  /// No description provided for @stmtChooseStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a store'**
+  String get stmtChooseStore;
+
+  /// No description provided for @stmtAsOf.
+  ///
+  /// In en, this message translates to:
+  /// **'As of {date}'**
+  String stmtAsOf(String date);
+
+  /// No description provided for @stmtEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing for this period.'**
+  String get stmtEmpty;
+
+  /// No description provided for @stmtTruncated.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many lines: only the newest are shown. Choose a shorter period.'**
+  String get stmtTruncated;
+
+  /// No description provided for @stmtExcel.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Excel'**
+  String get stmtExcel;
+
+  /// No description provided for @stmtShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Excel file is ready'**
+  String get stmtShared;
+
+  /// No description provided for @stmtTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get stmtTotal;
+
+  /// No description provided for @stmtCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Operations'**
+  String get stmtCount;
+
+  /// No description provided for @stmtCashTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get stmtCashTotal;
+
+  /// No description provided for @stmtCardTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Card'**
+  String get stmtCardTotal;
+
+  /// No description provided for @stmtQrTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'QR'**
+  String get stmtQrTotal;
+
+  /// No description provided for @stmtNoMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Method not set'**
+  String get stmtNoMethod;
+
+  /// No description provided for @stmtSalesTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get stmtSalesTotal;
+
+  /// No description provided for @stmtExpensesTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get stmtExpensesTotal;
+
+  /// No description provided for @stmtSalariesTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Salaries'**
+  String get stmtSalariesTotal;
+
+  /// No description provided for @stmtProfitTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit'**
+  String get stmtProfitTotal;
+
+  /// No description provided for @stmtDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get stmtDue;
+
+  /// No description provided for @stmtPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get stmtPaid;
+
+  /// No description provided for @stmtRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Owed'**
+  String get stmtRemaining;
+
+  /// No description provided for @colDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get colDate;
+
+  /// No description provided for @colStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Store'**
+  String get colStore;
+
+  /// No description provided for @colMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method'**
+  String get colMethod;
+
+  /// No description provided for @colCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get colCash;
+
+  /// No description provided for @colCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card / QR'**
+  String get colCard;
+
+  /// No description provided for @colAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount, TJS'**
+  String get colAmount;
+
+  /// No description provided for @colReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt'**
+  String get colReceipt;
+
+  /// No description provided for @colDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get colDescription;
+
+  /// No description provided for @colCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get colCategory;
+
+  /// No description provided for @colEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee'**
+  String get colEmployee;
+
+  /// No description provided for @colForMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'For month'**
+  String get colForMonth;
+
+  /// No description provided for @colNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get colNote;
+
+  /// No description provided for @colWhat.
+  ///
+  /// In en, this message translates to:
+  /// **'What'**
+  String get colWhat;
+
+  /// No description provided for @colWho.
+  ///
+  /// In en, this message translates to:
+  /// **'Store / employee'**
+  String get colWho;
+
+  /// No description provided for @colUser.
+  ///
+  /// In en, this message translates to:
+  /// **'By'**
+  String get colUser;
+
+  /// No description provided for @colUnpaidMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid months'**
+  String get colUnpaidMonths;
+
+  /// No description provided for @colItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get colItem;
+
+  /// No description provided for @colPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Place'**
+  String get colPlace;
+
+  /// No description provided for @colShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share, %'**
+  String get colShare;
+
+  /// No description provided for @colSalesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get colSalesCount;
+
+  /// No description provided for @moreStatementsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Excel statements: sales, cash, card, expenses…'**
+  String get moreStatementsHint;
 }
 
 class _AppLocalizationsDelegate
