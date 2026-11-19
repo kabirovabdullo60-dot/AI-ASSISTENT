@@ -2259,6 +2259,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The microphone didn\'t start. Try again; if it keeps happening, check the microphone permission in Settings.'**
   String get voiceMicFailed;
+
+  /// No description provided for @chatHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat history'**
+  String get chatHistory;
+
+  /// No description provided for @chatNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New chat'**
+  String get chatNew;
+
+  /// No description provided for @chatHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your conversations with the assistant will be kept here.'**
+  String get chatHistoryEmpty;
+
+  /// No description provided for @chatDeleteAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all'**
+  String get chatDeleteAll;
+
+  /// No description provided for @chatDeleteAllTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all chats?'**
+  String get chatDeleteAllTitle;
+
+  /// No description provided for @chatDeleteAllMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The history is kept only on this phone; it can\'t be restored.'**
+  String get chatDeleteAllMessage;
+
+  /// No description provided for @chatDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat deleted'**
+  String get chatDeleted;
+
+  /// No description provided for @chatCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Open now'**
+  String get chatCurrent;
 }
 
 class _AppLocalizationsDelegate

@@ -6,7 +6,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 import 'core/network/api_client.dart';
+import 'core/storage/chat_history_storage.dart';
 import 'core/storage/locale_storage.dart';
+import 'core/storage/secure_chat_history_storage.dart';
 import 'core/storage/secure_locale_storage.dart';
 import 'core/storage/secure_token_storage.dart';
 import 'core/storage/token_storage.dart';
@@ -47,6 +49,7 @@ class MobileApp extends StatefulWidget {
     this.localeStorage,
     this.locale,
     this.voice,
+    this.chatHistory,
     super.key,
   });
 
@@ -60,6 +63,9 @@ class MobileApp extends StatefulWidget {
 
   /// Speech in and out; tests pass a fake, the app uses the phone's.
   final VoiceService? voice;
+
+  /// Where AI chats are kept; tests pass one in memory.
+  final ChatHistoryStorage? chatHistory;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -88,6 +94,9 @@ class _MobileAppState extends State<MobileApp> {
       Provider(create: (_) => ActivityService(_api)),
       Provider(create: (_) => NotificationService(_api)),
       Provider(create: (_) => AssistantService(_api)),
+      Provider<ChatHistoryStorage>(
+        create: (_) => widget.chatHistory ?? const SecureChatHistoryStorage(),
+      ),
       Provider<VoiceService>(
         create: (_) => widget.voice ?? DeviceVoiceService(),
       ),

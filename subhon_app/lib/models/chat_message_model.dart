@@ -28,6 +28,25 @@ class ChatMessageModel {
   /// question); the screen shows [text].
   final String? prompt;
 
+  /// Saved on the phone (chat history): also keeps [prompt].
+  factory ChatMessageModel.fromStorageJson(Map<String, dynamic> json) =>
+      ChatMessageModel(
+        fromUser: json['role'] == 'user',
+        text: json['text'] as String,
+        time: json['time'] == null
+            ? null
+            : DateTime.parse(json['time'] as String).toLocal(),
+        prompt: json['prompt'] as String?,
+      );
+
+  Map<String, dynamic> toStorageJson() => {
+    'role': fromUser ? 'user' : 'assistant',
+    'text': text,
+    if (time != null) 'time': time!.toUtc().toIso8601String(),
+    'prompt': ?prompt,
+  };
+
+  /// What is sent to `POST /api/assistant/chat`.
   Map<String, dynamic> toJson() => {
     'role': fromUser ? 'user' : 'assistant',
     'text': prompt ?? text,

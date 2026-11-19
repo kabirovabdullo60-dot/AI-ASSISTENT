@@ -1249,4 +1249,30 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get voiceMicFailed =>
       'Микрофон не включился. Попробуйте ещё раз; если повторяется — проверьте доступ к микрофону в Настройках.';
+
+  @override
+  String get chatHistory => 'История чатов';
+
+  @override
+  String get chatNew => 'Новый чат';
+
+  @override
+  String get chatHistoryEmpty =>
+      'Здесь будут сохраняться ваши разговоры с ассистентом.';
+
+  @override
+  String get chatDeleteAll => 'Удалить все';
+
+  @override
+  String get chatDeleteAllTitle => 'Удалить все чаты?';
+
+  @override
+  String get chatDeleteAllMessage =>
+      'История хранится только на этом телефоне, вернуть её не получится.';
+
+  @override
+  String get chatDeleted => 'Чат удалён';
+
+  @override
+  String get chatCurrent => 'Открыт сейчас';
 }

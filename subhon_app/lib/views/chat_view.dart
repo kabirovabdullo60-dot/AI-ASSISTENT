@@ -4,13 +4,17 @@ import 'package:provider/provider.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../l10n/error_text.dart';
+import '../core/storage/chat_history_storage.dart';
 import '../l10n/l10n.dart';
+import '../models/chat_conversation_model.dart';
 import '../services/assistant_service.dart';
 import '../services/voice_service.dart';
 import '../viewmodels/chat_view_model.dart';
+import '../viewmodels/session_view_model.dart';
 import '../widgets/app_inline_message.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/jelly_blob.dart';
+import 'chat_history_view.dart';
 import 'voice_chat_view.dart';
 
 /// The AI assistant (`POST /api/assistant/chat`): ask about the business
@@ -24,6 +28,8 @@ class ChatView extends StatelessWidget {
     create: (context) => ChatViewModel(
       context.read<AssistantService>(),
       voice: context.read<VoiceService>(),
+      history: context.read<ChatHistoryStorage>(),
+      userId: context.read<SessionViewModel>().user?.id,
     ),
     child: const _Chat(),
   );
@@ -48,6 +54,19 @@ class _ChatState extends State<_Chat> {
   }
 
   String get _language => Localizations.localeOf(context).languageCode;
+
+  Future<void> _openHistory() async {
+    final vm = context.read<ChatViewModel>();
+    final userId = vm.userId;
+    if (userId == null) return;
+    final chat = await Navigator.of(context).push<ChatConversationModel>(
+      MaterialPageRoute(
+        builder: (_) =>
+            ChatHistoryView(userId: userId, currentId: vm.conversationId),
+      ),
+    );
+    if (chat != null) await vm.open(chat);
+  }
 
   void _openVoice() {
     final vm = context.read<ChatViewModel>();
@@ -77,10 +96,16 @@ class _ChatState extends State<_Chat> {
       appBar: AppBar(
         title: Text(l10n.assistantTitle),
         actions: [
+          if (messages.isNotEmpty)
+            IconButton(
+              tooltip: l10n.chatNew,
+              onPressed: vm.isSending ? null : vm.newChat,
+              icon: const Icon(Icons.edit_square),
+            ),
           IconButton(
-            tooltip: l10n.voiceOpen,
-            onPressed: _openVoice,
-            icon: const Icon(Icons.graphic_eq_rounded),
+            tooltip: l10n.chatHistory,
+            onPressed: vm.userId == null ? null : _openHistory,
+            icon: const Icon(Icons.history_rounded),
           ),
         ],
       ),

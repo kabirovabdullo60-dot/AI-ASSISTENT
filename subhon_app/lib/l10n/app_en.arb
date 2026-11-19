@@ -698,5 +698,13 @@
   "voiceMic": "Speak",
   "voiceEnd": "End",
   "voiceUnavailable": "Speech recognition is not available. Allow the microphone and speech recognition in Settings.",
-  "voiceMicFailed": "The microphone didn't start. Try again; if it keeps happening, check the microphone permission in Settings."
+  "voiceMicFailed": "The microphone didn't start. Try again; if it keeps happening, check the microphone permission in Settings.",
+  "chatHistory": "Chat history",
+  "chatNew": "New chat",
+  "chatHistoryEmpty": "Your conversations with the assistant will be kept here.",
+  "chatDeleteAll": "Delete all",
+  "chatDeleteAllTitle": "Delete all chats?",
+  "chatDeleteAllMessage": "The history is kept only on this phone; it can't be restored.",
+  "chatDeleted": "Chat deleted",
+  "chatCurrent": "Open now"
 }

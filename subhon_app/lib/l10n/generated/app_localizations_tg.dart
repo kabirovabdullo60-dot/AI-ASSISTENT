@@ -1243,4 +1243,30 @@ class AppLocalizationsTg extends AppLocalizations {
   @override
   String get voiceMicFailed =>
       'Микрофон фаъол нашуд. Боз кӯшиш кунед; агар такрор шавад, иҷозати микрофонро дар Танзимот санҷед.';
+
+  @override
+  String get chatHistory => 'Таърихи чатҳо';
+
+  @override
+  String get chatNew => 'Чати нав';
+
+  @override
+  String get chatHistoryEmpty =>
+      'Суҳбатҳои шумо бо ёрдамчӣ дар ин ҷо нигоҳ дошта мешаванд.';
+
+  @override
+  String get chatDeleteAll => 'Ҳамаро нест кардан';
+
+  @override
+  String get chatDeleteAllTitle => 'Ҳамаи чатҳоро нест кунем?';
+
+  @override
+  String get chatDeleteAllMessage =>
+      'Таърих танҳо дар ҳамин телефон нигоҳ дошта мешавад, баргардонидан ғайриимкон аст.';
+
+  @override
+  String get chatDeleted => 'Чат нест карда шуд';
+
+  @override
+  String get chatCurrent => 'Ҳозир кушода';
 }

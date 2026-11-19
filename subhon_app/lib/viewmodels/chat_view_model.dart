@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 import '../core/network/api_client.dart';
+import '../core/storage/chat_history_storage.dart';
 import '../core/utils/question_helper.dart';
+import '../models/chat_conversation_model.dart';
 import '../models/chat_message_model.dart';
 import '../services/assistant_service.dart';
 import '../services/voice_service.dart';
@@ -14,14 +16,30 @@ enum VoiceState { off, listening, thinking, speaking }
 /// questions. A question that failed stays in the list and can be sent
 /// again.
 class ChatViewModel extends ChangeNotifier {
-  ChatViewModel(this._assistant, {this.voice, DateTime Function()? clock})
-    : _clock = clock ?? DateTime.now;
+  ChatViewModel(
+    this._assistant, {
+    this.voice,
+    this.history,
+    this.userId,
+    DateTime Function()? clock,
+  }) : _clock = clock ?? DateTime.now;
 
   final AssistantService _assistant;
 
   /// Speech in and out; `null`: typing only.
   final VoiceService? voice;
   final DateTime Function() _clock;
+
+  /// Where conversations are saved, per account ([userId]); `null`: not
+  /// saved.
+  final ChatHistoryStorage? history;
+  final String? userId;
+
+  /// Keep the history small: the newest chats and their last messages.
+  static const int maxChats = 30;
+  static const int maxSavedMessages = 100;
+
+  String? _conversationId;
 
   VoiceState _voiceState = VoiceState.off;
   bool _voiceOn = false;
@@ -56,6 +74,47 @@ class ChatViewModel extends ChangeNotifier {
   /// The last answer of the assistant, if any.
   ChatMessageModel? get lastAnswer =>
       _messages.where((m) => !m.fromUser).lastOrNull;
+
+  /// The saved conversation shown now; `null` for a new one.
+  String? get conversationId => _conversationId;
+
+  /// Starts a new, empty conversation (the current one stays saved).
+  Future<void> newChat() async {
+    await stopVoice();
+    _messages.clear();
+    _conversationId = null;
+    _error = null;
+    notifyListeners();
+  }
+
+  /// Shows a saved conversation; new questions continue it.
+  Future<void> open(ChatConversationModel chat) async {
+    await stopVoice();
+    _messages
+      ..clear()
+      ..addAll(chat.messages);
+    _conversationId = chat.id;
+    _error = null;
+    notifyListeners();
+  }
+
+  /// Saves the current conversation at the top of the history.
+  Future<void> _save() async {
+    final storage = history;
+    final user = userId;
+    if (storage == null || user == null || _messages.isEmpty) return;
+    final id = _conversationId ??= '${_clock().microsecondsSinceEpoch}';
+    final kept = _messages.length > maxSavedMessages
+        ? _messages.sublist(_messages.length - maxSavedMessages)
+        : List.of(_messages);
+    final chats = await storage.read(user);
+    final updated = [
+      ChatConversationModel(id: id, messages: kept, updatedAt: _clock()),
+      for (final c in chats)
+        if (c.id != id) c,
+    ];
+    await storage.write(user, updated.take(maxChats).toList());
+  }
 
   /// The last question had no answer: it can be sent again.
   bool get canRetry =>
@@ -103,6 +162,7 @@ class ChatViewModel extends ChangeNotifier {
       _isSending = false;
       notifyListeners();
     }
+    await _save();
   }
 
   /// Starts talking by voice: listen → answer → read it aloud → listen

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:subhon_app/core/storage/chat_history_storage.dart';
 import 'package:subhon_app/main.dart';
 import 'package:subhon_app/services/voice_service.dart';
 
@@ -37,6 +38,7 @@ Future<void> pumpApp(
   MemoryTokenStorage? tokens,
   Locale locale = const Locale('ru'),
   VoiceService? voice,
+  ChatHistoryStorage? chatHistory,
 }) async {
   reduceMotion(tester);
   await tester.pumpWidget(
@@ -46,6 +48,7 @@ Future<void> pumpApp(
       localeStorage: MemoryLocaleStorage(),
       locale: locale,
       voice: voice,
+      chatHistory: chatHistory,
     ),
   );
   await tester.pumpAndSettle();

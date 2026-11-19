@@ -1243,4 +1243,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get voiceMicFailed =>
       'The microphone didn\'t start. Try again; if it keeps happening, check the microphone permission in Settings.';
+
+  @override
+  String get chatHistory => 'Chat history';
+
+  @override
+  String get chatNew => 'New chat';
+
+  @override
+  String get chatHistoryEmpty =>
+      'Your conversations with the assistant will be kept here.';
+
+  @override
+  String get chatDeleteAll => 'Delete all';
+
+  @override
+  String get chatDeleteAllTitle => 'Delete all chats?';
+
+  @override
+  String get chatDeleteAllMessage =>
+      'The history is kept only on this phone; it can\'t be restored.';
+
+  @override
+  String get chatDeleted => 'Chat deleted';
+
+  @override
+  String get chatCurrent => 'Open now';
 }
