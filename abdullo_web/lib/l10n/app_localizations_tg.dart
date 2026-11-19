@@ -582,7 +582,7 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String nLocations(int count) {
-    return '$count нуқта';
+    return '$count мағоза';
   }
 
   @override
@@ -608,7 +608,7 @@ class AppLocalizationsTg extends AppLocalizations {
   String get vsLastMonth => 'нисбат ба моҳи гузашта';
 
   @override
-  String get allocatedWorkforce => 'Кормандони тақсимшуда';
+  String get allocatedWorkforce => 'Кормандони фаъол';
 
   @override
   String acrossBranches(int count) {

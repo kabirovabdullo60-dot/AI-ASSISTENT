@@ -1123,7 +1123,7 @@ abstract class AppLocalizations {
   /// No description provided for @nLocations.
   ///
   /// In en, this message translates to:
-  /// **'{count} Locations'**
+  /// **'{count, plural, =1{1 store} other{{count} stores}}'**
   String nLocations(int count);
 
   /// No description provided for @opRatio.
@@ -1165,7 +1165,7 @@ abstract class AppLocalizations {
   /// No description provided for @allocatedWorkforce.
   ///
   /// In en, this message translates to:
-  /// **'Allocated Workforce'**
+  /// **'Active staff'**
   String get allocatedWorkforce;
 
   /// No description provided for @acrossBranches.
@@ -1309,7 +1309,7 @@ abstract class AppLocalizations {
   /// No description provided for @nEmployees.
   ///
   /// In en, this message translates to:
-  /// **'{count} employees'**
+  /// **'{count, plural, =1{1 employee} other{{count} employees}}'**
   String nEmployees(int count);
 
   /// No description provided for @regionalTitle.

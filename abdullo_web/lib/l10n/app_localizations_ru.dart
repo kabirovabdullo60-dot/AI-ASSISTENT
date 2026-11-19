@@ -582,7 +582,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String nLocations(int count) {
-    return '$count точек';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count магазина',
+      many: '$count магазинов',
+      few: '$count магазина',
+      one: '$count магазин',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -608,7 +616,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get vsLastMonth => 'к прошлому месяцу';
 
   @override
-  String get allocatedWorkforce => 'Распределённый персонал';
+  String get allocatedWorkforce => 'Активные сотрудники';
 
   @override
   String acrossBranches(int count) {

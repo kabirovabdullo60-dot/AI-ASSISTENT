@@ -31,6 +31,9 @@ class KpiCard extends StatelessWidget {
 
   static const height = 172.0;
 
+  /// Room for one badge + one caption line.
+  static const _footerHeight = 42.0;
+
   final String title;
   final String value;
   final String? unit;
@@ -48,6 +51,13 @@ class KpiCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final accent = highlight ? AppColors.amber : AppColors.ink;
+    final valueStyle = theme.textTheme.headlineSmall?.copyWith(
+      fontWeight: FontWeight.w700,
+      color: accent,
+      letterSpacing: -0.6,
+      fontFamily: AppTheme.display,
+      fontFeatures: AppTheme.numbers,
+    );
 
     final card = SizedBox(
       height: height,
@@ -79,44 +89,52 @@ class KpiCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
+              // Number and unit on one baseline ("24,505 TJS"), at the same height in every card.
               FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,
-                child: number != null && format != null
-                    ? NumberTicker(
-                        value: number!,
-                        format: format!,
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: accent,
-                          letterSpacing: -0.6,
-                          fontFamily: AppTheme.display,
-                          fontFeatures: AppTheme.numbers,
-                        ),
-                      )
-                    : Text(
-                        value,
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: accent,
-                          letterSpacing: -0.6,
-                          fontFamily: AppTheme.display,
-                          fontFeatures: AppTheme.numbers,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    if (number != null && format != null)
+                      NumberTicker(value: number!, format: format!, style: valueStyle)
+                    else
+                      Text(value, style: valueStyle),
+                    if (unit != null) ...[
+                      const SizedBox(width: 5),
+                      Text(
+                        unit!,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.muted,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-              ),
-              if (unit != null) Text(unit!, style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted)),
-              const SizedBox(height: 8),
-              if (badge != null) StatusBadge(badge!, tone: badgeTone, icon: badgeIcon, dot: badgeDot),
-              if (caption != null) ...[
-                const SizedBox(height: 4),
-                Text(
-                  caption!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall?.copyWith(color: AppColors.muted),
+                    ],
+                  ],
                 ),
-              ],
+              ),
+              const SizedBox(height: 10),
+              // Fixed-height footer: badge and caption start at the same line in every card,
+              // so the numbers above stay aligned even when a card has neither.
+              SizedBox(
+                height: _footerHeight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (badge != null) StatusBadge(badge!, tone: badgeTone, icon: badgeIcon, dot: badgeDot),
+                    if (badge != null && caption != null) const SizedBox(height: 4),
+                    if (caption != null)
+                      Text(
+                        caption!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelSmall?.copyWith(color: AppColors.muted),
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

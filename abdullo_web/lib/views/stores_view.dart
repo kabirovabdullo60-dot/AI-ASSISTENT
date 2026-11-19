@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -101,11 +100,11 @@ class StoresView extends StatelessWidget {
                     icon: Icons.insights_outlined,
                     badge: vm.monthChange == null ? null : formatPercent(vm.monthChange!),
                     badgeTone: (vm.monthChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
-                    caption: tr.vsLastMonth,
+                    caption: vm.monthChange == null ? null : tr.vsLastMonth,
                   ),
                   KpiCard(
                     title: tr.allocatedWorkforce,
-                    value: tr.nActive(vm.workforce),
+                    value: '${vm.workforce}',
                     icon: Icons.badge_outlined,
                     badge: tr.acrossBranches(vm.staffedBranches),
                     badgeTone: BadgeTone.info,
@@ -127,6 +126,7 @@ class StoresView extends StatelessWidget {
               LayoutBuilder(
                 builder: (context, c) => CardGrid(
                   key: const Key('stores-grid'),
+                  equalHeight: true,
                   columns: c.maxWidth >= 1000 ? 3 : (c.maxWidth >= 620 ? 2 : 1),
                   spacing: 16,
                   children: [for (final s in list) _StoreCard(store: s, stats: vm.statsOf(s), currency: cur)],
@@ -432,11 +432,10 @@ class _StoreCard extends StatelessWidget {
       key: Key('store-card-${s.id}'),
       clipBehavior: Clip.antiAlias,
       child: Container(
-        decoration: first
-            ? BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.orange, width: 3)),
-              )
-            : null,
+        // Every card has the 3px top line (only the leader's is colored), so all contents line up.
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: first ? AppColors.orange : Colors.transparent, width: 3)),
+        ),
         padding: const EdgeInsets.fromLTRB(16, 14, 8, 6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -486,8 +485,9 @@ class _StoreCard extends StatelessWidget {
                     child: figure(
                       tr.kpiTodaySales,
                       currency.format(stats.today),
-                      s.isActive ? tr.active : tr.offline,
-                      s.isActive ? AppColors.green : AppColors.muted,
+                      // The status badge already says "Active"; only an offline store needs a note.
+                      s.isActive ? '' : tr.offline,
+                      AppColors.muted,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -516,6 +516,8 @@ class _StoreCard extends StatelessWidget {
                 ],
               ),
             ),
+            // Cards in a row are equally tall; actions sit at the bottom of each.
+            const Spacer(),
             const Divider(height: 20),
             _StoreActions(store: s, showAnalytics: true),
           ],
@@ -538,14 +540,6 @@ class _ShareCard extends StatelessWidget {
     return SectionCard(
       title: tr.salesShare,
       subtitle: tr.storeComparisonTitle,
-      trailing: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(6)),
-        child: Text(
-          '${tr.endpoint}:\n${ApiConstants.reportStoreComparison}',
-          style: TextStyle(fontSize: 10.5, color: AppColors.ink),
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

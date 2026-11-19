@@ -584,7 +584,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nLocations(int count) {
-    return '$count Locations';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count stores',
+      one: '1 store',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -610,7 +616,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vsLastMonth => 'vs last month';
 
   @override
-  String get allocatedWorkforce => 'Allocated Workforce';
+  String get allocatedWorkforce => 'Active staff';
 
   @override
   String acrossBranches(int count) {
@@ -699,7 +705,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nEmployees(int count) {
-    return '$count employees';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count employees',
+      one: '1 employee',
+    );
+    return '$_temp0';
   }
 
   @override

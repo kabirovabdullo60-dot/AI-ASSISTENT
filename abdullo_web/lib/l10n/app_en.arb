@@ -387,7 +387,7 @@
   "exportDirectory": "Export Directory",
   "addNewStore": "Add New Store",
   "networkScope": "Network Scope",
-  "nLocations": "{count} Locations",
+  "nLocations": "{count, plural, =1{1 store} other{{count} stores}}",
   "@nLocations": {
     "placeholders": {
       "count": {
@@ -418,7 +418,7 @@
   "allBranchesToday": "all branches today",
   "totalMonthlyRevenue": "Total Monthly Revenue",
   "vsLastMonth": "vs last month",
-  "allocatedWorkforce": "Allocated Workforce",
+  "allocatedWorkforce": "Active staff",
   "acrossBranches": "Across {count} branches",
   "@acrossBranches": {
     "placeholders": {
@@ -501,7 +501,7 @@
   "topEarner": "Top Earner (#1)",
   "staffHeadcount": "Staff Headcount",
   "reassigned": "0 (reassigned)",
-  "nEmployees": "{count} employees",
+  "nEmployees": "{count, plural, =1{1 employee} other{{count} employees}}",
   "@nEmployees": {
     "placeholders": {
       "count": {
