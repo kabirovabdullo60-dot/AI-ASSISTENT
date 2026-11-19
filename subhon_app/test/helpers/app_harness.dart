@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/main.dart';
+import 'package:subhon_app/services/voice_service.dart';
 
 import 'fake_backend.dart';
 import 'memory_locale_storage.dart';
@@ -35,6 +36,7 @@ Future<void> pumpApp(
   FakeBackend backend, {
   MemoryTokenStorage? tokens,
   Locale locale = const Locale('ru'),
+  VoiceService? voice,
 }) async {
   reduceMotion(tester);
   await tester.pumpWidget(
@@ -43,6 +45,7 @@ Future<void> pumpApp(
       tokens: tokens ?? MemoryTokenStorage(),
       localeStorage: MemoryLocaleStorage(),
       locale: locale,
+      voice: voice,
     ),
   );
   await tester.pumpAndSettle();

@@ -1210,4 +1210,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activityHistory => 'History';
+
+  @override
+  String get voiceTitle => 'Voice chat';
+
+  @override
+  String get voiceOpen => 'Talk by voice';
+
+  @override
+  String get voiceListening => 'Listening…';
+
+  @override
+  String get voiceSpeaking => 'Answering…';
+
+  @override
+  String get voiceTapToTalk => 'Tap the microphone and speak';
+
+  @override
+  String get voiceHint =>
+      'Ask anything: “employees”, “sales today”, “how much salary is left?”';
+
+  @override
+  String get voiceMic => 'Speak';
+
+  @override
+  String get voiceEnd => 'End';
+
+  @override
+  String get voiceUnavailable =>
+      'Speech recognition is not available. Allow the microphone and speech recognition in Settings.';
 }

@@ -2199,6 +2199,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'History'**
   String get activityHistory;
+
+  /// No description provided for @voiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice chat'**
+  String get voiceTitle;
+
+  /// No description provided for @voiceOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Talk by voice'**
+  String get voiceOpen;
+
+  /// No description provided for @voiceListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening…'**
+  String get voiceListening;
+
+  /// No description provided for @voiceSpeaking.
+  ///
+  /// In en, this message translates to:
+  /// **'Answering…'**
+  String get voiceSpeaking;
+
+  /// No description provided for @voiceTapToTalk.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the microphone and speak'**
+  String get voiceTapToTalk;
+
+  /// No description provided for @voiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask anything: “employees”, “sales today”, “how much salary is left?”'**
+  String get voiceHint;
+
+  /// No description provided for @voiceMic.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak'**
+  String get voiceMic;
+
+  /// No description provided for @voiceEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get voiceEnd;
+
+  /// No description provided for @voiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech recognition is not available. Allow the microphone and speech recognition in Settings.'**
+  String get voiceUnavailable;
 }
 
 class _AppLocalizationsDelegate

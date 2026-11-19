@@ -1210,4 +1210,33 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get activityHistory => 'Таърих';
+
+  @override
+  String get voiceTitle => 'Бо овоз';
+
+  @override
+  String get voiceOpen => 'Бо овоз гап задан';
+
+  @override
+  String get voiceListening => 'Гӯш мекунам…';
+
+  @override
+  String get voiceSpeaking => 'Ҷавоб медиҳам…';
+
+  @override
+  String get voiceTapToTalk => 'Ба микрофон пахш кунед ва гап занед';
+
+  @override
+  String get voiceHint =>
+      'Ҳар чӣ хоҳед пурсед: «кормандон», «фурӯши имрӯз», «чӣ қадар маош монд?»';
+
+  @override
+  String get voiceMic => 'Гап задан';
+
+  @override
+  String get voiceEnd => 'Анҷом';
+
+  @override
+  String get voiceUnavailable =>
+      'Шинохти нутқ дастрас нест. Дар Танзимот микрофон ва шинохти нутқро иҷозат диҳед.';
 }

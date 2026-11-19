@@ -5,6 +5,7 @@ class ChatMessageModel {
     required this.fromUser,
     required this.text,
     this.time,
+    this.prompt,
   });
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) =>
@@ -23,9 +24,13 @@ class ChatMessageModel {
   final String text;
   final DateTime? time;
 
+  /// What is sent instead of [text] (a short request made into a clear
+  /// question); the screen shows [text].
+  final String? prompt;
+
   Map<String, dynamic> toJson() => {
     'role': fromUser ? 'user' : 'assistant',
-    'text': text,
+    'text': prompt ?? text,
     if (time != null) 'time': time!.toUtc().toIso8601String(),
   };
 }

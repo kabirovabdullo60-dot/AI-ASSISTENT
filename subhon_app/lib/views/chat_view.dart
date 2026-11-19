@@ -6,10 +6,12 @@ import '../core/theme/app_dimensions.dart';
 import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../services/assistant_service.dart';
+import '../services/voice_service.dart';
 import '../viewmodels/chat_view_model.dart';
 import '../widgets/app_inline_message.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/jelly_blob.dart';
+import 'voice_chat_view.dart';
 
 /// The AI assistant (`POST /api/assistant/chat`): ask about the business
 /// and get answers built from its real figures, in the app's language.
@@ -19,7 +21,10 @@ class ChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (context) => ChatViewModel(context.read<AssistantService>()),
+    create: (context) => ChatViewModel(
+      context.read<AssistantService>(),
+      voice: context.read<VoiceService>(),
+    ),
     child: const _Chat(),
   );
 }
@@ -44,6 +49,18 @@ class _ChatState extends State<_Chat> {
 
   String get _language => Localizations.localeOf(context).languageCode;
 
+  void _openVoice() {
+    final vm = context.read<ChatViewModel>();
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ChangeNotifierProvider.value(
+          value: vm,
+          child: const VoiceChatView(),
+        ),
+      ),
+    );
+  }
+
   Future<void> _send([String? text]) async {
     final vm = context.read<ChatViewModel>();
     final question = text ?? _input.text;
@@ -57,7 +74,16 @@ class _ChatState extends State<_Chat> {
     final vm = context.watch<ChatViewModel>();
     final messages = vm.messages;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.assistantTitle)),
+      appBar: AppBar(
+        title: Text(l10n.assistantTitle),
+        actions: [
+          IconButton(
+            tooltip: l10n.voiceOpen,
+            onPressed: _openVoice,
+            icon: const Icon(Icons.graphic_eq_rounded),
+          ),
+        ],
+      ),
       body: SafeArea(
         top: false,
         child: Column(
@@ -143,7 +169,11 @@ class _ChatState extends State<_Chat> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.xs),
+                    IconButton(
+                      tooltip: l10n.voiceOpen,
+                      onPressed: vm.isSending ? null : _openVoice,
+                      icon: const Icon(Icons.mic_none_rounded),
+                    ),
                     IconButton.filled(
                       tooltip: l10n.assistantSend,
                       onPressed: vm.isSending ? null : _send,

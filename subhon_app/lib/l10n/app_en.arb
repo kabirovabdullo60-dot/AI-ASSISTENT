@@ -688,5 +688,14 @@
   "homeMonth": "This month",
   "storeTargets": "Store targets",
   "targetSheetHintStore": "For this store only. You can change it any time.",
-  "activityHistory": "History"
+  "activityHistory": "History",
+  "voiceTitle": "Voice chat",
+  "voiceOpen": "Talk by voice",
+  "voiceListening": "Listening…",
+  "voiceSpeaking": "Answering…",
+  "voiceTapToTalk": "Tap the microphone and speak",
+  "voiceHint": "Ask anything: “employees”, “sales today”, “how much salary is left?”",
+  "voiceMic": "Speak",
+  "voiceEnd": "End",
+  "voiceUnavailable": "Speech recognition is not available. Allow the microphone and speech recognition in Settings."
 }

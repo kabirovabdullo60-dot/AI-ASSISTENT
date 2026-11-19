@@ -1216,4 +1216,33 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get activityHistory => 'История';
+
+  @override
+  String get voiceTitle => 'Голосом';
+
+  @override
+  String get voiceOpen => 'Говорить голосом';
+
+  @override
+  String get voiceListening => 'Слушаю…';
+
+  @override
+  String get voiceSpeaking => 'Отвечаю…';
+
+  @override
+  String get voiceTapToTalk => 'Нажмите на микрофон и говорите';
+
+  @override
+  String get voiceHint =>
+      'Спросите что угодно: «сотрудники», «продажи сегодня», «сколько осталось выплатить?»';
+
+  @override
+  String get voiceMic => 'Говорить';
+
+  @override
+  String get voiceEnd => 'Завершить';
+
+  @override
+  String get voiceUnavailable =>
+      'Распознавание речи недоступно. Разрешите микрофон и распознавание речи в Настройках.';
 }

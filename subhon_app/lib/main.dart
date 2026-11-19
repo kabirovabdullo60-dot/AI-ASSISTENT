@@ -16,6 +16,7 @@ import 'l10n/l10n.dart';
 import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
+import 'services/device_voice_service.dart';
 import 'services/employee_service.dart';
 import 'services/expense_service.dart';
 import 'services/notification_service.dart';
@@ -24,6 +25,7 @@ import 'services/profile_service.dart';
 import 'services/reports_service.dart';
 import 'services/sales_service.dart';
 import 'services/store_service.dart';
+import 'services/voice_service.dart';
 import 'services/target_service.dart';
 import 'viewmodels/locale_view_model.dart';
 import 'viewmodels/session_view_model.dart';
@@ -44,6 +46,7 @@ class MobileApp extends StatefulWidget {
     this.tokens,
     this.localeStorage,
     this.locale,
+    this.voice,
     super.key,
   });
 
@@ -54,6 +57,9 @@ class MobileApp extends StatefulWidget {
 
   /// Forces a language (tests).
   final Locale? locale;
+
+  /// Speech in and out; tests pass a fake, the app uses the phone's.
+  final VoiceService? voice;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -82,6 +88,9 @@ class _MobileAppState extends State<MobileApp> {
       Provider(create: (_) => ActivityService(_api)),
       Provider(create: (_) => NotificationService(_api)),
       Provider(create: (_) => AssistantService(_api)),
+      Provider<VoiceService>(
+        create: (_) => widget.voice ?? DeviceVoiceService(),
+      ),
       Provider(create: (_) => ReportsService(_api)),
       ChangeNotifierProvider(
         create: (_) => SessionViewModel(_auth, _api)..restore(),

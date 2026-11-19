@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Чтобы задавать вопросы ИИ-ассистенту голосом.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Чтобы превращать ваш голос в текст вопроса для ИИ-ассистента.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Доступ к фото нужен, чтобы выбрать фото профиля.</string>
 	<key>UIApplicationSceneManifest</key>
