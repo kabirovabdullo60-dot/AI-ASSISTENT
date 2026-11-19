@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/l10n/l10n.dart';
+import '../core/motion/app_dialog.dart';
 import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
 import '../viewmodels/assistant_view_model.dart';
 import '../viewmodels/voice_view_model.dart';
 import '../widgets/chat_bubble.dart';
+import '../widgets/chat_history_list.dart';
 import '../widgets/motion/ai_orb.dart';
 import '../widgets/motion/aurora.dart';
 import '../widgets/motion/border_beam.dart';
@@ -66,7 +68,7 @@ class _AssistantViewState extends State<AssistantView> {
     final itemCount = messages.length + (vm.isSending ? 1 : 0);
     _scrollToBottomIfNew(itemCount);
 
-    return Center(
+    Widget chat(bool showHistoryButton) => Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: _chatWidth + 40),
         child: LayoutBuilder(
@@ -131,6 +133,7 @@ class _AssistantViewState extends State<AssistantView> {
                   canClear: messages.isNotEmpty && !vm.isSending,
                   onSend: () => _send(vm),
                   onClear: vm.clear,
+                  onHistory: showHistoryButton ? () => _openHistorySheet(vm) : null,
                 ),
               ),
             ],
@@ -138,8 +141,89 @@ class _AssistantViewState extends State<AssistantView> {
         ),
       ),
     );
+
+    // Wide page: history panel on the left. Narrow: a history button opens it as a sheet.
+    return LayoutBuilder(
+      builder: (context, page) {
+        if (page.maxWidth < _historyPanelMinWidth) return chat(true);
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              key: const Key('history-panel'),
+              width: 272,
+              margin: const EdgeInsets.fromLTRB(16, 16, 0, 16),
+              padding: const EdgeInsets.only(top: 8),
+              decoration: BoxDecoration(
+                color: AppColors.card,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Align(alignment: Alignment.topCenter, child: _history(vm)),
+            ),
+            Expanded(child: chat(false)),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _history(AssistantViewModel vm, {VoidCallback? onPicked}) => ChatHistoryList(
+    conversations: vm.conversations,
+    currentId: vm.currentId,
+    enabled: !vm.isSending,
+    onOpen: (id) {
+      vm.open(id);
+      _freshFrom = null;
+      onPicked?.call();
+    },
+    onDelete: (id) => _confirmDelete(vm, id),
+    onNewChat: () {
+      vm.clear();
+      onPicked?.call();
+    },
+  );
+
+  void _openHistorySheet(AssistantViewModel vm) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.75),
+      builder: (sheet) => SafeArea(
+        // Rebuilds when a chat is deleted while the sheet is open.
+        child: ListenableBuilder(
+          listenable: vm,
+          builder: (_, _) => _history(vm, onPicked: () => Navigator.of(sheet).pop()),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _confirmDelete(AssistantViewModel vm, String id) async {
+    final tr = context.l10n;
+    final ok = await showAppDialog<bool>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: Text(tr.deleteChat),
+        content: Text(tr.deleteChatConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialog).pop(false), child: Text(tr.cancel)),
+          FilledButton(
+            key: const Key('history-delete-confirm'),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.red),
+            onPressed: () => Navigator.of(dialog).pop(true),
+            child: Text(tr.delete),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) await vm.delete(id);
   }
 }
+
+/// Page width from which the history sits beside the chat instead of in a sheet.
+const double _historyPanelMinWidth = 900;
 
 /// Empty chat: orb + one line of intro + a "live data" pill, then four example questions
 /// in a 2×2 grid (one column on phones). Faint Pamir ridgelines sit at the bottom.
@@ -380,6 +464,7 @@ class _InputBar extends StatelessWidget {
     required this.canClear,
     required this.onSend,
     required this.onClear,
+    this.onHistory,
   });
 
   final TextEditingController controller;
@@ -388,6 +473,9 @@ class _InputBar extends StatelessWidget {
   final bool canClear;
   final VoidCallback onSend;
   final VoidCallback onClear;
+
+  /// Null when the history panel is already on screen.
+  final VoidCallback? onHistory;
 
   @override
   Widget build(BuildContext context) {
@@ -411,10 +499,18 @@ class _InputBar extends StatelessWidget {
           child: Row(
             children: [
               IconButton(
+                key: const Key('chat-new'),
                 tooltip: tr.newChat,
                 onPressed: canClear ? onClear : null,
                 icon: Icon(Icons.add_comment_outlined, color: AppColors.muted),
               ),
+              if (onHistory != null)
+                IconButton(
+                  key: const Key('chat-history'),
+                  tooltip: tr.chatHistory,
+                  onPressed: enabled ? onHistory : null,
+                  icon: Icon(Icons.history, color: AppColors.muted),
+                ),
               const _SpeakRepliesButton(),
               Expanded(
                 child: TextField(

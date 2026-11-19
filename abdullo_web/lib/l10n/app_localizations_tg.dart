@@ -1819,4 +1819,23 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get voiceError => 'Вуруди овозӣ кор накард. Боз кӯшиш кунед.';
+
+  @override
+  String get chatHistory => 'Таърих';
+
+  @override
+  String get chatHistoryEmpty =>
+      'Ҳоло чатҳои захирашуда нестанд. Савол диҳед — чат дар ин ҷо захира мешавад.';
+
+  @override
+  String get deleteChat => 'Нест кардани чат';
+
+  @override
+  String get deleteChatConfirm =>
+      'Ин чатро нест кунем? Онро баргардондан намешавад.';
+
+  @override
+  String chatMessages(int count) {
+    return '$count паём';
+  }
 }

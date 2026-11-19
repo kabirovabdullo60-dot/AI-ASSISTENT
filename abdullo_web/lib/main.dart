@@ -12,6 +12,7 @@ import 'core/theme/app_theme.dart';
 import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
+import 'services/chat_history_service.dart';
 import 'services/employee_service.dart';
 import 'services/expense_service.dart';
 import 'services/notification_service.dart';
@@ -203,7 +204,12 @@ class _SignedInState extends State<_SignedIn> {
         ChangeNotifierProvider(create: (_) => PayrollViewModel(payroll)..load()),
         ChangeNotifierProvider(create: (_) => ExpensesViewModel(ExpenseService(api), reports)..load()),
         ChangeNotifierProvider(create: (_) => ReportsViewModel(reports)..load()),
-        ChangeNotifierProvider(create: (_) => AssistantViewModel(AssistantService(api, reports))),
+        ChangeNotifierProvider(
+          create: (_) => AssistantViewModel(
+            AssistantService(api, reports),
+            history: ChatHistoryService(userId: context.read<AuthViewModel>().user?.id ?? 'me'),
+          ),
+        ),
         ChangeNotifierProvider(
           lazy: false,
           create: (c) => VoiceViewModel(

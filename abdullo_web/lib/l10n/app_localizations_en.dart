@@ -1836,4 +1836,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voiceError => 'Voice input failed. Try again.';
+
+  @override
+  String get chatHistory => 'History';
+
+  @override
+  String get chatHistoryEmpty =>
+      'No saved chats yet. Ask a question — the chat is saved here.';
+
+  @override
+  String get deleteChat => 'Delete chat';
+
+  @override
+  String get deleteChatConfirm => 'Delete this chat? It cannot be restored.';
+
+  @override
+  String chatMessages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count messages',
+      one: '1 message',
+    );
+    return '$_temp0';
+  }
 }

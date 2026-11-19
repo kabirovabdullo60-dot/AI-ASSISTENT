@@ -1237,5 +1237,17 @@
         "type": "String"
       }
     }
+  },
+  "chatHistory": "History",
+  "chatHistoryEmpty": "No saved chats yet. Ask a question — the chat is saved here.",
+  "deleteChat": "Delete chat",
+  "deleteChatConfirm": "Delete this chat? It cannot be restored.",
+  "chatMessages": "{count, plural, =1{1 message} other{{count} messages}}",
+  "@chatMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

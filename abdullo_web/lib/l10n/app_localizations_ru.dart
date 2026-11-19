@@ -1825,4 +1825,31 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get voiceError => 'Голосовой ввод не сработал. Попробуйте ещё раз.';
+
+  @override
+  String get chatHistory => 'История';
+
+  @override
+  String get chatHistoryEmpty =>
+      'Сохранённых чатов пока нет. Задайте вопрос — чат сохранится здесь.';
+
+  @override
+  String get deleteChat => 'Удалить чат';
+
+  @override
+  String get deleteChatConfirm =>
+      'Удалить этот чат? Его нельзя будет восстановить.';
+
+  @override
+  String chatMessages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count сообщения',
+      many: '$count сообщений',
+      few: '$count сообщения',
+      one: '1 сообщение',
+    );
+    return '$_temp0';
+  }
 }

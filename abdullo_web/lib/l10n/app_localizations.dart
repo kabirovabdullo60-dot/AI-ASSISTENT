@@ -3303,6 +3303,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Voice input failed. Try again.'**
   String get voiceError;
+
+  /// No description provided for @chatHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get chatHistory;
+
+  /// No description provided for @chatHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved chats yet. Ask a question — the chat is saved here.'**
+  String get chatHistoryEmpty;
+
+  /// No description provided for @deleteChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete chat'**
+  String get deleteChat;
+
+  /// No description provided for @deleteChatConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this chat? It cannot be restored.'**
+  String get deleteChatConfirm;
+
+  /// No description provided for @chatMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 message} other{{count} messages}}'**
+  String chatMessages(int count);
 }
 
 class _AppLocalizationsDelegate
