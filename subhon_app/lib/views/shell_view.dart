@@ -18,8 +18,10 @@ import '../viewmodels/payroll_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../widgets/add_nav_button.dart';
 import '../widgets/app_feedback.dart';
+import '../widgets/assistant_fab.dart';
 import '../widgets/bottom_nav_item.dart';
 import '../widgets/quick_action_cell.dart';
+import 'chat_view.dart';
 import 'employee_form_view.dart';
 import 'expense_form_view.dart';
 import 'home_view.dart';
@@ -209,6 +211,14 @@ class _ShellViewState extends State<ShellView> {
       onTap: () => setState(() => _index = index),
     );
     return Scaffold(
+      // The AI assistant, always in the bottom-right corner on every tab.
+      floatingActionButton: AssistantFab(
+        tooltip: l10n.assistantTitle,
+        onPressed: () => Navigator.of(
+          context,
+        ).push(MaterialPageRoute<void>(builder: (_) => const ChatView())),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: IndexedStack(
         index: _index,
         children: [

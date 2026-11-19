@@ -24,7 +24,6 @@ import '../widgets/stat_tile.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/sales_target_card.dart';
 import 'activity_view.dart';
-import 'chat_view.dart';
 import 'notifications_view.dart';
 
 /// Home (OFAR layout): month sales card, today, period figures with the
@@ -59,13 +58,6 @@ class HomeView extends StatelessWidget {
               ),
             ),
             icon: const Icon(Icons.history_rounded),
-          ),
-          IconButton(
-            tooltip: l10n.assistantTitle,
-            onPressed: () => Navigator.of(
-              context,
-            ).push(MaterialPageRoute<void>(builder: (_) => const ChatView())),
-            icon: const Icon(Icons.auto_awesome_outlined),
           ),
           NotificationBell(
             unread: notifications.unreadCount,
