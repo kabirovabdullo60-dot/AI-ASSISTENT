@@ -1,31 +1,25 @@
 import 'package:flutter/foundation.dart';
 
+import '../core/navigation/app_section.dart';
+
+/// Open page + the global search text from the top bar.
 class HomeViewModel extends ChangeNotifier {
-  bool _isLoading = false;
-  String? _error;
-  int _selectedIndex = 0;
+  AppSection _section = AppSection.dashboard;
+  String _query = '';
 
-  bool get isLoading => _isLoading;
-  String? get error => _error;
-  int get selectedIndex => _selectedIndex;
+  AppSection get section => _section;
+  String get query => _query;
 
-  void select(int index) {
-    if (index == _selectedIndex) return;
-    _selectedIndex = index;
+  void select(AppSection section) {
+    if (section == _section) return;
+    _section = section;
     notifyListeners();
   }
 
-  Future<void> load() async {
-    _isLoading = true;
-    _error = null;
+  void setQuery(String value) {
+    final q = value.trim().toLowerCase();
+    if (q == _query) return;
+    _query = q;
     notifyListeners();
-    try {
-      // TODO: call a service from lib/services
-    } catch (e) {
-      _error = e.toString();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
   }
 }
