@@ -1860,4 +1860,16 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get hideHistory => 'Hide history';
+
+  @override
+  String get showHistory => 'Show history';
+
+  @override
+  String get collapseMenu => 'Collapse menu';
+
+  @override
+  String get expandMenu => 'Expand menu';
 }

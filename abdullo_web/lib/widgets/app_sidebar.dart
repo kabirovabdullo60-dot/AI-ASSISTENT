@@ -16,6 +16,7 @@ class AppSidebar extends StatelessWidget {
     required this.onSelect,
     required this.extended,
     required this.brandName,
+    this.onToggle,
   });
 
   static const extendedWidth = 236.0;
@@ -25,6 +26,9 @@ class AppSidebar extends StatelessWidget {
   final ValueChanged<AppSection> onSelect;
   final bool extended;
   final String brandName;
+
+  /// Desktop only: folds / unfolds the menu. Null → no button (tablet is always compact).
+  final VoidCallback? onToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class AppSidebar extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            _Brand(name: brandName, extended: extended),
+            _Brand(name: brandName, extended: extended, onToggle: onToggle),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -64,16 +68,25 @@ class AppSidebar extends StatelessWidget {
 }
 
 class _Brand extends StatelessWidget {
-  const _Brand({required this.name, required this.extended});
+  const _Brand({required this.name, required this.extended, this.onToggle});
 
   final String name;
   final bool extended;
+  final VoidCallback? onToggle;
 
   @override
   Widget build(BuildContext context) {
     final logo = const BrandMark();
+    final tr = context.l10n;
+    Widget toggle(bool open) => IconButton(
+      key: const Key('sidebar-toggle'),
+      tooltip: open ? tr.collapseMenu : tr.expandMenu,
+      onPressed: onToggle,
+      visualDensity: VisualDensity.compact,
+      icon: Icon(open ? Icons.menu_open : Icons.menu, color: AppColors.muted),
+    );
     return Padding(
-      padding: EdgeInsets.fromLTRB(extended ? 20 : 0, 20, extended ? 16 : 0, 20),
+      padding: EdgeInsets.fromLTRB(extended ? 20 : 0, 20, extended ? (onToggle == null ? 16 : 6) : 0, 20),
       child: extended
           ? Row(
               children: [
@@ -93,10 +106,16 @@ class _Brand extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (onToggle != null) toggle(true),
               ],
             )
-          : Center(
-              child: Tooltip(message: name, child: logo),
+          : Column(
+              children: [
+                Center(
+                  child: Tooltip(message: name, child: logo),
+                ),
+                if (onToggle != null) ...[const SizedBox(height: 8), toggle(false)],
+              ],
             ),
     );
   }

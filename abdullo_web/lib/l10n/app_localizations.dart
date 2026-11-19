@@ -3333,6 +3333,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 message} other{{count} messages}}'**
   String chatMessages(int count);
+
+  /// No description provided for @hideHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide history'**
+  String get hideHistory;
+
+  /// No description provided for @showHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Show history'**
+  String get showHistory;
+
+  /// No description provided for @collapseMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse menu'**
+  String get collapseMenu;
+
+  /// No description provided for @expandMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand menu'**
+  String get expandMenu;
 }
 
 class _AppLocalizationsDelegate

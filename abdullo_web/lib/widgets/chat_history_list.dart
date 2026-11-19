@@ -16,6 +16,7 @@ class ChatHistoryList extends StatelessWidget {
     required this.onDelete,
     required this.onNewChat,
     this.enabled = true,
+    this.onHide,
   });
 
   final List<ConversationModel> conversations;
@@ -26,6 +27,9 @@ class ChatHistoryList extends StatelessWidget {
 
   /// False while an answer is coming — switching chats then would lose it.
   final bool enabled;
+
+  /// Side panel: a button at the top that hides the panel. Null in the phone sheet.
+  final VoidCallback? onHide;
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +68,17 @@ class ChatHistoryList extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(12, 4, 8, 4),
           child: Row(
             children: [
-              Icon(Icons.history, size: 18, color: AppColors.muted),
-              const SizedBox(width: 8),
+              if (onHide != null)
+                IconButton(
+                  key: const Key('history-hide'),
+                  tooltip: tr.hideHistory,
+                  visualDensity: VisualDensity.compact,
+                  onPressed: onHide,
+                  icon: Icon(Icons.keyboard_double_arrow_right, size: 20, color: AppColors.muted),
+                )
+              else
+                Icon(Icons.history, size: 18, color: AppColors.muted),
+              SizedBox(width: onHide != null ? 2 : 8),
               Expanded(
                 child: Text(
                   tr.chatHistory,

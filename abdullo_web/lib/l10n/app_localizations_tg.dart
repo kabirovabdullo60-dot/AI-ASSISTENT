@@ -1838,4 +1838,16 @@ class AppLocalizationsTg extends AppLocalizations {
   String chatMessages(int count) {
     return '$count паём';
   }
+
+  @override
+  String get hideHistory => 'Пинҳон кардани таърих';
+
+  @override
+  String get showHistory => 'Нишон додани таърих';
+
+  @override
+  String get collapseMenu => 'Хурд кардани меню';
+
+  @override
+  String get expandMenu => 'Калон кардани меню';
 }

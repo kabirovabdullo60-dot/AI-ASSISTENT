@@ -3,6 +3,7 @@ import 'package:abdullo_web/main.dart';
 import 'package:abdullo_web/models/chat_message_model.dart';
 import 'package:abdullo_web/models/conversation_model.dart';
 import 'package:abdullo_web/widgets/chat_bubble.dart';
+import 'package:abdullo_web/widgets/app_sidebar.dart';
 import 'package:abdullo_web/widgets/chat_history_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -105,6 +106,42 @@ void main() {
       expect(_inHistory('Unpaid salaries?'), findsOneWidget);
     });
   }
+
+  testWidgets('desktop: history sits on the right and can be hidden', (tester) async {
+    await pumpApp(tester, desktopWidth);
+    await openSection(tester, AppSection.assistant);
+    final panel = find.byKey(const Key('history-panel'));
+    expect(tester.getTopLeft(panel).dx, greaterThan(tester.getTopRight(find.byKey(const Key('chat-input'))).dx));
+    expect(tester.getTopRight(panel).dx, greaterThan(desktopWidth - 40));
+
+    await tester.tap(find.byKey(const Key('history-hide')));
+    await tester.pumpAndSettle();
+    expect(panel, findsNothing);
+    await tester.tap(find.byKey(const Key('history-show')));
+    await tester.pumpAndSettle();
+    expect(panel, findsOneWidget);
+  });
+
+  testWidgets('desktop: the button next to the logo collapses the menu', (tester) async {
+    await pumpApp(tester, desktopWidth);
+    double sidebarWidth() => tester.getSize(find.byKey(const Key('app-sidebar'))).width - 12; // minus its left margin
+    expect(sidebarWidth(), AppSidebar.extendedWidth);
+    await tester.tap(find.byKey(const Key('sidebar-toggle')));
+    await tester.pumpAndSettle();
+    expect(sidebarWidth(), AppSidebar.compactWidth);
+    // Still navigates while folded.
+    await tester.tap(find.byKey(const Key('nav-assistant')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('history-panel')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('sidebar-toggle')));
+    await tester.pumpAndSettle();
+    expect(sidebarWidth(), AppSidebar.extendedWidth);
+  });
+
+  testWidgets('tablet has no menu toggle (always compact)', (tester) async {
+    await pumpApp(tester, tabletWidth);
+    expect(find.byKey(const Key('sidebar-toggle')), findsNothing);
+  });
 
   testWidgets('empty history shows a hint', (tester) async {
     await pumpApp(tester, desktopWidth);

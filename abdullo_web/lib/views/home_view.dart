@@ -62,7 +62,13 @@ class HomeView extends StatelessWidget {
     Widget wide(bool extended) => Scaffold(
       body: Row(
         children: [
-          AppSidebar(selected: home.section, onSelect: home.select, extended: extended, brandName: brand),
+          AppSidebar(
+            selected: home.section,
+            onSelect: home.select,
+            extended: extended && !home.sidebarCollapsed,
+            brandName: brand,
+            onToggle: extended ? home.toggleSidebar : null,
+          ),
           Expanded(
             child: Column(
               children: [

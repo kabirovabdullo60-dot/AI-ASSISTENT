@@ -538,5 +538,9 @@
   "chatHistoryEmpty": "Ҳоло чатҳои захирашуда нестанд. Савол диҳед — чат дар ин ҷо захира мешавад.",
   "deleteChat": "Нест кардани чат",
   "deleteChatConfirm": "Ин чатро нест кунем? Онро баргардондан намешавад.",
-  "chatMessages": "{count} паём"
+  "chatMessages": "{count} паём",
+  "hideHistory": "Пинҳон кардани таърих",
+  "showHistory": "Нишон додани таърих",
+  "collapseMenu": "Хурд кардани меню",
+  "expandMenu": "Калон кардани меню"
 }

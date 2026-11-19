@@ -1249,5 +1249,9 @@
         "type": "int"
       }
     }
-  }
+  },
+  "hideHistory": "Hide history",
+  "showHistory": "Show history",
+  "collapseMenu": "Collapse menu",
+  "expandMenu": "Expand menu"
 }

@@ -32,6 +32,9 @@ class _AssistantViewState extends State<AssistantView> {
   final _scroll = ScrollController();
   int _shownCount = 0;
 
+  /// Wide page: the history panel on the right is open (hide/show with its top button).
+  bool _historyOpen = true;
+
   /// Messages from this index on arrived while the page is open → they animate in.
   int? _freshFrom;
 
@@ -142,33 +145,64 @@ class _AssistantViewState extends State<AssistantView> {
       ),
     );
 
-    // Wide page: history panel on the left. Narrow: a history button opens it as a sheet.
+    // Wide page: history panel on the right, full height, with a hide button at its top.
+    // Hidden → a small history button stays in the top-right corner. Narrow: a sheet.
     return LayoutBuilder(
       builder: (context, page) {
         if (page.maxWidth < _historyPanelMinWidth) return chat(true);
+        final reduced = Motion.reduced(context);
         return Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              key: const Key('history-panel'),
-              width: 272,
-              margin: const EdgeInsets.fromLTRB(16, 16, 0, 16),
-              padding: const EdgeInsets.only(top: 8),
-              decoration: BoxDecoration(
-                color: AppColors.card,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Align(alignment: Alignment.topCenter, child: _history(vm)),
-            ),
             Expanded(child: chat(false)),
+            AnimatedSize(
+              duration: reduced ? Duration.zero : Motion.base,
+              curve: Motion.easeOut,
+              alignment: Alignment.topRight,
+              child: _historyOpen
+                  ? Container(
+                      key: const Key('history-panel'),
+                      width: 280,
+                      margin: const EdgeInsets.fromLTRB(0, 12, 12, 12),
+                      padding: const EdgeInsets.only(top: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.card,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: _history(vm, onHide: () => setState(() => _historyOpen = false)),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 12, 12, 0),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Material(
+                          color: AppColors.card,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: AppColors.border),
+                          ),
+                          child: IconButton(
+                            key: const Key('history-show'),
+                            tooltip: context.l10n.showHistory,
+                            onPressed: () => setState(() => _historyOpen = true),
+                            icon: Icon(Icons.history, color: AppColors.muted),
+                          ),
+                        ),
+                      ),
+                    ),
+            ),
           ],
         );
       },
     );
   }
 
-  Widget _history(AssistantViewModel vm, {VoidCallback? onPicked}) => ChatHistoryList(
+  Widget _history(AssistantViewModel vm, {VoidCallback? onPicked, VoidCallback? onHide}) => ChatHistoryList(
+    onHide: onHide,
     conversations: vm.conversations,
     currentId: vm.currentId,
     enabled: !vm.isSending,

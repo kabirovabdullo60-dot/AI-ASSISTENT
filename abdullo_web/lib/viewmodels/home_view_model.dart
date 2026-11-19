@@ -7,7 +7,18 @@ class HomeViewModel extends ChangeNotifier {
   AppSection _section = AppSection.dashboard;
   String _query = '';
 
+  bool _sidebarCollapsed = false;
+
   AppSection get section => _section;
+
+  /// Desktop: the menu folded to icons only (button next to the logo).
+  bool get sidebarCollapsed => _sidebarCollapsed;
+
+  void toggleSidebar() {
+    _sidebarCollapsed = !_sidebarCollapsed;
+    notifyListeners();
+  }
+
   String get query => _query;
 
   void select(AppSection section) {

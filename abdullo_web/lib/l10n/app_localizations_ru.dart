@@ -1852,4 +1852,16 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get hideHistory => 'Скрыть историю';
+
+  @override
+  String get showHistory => 'Показать историю';
+
+  @override
+  String get collapseMenu => 'Свернуть меню';
+
+  @override
+  String get expandMenu => 'Развернуть меню';
 }
