@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// The title of the launch intro ("ИИ бухгалтер"), animated by the intro
+/// The title of the launch intro ("ИИ-бухгалтер"), animated by the intro
 /// clock [seconds]: the letters rise in one by one, a light shimmer runs
 /// across, and it all fades up and out before the colour drains.
 class IntroTitle extends StatelessWidget {

@@ -9,7 +9,7 @@ Widget _host({bool reduceMotion = false}) => MediaQuery(
   data: MediaQueryData(disableAnimations: reduceMotion),
   child: const Directionality(
     textDirection: TextDirection.ltr,
-    child: IntroOverlay(title: 'ИИ бухгалтер', child: Text('app')),
+    child: IntroOverlay(title: 'ИИ-бухгалтер', child: Text('app')),
   ),
 );
 
@@ -27,7 +27,7 @@ void main() {
     expect(eyes.openness, greaterThan(0.9));
     expect(
       tester.widget<IntroTitle>(find.byType(IntroTitle)).text,
-      'ИИ бухгалтер',
+      'ИИ-бухгалтер',
     );
     expect(find.text('б'), findsOneWidget); // letter by letter
 

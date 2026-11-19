@@ -24,7 +24,7 @@ const _lookKeys = <(double, double)>[
 
 /// The launch intro, played once over [child] when the app opens: a full
 /// screen of the brand colour with two eyes in the middle that look left
-/// and right and blink, with [title] ("ИИ бухгалтер") under them, then the
+/// and right and blink, with [title] ("ИИ-бухгалтер") under them, then the
 /// colour drains upward with drips and shows the app (login or home)
 /// underneath.
 ///

@@ -1,7 +1,7 @@
 {
   "@@locale": "ru",
   "appTitle": "OFAR",
-  "introTitle": "ИИ бухгалтер",
+  "introTitle": "ИИ-бухгалтер",
   "commonLoading": "Загрузка…",
   "commonEmptyTitle": "Пока пусто",
   "commonErrorTitle": "Не удалось загрузить",
