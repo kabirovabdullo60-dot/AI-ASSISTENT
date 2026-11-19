@@ -1275,4 +1275,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get chatCurrent => 'Открыт сейчас';
+
+  @override
+  String homeStores(int count) {
+    return 'Магазины · $count';
+  }
+
+  @override
+  String get homeStoreMonth => 'За месяц';
+
+  @override
+  String get homeAddStore => 'Добавить магазин';
+
+  @override
+  String get homeProfit => 'Прибыль';
+
+  @override
+  String get homeShowAllStores => 'Все';
 }

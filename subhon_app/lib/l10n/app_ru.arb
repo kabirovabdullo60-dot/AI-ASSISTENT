@@ -367,5 +367,10 @@
   "chatDeleteAllTitle": "Удалить все чаты?",
   "chatDeleteAllMessage": "История хранится только на этом телефоне, вернуть её не получится.",
   "chatDeleted": "Чат удалён",
-  "chatCurrent": "Открыт сейчас"
+  "chatCurrent": "Открыт сейчас",
+  "homeStores": "Магазины · {count}",
+  "homeStoreMonth": "За месяц",
+  "homeAddStore": "Добавить магазин",
+  "homeProfit": "Прибыль",
+  "homeShowAllStores": "Все"
 }

@@ -11,7 +11,6 @@ import '../services/payroll_service.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
-import '../services/target_service.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
@@ -47,7 +46,7 @@ class _ShellViewState extends State<ShellView> {
   late final _dashboard = DashboardViewModel(
     context.read<ReportsService>(),
     context.read<SalesService>(),
-    context.read<TargetService>(),
+    context.read<StoreService>(),
     context.read<ActivityService>(),
   )..load();
   late final _sales = SalesViewModel(

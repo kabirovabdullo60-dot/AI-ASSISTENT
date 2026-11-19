@@ -1269,4 +1269,21 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get chatCurrent => 'Ҳозир кушода';
+
+  @override
+  String homeStores(int count) {
+    return 'Мағозаҳо · $count';
+  }
+
+  @override
+  String get homeStoreMonth => 'Дар як моҳ';
+
+  @override
+  String get homeAddStore => 'Илова кардани мағоза';
+
+  @override
+  String get homeProfit => 'Фоида';
+
+  @override
+  String get homeShowAllStores => 'Ҳама';
 }

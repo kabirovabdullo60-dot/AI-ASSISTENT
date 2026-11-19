@@ -2307,6 +2307,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open now'**
   String get chatCurrent;
+
+  /// No description provided for @homeStores.
+  ///
+  /// In en, this message translates to:
+  /// **'Stores · {count}'**
+  String homeStores(int count);
+
+  /// No description provided for @homeStoreMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get homeStoreMonth;
+
+  /// No description provided for @homeAddStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a store'**
+  String get homeAddStore;
+
+  /// No description provided for @homeProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit'**
+  String get homeProfit;
+
+  /// No description provided for @homeShowAllStores.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get homeShowAllStores;
 }
 
 class _AppLocalizationsDelegate

@@ -1269,4 +1269,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatCurrent => 'Open now';
+
+  @override
+  String homeStores(int count) {
+    return 'Stores · $count';
+  }
+
+  @override
+  String get homeStoreMonth => 'This month';
+
+  @override
+  String get homeAddStore => 'Add a store';
+
+  @override
+  String get homeProfit => 'Profit';
+
+  @override
+  String get homeShowAllStores => 'All';
 }

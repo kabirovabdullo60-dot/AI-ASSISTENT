@@ -367,5 +367,10 @@
   "chatDeleteAllTitle": "Ҳамаи чатҳоро нест кунем?",
   "chatDeleteAllMessage": "Таърих танҳо дар ҳамин телефон нигоҳ дошта мешавад, баргардонидан ғайриимкон аст.",
   "chatDeleted": "Чат нест карда шуд",
-  "chatCurrent": "Ҳозир кушода"
+  "chatCurrent": "Ҳозир кушода",
+  "homeStores": "Мағозаҳо · {count}",
+  "homeStoreMonth": "Дар як моҳ",
+  "homeAddStore": "Илова кардани мағоза",
+  "homeProfit": "Фоида",
+  "homeShowAllStores": "Ҳама"
 }

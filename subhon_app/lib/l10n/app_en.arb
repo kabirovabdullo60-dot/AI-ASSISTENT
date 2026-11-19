@@ -706,5 +706,17 @@
   "chatDeleteAllTitle": "Delete all chats?",
   "chatDeleteAllMessage": "The history is kept only on this phone; it can't be restored.",
   "chatDeleted": "Chat deleted",
-  "chatCurrent": "Open now"
+  "chatCurrent": "Open now",
+  "homeStores": "Stores · {count}",
+  "@homeStores": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeStoreMonth": "This month",
+  "homeAddStore": "Add a store",
+  "homeProfit": "Profit",
+  "homeShowAllStores": "All"
 }
