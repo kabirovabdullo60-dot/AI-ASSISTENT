@@ -105,6 +105,18 @@ class PayrollView extends StatelessWidget {
                         data.unpaidCount,
                       ),
                     ),
+                    if (vm.summary case final all?) ...[
+                      const SizedBox(height: AppSpacing.md),
+                      FigureCard(
+                        label: l10n.payrollAllTimeRemaining,
+                        value: context.money(all.totalRemaining),
+                        valueColor: all.totalRemaining > 0 ? p.error : null,
+                        caption: l10n.payrollAllTimeCaption(
+                          context.money(all.totalDue),
+                          context.money(all.totalPaid),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: AppSpacing.md),
                     AppCard(
                       padding: const EdgeInsets.symmetric(

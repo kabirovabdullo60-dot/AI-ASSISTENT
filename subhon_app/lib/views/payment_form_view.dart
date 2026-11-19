@@ -9,6 +9,7 @@ import '../l10n/l10n.dart';
 import '../l10n/validators.dart';
 import '../models/monthly_payroll_row_model.dart';
 import '../models/payroll_status.dart';
+import '../models/salary_payment_method.dart';
 import '../services/payroll_service.dart';
 import '../viewmodels/payment_form_view_model.dart';
 import '../widgets/app_button.dart';
@@ -17,6 +18,7 @@ import '../widgets/app_inline_message.dart';
 import '../widgets/app_picker_field.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/figure_card.dart';
+import '../widgets/options_sheet.dart';
 import '../widgets/payroll_status_badge.dart';
 import 'employee_payroll_view.dart';
 
@@ -64,6 +66,7 @@ class _PaymentFormState extends State<_PaymentForm> {
         : '',
   );
   final _note = TextEditingController();
+  SalaryPaymentMethod? _method;
   DateTime _date = today();
 
   @override
@@ -85,6 +88,7 @@ class _PaymentFormState extends State<_PaymentForm> {
       amount: Validators.parseAmount(_amount.text)!,
       paymentDate: _date,
       note: _note.text,
+      method: _method,
     );
     if (ok) {
       feedback.showSuccess(l10n.paymentSaved);
@@ -190,6 +194,36 @@ class _PaymentFormState extends State<_PaymentForm> {
                   lastDate: today(),
                 );
                 if (picked != null) setState(() => _date = picked);
+              },
+            ),
+            gap,
+            AppPickerField(
+              label: l10n.fieldSalaryMethod,
+              value: switch (_method) {
+                SalaryPaymentMethod.bankTransfer => l10n.salaryMethodBank,
+                SalaryPaymentMethod.cash => l10n.salaryMethodCash,
+                null => l10n.paymentNotSet,
+              },
+              leading: const Icon(Icons.account_balance_wallet_outlined),
+              onTap: () async {
+                final picked = await showOptionsSheet<String>(
+                  context,
+                  title: l10n.fieldSalaryMethod,
+                  selected: _method?.json ?? '',
+                  options: [
+                    ('', l10n.paymentNotSet),
+                    (
+                      SalaryPaymentMethod.bankTransfer.json,
+                      l10n.salaryMethodBank,
+                    ),
+                    (SalaryPaymentMethod.cash.json, l10n.salaryMethodCash),
+                  ],
+                );
+                if (picked != null) {
+                  setState(
+                    () => _method = SalaryPaymentMethod.fromJson(picked),
+                  );
+                }
               },
             ),
             gap,

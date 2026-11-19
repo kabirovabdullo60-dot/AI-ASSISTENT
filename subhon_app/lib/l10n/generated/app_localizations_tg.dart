@@ -1166,4 +1166,21 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get storeMoreDetails => 'Тафсилот';
+
+  @override
+  String get fieldSalaryMethod => 'Тарзи пардохт';
+
+  @override
+  String get salaryMethodBank => 'Интиқоли бонкӣ';
+
+  @override
+  String get salaryMethodCash => 'Нақд';
+
+  @override
+  String get payrollAllTimeRemaining => 'Пардохтнашуда барои ҳамаи моҳҳо';
+
+  @override
+  String payrollAllTimeCaption(String due, String paid) {
+    return 'Ҳисобшуда $due · пардохтшуда $paid';
+  }
 }

@@ -2127,6 +2127,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More details'**
   String get storeMoreDetails;
+
+  /// No description provided for @fieldSalaryMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid by'**
+  String get fieldSalaryMethod;
+
+  /// No description provided for @salaryMethodBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer'**
+  String get salaryMethodBank;
+
+  /// No description provided for @salaryMethodCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get salaryMethodCash;
+
+  /// No description provided for @payrollAllTimeRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid salaries, all months'**
+  String get payrollAllTimeRemaining;
+
+  /// No description provided for @payrollAllTimeCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {due} · paid {paid}'**
+  String payrollAllTimeCaption(String due, String paid);
 }
 
 class _AppLocalizationsDelegate

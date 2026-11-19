@@ -337,5 +337,10 @@
   "fieldStatusNote": "Сабаби вазъ",
   "fieldStatusNoteHint": "Масалан, таъмир",
   "validationCounters": "Адади бутун аз 0 то 999",
-  "storeMoreDetails": "Тафсилот"
+  "storeMoreDetails": "Тафсилот",
+  "fieldSalaryMethod": "Тарзи пардохт",
+  "salaryMethodBank": "Интиқоли бонкӣ",
+  "salaryMethodCash": "Нақд",
+  "payrollAllTimeRemaining": "Пардохтнашуда барои ҳамаи моҳҳо",
+  "payrollAllTimeCaption": "Ҳисобшуда {due} · пардохтшуда {paid}"
 }

@@ -32,6 +32,10 @@ class EmployeeService {
     EmployeeModel.fromJson,
   );
 
+  Future<EmployeeModel> get(String id) async => EmployeeModel.fromJson(
+    await _api.get('/api/employees/$id') as Map<String, dynamic>,
+  );
+
   Future<EmployeeModel> create(EmployeeCreateModel employee) async =>
       EmployeeModel.fromJson(
         await _api.post('/api/employees', body: employee.toJson())

@@ -337,5 +337,10 @@
   "fieldStatusNote": "Причина статуса",
   "fieldStatusNoteHint": "Например, ремонт",
   "validationCounters": "Целое число от 0 до 999",
-  "storeMoreDetails": "Подробнее"
+  "storeMoreDetails": "Подробнее",
+  "fieldSalaryMethod": "Способ выплаты",
+  "salaryMethodBank": "Банковский перевод",
+  "salaryMethodCash": "Наличные",
+  "payrollAllTimeRemaining": "Невыплачено за все месяцы",
+  "payrollAllTimeCaption": "Начислено {due} · выплачено {paid}"
 }

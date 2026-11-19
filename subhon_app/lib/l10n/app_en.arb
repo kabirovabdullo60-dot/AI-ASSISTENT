@@ -669,5 +669,20 @@
   "fieldStatusNote": "Status reason",
   "fieldStatusNoteHint": "E.g. renovation",
   "validationCounters": "A whole number from 0 to 999",
-  "storeMoreDetails": "More details"
+  "storeMoreDetails": "More details",
+  "fieldSalaryMethod": "Paid by",
+  "salaryMethodBank": "Bank transfer",
+  "salaryMethodCash": "Cash",
+  "payrollAllTimeRemaining": "Unpaid salaries, all months",
+  "payrollAllTimeCaption": "Due {due} · paid {paid}",
+  "@payrollAllTimeCaption": {
+    "placeholders": {
+      "due": {
+        "type": "String"
+      },
+      "paid": {
+        "type": "String"
+      }
+    }
+  }
 }

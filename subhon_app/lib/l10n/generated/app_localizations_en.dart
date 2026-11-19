@@ -1165,4 +1165,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get storeMoreDetails => 'More details';
+
+  @override
+  String get fieldSalaryMethod => 'Paid by';
+
+  @override
+  String get salaryMethodBank => 'Bank transfer';
+
+  @override
+  String get salaryMethodCash => 'Cash';
+
+  @override
+  String get payrollAllTimeRemaining => 'Unpaid salaries, all months';
+
+  @override
+  String payrollAllTimeCaption(String due, String paid) {
+    return 'Due $due · paid $paid';
+  }
 }

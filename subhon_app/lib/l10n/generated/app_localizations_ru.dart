@@ -1169,4 +1169,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get storeMoreDetails => 'Подробнее';
+
+  @override
+  String get fieldSalaryMethod => 'Способ выплаты';
+
+  @override
+  String get salaryMethodBank => 'Банковский перевод';
+
+  @override
+  String get salaryMethodCash => 'Наличные';
+
+  @override
+  String get payrollAllTimeRemaining => 'Невыплачено за все месяцы';
+
+  @override
+  String payrollAllTimeCaption(String due, String paid) {
+    return 'Начислено $due · выплачено $paid';
+  }
 }

@@ -135,6 +135,9 @@ void main() {
 
   testWidgets('salary payment: open the month, pay the remaining amount; the '
       'month reloads', (tester) async {
+    // A tall screen: the whole payment form is built.
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     final backend = FakeBackend()
       ..json('GET', '/api/auth/me', ApiJson.profile());
     stubHome(backend);

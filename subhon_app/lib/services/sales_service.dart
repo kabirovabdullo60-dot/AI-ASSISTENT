@@ -35,6 +35,10 @@ class SalesService {
     SaleModel.fromJson,
   );
 
+  Future<SaleModel> get(String id) async => SaleModel.fromJson(
+    await _api.get('/api/sales/$id') as Map<String, dynamic>,
+  );
+
   Future<SaleModel> create(SaleCreateModel sale) async => SaleModel.fromJson(
     await _api.post('/api/sales', body: sale.toJson()) as Map<String, dynamic>,
   );

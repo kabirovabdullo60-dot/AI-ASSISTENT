@@ -3,6 +3,7 @@ import '../core/utils/money.dart';
 
 import 'payroll_status.dart';
 import 'period_balance_model.dart';
+import 'salary_payment_method.dart';
 
 /// `PaymentOut` from the API contract (API.md / Swagger).
 class PaymentModel {
@@ -16,6 +17,7 @@ class PaymentModel {
     required this.paymentDate,
     required this.status,
     this.note,
+    this.method,
     required this.period,
     required this.createdAt,
   });
@@ -30,6 +32,7 @@ class PaymentModel {
     paymentDate: parseLocalDate(json['paymentDate'] as String),
     status: PayrollStatus.fromJson(json['status'] as String),
     note: json['note'] as String?,
+    method: SalaryPaymentMethod.fromJson(json['method'] as String?),
     period: PeriodBalanceModel.fromJson(json['period'] as Map<String, dynamic>),
     createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
   );
@@ -43,6 +46,9 @@ class PaymentModel {
   final DateTime paymentDate;
   final PayrollStatus status;
   final String? note;
+
+  /// How it was paid; `null` when not recorded.
+  final SalaryPaymentMethod? method;
   final PeriodBalanceModel period;
   final DateTime createdAt;
 }
