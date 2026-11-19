@@ -312,5 +312,6 @@
   "assistantSuggestBestStore": "Какой магазин продаёт лучше всех?",
   "assistantSuggestSalary": "Сколько зарплаты ещё не выплачено?",
   "errAssistantUnavailable": "Ассистент сейчас недоступен. Попробуйте позже.",
-  "errAssistantRateLimited": "Слишком много вопросов. Подождите {seconds} с и попробуйте снова."
+  "errAssistantRateLimited": "Слишком много вопросов. Подождите {seconds} с и попробуйте снова.",
+  "homeInUsd": "≈ {amount} · 1 USD = {rate}"
 }

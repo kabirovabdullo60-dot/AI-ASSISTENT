@@ -15,6 +15,10 @@ extension L10nContext on BuildContext {
   String money(double amount, {bool signed = false}) =>
       formatMoney(amount, _language, signed: signed);
 
+  /// The same in another currency: `9 456 USD` (whole units).
+  String moneyIn(double amount, String currency) =>
+      formatMoney(amount.roundToDouble(), _language, currency: currency);
+
   /// `+12,5 %` (one decimal, the sign when [signed]).
   String percent(double value, {bool signed = false}) {
     final text = NumberFormat.decimalPatternDigits(

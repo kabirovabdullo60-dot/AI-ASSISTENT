@@ -1088,4 +1088,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String errAssistantRateLimited(int seconds) {
     return 'Too many questions. Wait $seconds s and try again.';
   }
+
+  @override
+  String homeInUsd(String amount, String rate) {
+    return '≈ $amount · 1 USD = $rate';
+  }
 }

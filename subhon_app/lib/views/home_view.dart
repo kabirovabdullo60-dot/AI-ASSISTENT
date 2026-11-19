@@ -120,6 +120,19 @@ class _Body extends StatelessWidget {
             (l10n.homeWeek, context.money(d.weekSales)),
           ],
         ),
+        if (vm.exchangeRates?.rates['USD'] case final usd?) ...[
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            l10n.homeInUsd(
+              context.moneyIn(d.monthSales / usd, 'USD'),
+              context.money(usd),
+            ),
+            textAlign: TextAlign.end,
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(color: p.textSecondary),
+          ),
+        ],
         gap,
         StatTile(
           icon: Icons.point_of_sale_rounded,

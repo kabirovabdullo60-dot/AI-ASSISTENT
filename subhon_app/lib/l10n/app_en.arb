@@ -634,5 +634,16 @@
         "type": "int"
       }
     }
+  },
+  "homeInUsd": "≈ {amount} · 1 USD = {rate}",
+  "@homeInUsd": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "rate": {
+        "type": "String"
+      }
+    }
   }
 }

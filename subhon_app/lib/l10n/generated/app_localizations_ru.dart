@@ -1091,4 +1091,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String errAssistantRateLimited(int seconds) {
     return 'Слишком много вопросов. Подождите $seconds с и попробуйте снова.';
   }
+
+  @override
+  String homeInUsd(String amount, String rate) {
+    return '≈ $amount · 1 USD = $rate';
+  }
 }

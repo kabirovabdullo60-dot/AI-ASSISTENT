@@ -312,5 +312,6 @@
   "assistantSuggestBestStore": "Кадом мағоза беҳтар мефурӯшад?",
   "assistantSuggestSalary": "Чӣ қадар маош ҳоло пардохт нашудааст?",
   "errAssistantUnavailable": "Ёрдамчӣ ҳоло дастрас нест. Баъдтар кӯшиш кунед.",
-  "errAssistantRateLimited": "Саволҳо аз ҳад зиёданд. {seconds} сония интизор шавед ва боз кӯшиш кунед."
+  "errAssistantRateLimited": "Саволҳо аз ҳад зиёданд. {seconds} сония интизор шавед ва боз кӯшиш кунед.",
+  "homeInUsd": "≈ {amount} · 1 USD = {rate}"
 }

@@ -17,6 +17,7 @@ import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
 import 'services/employee_service.dart';
+import 'services/exchange_rate_service.dart';
 import 'services/expense_service.dart';
 import 'services/notification_service.dart';
 import 'services/payroll_service.dart';
@@ -82,6 +83,7 @@ class _MobileAppState extends State<MobileApp> {
       Provider(create: (_) => ActivityService(_api)),
       Provider(create: (_) => NotificationService(_api)),
       Provider(create: (_) => AssistantService(_api)),
+      Provider(create: (_) => ExchangeRateService(_api)),
       Provider(create: (_) => ReportsService(_api)),
       ChangeNotifierProvider(
         create: (_) => SessionViewModel(_auth, _api)..restore(),

@@ -1087,4 +1087,9 @@ class AppLocalizationsTg extends AppLocalizations {
   String errAssistantRateLimited(int seconds) {
     return 'Саволҳо аз ҳад зиёданд. $seconds сония интизор шавед ва боз кӯшиш кунед.';
   }
+
+  @override
+  String homeInUsd(String amount, String rate) {
+    return '≈ $amount · 1 USD = $rate';
+  }
 }

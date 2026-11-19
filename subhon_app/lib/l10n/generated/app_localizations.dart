@@ -1977,6 +1977,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Too many questions. Wait {seconds} s and try again.'**
   String errAssistantRateLimited(int seconds);
+
+  /// No description provided for @homeInUsd.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {amount} · 1 USD = {rate}'**
+  String homeInUsd(String amount, String rate);
 }
 
 class _AppLocalizationsDelegate
