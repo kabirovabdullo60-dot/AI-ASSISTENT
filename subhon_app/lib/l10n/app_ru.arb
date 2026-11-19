@@ -290,5 +290,16 @@
   "activityPayrollCancelled": "Отменена выплата: {name}",
   "activityProfileUpdated": "Профиль изменён",
   "activityOther": "{name}: изменение",
-  "activityBy": "{actor} · {time}"
+  "activityBy": "{actor} · {time}",
+  "notificationsTitle": "Уведомления",
+  "notificationsTooltip": "Уведомления",
+  "notificationsEmpty": "Всё в порядке: ничего не требует внимания.",
+  "notificationsNew": "Новое",
+  "notifSalaryOverdueTitle": "Просроченная зарплата",
+  "notifSalaryOverdueBody": "Не выплачено за прошлые месяцы ({count}) · {amount}",
+  "notifUnpaidTitle": "Зарплата за этот месяц",
+  "notifUnpaidBody": "{count, plural, one{Осталось выплатить 1 сотруднику} other{Осталось выплатить {count} сотрудникам}} · {amount}",
+  "notifNoSalesTitle": "Сегодня нет продаж",
+  "notifNoSalesBody": "В «{store}» сегодня не записано ни одной продажи.",
+  "notifOther": "Требует внимания"
 }

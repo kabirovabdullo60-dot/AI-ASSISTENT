@@ -1845,6 +1845,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{actor} · {time}'**
   String activityBy(String actor, String time);
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTooltip;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'All good: nothing needs attention.'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get notificationsNew;
+
+  /// No description provided for @notifSalaryOverdueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue salaries'**
+  String get notifSalaryOverdueTitle;
+
+  /// No description provided for @notifSalaryOverdueBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unpaid employee-months from earlier months · {amount}'**
+  String notifSalaryOverdueBody(int count, String amount);
+
+  /// No description provided for @notifUnpaidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Salaries to pay this month'**
+  String get notifUnpaidTitle;
+
+  /// No description provided for @notifUnpaidBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 employee still to pay} other{{count} employees still to pay}} · {amount}'**
+  String notifUnpaidBody(int count, String amount);
+
+  /// No description provided for @notifNoSalesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No sales today'**
+  String get notifNoSalesTitle;
+
+  /// No description provided for @notifNoSalesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'“{store}” has no sales recorded today.'**
+  String notifNoSalesBody(String store);
+
+  /// No description provided for @notifOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something needs attention'**
+  String get notifOther;
 }
 
 class _AppLocalizationsDelegate

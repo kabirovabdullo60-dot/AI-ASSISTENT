@@ -409,4 +409,35 @@ abstract final class ApiJson {
     'actorName': 'Фарход Назаров',
     'createdAt': '2026-11-18T09:05:00Z',
   };
+
+  static Map<String, Object?> notifications({int unread = 2}) => {
+    'items': [
+      {
+        'id': '88888888-8888-8888-8888-888888888881',
+        'kind': 'SALARY_OVERDUE',
+        'severity': 'WARNING',
+        'count': 2,
+        'amount': '6000.00',
+        'storeId': null,
+        'storeName': null,
+        'link': 'PAYROLL',
+        'read': false,
+        'createdAt': '2026-11-01T00:00:00Z',
+      },
+      {
+        'id': '88888888-8888-8888-8888-888888888882',
+        'kind': 'STORE_NO_SALES_TODAY',
+        'severity': 'INFO',
+        'count': 1,
+        'amount': null,
+        'storeId': '33333333-3333-3333-3333-333333333333',
+        'storeName': 'Бахор — Сомони',
+        'link': 'SALES',
+        'read': unread < 2,
+        'createdAt': '2026-11-18T00:00:00Z',
+      },
+    ],
+    'unreadCount': unread,
+    'lastReadAt': null,
+  };
 }

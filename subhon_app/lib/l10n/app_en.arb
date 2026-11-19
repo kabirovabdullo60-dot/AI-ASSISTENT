@@ -578,5 +578,43 @@
         "type": "String"
       }
     }
-  }
+  },
+  "notificationsTitle": "Notifications",
+  "notificationsTooltip": "Notifications",
+  "notificationsEmpty": "All good: nothing needs attention.",
+  "notificationsNew": "New",
+  "notifSalaryOverdueTitle": "Overdue salaries",
+  "notifSalaryOverdueBody": "{count} unpaid employee-months from earlier months · {amount}",
+  "@notifSalaryOverdueBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUnpaidTitle": "Salaries to pay this month",
+  "notifUnpaidBody": "{count, plural, one{1 employee still to pay} other{{count} employees still to pay}} · {amount}",
+  "@notifUnpaidBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifNoSalesTitle": "No sales today",
+  "notifNoSalesBody": "“{store}” has no sales recorded today.",
+  "@notifNoSalesBody": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOther": "Something needs attention"
 }

@@ -7,8 +7,10 @@ import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../l10n/validators.dart';
 import '../models/sales_report_model.dart';
+import '../models/notification_link.dart';
 import '../models/target_period.dart';
 import '../viewmodels/dashboard_view_model.dart';
+import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/sales_period.dart';
 import '../widgets/activity_tile.dart';
 import '../widgets/app_button.dart';
@@ -18,6 +20,7 @@ import '../widgets/app_inline_message.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/async_state_view.dart';
 import '../widgets/figure_card.dart';
+import '../widgets/notification_bell.dart';
 import '../widgets/period_chips.dart';
 import '../widgets/section_header.dart';
 import '../widgets/share_bar_row.dart';
@@ -25,21 +28,46 @@ import '../widgets/stat_tile.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/target_progress_card.dart';
 import 'activity_view.dart';
+import 'notifications_view.dart';
 
 /// Home (OFAR layout): month sales card, today, period figures with the
 /// change, this month's profit and the sales targets, salaries of the
 /// month, stores and employees, top stores.
 class HomeView extends StatelessWidget {
-  const HomeView({required this.onOpenSales, super.key});
+  const HomeView({
+    required this.onOpenSales,
+    required this.onOpenLink,
+    super.key,
+  });
 
   final VoidCallback onOpenSales;
+
+  /// A notification was tapped: open its screen.
+  final ValueChanged<NotificationLink> onOpenLink;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final vm = context.watch<DashboardViewModel>();
+    final notifications = context.watch<NotificationsViewModel>();
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navHome)),
+      appBar: AppBar(
+        title: Text(l10n.navHome),
+        actions: [
+          NotificationBell(
+            unread: notifications.unreadCount,
+            tooltip: l10n.notificationsTooltip,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => ChangeNotifierProvider.value(
+                  value: notifications,
+                  child: NotificationsView(onOpenLink: onOpenLink),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: vm.load,
         child: AsyncStateView(

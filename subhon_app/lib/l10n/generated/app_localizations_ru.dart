@@ -1009,4 +1009,49 @@ class AppLocalizationsRu extends AppLocalizations {
   String activityBy(String actor, String time) {
     return '$actor · $time';
   }
+
+  @override
+  String get notificationsTitle => 'Уведомления';
+
+  @override
+  String get notificationsTooltip => 'Уведомления';
+
+  @override
+  String get notificationsEmpty => 'Всё в порядке: ничего не требует внимания.';
+
+  @override
+  String get notificationsNew => 'Новое';
+
+  @override
+  String get notifSalaryOverdueTitle => 'Просроченная зарплата';
+
+  @override
+  String notifSalaryOverdueBody(int count, String amount) {
+    return 'Не выплачено за прошлые месяцы ($count) · $amount';
+  }
+
+  @override
+  String get notifUnpaidTitle => 'Зарплата за этот месяц';
+
+  @override
+  String notifUnpaidBody(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Осталось выплатить $count сотрудникам',
+      one: 'Осталось выплатить 1 сотруднику',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String get notifNoSalesTitle => 'Сегодня нет продаж';
+
+  @override
+  String notifNoSalesBody(String store) {
+    return 'В «$store» сегодня не записано ни одной продажи.';
+  }
+
+  @override
+  String get notifOther => 'Требует внимания';
 }

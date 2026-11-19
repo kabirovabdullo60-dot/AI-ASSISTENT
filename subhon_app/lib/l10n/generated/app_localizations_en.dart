@@ -1006,4 +1006,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String activityBy(String actor, String time) {
     return '$actor · $time';
   }
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsTooltip => 'Notifications';
+
+  @override
+  String get notificationsEmpty => 'All good: nothing needs attention.';
+
+  @override
+  String get notificationsNew => 'New';
+
+  @override
+  String get notifSalaryOverdueTitle => 'Overdue salaries';
+
+  @override
+  String notifSalaryOverdueBody(int count, String amount) {
+    return '$count unpaid employee-months from earlier months · $amount';
+  }
+
+  @override
+  String get notifUnpaidTitle => 'Salaries to pay this month';
+
+  @override
+  String notifUnpaidBody(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count employees still to pay',
+      one: '1 employee still to pay',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String get notifNoSalesTitle => 'No sales today';
+
+  @override
+  String notifNoSalesBody(String store) {
+    return '“$store” has no sales recorded today.';
+  }
+
+  @override
+  String get notifOther => 'Something needs attention';
 }

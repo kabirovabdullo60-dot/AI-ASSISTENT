@@ -5,12 +5,15 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../l10n/l10n.dart';
 import '../services/activity_service.dart';
+import '../models/notification_link.dart';
+import '../services/notification_service.dart';
 import '../services/payroll_service.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
 import '../services/target_service.dart';
 import '../viewmodels/dashboard_view_model.dart';
+import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../widgets/add_nav_button.dart';
@@ -24,6 +27,7 @@ import 'payroll_view.dart';
 import 'sale_form_view.dart';
 import 'sales_view.dart';
 import 'store_form_view.dart';
+import 'stores_view.dart';
 
 /// The app after login, with OFAR's bottom navigation:
 /// Главная · Продажи · [+] · Зарплаты · Ещё.
@@ -49,12 +53,16 @@ class _ShellViewState extends State<ShellView> {
   )..load();
   late final _payroll = PayrollViewModel(context.read<PayrollService>())
     ..load();
+  late final _notifications = NotificationsViewModel(
+    context.read<NotificationService>(),
+  )..load();
 
   @override
   void dispose() {
     _dashboard.dispose();
     _sales.dispose();
     _payroll.dispose();
+    _notifications.dispose();
     super.dispose();
   }
 
@@ -63,6 +71,21 @@ class _ShellViewState extends State<ShellView> {
     _dashboard.load();
     _sales.load();
     _payroll.load();
+    _notifications.load();
+  }
+
+  /// A notification was tapped: its screen.
+  void _openLink(NotificationLink link) {
+    switch (link) {
+      case NotificationLink.sales:
+        setState(() => _index = 1);
+      case NotificationLink.payroll:
+        setState(() => _index = 2);
+      case NotificationLink.stores:
+        _open(const StoresView());
+      case NotificationLink.unknown:
+        break;
+    }
   }
 
   Future<void> _open(Widget screen) async {
@@ -177,9 +200,15 @@ class _ShellViewState extends State<ShellView> {
       body: IndexedStack(
         index: _index,
         children: [
-          ChangeNotifierProvider.value(
-            value: _dashboard,
-            child: HomeView(onOpenSales: () => setState(() => _index = 1)),
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider.value(value: _dashboard),
+              ChangeNotifierProvider.value(value: _notifications),
+            ],
+            child: HomeView(
+              onOpenSales: () => setState(() => _index = 1),
+              onOpenLink: _openLink,
+            ),
           ),
           ChangeNotifierProvider.value(value: _sales, child: const SalesView()),
           ChangeNotifierProvider.value(

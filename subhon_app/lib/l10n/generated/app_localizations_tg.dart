@@ -1005,4 +1005,49 @@ class AppLocalizationsTg extends AppLocalizations {
   String activityBy(String actor, String time) {
     return '$actor · $time';
   }
+
+  @override
+  String get notificationsTitle => 'Огоҳиномаҳо';
+
+  @override
+  String get notificationsTooltip => 'Огоҳиномаҳо';
+
+  @override
+  String get notificationsEmpty =>
+      'Ҳама хуб аст: чизе диққатро талаб намекунад.';
+
+  @override
+  String get notificationsNew => 'Нав';
+
+  @override
+  String get notifSalaryOverdueTitle => 'Маоши мӯҳлаташ гузашта';
+
+  @override
+  String notifSalaryOverdueBody(int count, String amount) {
+    return 'Барои моҳҳои гузашта пардохт нашудааст ($count) · $amount';
+  }
+
+  @override
+  String get notifUnpaidTitle => 'Маоши ин моҳ';
+
+  @override
+  String notifUnpaidBody(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ба $count корманд пардохт кардан лозим',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String get notifNoSalesTitle => 'Имрӯз фурӯш нест';
+
+  @override
+  String notifNoSalesBody(String store) {
+    return 'Дар «$store» имрӯз ягон фурӯш сабт нашудааст.';
+  }
+
+  @override
+  String get notifOther => 'Диққат лозим';
 }

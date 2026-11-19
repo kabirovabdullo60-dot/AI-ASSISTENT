@@ -290,5 +290,16 @@
   "activityPayrollCancelled": "Пардохт бекор шуд: {name}",
   "activityProfileUpdated": "Профил тағйир ёфт",
   "activityOther": "{name}: тағйирот",
-  "activityBy": "{actor} · {time}"
+  "activityBy": "{actor} · {time}",
+  "notificationsTitle": "Огоҳиномаҳо",
+  "notificationsTooltip": "Огоҳиномаҳо",
+  "notificationsEmpty": "Ҳама хуб аст: чизе диққатро талаб намекунад.",
+  "notificationsNew": "Нав",
+  "notifSalaryOverdueTitle": "Маоши мӯҳлаташ гузашта",
+  "notifSalaryOverdueBody": "Барои моҳҳои гузашта пардохт нашудааст ({count}) · {amount}",
+  "notifUnpaidTitle": "Маоши ин моҳ",
+  "notifUnpaidBody": "{count, plural, other{Ба {count} корманд пардохт кардан лозим}} · {amount}",
+  "notifNoSalesTitle": "Имрӯз фурӯш нест",
+  "notifNoSalesBody": "Дар «{store}» имрӯз ягон фурӯш сабт нашудааст.",
+  "notifOther": "Диққат лозим"
 }
