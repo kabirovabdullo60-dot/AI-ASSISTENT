@@ -3357,6 +3357,462 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sales'**
   String get actionSalesList;
+
+  /// No description provided for @pfExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get pfExpense;
+
+  /// No description provided for @pfIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get pfIncome;
+
+  /// No description provided for @pfTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get pfTransfer;
+
+  /// No description provided for @pfNewExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'New expense'**
+  String get pfNewExpense;
+
+  /// No description provided for @pfNewIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'New income'**
+  String get pfNewIncome;
+
+  /// No description provided for @pfNewTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer between accounts'**
+  String get pfNewTransfer;
+
+  /// No description provided for @pfEditOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation'**
+  String get pfEditOperation;
+
+  /// No description provided for @pfAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get pfAccount;
+
+  /// No description provided for @pfFromAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'From account'**
+  String get pfFromAccount;
+
+  /// No description provided for @pfToAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'To account'**
+  String get pfToAccount;
+
+  /// No description provided for @pfSameAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another account'**
+  String get pfSameAccount;
+
+  /// No description provided for @pfSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get pfSaved;
+
+  /// No description provided for @pfDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get pfDeleted;
+
+  /// No description provided for @pfDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the operation?'**
+  String get pfDeleteTitle;
+
+  /// No description provided for @pfDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The account balance changes back.'**
+  String get pfDeleteMessage;
+
+  /// No description provided for @pfOperations.
+  ///
+  /// In en, this message translates to:
+  /// **'Operations'**
+  String get pfOperations;
+
+  /// No description provided for @pfNoOperations.
+  ///
+  /// In en, this message translates to:
+  /// **'No operations yet. Tap “+” to write down an expense or income.'**
+  String get pfNoOperations;
+
+  /// No description provided for @pfAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get pfAccounts;
+
+  /// No description provided for @pfAccountsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash, cards and their balances'**
+  String get pfAccountsHint;
+
+  /// No description provided for @pfNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'New account'**
+  String get pfNewAccount;
+
+  /// No description provided for @pfAccountName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get pfAccountName;
+
+  /// No description provided for @pfAccountNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Alif card, cash…'**
+  String get pfAccountNameHint;
+
+  /// No description provided for @pfAccountKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get pfAccountKind;
+
+  /// No description provided for @pfOpeningBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance now'**
+  String get pfOpeningBalance;
+
+  /// No description provided for @pfAccountUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'The account has operations: delete them first.'**
+  String get pfAccountUsed;
+
+  /// No description provided for @pfAccountDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the account?'**
+  String get pfAccountDeleteTitle;
+
+  /// No description provided for @pfKindCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get pfKindCash;
+
+  /// No description provided for @pfKindCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card'**
+  String get pfKindCard;
+
+  /// No description provided for @pfKindBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank account'**
+  String get pfKindBank;
+
+  /// No description provided for @pfKindSavings.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings'**
+  String get pfKindSavings;
+
+  /// No description provided for @pfKindOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get pfKindOther;
+
+  /// No description provided for @pfTotalBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'My money'**
+  String get pfTotalBalance;
+
+  /// No description provided for @pfRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular payments'**
+  String get pfRecurring;
+
+  /// No description provided for @pfRecurringHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent, internet, subscriptions'**
+  String get pfRecurringHint;
+
+  /// No description provided for @pfNewRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'New regular payment'**
+  String get pfNewRecurring;
+
+  /// No description provided for @pfRecurringName.
+  ///
+  /// In en, this message translates to:
+  /// **'What for'**
+  String get pfRecurringName;
+
+  /// No description provided for @pfRecurringNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Internet, rent…'**
+  String get pfRecurringNameHint;
+
+  /// No description provided for @pfNextDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Next payment'**
+  String get pfNextDate;
+
+  /// No description provided for @pfEvery.
+  ///
+  /// In en, this message translates to:
+  /// **'How often'**
+  String get pfEvery;
+
+  /// No description provided for @pfEveryMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Every month'**
+  String get pfEveryMonth;
+
+  /// No description provided for @pfEveryQuarter.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 3 months'**
+  String get pfEveryQuarter;
+
+  /// No description provided for @pfEveryYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Every year'**
+  String get pfEveryYear;
+
+  /// No description provided for @pfAnyAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose when paying'**
+  String get pfAnyAccount;
+
+  /// No description provided for @pfPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get pfPay;
+
+  /// No description provided for @pfPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid: written as an expense'**
+  String get pfPaid;
+
+  /// No description provided for @pfNoRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'No regular payments yet.'**
+  String get pfNoRecurring;
+
+  /// No description provided for @pfDue.
+  ///
+  /// In en, this message translates to:
+  /// **'{date}'**
+  String pfDue(String date);
+
+  /// No description provided for @pfDueToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get pfDueToday;
+
+  /// No description provided for @pfOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue · {date}'**
+  String pfOverdue(String date);
+
+  /// No description provided for @pfUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming payments'**
+  String get pfUpcoming;
+
+  /// No description provided for @pfMonthIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get pfMonthIncome;
+
+  /// No description provided for @pfMonthExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get pfMonthExpense;
+
+  /// No description provided for @pfByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses by category'**
+  String get pfByCategory;
+
+  /// No description provided for @pfNoExpensesMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses this month.'**
+  String get pfNoExpensesMonth;
+
+  /// No description provided for @pfRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest operations'**
+  String get pfRecent;
+
+  /// No description provided for @pfMyFinances.
+  ///
+  /// In en, this message translates to:
+  /// **'My finances'**
+  String get pfMyFinances;
+
+  /// No description provided for @pfLocalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal finances are kept only on this phone.'**
+  String get pfLocalNote;
+
+  /// No description provided for @pfCatFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Groceries'**
+  String get pfCatFood;
+
+  /// No description provided for @pfCatCafe.
+  ///
+  /// In en, this message translates to:
+  /// **'Cafés'**
+  String get pfCatCafe;
+
+  /// No description provided for @pfCatTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get pfCatTransport;
+
+  /// No description provided for @pfCatHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home and rent'**
+  String get pfCatHome;
+
+  /// No description provided for @pfCatUtilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Utilities'**
+  String get pfCatUtilities;
+
+  /// No description provided for @pfCatPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone and internet'**
+  String get pfCatPhone;
+
+  /// No description provided for @pfCatHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get pfCatHealth;
+
+  /// No description provided for @pfCatClothes.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothes'**
+  String get pfCatClothes;
+
+  /// No description provided for @pfCatEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get pfCatEducation;
+
+  /// No description provided for @pfCatFun.
+  ///
+  /// In en, this message translates to:
+  /// **'Fun'**
+  String get pfCatFun;
+
+  /// No description provided for @pfCatGifts.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get pfCatGifts;
+
+  /// No description provided for @pfCatFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get pfCatFamily;
+
+  /// No description provided for @pfCatOtherExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get pfCatOtherExpense;
+
+  /// No description provided for @pfCatSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary'**
+  String get pfCatSalary;
+
+  /// No description provided for @pfCatBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get pfCatBusiness;
+
+  /// No description provided for @pfCatSideJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Side job'**
+  String get pfCatSideJob;
+
+  /// No description provided for @pfCatGiftIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift'**
+  String get pfCatGiftIn;
+
+  /// No description provided for @pfCatRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund'**
+  String get pfCatRefund;
+
+  /// No description provided for @pfCatOtherIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Other income'**
+  String get pfCatOtherIncome;
 }
 
 class _AppLocalizationsDelegate

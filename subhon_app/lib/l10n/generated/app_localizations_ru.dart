@@ -1846,4 +1846,237 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get actionSalesList => 'Продажи';
+
+  @override
+  String get pfExpense => 'Расход';
+
+  @override
+  String get pfIncome => 'Доход';
+
+  @override
+  String get pfTransfer => 'Перевод';
+
+  @override
+  String get pfNewExpense => 'Новый расход';
+
+  @override
+  String get pfNewIncome => 'Новый доход';
+
+  @override
+  String get pfNewTransfer => 'Перевод между счетами';
+
+  @override
+  String get pfEditOperation => 'Операция';
+
+  @override
+  String get pfAccount => 'Счёт';
+
+  @override
+  String get pfFromAccount => 'Со счёта';
+
+  @override
+  String get pfToAccount => 'На счёт';
+
+  @override
+  String get pfSameAccount => 'Выберите другой счёт';
+
+  @override
+  String get pfSaved => 'Сохранено';
+
+  @override
+  String get pfDeleted => 'Удалено';
+
+  @override
+  String get pfDeleteTitle => 'Удалить операцию?';
+
+  @override
+  String get pfDeleteMessage => 'Остаток на счёте пересчитается.';
+
+  @override
+  String get pfOperations => 'Операции';
+
+  @override
+  String get pfNoOperations =>
+      'Операций пока нет. Нажмите «+», чтобы записать расход или доход.';
+
+  @override
+  String get pfAccounts => 'Счета';
+
+  @override
+  String get pfAccountsHint => 'Наличные, карты и их остатки';
+
+  @override
+  String get pfNewAccount => 'Новый счёт';
+
+  @override
+  String get pfAccountName => 'Название';
+
+  @override
+  String get pfAccountNameHint => 'Карта Алиф, наличные…';
+
+  @override
+  String get pfAccountKind => 'Тип';
+
+  @override
+  String get pfOpeningBalance => 'Сейчас на счёте';
+
+  @override
+  String get pfAccountUsed => 'По счёту есть операции — сначала удалите их.';
+
+  @override
+  String get pfAccountDeleteTitle => 'Удалить счёт?';
+
+  @override
+  String get pfKindCash => 'Наличные';
+
+  @override
+  String get pfKindCard => 'Карта';
+
+  @override
+  String get pfKindBank => 'Банковский счёт';
+
+  @override
+  String get pfKindSavings => 'Накопления';
+
+  @override
+  String get pfKindOther => 'Другое';
+
+  @override
+  String get pfTotalBalance => 'Мои деньги';
+
+  @override
+  String get pfRecurring => 'Регулярные платежи';
+
+  @override
+  String get pfRecurringHint => 'Аренда, интернет, подписки';
+
+  @override
+  String get pfNewRecurring => 'Новый регулярный платёж';
+
+  @override
+  String get pfRecurringName => 'За что';
+
+  @override
+  String get pfRecurringNameHint => 'Интернет, аренда…';
+
+  @override
+  String get pfNextDate => 'Следующий платёж';
+
+  @override
+  String get pfEvery => 'Как часто';
+
+  @override
+  String get pfEveryMonth => 'Каждый месяц';
+
+  @override
+  String get pfEveryQuarter => 'Раз в 3 месяца';
+
+  @override
+  String get pfEveryYear => 'Раз в год';
+
+  @override
+  String get pfAnyAccount => 'Выбрать при оплате';
+
+  @override
+  String get pfPay => 'Оплатить';
+
+  @override
+  String get pfPaid => 'Оплачено — записано в расходы';
+
+  @override
+  String get pfNoRecurring => 'Регулярных платежей пока нет.';
+
+  @override
+  String pfDue(String date) {
+    return '$date';
+  }
+
+  @override
+  String get pfDueToday => 'Сегодня';
+
+  @override
+  String pfOverdue(String date) {
+    return 'Просрочен · $date';
+  }
+
+  @override
+  String get pfUpcoming => 'Ближайшие платежи';
+
+  @override
+  String get pfMonthIncome => 'Доходы';
+
+  @override
+  String get pfMonthExpense => 'Расходы';
+
+  @override
+  String get pfByCategory => 'Расходы по категориям';
+
+  @override
+  String get pfNoExpensesMonth => 'В этом месяце расходов нет.';
+
+  @override
+  String get pfRecent => 'Последние операции';
+
+  @override
+  String get pfMyFinances => 'Мои финансы';
+
+  @override
+  String get pfLocalNote => 'Личные финансы хранятся только на этом телефоне.';
+
+  @override
+  String get pfCatFood => 'Продукты';
+
+  @override
+  String get pfCatCafe => 'Кафе и рестораны';
+
+  @override
+  String get pfCatTransport => 'Транспорт';
+
+  @override
+  String get pfCatHome => 'Жильё и аренда';
+
+  @override
+  String get pfCatUtilities => 'Коммунальные';
+
+  @override
+  String get pfCatPhone => 'Связь и интернет';
+
+  @override
+  String get pfCatHealth => 'Здоровье';
+
+  @override
+  String get pfCatClothes => 'Одежда';
+
+  @override
+  String get pfCatEducation => 'Образование';
+
+  @override
+  String get pfCatFun => 'Развлечения';
+
+  @override
+  String get pfCatGifts => 'Подарки';
+
+  @override
+  String get pfCatFamily => 'Семья';
+
+  @override
+  String get pfCatOtherExpense => 'Другое';
+
+  @override
+  String get pfCatSalary => 'Зарплата';
+
+  @override
+  String get pfCatBusiness => 'Бизнес';
+
+  @override
+  String get pfCatSideJob => 'Подработка';
+
+  @override
+  String get pfCatGiftIn => 'Подарок';
+
+  @override
+  String get pfCatRefund => 'Возврат';
+
+  @override
+  String get pfCatOtherIncome => 'Другой доход';
 }

@@ -1839,4 +1839,237 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionSalesList => 'Sales';
+
+  @override
+  String get pfExpense => 'Expense';
+
+  @override
+  String get pfIncome => 'Income';
+
+  @override
+  String get pfTransfer => 'Transfer';
+
+  @override
+  String get pfNewExpense => 'New expense';
+
+  @override
+  String get pfNewIncome => 'New income';
+
+  @override
+  String get pfNewTransfer => 'Transfer between accounts';
+
+  @override
+  String get pfEditOperation => 'Operation';
+
+  @override
+  String get pfAccount => 'Account';
+
+  @override
+  String get pfFromAccount => 'From account';
+
+  @override
+  String get pfToAccount => 'To account';
+
+  @override
+  String get pfSameAccount => 'Choose another account';
+
+  @override
+  String get pfSaved => 'Saved';
+
+  @override
+  String get pfDeleted => 'Deleted';
+
+  @override
+  String get pfDeleteTitle => 'Delete the operation?';
+
+  @override
+  String get pfDeleteMessage => 'The account balance changes back.';
+
+  @override
+  String get pfOperations => 'Operations';
+
+  @override
+  String get pfNoOperations =>
+      'No operations yet. Tap “+” to write down an expense or income.';
+
+  @override
+  String get pfAccounts => 'Accounts';
+
+  @override
+  String get pfAccountsHint => 'Cash, cards and their balances';
+
+  @override
+  String get pfNewAccount => 'New account';
+
+  @override
+  String get pfAccountName => 'Name';
+
+  @override
+  String get pfAccountNameHint => 'Alif card, cash…';
+
+  @override
+  String get pfAccountKind => 'Type';
+
+  @override
+  String get pfOpeningBalance => 'Balance now';
+
+  @override
+  String get pfAccountUsed => 'The account has operations: delete them first.';
+
+  @override
+  String get pfAccountDeleteTitle => 'Delete the account?';
+
+  @override
+  String get pfKindCash => 'Cash';
+
+  @override
+  String get pfKindCard => 'Card';
+
+  @override
+  String get pfKindBank => 'Bank account';
+
+  @override
+  String get pfKindSavings => 'Savings';
+
+  @override
+  String get pfKindOther => 'Other';
+
+  @override
+  String get pfTotalBalance => 'My money';
+
+  @override
+  String get pfRecurring => 'Regular payments';
+
+  @override
+  String get pfRecurringHint => 'Rent, internet, subscriptions';
+
+  @override
+  String get pfNewRecurring => 'New regular payment';
+
+  @override
+  String get pfRecurringName => 'What for';
+
+  @override
+  String get pfRecurringNameHint => 'Internet, rent…';
+
+  @override
+  String get pfNextDate => 'Next payment';
+
+  @override
+  String get pfEvery => 'How often';
+
+  @override
+  String get pfEveryMonth => 'Every month';
+
+  @override
+  String get pfEveryQuarter => 'Every 3 months';
+
+  @override
+  String get pfEveryYear => 'Every year';
+
+  @override
+  String get pfAnyAccount => 'Choose when paying';
+
+  @override
+  String get pfPay => 'Paid';
+
+  @override
+  String get pfPaid => 'Paid: written as an expense';
+
+  @override
+  String get pfNoRecurring => 'No regular payments yet.';
+
+  @override
+  String pfDue(String date) {
+    return '$date';
+  }
+
+  @override
+  String get pfDueToday => 'Today';
+
+  @override
+  String pfOverdue(String date) {
+    return 'Overdue · $date';
+  }
+
+  @override
+  String get pfUpcoming => 'Coming payments';
+
+  @override
+  String get pfMonthIncome => 'Income';
+
+  @override
+  String get pfMonthExpense => 'Expenses';
+
+  @override
+  String get pfByCategory => 'Expenses by category';
+
+  @override
+  String get pfNoExpensesMonth => 'No expenses this month.';
+
+  @override
+  String get pfRecent => 'Latest operations';
+
+  @override
+  String get pfMyFinances => 'My finances';
+
+  @override
+  String get pfLocalNote => 'Personal finances are kept only on this phone.';
+
+  @override
+  String get pfCatFood => 'Groceries';
+
+  @override
+  String get pfCatCafe => 'Cafés';
+
+  @override
+  String get pfCatTransport => 'Transport';
+
+  @override
+  String get pfCatHome => 'Home and rent';
+
+  @override
+  String get pfCatUtilities => 'Utilities';
+
+  @override
+  String get pfCatPhone => 'Phone and internet';
+
+  @override
+  String get pfCatHealth => 'Health';
+
+  @override
+  String get pfCatClothes => 'Clothes';
+
+  @override
+  String get pfCatEducation => 'Education';
+
+  @override
+  String get pfCatFun => 'Fun';
+
+  @override
+  String get pfCatGifts => 'Gifts';
+
+  @override
+  String get pfCatFamily => 'Family';
+
+  @override
+  String get pfCatOtherExpense => 'Other';
+
+  @override
+  String get pfCatSalary => 'Salary';
+
+  @override
+  String get pfCatBusiness => 'Business';
+
+  @override
+  String get pfCatSideJob => 'Side job';
+
+  @override
+  String get pfCatGiftIn => 'Gift';
+
+  @override
+  String get pfCatRefund => 'Refund';
+
+  @override
+  String get pfCatOtherIncome => 'Other income';
 }

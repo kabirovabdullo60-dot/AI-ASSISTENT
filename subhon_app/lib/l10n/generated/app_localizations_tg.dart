@@ -1831,4 +1831,237 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get actionSalesList => 'Фурӯш';
+
+  @override
+  String get pfExpense => 'Хароҷот';
+
+  @override
+  String get pfIncome => 'Даромад';
+
+  @override
+  String get pfTransfer => 'Интиқол';
+
+  @override
+  String get pfNewExpense => 'Хароҷоти нав';
+
+  @override
+  String get pfNewIncome => 'Даромади нав';
+
+  @override
+  String get pfNewTransfer => 'Интиқол байни ҳисобҳо';
+
+  @override
+  String get pfEditOperation => 'Амалиёт';
+
+  @override
+  String get pfAccount => 'Ҳисоб';
+
+  @override
+  String get pfFromAccount => 'Аз ҳисоб';
+
+  @override
+  String get pfToAccount => 'Ба ҳисоб';
+
+  @override
+  String get pfSameAccount => 'Ҳисоби дигарро интихоб кунед';
+
+  @override
+  String get pfSaved => 'Сабт шуд';
+
+  @override
+  String get pfDeleted => 'Нест шуд';
+
+  @override
+  String get pfDeleteTitle => 'Амалиётро нест кунем?';
+
+  @override
+  String get pfDeleteMessage => 'Бақияи ҳисоб аз нав ҳисоб мешавад.';
+
+  @override
+  String get pfOperations => 'Амалиётҳо';
+
+  @override
+  String get pfNoOperations => 'Ҳоло амалиёт нест. «+»-ро пахш кунед.';
+
+  @override
+  String get pfAccounts => 'Ҳисобҳо';
+
+  @override
+  String get pfAccountsHint => 'Нақд, кортҳо ва бақия';
+
+  @override
+  String get pfNewAccount => 'Ҳисоби нав';
+
+  @override
+  String get pfAccountName => 'Ном';
+
+  @override
+  String get pfAccountNameHint => 'Корти Алиф, нақд…';
+
+  @override
+  String get pfAccountKind => 'Навъ';
+
+  @override
+  String get pfOpeningBalance => 'Ҳозир дар ҳисоб';
+
+  @override
+  String get pfAccountUsed => 'Ҳисоб амалиёт дорад — аввал онҳоро нест кунед.';
+
+  @override
+  String get pfAccountDeleteTitle => 'Ҳисобро нест кунем?';
+
+  @override
+  String get pfKindCash => 'Нақд';
+
+  @override
+  String get pfKindCard => 'Корт';
+
+  @override
+  String get pfKindBank => 'Ҳисоби бонкӣ';
+
+  @override
+  String get pfKindSavings => 'Пасандоз';
+
+  @override
+  String get pfKindOther => 'Дигар';
+
+  @override
+  String get pfTotalBalance => 'Пули ман';
+
+  @override
+  String get pfRecurring => 'Пардохтҳои доимӣ';
+
+  @override
+  String get pfRecurringHint => 'Иҷора, интернет, обуна';
+
+  @override
+  String get pfNewRecurring => 'Пардохти доимии нав';
+
+  @override
+  String get pfRecurringName => 'Барои чӣ';
+
+  @override
+  String get pfRecurringNameHint => 'Интернет, иҷора…';
+
+  @override
+  String get pfNextDate => 'Пардохти навбатӣ';
+
+  @override
+  String get pfEvery => 'Чӣ қадар зуд';
+
+  @override
+  String get pfEveryMonth => 'Ҳар моҳ';
+
+  @override
+  String get pfEveryQuarter => 'Ҳар 3 моҳ';
+
+  @override
+  String get pfEveryYear => 'Ҳар сол';
+
+  @override
+  String get pfAnyAccount => 'Ҳангоми пардохт интихоб';
+
+  @override
+  String get pfPay => 'Пардохт';
+
+  @override
+  String get pfPaid => 'Пардохт шуд — ба хароҷот сабт шуд';
+
+  @override
+  String get pfNoRecurring => 'Ҳоло пардохти доимӣ нест.';
+
+  @override
+  String pfDue(String date) {
+    return '$date';
+  }
+
+  @override
+  String get pfDueToday => 'Имрӯз';
+
+  @override
+  String pfOverdue(String date) {
+    return 'Гузашта · $date';
+  }
+
+  @override
+  String get pfUpcoming => 'Пардохтҳои наздик';
+
+  @override
+  String get pfMonthIncome => 'Даромад';
+
+  @override
+  String get pfMonthExpense => 'Хароҷот';
+
+  @override
+  String get pfByCategory => 'Хароҷот аз рӯи категория';
+
+  @override
+  String get pfNoExpensesMonth => 'Дар ин моҳ хароҷот нест.';
+
+  @override
+  String get pfRecent => 'Амалиётҳои охирин';
+
+  @override
+  String get pfMyFinances => 'Молияи ман';
+
+  @override
+  String get pfLocalNote =>
+      'Молияи шахсӣ танҳо дар ҳамин телефон нигоҳ дошта мешавад.';
+
+  @override
+  String get pfCatFood => 'Озуқа';
+
+  @override
+  String get pfCatCafe => 'Қаҳвахона';
+
+  @override
+  String get pfCatTransport => 'Нақлиёт';
+
+  @override
+  String get pfCatHome => 'Манзил ва иҷора';
+
+  @override
+  String get pfCatUtilities => 'Коммуналӣ';
+
+  @override
+  String get pfCatPhone => 'Алоқа ва интернет';
+
+  @override
+  String get pfCatHealth => 'Саломатӣ';
+
+  @override
+  String get pfCatClothes => 'Либос';
+
+  @override
+  String get pfCatEducation => 'Таҳсил';
+
+  @override
+  String get pfCatFun => 'Фароғат';
+
+  @override
+  String get pfCatGifts => 'Тӯҳфаҳо';
+
+  @override
+  String get pfCatFamily => 'Оила';
+
+  @override
+  String get pfCatOtherExpense => 'Дигар';
+
+  @override
+  String get pfCatSalary => 'Маош';
+
+  @override
+  String get pfCatBusiness => 'Тиҷорат';
+
+  @override
+  String get pfCatSideJob => 'Кори иловагӣ';
+
+  @override
+  String get pfCatGiftIn => 'Тӯҳфа';
+
+  @override
+  String get pfCatRefund => 'Бозгашт';
+
+  @override
+  String get pfCatOtherIncome => 'Даромади дигар';
 }
