@@ -1620,4 +1620,55 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get currenciesSoon => 'Ба наздикӣ.';
+
+  @override
+  String fxUpdated(String time) {
+    return 'Навсозӣ: $time';
+  }
+
+  @override
+  String get fxRefresh => 'Навсозӣ';
+
+  @override
+  String get fxConverter => 'Табдилдиҳанда';
+
+  @override
+  String get fxAmount => 'МАБЛАҒ';
+
+  @override
+  String get fxSwap => 'Ҷой иваз кардан';
+
+  @override
+  String get fxFrom => 'Аз асъор';
+
+  @override
+  String get fxTo => 'Ба асъор';
+
+  @override
+  String get fxCrypto => 'Крипто';
+
+  @override
+  String get fxCryptoNote =>
+      'Танҳо қурб — дар ин ҷо харидан ё фурӯхтан мумкин нест';
+
+  @override
+  String get fxAll => 'Ҳама';
+
+  @override
+  String get fxAllCrypto => 'Криптоасъорҳо';
+
+  @override
+  String get fxSearchCoin => 'Ном ё тикери танга';
+
+  @override
+  String get fxSources =>
+      'Қурбҳо: open.er-api.com (рӯзе як бор), крипто: CoinGecko (воқеӣ).';
+
+  @override
+  String get fxCryptoUnavailable => 'Қурби криптоасъорҳо ҳоло дастрас нест.';
+
+  @override
+  String fxLive(String time) {
+    return 'Воқеӣ · $time';
+  }
 }

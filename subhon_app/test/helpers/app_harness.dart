@@ -5,6 +5,7 @@ import 'package:subhon_app/core/storage/chat_history_storage.dart';
 import 'package:subhon_app/core/storage/statement_history_storage.dart';
 import 'package:subhon_app/main.dart';
 import 'package:subhon_app/services/biometric_service.dart';
+import 'package:subhon_app/services/market_service.dart';
 import 'package:subhon_app/services/file_share_service.dart';
 import 'package:subhon_app/services/voice_service.dart';
 
@@ -47,6 +48,7 @@ Future<void> pumpApp(
   FileShareService? fileShare,
   BiometricService? biometric,
   AppLockStorage? appLock,
+  MarketService? market,
 }) async {
   reduceMotion(tester);
   await tester.pumpWidget(
@@ -61,6 +63,7 @@ Future<void> pumpApp(
       fileShare: fileShare,
       biometric: biometric,
       appLock: appLock,
+      market: market,
     ),
   );
   await tester.pumpAndSettle();

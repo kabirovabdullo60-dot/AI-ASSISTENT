@@ -1618,4 +1618,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get currenciesSoon => 'Coming soon.';
+
+  @override
+  String fxUpdated(String time) {
+    return 'Updated: $time';
+  }
+
+  @override
+  String get fxRefresh => 'Refresh';
+
+  @override
+  String get fxConverter => 'Converter';
+
+  @override
+  String get fxAmount => 'AMOUNT';
+
+  @override
+  String get fxSwap => 'Swap';
+
+  @override
+  String get fxFrom => 'From';
+
+  @override
+  String get fxTo => 'To';
+
+  @override
+  String get fxCrypto => 'Crypto';
+
+  @override
+  String get fxCryptoNote =>
+      'Rates only — you can\'t buy, sell or exchange here';
+
+  @override
+  String get fxAll => 'All';
+
+  @override
+  String get fxAllCrypto => 'Cryptocurrencies';
+
+  @override
+  String get fxSearchCoin => 'Coin name or ticker';
+
+  @override
+  String get fxSources =>
+      'Rates: open.er-api.com (daily), crypto: CoinGecko (live).';
+
+  @override
+  String get fxCryptoUnavailable => 'Crypto prices are unavailable right now.';
+
+  @override
+  String fxLive(String time) {
+    return 'Live · $time';
+  }
 }

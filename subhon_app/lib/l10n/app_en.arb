@@ -853,5 +853,34 @@
   "lockOff": "Biometric sign-in is off",
   "lockNotConfirmed": "Not confirmed — the lock stays off",
   "navCurrencies": "Currencies",
-  "currenciesSoon": "Coming soon."
+  "currenciesSoon": "Coming soon.",
+  "fxUpdated": "Updated: {time}",
+  "@fxUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "fxRefresh": "Refresh",
+  "fxConverter": "Converter",
+  "fxAmount": "AMOUNT",
+  "fxSwap": "Swap",
+  "fxFrom": "From",
+  "fxTo": "To",
+  "fxCrypto": "Crypto",
+  "fxCryptoNote": "Rates only — you can't buy, sell or exchange here",
+  "fxAll": "All",
+  "fxAllCrypto": "Cryptocurrencies",
+  "fxSearchCoin": "Coin name or ticker",
+  "fxSources": "Rates: open.er-api.com (daily), crypto: CoinGecko (live).",
+  "fxCryptoUnavailable": "Crypto prices are unavailable right now.",
+  "fxLive": "Live · {time}",
+  "@fxLive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

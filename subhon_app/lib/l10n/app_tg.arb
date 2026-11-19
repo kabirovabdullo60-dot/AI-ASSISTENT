@@ -479,5 +479,20 @@
   "lockOff": "Ворид бо биометрия хомӯш шуд",
   "lockNotConfirmed": "Тасдиқ нашуд — фаъол нашуд",
   "navCurrencies": "Асъорҳо",
-  "currenciesSoon": "Ба наздикӣ."
+  "currenciesSoon": "Ба наздикӣ.",
+  "fxUpdated": "Навсозӣ: {time}",
+  "fxRefresh": "Навсозӣ",
+  "fxConverter": "Табдилдиҳанда",
+  "fxAmount": "МАБЛАҒ",
+  "fxSwap": "Ҷой иваз кардан",
+  "fxFrom": "Аз асъор",
+  "fxTo": "Ба асъор",
+  "fxCrypto": "Крипто",
+  "fxCryptoNote": "Танҳо қурб — дар ин ҷо харидан ё фурӯхтан мумкин нест",
+  "fxAll": "Ҳама",
+  "fxAllCrypto": "Криптоасъорҳо",
+  "fxSearchCoin": "Ном ё тикери танга",
+  "fxSources": "Қурбҳо: open.er-api.com (рӯзе як бор), крипто: CoinGecko (воқеӣ).",
+  "fxCryptoUnavailable": "Қурби криптоасъорҳо ҳоло дастрас нест.",
+  "fxLive": "Воқеӣ · {time}"
 }

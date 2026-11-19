@@ -2979,6 +2979,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming soon.'**
   String get currenciesSoon;
+
+  /// No description provided for @fxUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated: {time}'**
+  String fxUpdated(String time);
+
+  /// No description provided for @fxRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get fxRefresh;
+
+  /// No description provided for @fxConverter.
+  ///
+  /// In en, this message translates to:
+  /// **'Converter'**
+  String get fxConverter;
+
+  /// No description provided for @fxAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'AMOUNT'**
+  String get fxAmount;
+
+  /// No description provided for @fxSwap.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap'**
+  String get fxSwap;
+
+  /// No description provided for @fxFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get fxFrom;
+
+  /// No description provided for @fxTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get fxTo;
+
+  /// No description provided for @fxCrypto.
+  ///
+  /// In en, this message translates to:
+  /// **'Crypto'**
+  String get fxCrypto;
+
+  /// No description provided for @fxCryptoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Rates only — you can\'t buy, sell or exchange here'**
+  String get fxCryptoNote;
+
+  /// No description provided for @fxAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get fxAll;
+
+  /// No description provided for @fxAllCrypto.
+  ///
+  /// In en, this message translates to:
+  /// **'Cryptocurrencies'**
+  String get fxAllCrypto;
+
+  /// No description provided for @fxSearchCoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Coin name or ticker'**
+  String get fxSearchCoin;
+
+  /// No description provided for @fxSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Rates: open.er-api.com (daily), crypto: CoinGecko (live).'**
+  String get fxSources;
+
+  /// No description provided for @fxCryptoUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Crypto prices are unavailable right now.'**
+  String get fxCryptoUnavailable;
+
+  /// No description provided for @fxLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live · {time}'**
+  String fxLive(String time);
 }
 
 class _AppLocalizationsDelegate

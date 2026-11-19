@@ -28,6 +28,7 @@ import 'services/device_file_share_service.dart';
 import 'services/device_voice_service.dart';
 import 'services/employee_service.dart';
 import 'services/expense_service.dart';
+import 'services/market_service.dart';
 import 'services/file_share_service.dart';
 import 'services/notification_service.dart';
 import 'services/payroll_service.dart';
@@ -65,6 +66,7 @@ class MobileApp extends StatefulWidget {
     this.fileShare,
     this.biometric,
     this.appLock,
+    this.market,
     super.key,
   });
 
@@ -89,6 +91,9 @@ class MobileApp extends StatefulWidget {
   /// Face ID / fingerprint and whether the lock is on; tests pass fakes.
   final BiometricService? biometric;
   final AppLockStorage? appLock;
+
+  /// Public exchange rates and crypto prices; tests pass a fake backend.
+  final MarketService? market;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -135,6 +140,7 @@ class _MobileAppState extends State<MobileApp> {
       Provider<FileShareService>(
         create: (_) => widget.fileShare ?? DeviceFileShareService(),
       ),
+      Provider(create: (_) => widget.market ?? MarketService()),
       Provider<ChatHistoryStorage>(
         create: (_) => widget.chatHistory ?? const SecureChatHistoryStorage(),
       ),

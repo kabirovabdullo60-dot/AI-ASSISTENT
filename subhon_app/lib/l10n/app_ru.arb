@@ -479,5 +479,20 @@
   "lockOff": "Вход по биометрии выключен",
   "lockNotConfirmed": "Не подтверждено — вход по биометрии не включён",
   "navCurrencies": "Валюты",
-  "currenciesSoon": "Скоро здесь что-то появится."
+  "currenciesSoon": "Скоро здесь что-то появится.",
+  "fxUpdated": "Обновлено: {time}",
+  "fxRefresh": "Обновить",
+  "fxConverter": "Конвертер",
+  "fxAmount": "СУММА",
+  "fxSwap": "Поменять местами",
+  "fxFrom": "Из валюты",
+  "fxTo": "В валюту",
+  "fxCrypto": "Крипто",
+  "fxCryptoNote": "Только курс — купить, продать или обменять здесь нельзя",
+  "fxAll": "Все",
+  "fxAllCrypto": "Криптовалюты",
+  "fxSearchCoin": "Название или тикер монеты",
+  "fxSources": "Курсы: open.er-api.com (раз в сутки), крипто: CoinGecko (в реальном времени).",
+  "fxCryptoUnavailable": "Курсы криптовалют сейчас недоступны.",
+  "fxLive": "В реальном времени · {time}"
 }

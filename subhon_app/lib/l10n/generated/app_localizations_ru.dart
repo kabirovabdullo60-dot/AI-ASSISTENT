@@ -1629,4 +1629,55 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get currenciesSoon => 'Скоро здесь что-то появится.';
+
+  @override
+  String fxUpdated(String time) {
+    return 'Обновлено: $time';
+  }
+
+  @override
+  String get fxRefresh => 'Обновить';
+
+  @override
+  String get fxConverter => 'Конвертер';
+
+  @override
+  String get fxAmount => 'СУММА';
+
+  @override
+  String get fxSwap => 'Поменять местами';
+
+  @override
+  String get fxFrom => 'Из валюты';
+
+  @override
+  String get fxTo => 'В валюту';
+
+  @override
+  String get fxCrypto => 'Крипто';
+
+  @override
+  String get fxCryptoNote =>
+      'Только курс — купить, продать или обменять здесь нельзя';
+
+  @override
+  String get fxAll => 'Все';
+
+  @override
+  String get fxAllCrypto => 'Криптовалюты';
+
+  @override
+  String get fxSearchCoin => 'Название или тикер монеты';
+
+  @override
+  String get fxSources =>
+      'Курсы: open.er-api.com (раз в сутки), крипто: CoinGecko (в реальном времени).';
+
+  @override
+  String get fxCryptoUnavailable => 'Курсы криптовалют сейчас недоступны.';
+
+  @override
+  String fxLive(String time) {
+    return 'В реальном времени · $time';
+  }
 }

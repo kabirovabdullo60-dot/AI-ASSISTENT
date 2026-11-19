@@ -15,11 +15,38 @@ extension L10nContext on BuildContext {
   String money(double amount, {bool signed = false}) =>
       formatMoney(amount, _language, signed: signed);
 
-  /// `+12,5 %` (one decimal, the sign when [signed]).
-  String percent(double value, {bool signed = false}) {
+  /// A rate or converted amount: 2 decimals from 100, 4 from 1, up to 8
+  /// below 1 (`0,00012345`), trailing zeros dropped.
+  String rate(double value) {
+    final abs = value.abs();
+    final digits = abs >= 100
+        ? 2
+        : abs >= 1
+        ? 4
+        : 8;
     final text = NumberFormat.decimalPatternDigits(
       locale: _dateLocale,
-      decimalDigits: 1,
+      decimalDigits: digits,
+    ).format(value);
+    // Big amounts keep their kopecks (`586 887,20`), unless they are whole.
+    if (abs >= 100) {
+      return text.endsWith(',00') || text.endsWith('.00')
+          ? text.substring(0, text.length - 3)
+          : text;
+    }
+    // Drop trailing zeros after the decimal separator (and the separator).
+    final match = RegExp(r'^(.*?[.,]\d*?)0+$').firstMatch(text);
+    final trimmed = match == null ? text : match.group(1)!;
+    return trimmed.endsWith(',') || trimmed.endsWith('.')
+        ? trimmed.substring(0, trimmed.length - 1)
+        : trimmed;
+  }
+
+  /// `+12,5 %` (one decimal, the sign when [signed]).
+  String percent(double value, {bool signed = false, int digits = 1}) {
+    final text = NumberFormat.decimalPatternDigits(
+      locale: _dateLocale,
+      decimalDigits: digits,
     ).format(value.abs());
     final sign = !signed || value == 0 ? '' : (value > 0 ? '+' : '−');
     return '$sign$text %';

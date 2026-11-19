@@ -12,6 +12,8 @@ import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
 import '../viewmodels/history_view_model.dart';
+import '../services/market_service.dart';
+import '../viewmodels/currencies_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
@@ -63,6 +65,12 @@ class _ShellViewState extends State<ShellView> {
   PayrollViewModel get _payroll =>
       _payrollVm ??= PayrollViewModel(context.read<PayrollService>());
 
+  /// The "Валюты" tab, loaded the first time it is opened.
+  CurrenciesViewModel? _currenciesVm;
+  CurrenciesViewModel get _currencies =>
+      _currenciesVm ??= CurrenciesViewModel(context.read<MarketService>())
+        ..load();
+
   /// Created the first time the history is opened.
   HistoryViewModel? _historyVm;
   HistoryViewModel get _history => _historyVm ??= HistoryViewModel(
@@ -79,6 +87,7 @@ class _ShellViewState extends State<ShellView> {
     _sales.dispose();
     _payrollVm?.dispose();
     _historyVm?.dispose();
+    _currenciesVm?.dispose();
     _notifications.dispose();
     super.dispose();
   }
@@ -290,7 +299,14 @@ class _ShellViewState extends State<ShellView> {
             ),
           ),
           ChangeNotifierProvider.value(value: _sales, child: const SalesView()),
-          const CurrenciesView(),
+          // Built (and loaded) only once the tab is opened.
+          if (_index == 2 || _currenciesVm != null)
+            ChangeNotifierProvider.value(
+              value: _currencies,
+              child: const CurrenciesView(),
+            )
+          else
+            const SizedBox.shrink(),
           MoreView(onChanged: _refreshAll),
         ],
       ),
