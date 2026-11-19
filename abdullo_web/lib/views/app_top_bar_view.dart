@@ -8,6 +8,7 @@ import '../core/navigation/app_section.dart';
 import '../core/theme/app_palette.dart';
 import '../widgets/palette_swatch.dart';
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_theme.dart';
 import '../core/utils/format.dart';
 import '../models/activity_model.dart';
 import '../models/notification_model.dart';
@@ -51,41 +52,61 @@ class AppTopBarView extends StatelessWidget {
       );
     }
 
-    return Container(
-      height: 68,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        border: Border(bottom: BorderSide(color: AppColors.border)),
-      ),
+    // Desktop / tablet: no bar — the page opens with a greeting, and the tools sit to the right
+    // on the same line, floating on the page background.
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(28, 20, 20, 2),
       child: LayoutBuilder(
         builder: (context, constraints) => Row(
           children: [
-            Flexible(
-              flex: 2,
-              child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 260), child: const _BusinessChip()),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              flex: 3,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: const _SearchField()),
-              ),
-            ),
-            const SizedBox(width: 12),
-            if (constraints.maxWidth >= 1000) ...[
-              const Flexible(flex: 2, child: _ApiStatus()),
+            const Expanded(child: _Greeting()),
+            if (constraints.maxWidth >= 720) ...[
+              ConstrainedBox(constraints: const BoxConstraints(maxWidth: 300), child: const _SearchField()),
               const SizedBox(width: 8),
             ],
+            if (constraints.maxWidth >= 1000) ...[const _ApiStatus(), const SizedBox(width: 4)],
             const _LanguageButton(),
             const _PaletteButton(),
             const _NotificationsButton(),
             const SizedBox(width: 6),
-            _UserMenu(showName: constraints.maxWidth >= 860),
+            _UserMenu(showName: constraints.maxWidth >= 1100),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// "Hello, Abdullo" in the display face, with today's date under it.
+class _Greeting extends StatelessWidget {
+  const _Greeting();
+
+  @override
+  Widget build(BuildContext context) {
+    final tr = context.l10n;
+    final name = context.select<AuthViewModel, String>((a) => (a.user?.fullName ?? '').split(' ').first);
+    // The app's own formatter (intl has no Tajik date data — DateFormat('tg') throws).
+    final now = DateTime.now();
+    final date = '${formatWeekday(now)}, ${formatDate(now)}';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          name.isEmpty ? tr.greetingNoName : tr.greeting(name),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontFamily: AppTheme.display,
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.4,
+            color: AppColors.ink,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(date, maxLines: 1, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+      ],
     );
   }
 }
@@ -136,6 +157,19 @@ class _SearchField extends StatelessWidget {
         hintText: context.l10n.searchHint,
         prefixIcon: const Icon(Icons.search, size: 18),
         contentPadding: const EdgeInsets.symmetric(vertical: 10),
+        fillColor: AppColors.card,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.border),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.teal, width: 1.6),
+        ),
       ),
     );
   }

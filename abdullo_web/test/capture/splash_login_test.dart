@@ -47,6 +47,7 @@ void main() {
     if (!_capture) return;
     ByteData f(String path) => ByteData.sublistView(File(path).readAsBytesSync());
     await (FontLoader('Onest')..addFont(Future.value(f('assets/fonts/Onest.ttf')))).load();
+    await (FontLoader('Raleway')..addFont(Future.value(f('assets/fonts/Raleway.ttf')))).load();
     await (FontLoader('MaterialIcons')..addFont(Future.value(f('/Users/abdullo/Documents/flutter/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf')))).load();
   });
   setUp(() => AppColors.use(AppPalette.fromName(_paletteName)));

@@ -22,6 +22,7 @@ const _fonts = '/Users/abdullo/Documents/flutter/bin/cache/artifacts/material_fo
 Future<void> _loadFonts() async {
   ByteData f(String path) => ByteData.sublistView(File(path).readAsBytesSync());
   await (FontLoader('Onest')..addFont(Future.value(f('assets/fonts/Onest.ttf')))).load();
+  await (FontLoader('Raleway')..addFont(Future.value(f('assets/fonts/Raleway.ttf')))).load();
   await (FontLoader('MaterialIcons')..addFont(Future.value(f('$_fonts/MaterialIcons-Regular.otf')))).load();
 }
 

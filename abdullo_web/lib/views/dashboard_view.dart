@@ -25,6 +25,11 @@ import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
 import '../core/motion/motion.dart';
 import '../widgets/motion/pressable.dart';
+import '../widgets/motion/photo_slideshow.dart';
+import '../widgets/motion/number_ticker.dart';
+import '../widgets/motion/ai_orb.dart';
+import '../viewmodels/assistant_view_model.dart';
+import '../core/theme/app_theme.dart';
 import '../widgets/motion/shimmer_sweep.dart';
 import 'record_sale_dialog.dart';
 import 'targets_dialog.dart';
@@ -88,11 +93,11 @@ class _DashboardContent extends StatelessWidget {
         caption: tr.ofTotal(d.totalEmployees),
       ),
       _money(
-        tr.kpiTodaySales,
-        d.todaySales,
-        vm.todayChange,
-        tr.salesCount(d.todaySalesCount),
-        Icons.today_outlined,
+        tr.profitThisMonth,
+        d.monthProfit,
+        null,
+        '${tr.navExpenses}: ${cur.format(d.monthExpenses)}',
+        Icons.savings_outlined,
         cur,
       ),
       _money(
@@ -130,7 +135,7 @@ class _DashboardContent extends StatelessWidget {
     final entrance = !_DashboardContent._entered && !Motion.reduced(context);
     _DashboardContent._entered = true;
     // KPI cards: non-uniform delays that shrink (60, 100, 130, 150, 165, 175 ms) read as one wave.
-    const kpiDelays = [60, 100, 130, 150, 165, 175];
+    const kpiDelays = [60, 110, 140, 160, 175, 185];
     Widget kpi(int i, Widget card) => entrance
         ? card
               .animate(delay: kpiDelays[i.clamp(0, 5)].ms)
@@ -146,16 +151,28 @@ class _DashboardContent extends StatelessWidget {
       actions: [
         const _DateChip(),
         _CurrencyToggle(selected: cur),
-        ShimmerSweep(
-          child: FilledButton.icon(
-            key: const Key('record-sale'),
-            onPressed: () => RecordSaleDialog.show(context),
-            icon: const Icon(Icons.add, size: 18),
-            label: Text(tr.recordSale),
-          ),
-        ),
       ],
       children: [
+        // Bento top row: the hero (today's sales on a real photo) and the AI card.
+        LayoutBuilder(
+          builder: (context, c) {
+            final hero = kpi(0, _HeroCard(d: d, change: vm.todayChange, currency: cur));
+            final ai = kpi(1, const _AiCard());
+            if (c.maxWidth < 900) return Column(children: [hero, const SizedBox(height: 16), ai]);
+            return SizedBox(
+              height: 252,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(flex: 3, child: hero),
+                  const SizedBox(width: 16),
+                  Expanded(flex: 2, child: ai),
+                ],
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 16),
         LayoutBuilder(
           builder: (context, c) => CardGrid(
             columns: c.maxWidth >= 1100 ? 6 : (c.maxWidth >= 620 ? 3 : 2),
@@ -759,6 +776,236 @@ class _ActivityRow extends StatelessWidget {
             ),
           ),
           if (!compact) ...[const SizedBox(width: 12), time],
+        ],
+      ),
+    );
+  }
+}
+
+/// Lead of the dashboard: today's sales as a big counting number over a real photo of a
+/// cosmetics shop, tinted with the palette's dark surface; the two main actions live here.
+class _HeroCard extends StatelessWidget {
+  const _HeroCard({required this.d, required this.change, required this.currency});
+
+  final DashboardModel d;
+  final double? change;
+  final Currency currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final tr = context.l10n;
+    final tint = AppColors.navy;
+    final up = (change ?? 0) >= 0;
+    return Container(
+      key: const Key('dashboard-hero'),
+      constraints: const BoxConstraints(minHeight: 232),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: tint,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [BoxShadow(color: tint.withValues(alpha: 0.10), blurRadius: 18, offset: const Offset(0, 6))],
+      ),
+      child: Stack(
+        children: [
+          const Positioned.fill(
+            child: PhotoSlideshow(images: ['assets/images/cosmetics_shop.jpg'], hold: Duration(seconds: 9)),
+          ),
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [tint.withValues(alpha: 0.96), tint.withValues(alpha: 0.82), tint.withValues(alpha: 0.30)],
+                  stops: const [0, 0.5, 1],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(26, 24, 26, 22),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(tr.kpiTodaySales, style: const TextStyle(color: Color(0xFFD5DEE8), fontSize: 14)),
+                const SizedBox(height: 6),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.end,
+                  spacing: 10,
+                  children: [
+                    NumberTicker(
+                      value: d.todaySales,
+                      format: currency.amount,
+                      style: const TextStyle(
+                        fontFamily: AppTheme.display,
+                        color: Colors.white,
+                        fontSize: 52,
+                        height: 1,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -1.6,
+                        fontFeatures: AppTheme.numbers,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Text(
+                        currency.code,
+                        style: const TextStyle(color: Color(0xFFD5DEE8), fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    if (change != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.14),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(up ? Icons.trending_up : Icons.trending_down, size: 14, color: Colors.white),
+                            const SizedBox(width: 4),
+                            Text(
+                              formatPercent(change!),
+                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    Text(
+                      tr.salesCount(d.todaySalesCount),
+                      style: const TextStyle(color: Color(0xFFD5DEE8), fontSize: 12.5),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    ShimmerSweep(
+                      child: FilledButton.icon(
+                        key: const Key('record-sale'),
+                        style: FilledButton.styleFrom(backgroundColor: Colors.white, foregroundColor: AppColors.navy),
+                        onPressed: () => RecordSaleDialog.show(context),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: Text(tr.recordSale),
+                      ),
+                    ),
+                    OutlinedButton.icon(
+                      key: const Key('hero-ask-ai'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: BorderSide(color: Colors.white.withValues(alpha: 0.4)),
+                      ),
+                      onPressed: () => context.read<HomeViewModel>().select(AppSection.assistant),
+                      icon: const Icon(Icons.auto_awesome, size: 16),
+                      label: Text(tr.navAssistant),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Doorway to the assistant: the orb, one line, and two real questions that are sent on tap.
+class _AiCard extends StatelessWidget {
+  const _AiCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final tr = context.l10n;
+    void ask(String q) {
+      context.read<AssistantViewModel>().send(q, language: Localizations.localeOf(context).languageCode);
+      context.read<HomeViewModel>().select(AppSection.assistant);
+    }
+
+    Widget chip(Key key, String q) => Pressable(
+      lift: false,
+      radius: 12,
+      child: Material(
+        color: AppColors.card.withValues(alpha: AppColors.isDark ? 0.6 : 0.85),
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          key: key,
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => ask(q),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    q,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13, color: AppColors.ink),
+                  ),
+                ),
+                Icon(Icons.north_east, size: 15, color: AppColors.muted),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return Container(
+      key: const Key('dashboard-ai'),
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.goldSoft, AppColors.tealSoft],
+        ),
+        border: AppColors.isDark ? Border.all(color: AppColors.border) : null,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              const AiOrb(size: 40),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  tr.askAssistant,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: AppTheme.display,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.3,
+                    color: AppColors.ink,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(tr.assistantLiveData, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+          const SizedBox(height: 14),
+          chip(const Key('ai-card-sales'), tr.askSales),
+          const SizedBox(height: 8),
+          chip(const Key('ai-card-stores'), tr.askStores),
         ],
       ),
     );

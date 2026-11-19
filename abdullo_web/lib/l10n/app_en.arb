@@ -1203,5 +1203,14 @@
   "askStores": "Which store sells best this month?",
   "askSalaries": "Who is still waiting for salary?",
   "askMarketing": "Ideas to bring in more customers",
-  "themeLabel": "Theme"
+  "themeLabel": "Theme",
+  "greeting": "Hello, {name}",
+  "greetingNoName": "Hello",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

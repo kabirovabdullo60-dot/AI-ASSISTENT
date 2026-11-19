@@ -10,10 +10,13 @@ void main() {
   for (final width in [mobileWidth, desktopWidth]) {
     testWidgets('dashboard at ${width.toInt()}px shows the backend numbers', (tester) async {
       await pumpApp(tester, width);
-      expect(find.byType(KpiCard), findsNWidgets(6));
-      expect(find.text('1,500'), findsOneWidget); // today: 1000 + 500
-      expect(find.text('4,200'), findsOneWidget); // unpaid salaries this month
-      expect(find.text('2 Active'), findsWidgets); // stores
+      expect(find.byKey(const Key('dashboard-hero')), findsOneWidget);
+      expect(find.text('1,500'), findsOneWidget); // hero: today 1000 + 500
+      expect(find.byKey(const Key('dashboard-ai')), findsOneWidget);
+      await scrollTo(tester, find.text('4,200')); // unpaid salaries this month
+      expect(find.text('4,200'), findsOneWidget);
+      expect(find.byType(KpiCard), findsWidgets);
+      await scrollTo(tester, find.text('2 Active')); // stores
       await scrollTo(tester, find.byKey(const Key('revenue-chart')));
       await scrollTo(tester, find.text('Central Plaza'));
       await scrollTo(tester, find.text('Recent Business Activity'));
@@ -59,5 +62,16 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Store Management'), findsOneWidget);
     await openSection(tester, AppSection.dashboard);
+  });
+
+  testWidgets('dashboard AI card sends its question and opens the assistant', (tester) async {
+    final backend = setUpBackend()..assistantReply = 'Today you sold 1500.00 TJS.';
+    await pumpApp(tester, desktopWidth, backend: backend);
+    await tester.tap(find.byKey(const Key('ai-card-sales')));
+    await tester.pumpAndSettle();
+    expect(backend.lastChatRequest!['messages'], [
+      {'role': 'user', 'text': 'How much did I sell today?'},
+    ]);
+    expect(find.text('Today you sold 1500.00 TJS.'), findsOneWidget);
   });
 }

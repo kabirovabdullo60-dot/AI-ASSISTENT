@@ -77,6 +77,8 @@ class HomeView extends StatelessWidget {
     return ResponsiveLayout(
       mobile: (_) => Scaffold(
         appBar: AppBar(
+          backgroundColor: AppColors.background,
+          scrolledUnderElevation: 0,
           titleSpacing: 16,
           title: Row(
             children: [
@@ -146,15 +148,35 @@ class _MobileNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final index = AppSection.mobileBar.indexOf(section);
-    return NavigationBar(
-      selectedIndex: index < 0 ? _moreIndex : index,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-      onDestinationSelected: (i) => i == _moreIndex ? _openMore(context) : onSelect(AppSection.mobileBar[i]),
-      destinations: [
-        for (final s in AppSection.mobileBar)
-          NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: tr.section(s)),
-        NavigationDestination(icon: Icon(Icons.more_horiz), label: tr.navMore),
-      ],
+    // A floating pill above the page edge instead of a bar glued to the bottom.
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            border: AppColors.isDark ? Border.all(color: AppColors.border) : null,
+            boxShadow: [
+              BoxShadow(color: AppColors.navy.withValues(alpha: 0.16), blurRadius: 24, offset: const Offset(0, 8)),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: NavigationBar(
+              height: 66,
+              selectedIndex: index < 0 ? _moreIndex : index,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+              onDestinationSelected: (i) => i == _moreIndex ? _openMore(context) : onSelect(AppSection.mobileBar[i]),
+              destinations: [
+                for (final s in AppSection.mobileBar)
+                  NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: tr.section(s)),
+                NavigationDestination(icon: Icon(Icons.more_horiz), label: tr.navMore),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

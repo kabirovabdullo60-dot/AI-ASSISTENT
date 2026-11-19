@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_theme.dart';
 import 'motion/border_beam.dart';
 import 'motion/number_ticker.dart';
 import 'icon_box.dart';
@@ -89,7 +90,8 @@ class KpiCard extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           color: accent,
                           letterSpacing: -0.6,
-                          fontFeatures: const [FontFeature.tabularFigures()],
+                          fontFamily: AppTheme.display,
+                          fontFeatures: AppTheme.numbers,
                         ),
                       )
                     : Text(
@@ -98,7 +100,8 @@ class KpiCard extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           color: accent,
                           letterSpacing: -0.6,
-                          fontFeatures: const [FontFeature.tabularFigures()],
+                          fontFamily: AppTheme.display,
+                          fontFeatures: AppTheme.numbers,
                         ),
                       ),
               ),

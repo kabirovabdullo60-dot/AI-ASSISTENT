@@ -6,6 +6,12 @@ import 'app_colors.dart';
 class AppTheme {
   AppTheme._();
 
+  /// Display face for headings and big numbers.
+  static const display = 'Raleway';
+
+  /// Lining, tabular figures (Raleway defaults to old-style numerals).
+  static const numbers = [FontFeature.liningFigures(), FontFeature.tabularFigures()];
+
   /// Theme for the current [AppColors.palette] (light or dark).
   static ThemeData get light {
     final scheme = ColorScheme.fromSeed(
@@ -51,19 +57,36 @@ class AppTheme {
       focusColor: AppColors.teal.withValues(alpha: 0.14),
       hoverColor: AppColors.ink.withValues(alpha: 0.04),
       // Tighter, heavier headings; calm body text.
+      // Display voice: Raleway (headings, big numbers). Reading voice: Onest.
       textTheme: base.copyWith(
+        displaySmall: base.displaySmall?.copyWith(
+          fontFamily: AppTheme.display,
+          fontWeight: FontWeight.w800,
+          letterSpacing: -1,
+        ),
+        headlineLarge: base.headlineLarge?.copyWith(
+          fontFamily: AppTheme.display,
+          fontWeight: FontWeight.w800,
+          letterSpacing: -0.9,
+        ),
         headlineMedium: base.headlineMedium?.copyWith(
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.7,
+          fontFamily: AppTheme.display,
+          fontWeight: FontWeight.w800,
+          letterSpacing: -0.8,
           color: AppColors.ink,
         ),
         headlineSmall: base.headlineSmall?.copyWith(
-          fontWeight: FontWeight.w700,
+          fontFamily: AppTheme.display,
+          fontWeight: FontWeight.w800,
           letterSpacing: -0.5,
           color: AppColors.ink,
         ),
-        titleLarge: base.titleLarge?.copyWith(fontWeight: FontWeight.w700, letterSpacing: -0.3),
-        titleMedium: base.titleMedium?.copyWith(fontWeight: FontWeight.w600, letterSpacing: -0.1),
+        titleLarge: base.titleLarge?.copyWith(
+          fontFamily: AppTheme.display,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.2,
+        ),
+        titleMedium: base.titleMedium?.copyWith(fontFamily: AppTheme.display, fontWeight: FontWeight.w700),
         bodyMedium: base.bodyMedium?.copyWith(height: 1.45),
       ),
       filledButtonTheme: FilledButtonThemeData(
@@ -124,13 +147,16 @@ class AppTheme {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
       ),
+      // Cards: 20px radius. Light looks float on a soft shadow; the dark look uses a hairline instead.
       cardTheme: CardThemeData(
         color: AppColors.card,
-        elevation: 0,
+        elevation: AppColors.isDark ? 0 : 1.5,
+        shadowColor: AppColors.navy.withValues(alpha: 0.10),
+        surfaceTintColor: Colors.transparent,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14)),
-          side: BorderSide(color: AppColors.border),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          side: AppColors.isDark ? BorderSide(color: AppColors.border) : BorderSide.none,
         ),
       ),
       // Inputs: white field, hairline border, teal focus.

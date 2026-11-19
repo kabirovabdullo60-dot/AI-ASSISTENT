@@ -76,6 +76,10 @@ flutter:
     - family: Onest
       fonts:
         - asset: assets/fonts/Onest.ttf
+    # Raleway (variable, full Tajik Cyrillic) for display headings and big numbers — OFL, see assets/fonts/OFL-Raleway.txt.
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/Raleway.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

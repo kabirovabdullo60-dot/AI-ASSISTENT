@@ -4,6 +4,7 @@ import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
 import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_theme.dart';
 import 'brand_mark.dart';
 
 /// Side menu: white panel with a hairline edge; the current page is a soft teal pill.
@@ -17,7 +18,7 @@ class AppSidebar extends StatelessWidget {
     required this.brandName,
   });
 
-  static const extendedWidth = 232.0;
+  static const extendedWidth = 236.0;
   static const compactWidth = 88.0;
 
   final AppSection selected;
@@ -30,12 +31,18 @@ class AppSidebar extends StatelessWidget {
     Widget group(List<AppSection> sections) =>
         _NavGroup(sections: sections, selected: selected, extended: extended, onSelect: onSelect);
 
+    // A floating panel: inset from the window edges, rounded, lifted off the page.
     return Container(
       key: const Key('app-sidebar'),
       width: extended ? extendedWidth : compactWidth,
+      margin: const EdgeInsets.fromLTRB(12, 12, 0, 12),
       decoration: BoxDecoration(
         color: AppColors.card,
-        border: Border(right: BorderSide(color: AppColors.border)),
+        borderRadius: BorderRadius.circular(22),
+        border: AppColors.isDark ? Border.all(color: AppColors.border) : null,
+        boxShadow: AppColors.isDark
+            ? null
+            : [BoxShadow(color: AppColors.navy.withValues(alpha: 0.08), blurRadius: 28, offset: const Offset(0, 10))],
       ),
       child: SafeArea(
         child: Column(
@@ -47,7 +54,7 @@ class AppSidebar extends StatelessWidget {
                 child: group(AppSection.main),
               ),
             ),
-            Divider(color: AppColors.border, height: 1),
+            Divider(color: AppColors.border, height: 1, indent: 14, endIndent: 14),
             Padding(padding: const EdgeInsets.fromLTRB(10, 8, 10, 12), child: group(AppSection.footer)),
           ],
         ),
@@ -78,6 +85,7 @@ class _Brand extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
+                      fontFamily: AppTheme.display,
                       color: AppColors.ink,
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
@@ -130,7 +138,17 @@ class _NavGroup extends StatelessWidget {
               duration: Motion.fast,
               opacity: index < 0 ? 0 : 1,
               child: DecoratedBox(
-                decoration: BoxDecoration(color: AppColors.tealSoft, borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(
+                  color: AppColors.teal,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.teal.withValues(alpha: 0.38),
+                      blurRadius: 16,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -156,7 +174,7 @@ class _SidebarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? AppColors.teal : AppColors.muted;
+    final color = selected ? Colors.white : AppColors.muted;
     final icon = Icon(selected ? section.selectedIcon : section.icon, size: 19, color: color);
 
     return Padding(
@@ -167,7 +185,7 @@ class _SidebarItem extends StatelessWidget {
           type: MaterialType.transparency,
           child: InkWell(
             key: Key('nav-${section.name}'),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
             hoverColor: AppColors.ink.withValues(alpha: 0.04),
             onTap: onTap,
             child: Semantics(
