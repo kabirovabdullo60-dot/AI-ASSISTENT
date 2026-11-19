@@ -53,15 +53,6 @@ class HomeView extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.navHome),
         actions: [
-          IconButton(
-            tooltip: l10n.activityHistory,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => ActivityView(title: l10n.activityHistory),
-              ),
-            ),
-            icon: const Icon(Icons.history_rounded),
-          ),
           NotificationBell(
             unread: notifications.unreadCount,
             tooltip: l10n.notificationsTooltip,

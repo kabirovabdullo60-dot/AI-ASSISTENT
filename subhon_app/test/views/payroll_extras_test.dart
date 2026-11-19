@@ -48,7 +48,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tapText(tester, 'Зарплаты');
+    await openPayroll(tester);
     expect(find.text('Невыплачено за все месяцы'), findsOneWidget);
     expect(find.textContaining('12 000'), findsOneWidget);
 

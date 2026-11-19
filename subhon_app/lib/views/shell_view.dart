@@ -11,6 +11,7 @@ import '../services/payroll_service.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
+import '../viewmodels/activity_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
@@ -20,6 +21,7 @@ import '../widgets/app_feedback.dart';
 import '../widgets/assistant_fab.dart';
 import '../widgets/bottom_nav_item.dart';
 import '../widgets/quick_action_cell.dart';
+import 'activity_view.dart';
 import 'chat_view.dart';
 import 'employee_form_view.dart';
 import 'expense_form_view.dart';
@@ -32,7 +34,7 @@ import 'store_form_view.dart';
 import 'stores_view.dart';
 
 /// The app after login, with OFAR's bottom navigation:
-/// Главная · Продажи · [+] · Зарплаты · Ещё.
+/// Главная · Продажи · [+] · История · Ещё. Salaries open from "+".
 class ShellView extends StatefulWidget {
   const ShellView({super.key});
 
@@ -53,7 +55,11 @@ class _ShellViewState extends State<ShellView> {
     context.read<SalesService>(),
     context.read<StoreService>(),
   )..load();
-  late final _payroll = PayrollViewModel(context.read<PayrollService>())
+  /// Created the first time salaries are opened (they are no longer a tab).
+  PayrollViewModel? _payrollVm;
+  PayrollViewModel get _payroll =>
+      _payrollVm ??= PayrollViewModel(context.read<PayrollService>());
+  late final _history = ActivityViewModel(context.read<ActivityService>())
     ..load();
   late final _notifications = NotificationsViewModel(
     context.read<NotificationService>(),
@@ -63,7 +69,8 @@ class _ShellViewState extends State<ShellView> {
   void dispose() {
     _dashboard.dispose();
     _sales.dispose();
-    _payroll.dispose();
+    _payrollVm?.dispose();
+    _history.dispose();
     _notifications.dispose();
     super.dispose();
   }
@@ -72,8 +79,24 @@ class _ShellViewState extends State<ShellView> {
   void _refreshAll() {
     _dashboard.load();
     _sales.load();
-    _payroll.load();
+    _payrollVm?.load();
+    _history.load();
     _notifications.load();
+  }
+
+  /// Salaries: their own page, opened from "+" or a notification.
+  Future<void> _openPayroll() async {
+    await _payroll.load();
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ChangeNotifierProvider.value(
+          value: _payroll,
+          child: const PayrollView(),
+        ),
+      ),
+    );
+    _refreshAll();
   }
 
   /// A notification was tapped: its screen.
@@ -82,7 +105,7 @@ class _ShellViewState extends State<ShellView> {
       case NotificationLink.sales:
         setState(() => _index = 1);
       case NotificationLink.payroll:
-        setState(() => _index = 2);
+        _openPayroll();
       case NotificationLink.stores:
         _open(const StoresView());
       case NotificationLink.unknown:
@@ -117,10 +140,10 @@ class _ShellViewState extends State<ShellView> {
       ),
       (
         Icons.payments_outlined,
-        l10n.actionPaySalary,
+        l10n.navPayroll,
         p.primary,
         p.primaryLight,
-        () => setState(() => _index = 2),
+        _openPayroll,
       ),
       (
         Icons.storefront_outlined,
@@ -199,7 +222,7 @@ class _ShellViewState extends State<ShellView> {
         Icons.point_of_sale_rounded,
         l10n.navSales,
       ),
-      (Icons.payments_outlined, Icons.payments_rounded, l10n.navPayroll),
+      (Icons.history_rounded, Icons.history_rounded, l10n.activityHistory),
       (Icons.grid_view_outlined, Icons.grid_view_rounded, l10n.navMore),
     ];
     Widget tab(int index) => BottomNavItem(
@@ -207,7 +230,11 @@ class _ShellViewState extends State<ShellView> {
       selectedIcon: items[index].$2,
       label: items[index].$3,
       selected: _index == index,
-      onTap: () => setState(() => _index = index),
+      onTap: () {
+        // The history is always fresh when opened.
+        if (index == 2 && _index != 2) _history.load();
+        setState(() => _index = index);
+      },
     );
     return Scaffold(
       // The AI assistant, always in the bottom-right corner on every tab.
@@ -232,10 +259,7 @@ class _ShellViewState extends State<ShellView> {
             ),
           ),
           ChangeNotifierProvider.value(value: _sales, child: const SalesView()),
-          ChangeNotifierProvider.value(
-            value: _payroll,
-            child: const PayrollView(),
-          ),
+          ActivityView(viewModel: _history, title: l10n.activityHistory),
           MoreView(onChanged: _refreshAll),
         ],
       ),

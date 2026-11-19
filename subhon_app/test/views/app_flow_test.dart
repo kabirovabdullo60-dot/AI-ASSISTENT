@@ -103,7 +103,7 @@ void main() {
     stubHome(backend);
     backend.on(
       'GET',
-      '/api/payroll/monthly',
+      '/api/sales',
       (_) => FakeBackend.error(401, 'AUTH_SESSION_REVOKED', 'Revoked.'),
     );
     await pumpApp(tester, backend, tokens: tokens);
@@ -158,7 +158,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tapText(tester, 'Зарплаты');
+    await openPayroll(tester);
     expect(find.text('Частично'), findsWidgets);
     await tapText(tester, 'Шерзод Рахимов');
     expect(find.text('Выплата зарплаты'), findsOneWidget);

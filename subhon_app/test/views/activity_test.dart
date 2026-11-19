@@ -80,9 +80,12 @@ void main() {
     expect(find.text('Продажа в «Бахор — Сомони»'), findsOneWidget);
     expect(find.text('Отменена выплата: Шерзод Рахимов'), findsOneWidget);
     expect(find.textContaining('Фарход Назаров'), findsWidgets);
+    // Home asks for the latest 5 (the "История" tab for a page of 20).
     expect(
-      backend.calls('GET', '/api/activity').first.url.queryParameters['limit'],
-      '5',
+      backend
+          .calls('GET', '/api/activity')
+          .map((r) => r.url.queryParameters['limit']),
+      contains('5'),
     );
 
     await tester.tap(
@@ -113,7 +116,7 @@ void main() {
     expect(find.text('Последние действия'), findsNothing);
   });
 
-  testWidgets('the history icon on home opens the whole log', (tester) async {
+  testWidgets('the "История" tab shows the whole log', (tester) async {
     final backend = FakeBackend()
       ..json('GET', '/api/auth/me', ApiJson.profile())
       ..json('GET', '/api/activity', ApiJson.page([ApiJson.activity()]));
@@ -123,8 +126,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tester.tap(find.byTooltip('История'));
-    await tester.pumpAndSettle();
+    await tapText(tester, 'История');
     expect(find.widgetWithText(AppBar, 'История'), findsOneWidget);
     expect(find.text('Продажа в «Бахор — Сомони»'), findsOneWidget);
   });

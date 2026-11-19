@@ -67,3 +67,10 @@ Finder fieldWithLabel(String label) => find.descendant(
   of: find.ancestor(of: find.text(label), matching: find.byType(Column)).first,
   matching: find.byType(EditableText),
 );
+
+/// Salaries are opened from the "+" sheet (they are no longer a tab).
+Future<void> openPayroll(WidgetTester tester) async {
+  await tester.tap(find.byTooltip('Добавить'));
+  await tester.pumpAndSettle();
+  await tapText(tester, 'Зарплаты');
+}
