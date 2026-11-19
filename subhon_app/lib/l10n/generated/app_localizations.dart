@@ -2883,6 +2883,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Excel statements: sales, cash, card, expenses…'**
   String get moreStatementsHint;
+
+  /// No description provided for @securityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get securityTitle;
+
+  /// No description provided for @lockFaceId.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Face ID'**
+  String get lockFaceId;
+
+  /// No description provided for @lockFingerprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with fingerprint'**
+  String get lockFingerprint;
+
+  /// No description provided for @lockBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with biometrics'**
+  String get lockBiometric;
+
+  /// No description provided for @lockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for it when the app opens'**
+  String get lockHint;
+
+  /// No description provided for @lockUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No Face ID or fingerprint set up on this phone'**
+  String get lockUnavailable;
+
+  /// No description provided for @lockReasonEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm to turn on the lock'**
+  String get lockReasonEnable;
+
+  /// No description provided for @lockReasonOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open OFAR'**
+  String get lockReasonOpen;
+
+  /// No description provided for @lockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'OFAR is locked'**
+  String get lockTitle;
+
+  /// No description provided for @lockMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm it is you to see your business.'**
+  String get lockMessage;
+
+  /// No description provided for @lockUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get lockUnlock;
+
+  /// No description provided for @lockOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric sign-in is on'**
+  String get lockOn;
+
+  /// No description provided for @lockOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric sign-in is off'**
+  String get lockOff;
+
+  /// No description provided for @lockNotConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not confirmed — the lock stays off'**
+  String get lockNotConfirmed;
 }
 
 class _AppLocalizationsDelegate

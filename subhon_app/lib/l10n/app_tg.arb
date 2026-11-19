@@ -463,5 +463,19 @@
   "colPlace": "Ҷой",
   "colShare": "Ҳисса, %",
   "colSalesCount": "Фурӯшҳо",
-  "moreStatementsHint": "Хулосаҳо дар Excel: фурӯш, нақд, корт, хароҷот…"
+  "moreStatementsHint": "Хулосаҳо дар Excel: фурӯш, нақд, корт, хароҷот…",
+  "securityTitle": "Амният",
+  "lockFaceId": "Ворид бо Face ID",
+  "lockFingerprint": "Ворид бо изи ангушт",
+  "lockBiometric": "Ворид бо биометрия",
+  "lockHint": "Ҳангоми ҳар кушодани барнома пурсидан",
+  "lockUnavailable": "Дар ин телефон Face ID ё изи ангушт танзим нашудааст",
+  "lockReasonEnable": "Барои фаъол кардан тасдиқ кунед",
+  "lockReasonOpen": "OFAR-ро кушоед",
+  "lockTitle": "OFAR баста аст",
+  "lockMessage": "Тасдиқ кунед, ки шумоед, то тиҷорати худро бинед.",
+  "lockUnlock": "Кушодан",
+  "lockOn": "Ворид бо биометрия фаъол шуд",
+  "lockOff": "Ворид бо биометрия хомӯш шуд",
+  "lockNotConfirmed": "Тасдиқ нашуд — фаъол нашуд"
 }

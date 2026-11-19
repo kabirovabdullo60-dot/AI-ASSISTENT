@@ -1569,4 +1569,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get moreStatementsHint =>
       'Excel statements: sales, cash, card, expenses…';
+
+  @override
+  String get securityTitle => 'Security';
+
+  @override
+  String get lockFaceId => 'Sign in with Face ID';
+
+  @override
+  String get lockFingerprint => 'Sign in with fingerprint';
+
+  @override
+  String get lockBiometric => 'Sign in with biometrics';
+
+  @override
+  String get lockHint => 'Ask for it when the app opens';
+
+  @override
+  String get lockUnavailable =>
+      'No Face ID or fingerprint set up on this phone';
+
+  @override
+  String get lockReasonEnable => 'Confirm to turn on the lock';
+
+  @override
+  String get lockReasonOpen => 'Open OFAR';
+
+  @override
+  String get lockTitle => 'OFAR is locked';
+
+  @override
+  String get lockMessage => 'Confirm it is you to see your business.';
+
+  @override
+  String get lockUnlock => 'Unlock';
+
+  @override
+  String get lockOn => 'Biometric sign-in is on';
+
+  @override
+  String get lockOff => 'Biometric sign-in is off';
+
+  @override
+  String get lockNotConfirmed => 'Not confirmed — the lock stays off';
 }

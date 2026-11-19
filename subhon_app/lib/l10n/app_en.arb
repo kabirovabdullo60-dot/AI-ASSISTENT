@@ -837,5 +837,19 @@
   "colPlace": "Place",
   "colShare": "Share, %",
   "colSalesCount": "Sales",
-  "moreStatementsHint": "Excel statements: sales, cash, card, expenses…"
+  "moreStatementsHint": "Excel statements: sales, cash, card, expenses…",
+  "securityTitle": "Security",
+  "lockFaceId": "Sign in with Face ID",
+  "lockFingerprint": "Sign in with fingerprint",
+  "lockBiometric": "Sign in with biometrics",
+  "lockHint": "Ask for it when the app opens",
+  "lockUnavailable": "No Face ID or fingerprint set up on this phone",
+  "lockReasonEnable": "Confirm to turn on the lock",
+  "lockReasonOpen": "Open OFAR",
+  "lockTitle": "OFAR is locked",
+  "lockMessage": "Confirm it is you to see your business.",
+  "lockUnlock": "Unlock",
+  "lockOn": "Biometric sign-in is on",
+  "lockOff": "Biometric sign-in is off",
+  "lockNotConfirmed": "Not confirmed — the lock stays off"
 }

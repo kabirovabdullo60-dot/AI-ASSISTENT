@@ -463,5 +463,19 @@
   "colPlace": "Место",
   "colShare": "Доля, %",
   "colSalesCount": "Продаж",
-  "moreStatementsHint": "Выписки в Excel: продажи, наличные, карта, расходы…"
+  "moreStatementsHint": "Выписки в Excel: продажи, наличные, карта, расходы…",
+  "securityTitle": "Безопасность",
+  "lockFaceId": "Вход по Face ID",
+  "lockFingerprint": "Вход по отпечатку пальца",
+  "lockBiometric": "Вход по биометрии",
+  "lockHint": "Спрашивать при каждом открытии приложения",
+  "lockUnavailable": "На этом телефоне не настроены Face ID или отпечаток",
+  "lockReasonEnable": "Подтвердите, чтобы включить вход по биометрии",
+  "lockReasonOpen": "Откройте OFAR",
+  "lockTitle": "OFAR заблокирован",
+  "lockMessage": "Подтвердите, что это вы, чтобы увидеть свой бизнес.",
+  "lockUnlock": "Разблокировать",
+  "lockOn": "Вход по биометрии включён",
+  "lockOff": "Вход по биометрии выключен",
+  "lockNotConfirmed": "Не подтверждено — вход по биометрии не включён"
 }

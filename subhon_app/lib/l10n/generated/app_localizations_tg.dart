@@ -1571,4 +1571,47 @@ class AppLocalizationsTg extends AppLocalizations {
   @override
   String get moreStatementsHint =>
       'Хулосаҳо дар Excel: фурӯш, нақд, корт, хароҷот…';
+
+  @override
+  String get securityTitle => 'Амният';
+
+  @override
+  String get lockFaceId => 'Ворид бо Face ID';
+
+  @override
+  String get lockFingerprint => 'Ворид бо изи ангушт';
+
+  @override
+  String get lockBiometric => 'Ворид бо биометрия';
+
+  @override
+  String get lockHint => 'Ҳангоми ҳар кушодани барнома пурсидан';
+
+  @override
+  String get lockUnavailable =>
+      'Дар ин телефон Face ID ё изи ангушт танзим нашудааст';
+
+  @override
+  String get lockReasonEnable => 'Барои фаъол кардан тасдиқ кунед';
+
+  @override
+  String get lockReasonOpen => 'OFAR-ро кушоед';
+
+  @override
+  String get lockTitle => 'OFAR баста аст';
+
+  @override
+  String get lockMessage => 'Тасдиқ кунед, ки шумоед, то тиҷорати худро бинед.';
+
+  @override
+  String get lockUnlock => 'Кушодан';
+
+  @override
+  String get lockOn => 'Ворид бо биометрия фаъол шуд';
+
+  @override
+  String get lockOff => 'Ворид бо биометрия хомӯш шуд';
+
+  @override
+  String get lockNotConfirmed => 'Тасдиқ нашуд — фаъол нашуд';
 }

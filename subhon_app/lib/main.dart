@@ -6,8 +6,10 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 import 'core/network/api_client.dart';
+import 'core/storage/app_lock_storage.dart';
 import 'core/storage/chat_history_storage.dart';
 import 'core/storage/locale_storage.dart';
+import 'core/storage/secure_app_lock_storage.dart';
 import 'core/storage/secure_chat_history_storage.dart';
 import 'core/storage/secure_statement_history_storage.dart';
 import 'core/storage/statement_history_storage.dart';
@@ -20,6 +22,8 @@ import 'l10n/l10n.dart';
 import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
+import 'services/biometric_service.dart';
+import 'services/device_biometric_service.dart';
 import 'services/device_file_share_service.dart';
 import 'services/device_voice_service.dart';
 import 'services/employee_service.dart';
@@ -34,8 +38,10 @@ import 'services/statement_service.dart';
 import 'services/store_service.dart';
 import 'services/voice_service.dart';
 import 'services/target_service.dart';
+import 'viewmodels/app_lock_view_model.dart';
 import 'viewmodels/locale_view_model.dart';
 import 'viewmodels/session_view_model.dart';
+import 'views/app_lock_gate.dart';
 import 'views/session_gate_view.dart';
 import 'widgets/intro_overlay.dart';
 
@@ -57,6 +63,8 @@ class MobileApp extends StatefulWidget {
     this.chatHistory,
     this.statementHistory,
     this.fileShare,
+    this.biometric,
+    this.appLock,
     super.key,
   });
 
@@ -77,6 +85,10 @@ class MobileApp extends StatefulWidget {
   /// "Мои выписки" and the share sheet; tests pass fakes.
   final StatementHistoryStorage? statementHistory;
   final FileShareService? fileShare;
+
+  /// Face ID / fingerprint and whether the lock is on; tests pass fakes.
+  final BiometricService? biometric;
+  final AppLockStorage? appLock;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -133,6 +145,12 @@ class _MobileAppState extends State<MobileApp> {
         create: (_) => SessionViewModel(_auth, _api)..restore(),
       ),
       ChangeNotifierProvider(
+        create: (_) => AppLockViewModel(
+          widget.appLock ?? const SecureAppLockStorage(),
+          widget.biometric ?? DeviceBiometricService(),
+        )..load(),
+      ),
+      ChangeNotifierProvider(
         create: (_) =>
             LocaleViewModel(widget.localeStorage ?? const SecureLocaleStorage())
               ..load(),
@@ -164,7 +182,12 @@ class _MobileAppState extends State<MobileApp> {
             // Accept-Language follows the language on screen.
             final language = Localizations.localeOf(context).languageCode;
             _api.language = () => language;
-            return IntroOverlay(title: context.l10n.introTitle, child: child!);
+            return AppLockGate(
+              child: IntroOverlay(
+                title: context.l10n.introTitle,
+                child: child!,
+              ),
+            );
           },
           home: const SessionGateView(),
         );

@@ -1577,4 +1577,50 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get moreStatementsHint =>
       'Выписки в Excel: продажи, наличные, карта, расходы…';
+
+  @override
+  String get securityTitle => 'Безопасность';
+
+  @override
+  String get lockFaceId => 'Вход по Face ID';
+
+  @override
+  String get lockFingerprint => 'Вход по отпечатку пальца';
+
+  @override
+  String get lockBiometric => 'Вход по биометрии';
+
+  @override
+  String get lockHint => 'Спрашивать при каждом открытии приложения';
+
+  @override
+  String get lockUnavailable =>
+      'На этом телефоне не настроены Face ID или отпечаток';
+
+  @override
+  String get lockReasonEnable =>
+      'Подтвердите, чтобы включить вход по биометрии';
+
+  @override
+  String get lockReasonOpen => 'Откройте OFAR';
+
+  @override
+  String get lockTitle => 'OFAR заблокирован';
+
+  @override
+  String get lockMessage =>
+      'Подтвердите, что это вы, чтобы увидеть свой бизнес.';
+
+  @override
+  String get lockUnlock => 'Разблокировать';
+
+  @override
+  String get lockOn => 'Вход по биометрии включён';
+
+  @override
+  String get lockOff => 'Вход по биометрии выключен';
+
+  @override
+  String get lockNotConfirmed =>
+      'Не подтверждено — вход по биометрии не включён';
 }
