@@ -18,6 +18,7 @@ import '../viewmodels/home_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
 import '../widgets/status_badge.dart';
+import '../widgets/voice_mic_button.dart';
 
 /// White bar above every page: business, search, API status, language, notifications, user.
 class AppTopBarView extends StatelessWidget {
@@ -39,6 +40,7 @@ class AppTopBarView extends StatelessWidget {
                 Expanded(
                   child: Align(alignment: Alignment.centerLeft, child: _BusinessChip()),
                 ),
+                VoiceMicButton(size: 36),
                 _LanguageButton(),
                 _PaletteButton(),
                 _NotificationsButton(),
@@ -65,6 +67,7 @@ class AppTopBarView extends StatelessWidget {
               const SizedBox(width: 8),
             ],
             if (constraints.maxWidth >= 1000) ...[const _ApiStatus(), const SizedBox(width: 4)],
+            const VoiceMicButton(),
             const _LanguageButton(),
             const _PaletteButton(),
             const _NotificationsButton(),

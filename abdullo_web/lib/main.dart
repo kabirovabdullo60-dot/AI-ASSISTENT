@@ -22,6 +22,7 @@ import 'services/reports_service.dart';
 import 'services/sales_service.dart';
 import 'services/store_service.dart';
 import 'services/target_service.dart';
+import 'services/voice_service.dart';
 import 'viewmodels/assistant_view_model.dart';
 import 'viewmodels/auth_view_model.dart';
 import 'viewmodels/dashboard_view_model.dart';
@@ -34,6 +35,7 @@ import 'viewmodels/reports_view_model.dart';
 import 'viewmodels/sales_view_model.dart';
 import 'viewmodels/settings_view_model.dart';
 import 'viewmodels/stores_view_model.dart';
+import 'viewmodels/voice_view_model.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/splash_view.dart';
@@ -44,9 +46,12 @@ void main() {
 
 class WebApp extends StatefulWidget {
   /// [httpClient] can be replaced in tests with a fake backend.
-  const WebApp({super.key, this.httpClient, this.splashDuration = const Duration(seconds: 5)});
+  const WebApp({super.key, this.httpClient, this.voice, this.splashDuration = const Duration(seconds: 5)});
 
   final http.Client? httpClient;
+
+  /// Microphone + speech; tests pass a fake.
+  final VoiceService? voice;
 
   /// The splash stays at least this long on every visit (its animation plays in full),
   /// and longer if the session check is still running. Tests pass [Duration.zero].
@@ -101,6 +106,7 @@ class _WebAppState extends State<WebApp> {
     return MultiProvider(
       providers: [
         Provider.value(value: _api),
+        Provider<VoiceService>(create: (_) => widget.voice ?? VoiceService(), lazy: false),
         Provider(create: (_) => ReportsService(_api)),
         ChangeNotifierProvider.value(value: _auth),
         ChangeNotifierProvider(
@@ -198,6 +204,15 @@ class _SignedInState extends State<_SignedIn> {
         ChangeNotifierProvider(create: (_) => ExpensesViewModel(ExpenseService(api), reports)..load()),
         ChangeNotifierProvider(create: (_) => ReportsViewModel(reports)..load()),
         ChangeNotifierProvider(create: (_) => AssistantViewModel(AssistantService(api, reports))),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (c) => VoiceViewModel(
+            c.read<VoiceService>(),
+            c.read<HomeViewModel>(),
+            c.read<AssistantViewModel>(),
+            PreferencesService(),
+          ),
+        ),
       ],
       child: widget.child,
     );

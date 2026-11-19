@@ -4,6 +4,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferencesService {
   static const _languageKey = 'language';
   static const _paletteKey = 'palette';
+  static const _voiceRepliesKey = 'voiceReplies';
+
+  /// Read assistant answers aloud after a spoken question (default on).
+  Future<bool> loadVoiceReplies() async {
+    try {
+      return (await SharedPreferences.getInstance()).getBool(_voiceRepliesKey) ?? true;
+    } catch (_) {
+      return true;
+    }
+  }
+
+  Future<void> saveVoiceReplies(bool on) async {
+    try {
+      await (await SharedPreferences.getInstance()).setBool(_voiceRepliesKey, on);
+    } catch (_) {}
+  }
 
   Future<String?> loadPalette() async {
     try {

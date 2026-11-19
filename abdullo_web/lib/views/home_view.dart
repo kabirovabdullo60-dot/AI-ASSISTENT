@@ -11,6 +11,7 @@ import '../viewmodels/auth_view_model.dart';
 import '../widgets/app_sidebar.dart';
 import '../widgets/brand_mark.dart';
 import '../widgets/responsive_layout.dart';
+import '../widgets/voice_status_pill.dart';
 import 'app_top_bar_view.dart';
 import 'assistant_view.dart';
 import 'dashboard_view.dart';
@@ -74,7 +75,7 @@ class HomeView extends StatelessWidget {
       ),
     );
 
-    return ResponsiveLayout(
+    final layout = ResponsiveLayout(
       mobile: (_) => Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.background,
@@ -105,6 +106,19 @@ class HomeView extends StatelessWidget {
       ),
       tablet: (_) => wide(false),
       desktop: (_) => wide(true),
+    );
+
+    // Voice pill floats over every page, just under the top edge.
+    return Stack(
+      children: [
+        Positioned.fill(child: layout),
+        const Positioned(
+          left: 0,
+          right: 0,
+          top: 12,
+          child: SafeArea(bottom: false, child: Center(child: VoiceStatusPill())),
+        ),
+      ],
     );
   }
 }

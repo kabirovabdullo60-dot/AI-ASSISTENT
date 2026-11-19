@@ -1216,5 +1216,26 @@
   "errSplitMismatch": "Cash and card must add up to the sale amount.",
   "clearDate": "Clear date",
   "showPassword": "Show password",
-  "hidePassword": "Hide password"
+  "hidePassword": "Hide password",
+  "voiceSpeak": "Speak",
+  "voiceStop": "Stop listening",
+  "voiceListening": "Listening…",
+  "voiceOpened": "Opened: {section}",
+  "voiceRepliesOn": "Read answers aloud: on",
+  "voiceRepliesOff": "Read answers aloud: off",
+  "voiceStopSpeaking": "Stop reading",
+  "voiceHint": "Tap the mic and say: “Open sales”, “New chat” or any question.",
+  "voiceDenied": "Microphone access is blocked. Allow it in the browser address bar.",
+  "voiceNoSpeech": "I didn't hear anything. Try again.",
+  "voiceNoMic": "No microphone found.",
+  "voiceUnsupported": "This browser can't listen. Use Chrome or Edge.",
+  "voiceNetwork": "Voice recognition needs the internet.",
+  "voiceError": "Voice input failed. Try again.",
+  "@voiceOpened": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  }
 }

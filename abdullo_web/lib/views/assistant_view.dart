@@ -5,6 +5,7 @@ import '../core/l10n/l10n.dart';
 import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
 import '../viewmodels/assistant_view_model.dart';
+import '../viewmodels/voice_view_model.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/motion/ai_orb.dart';
 import '../widgets/motion/aurora.dart';
@@ -14,6 +15,7 @@ import '../widgets/motion/fade_slide_in.dart';
 import '../widgets/motion/pressable.dart';
 import '../widgets/motion/typing_indicator.dart';
 import '../widgets/pamir_ridge.dart';
+import '../widgets/voice_mic_button.dart';
 
 /// AI assistant — POST /api/assistant/chat (answers in the selected language).
 class AssistantView extends StatefulWidget {
@@ -237,6 +239,27 @@ class _EmptyChat extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (context.select<VoiceViewModel, bool>((v) => v.canListen)) ...[
+                        const SizedBox(height: 10),
+                        FadeSlideIn(
+                          delay: Motion.staggerAt(3),
+                          child: Row(
+                            key: const Key('voice-hint'),
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.mic_none_rounded, size: 16, color: AppColors.muted),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  tr.voiceHint,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 12.5, color: AppColors.muted),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 28),
                       LayoutBuilder(
                         builder: (context, c) {
@@ -392,6 +415,7 @@ class _InputBar extends StatelessWidget {
                 onPressed: canClear ? onClear : null,
                 icon: Icon(Icons.add_comment_outlined, color: AppColors.muted),
               ),
+              const _SpeakRepliesButton(),
               Expanded(
                 child: TextField(
                   key: const Key('chat-input'),
@@ -412,7 +436,8 @@ class _InputBar extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 6),
+              const VoiceMicButton(size: 40, filled: true),
+              const SizedBox(width: 2),
               Pressable(
                 lift: false,
                 radius: 22,
@@ -454,6 +479,30 @@ class _InputBar extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Speaker toggle: read answers to spoken questions aloud. While an answer is being read,
+/// it stops the reading instead.
+class _SpeakRepliesButton extends StatelessWidget {
+  const _SpeakRepliesButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = context.watch<VoiceViewModel>();
+    if (!vm.canSpeak || !vm.canListen) return const SizedBox.shrink();
+    final tr = context.l10n;
+    final (IconData icon, String tip, VoidCallback onTap) = vm.isSpeaking
+        ? (Icons.stop_circle_outlined, tr.voiceStopSpeaking, vm.stopSpeaking)
+        : vm.speakReplies
+        ? (Icons.volume_up_outlined, tr.voiceRepliesOn, vm.toggleSpeakReplies)
+        : (Icons.volume_off_outlined, tr.voiceRepliesOff, vm.toggleSpeakReplies);
+    return IconButton(
+      key: const Key('voice-replies'),
+      tooltip: tip,
+      onPressed: onTap,
+      icon: Icon(icon, color: vm.isSpeaking || vm.speakReplies ? AppColors.teal : AppColors.muted),
     );
   }
 }
