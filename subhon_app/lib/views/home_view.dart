@@ -36,6 +36,7 @@ class HomeView extends StatelessWidget {
   const HomeView({
     required this.onOpenSales,
     required this.onOpenLink,
+    required this.onOpenHistory,
     super.key,
   });
 
@@ -43,6 +44,9 @@ class HomeView extends StatelessWidget {
 
   /// A notification was tapped: open its screen.
   final ValueChanged<NotificationLink> onOpenLink;
+
+  /// Opens the history (the icon next to the bell).
+  final VoidCallback onOpenHistory;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +57,11 @@ class HomeView extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.navHome),
         actions: [
+          IconButton(
+            tooltip: l10n.activityHistory,
+            onPressed: onOpenHistory,
+            icon: const Icon(Icons.history_rounded),
+          ),
           NotificationBell(
             unread: notifications.unreadCount,
             tooltip: l10n.notificationsTooltip,

@@ -2967,6 +2967,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not confirmed — the lock stays off'**
   String get lockNotConfirmed;
+
+  /// No description provided for @navCurrencies.
+  ///
+  /// In en, this message translates to:
+  /// **'Currencies'**
+  String get navCurrencies;
+
+  /// No description provided for @currenciesSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon.'**
+  String get currenciesSoon;
 }
 
 class _AppLocalizationsDelegate

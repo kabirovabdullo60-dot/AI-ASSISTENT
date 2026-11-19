@@ -851,5 +851,7 @@
   "lockUnlock": "Unlock",
   "lockOn": "Biometric sign-in is on",
   "lockOff": "Biometric sign-in is off",
-  "lockNotConfirmed": "Not confirmed — the lock stays off"
+  "lockNotConfirmed": "Not confirmed — the lock stays off",
+  "navCurrencies": "Currencies",
+  "currenciesSoon": "Coming soon."
 }

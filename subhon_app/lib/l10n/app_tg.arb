@@ -477,5 +477,7 @@
   "lockUnlock": "Кушодан",
   "lockOn": "Ворид бо биометрия фаъол шуд",
   "lockOff": "Ворид бо биометрия хомӯш шуд",
-  "lockNotConfirmed": "Тасдиқ нашуд — фаъол нашуд"
+  "lockNotConfirmed": "Тасдиқ нашуд — фаъол нашуд",
+  "navCurrencies": "Асъорҳо",
+  "currenciesSoon": "Ба наздикӣ."
 }

@@ -36,7 +36,8 @@ void main() {
       statementHistory: mine,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tapText(tester, 'История');
+    await tester.tap(find.byTooltip('История'));
+    await tester.pumpAndSettle();
     await tapText(tester, 'Выписка');
 
     expect(find.text('Выписки и справки'), findsOneWidget);

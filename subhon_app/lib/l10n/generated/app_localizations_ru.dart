@@ -1623,4 +1623,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get lockNotConfirmed =>
       'Не подтверждено — вход по биометрии не включён';
+
+  @override
+  String get navCurrencies => 'Валюты';
+
+  @override
+  String get currenciesSoon => 'Скоро здесь что-то появится.';
 }

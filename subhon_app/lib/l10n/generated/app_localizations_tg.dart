@@ -1614,4 +1614,10 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get lockNotConfirmed => 'Тасдиқ нашуд — фаъол нашуд';
+
+  @override
+  String get navCurrencies => 'Асъорҳо';
+
+  @override
+  String get currenciesSoon => 'Ба наздикӣ.';
 }

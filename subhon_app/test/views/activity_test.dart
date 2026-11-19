@@ -116,7 +116,9 @@ void main() {
     expect(find.text('Последние действия'), findsNothing);
   });
 
-  testWidgets('the "История" tab shows the whole log', (tester) async {
+  testWidgets('the history icon next to the bell opens the history', (
+    tester,
+  ) async {
     final backend = FakeBackend()
       ..json('GET', '/api/auth/me', ApiJson.profile())
       ..json('GET', '/api/activity', ApiJson.page([ApiJson.activity()]));
@@ -126,10 +128,36 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tapText(tester, 'История');
+    await tester.tap(find.byTooltip('История'));
+    await tester.pumpAndSettle();
     expect(find.widgetWithText(AppBar, 'История'), findsOneWidget);
     // Bank-style: the store, what happened, the amount.
     expect(find.text('Продажа'), findsOneWidget);
     expect(find.textContaining('+1\u00a0250,50 TJS'), findsOneWidget);
+  });
+
+  testWidgets('"+" → "История" opens the history; "Валюты" is an empty tab', (
+    tester,
+  ) async {
+    final backend = FakeBackend()
+      ..json('GET', '/api/auth/me', ApiJson.profile())
+      ..json('GET', '/api/reports/profit', ApiJson.profit())
+      ..json('GET', '/api/activity', ApiJson.page([ApiJson.activity()]));
+    stubHome(backend);
+    await pumpApp(
+      tester,
+      backend,
+      tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
+    );
+    await tester.tap(find.byTooltip('Добавить'));
+    await tester.pumpAndSettle();
+    await tapText(tester, 'История');
+    expect(find.widgetWithText(AppBar, 'История'), findsOneWidget);
+    expect(find.text('Продажа'), findsOneWidget);
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    await tapText(tester, 'Валюты');
+    expect(find.widgetWithText(AppBar, 'Валюты'), findsOneWidget);
   });
 }

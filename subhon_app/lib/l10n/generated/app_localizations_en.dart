@@ -1612,4 +1612,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lockNotConfirmed => 'Not confirmed — the lock stays off';
+
+  @override
+  String get navCurrencies => 'Currencies';
+
+  @override
+  String get currenciesSoon => 'Coming soon.';
 }

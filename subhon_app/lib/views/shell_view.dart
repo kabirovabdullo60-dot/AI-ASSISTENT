@@ -23,6 +23,7 @@ import '../widgets/bottom_nav_item.dart';
 import '../widgets/quick_action_cell.dart';
 import 'history_view.dart';
 import 'chat_view.dart';
+import 'currencies_view.dart';
 import 'employee_form_view.dart';
 import 'expense_form_view.dart';
 import 'home_view.dart';
@@ -34,7 +35,8 @@ import 'store_form_view.dart';
 import 'stores_view.dart';
 
 /// The app after login, with OFAR's bottom navigation:
-/// Главная · Продажи · [+] · История · Ещё. Salaries open from "+".
+/// Главная · Продажи · [+] · Валюты · Ещё. Salaries and the history open
+/// from "+" (the history also from home's app bar).
 class ShellView extends StatefulWidget {
   const ShellView({super.key});
 
@@ -60,10 +62,13 @@ class _ShellViewState extends State<ShellView> {
   PayrollViewModel? _payrollVm;
   PayrollViewModel get _payroll =>
       _payrollVm ??= PayrollViewModel(context.read<PayrollService>());
-  late final _history = HistoryViewModel(
+
+  /// Created the first time the history is opened.
+  HistoryViewModel? _historyVm;
+  HistoryViewModel get _history => _historyVm ??= HistoryViewModel(
     context.read<ActivityService>(),
     context.read<ReportsService>(),
-  )..load();
+  );
   late final _notifications = NotificationsViewModel(
     context.read<NotificationService>(),
   )..load();
@@ -73,7 +78,7 @@ class _ShellViewState extends State<ShellView> {
     _dashboard.dispose();
     _sales.dispose();
     _payrollVm?.dispose();
-    _history.dispose();
+    _historyVm?.dispose();
     _notifications.dispose();
     super.dispose();
   }
@@ -83,8 +88,23 @@ class _ShellViewState extends State<ShellView> {
     _dashboard.load();
     _sales.load();
     _payrollVm?.load();
-    _history.load();
+    _historyVm?.load();
     _notifications.load();
+  }
+
+  /// The history: its own page, from "+" or home's app bar.
+  Future<void> _openHistory() async {
+    final history = _history;
+    history.load();
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ChangeNotifierProvider.value(
+          value: history,
+          child: const HistoryView(),
+        ),
+      ),
+    );
+    _refreshAll();
   }
 
   /// Salaries: their own page, opened from "+" or a notification.
@@ -162,6 +182,13 @@ class _ShellViewState extends State<ShellView> {
         p.primaryLight,
         () => _open(const EmployeeFormView()),
       ),
+      (
+        Icons.history_rounded,
+        l10n.activityHistory,
+        p.warning,
+        p.warningLight,
+        _openHistory,
+      ),
     ];
     showAppBottomSheet<void>(
       context,
@@ -225,7 +252,11 @@ class _ShellViewState extends State<ShellView> {
         Icons.point_of_sale_rounded,
         l10n.navSales,
       ),
-      (Icons.history_rounded, Icons.history_rounded, l10n.activityHistory),
+      (
+        Icons.currency_exchange_rounded,
+        Icons.currency_exchange_rounded,
+        l10n.navCurrencies,
+      ),
       (Icons.grid_view_outlined, Icons.grid_view_rounded, l10n.navMore),
     ];
     Widget tab(int index) => BottomNavItem(
@@ -233,11 +264,7 @@ class _ShellViewState extends State<ShellView> {
       selectedIcon: items[index].$2,
       label: items[index].$3,
       selected: _index == index,
-      onTap: () {
-        // The history is always fresh when opened.
-        if (index == 2 && _index != 2) _history.load();
-        setState(() => _index = index);
-      },
+      onTap: () => setState(() => _index = index),
     );
     return Scaffold(
       // The AI assistant, always in the bottom-right corner on every tab.
@@ -259,13 +286,11 @@ class _ShellViewState extends State<ShellView> {
             child: HomeView(
               onOpenSales: () => setState(() => _index = 1),
               onOpenLink: _openLink,
+              onOpenHistory: _openHistory,
             ),
           ),
           ChangeNotifierProvider.value(value: _sales, child: const SalesView()),
-          ChangeNotifierProvider.value(
-            value: _history,
-            child: const HistoryView(),
-          ),
+          const CurrenciesView(),
           MoreView(onChanged: _refreshAll),
         ],
       ),
