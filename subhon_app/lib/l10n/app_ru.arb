@@ -348,5 +348,6 @@
   "homeTodaySales": "Продажи за сегодня",
   "homeMonth": "За месяц",
   "storeTargets": "Цели магазина",
-  "targetSheetHintStore": "Только для этого магазина. Можно изменить в любой момент."
+  "targetSheetHintStore": "Только для этого магазина. Можно изменить в любой момент.",
+  "activityHistory": "История"
 }

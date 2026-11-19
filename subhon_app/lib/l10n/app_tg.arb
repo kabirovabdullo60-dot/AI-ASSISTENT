@@ -348,5 +348,6 @@
   "homeTodaySales": "Фурӯши имрӯз",
   "homeMonth": "Дар як моҳ",
   "storeTargets": "Ҳадафҳои мағоза",
-  "targetSheetHintStore": "Танҳо барои ҳамин мағоза. Ҳар вақт тағйир додан мумкин."
+  "targetSheetHintStore": "Танҳо барои ҳамин мағоза. Ҳар вақт тағйир додан мумкин.",
+  "activityHistory": "Таърих"
 }

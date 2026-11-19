@@ -1213,4 +1213,7 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get targetSheetHintStore =>
       'Только для этого магазина. Можно изменить в любой момент.';
+
+  @override
+  String get activityHistory => 'История';
 }

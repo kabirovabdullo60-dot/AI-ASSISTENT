@@ -1207,4 +1207,7 @@ class AppLocalizationsTg extends AppLocalizations {
   @override
   String get targetSheetHintStore =>
       'Танҳо барои ҳамин мағоза. Ҳар вақт тағйир додан мумкин.';
+
+  @override
+  String get activityHistory => 'Таърих';
 }

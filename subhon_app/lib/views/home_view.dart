@@ -52,6 +52,15 @@ class HomeView extends StatelessWidget {
         title: Text(l10n.navHome),
         actions: [
           IconButton(
+            tooltip: l10n.activityHistory,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => ActivityView(title: l10n.activityHistory),
+              ),
+            ),
+            icon: const Icon(Icons.history_rounded),
+          ),
+          IconButton(
             tooltip: l10n.assistantTitle,
             onPressed: () => Navigator.of(
               context,

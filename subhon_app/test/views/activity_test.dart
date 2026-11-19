@@ -112,4 +112,20 @@ void main() {
     expect(find.text('Продажи за сегодня'), findsOneWidget);
     expect(find.text('Последние действия'), findsNothing);
   });
+
+  testWidgets('the history icon on home opens the whole log', (tester) async {
+    final backend = FakeBackend()
+      ..json('GET', '/api/auth/me', ApiJson.profile())
+      ..json('GET', '/api/activity', ApiJson.page([ApiJson.activity()]));
+    stubHome(backend);
+    await pumpApp(
+      tester,
+      backend,
+      tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
+    );
+    await tester.tap(find.byTooltip('История'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'История'), findsOneWidget);
+    expect(find.text('Продажа в «Бахор — Сомони»'), findsOneWidget);
+  });
 }

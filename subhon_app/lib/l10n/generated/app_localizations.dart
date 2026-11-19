@@ -2193,6 +2193,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For this store only. You can change it any time.'**
   String get targetSheetHintStore;
+
+  /// No description provided for @activityHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get activityHistory;
 }
 
 class _AppLocalizationsDelegate
