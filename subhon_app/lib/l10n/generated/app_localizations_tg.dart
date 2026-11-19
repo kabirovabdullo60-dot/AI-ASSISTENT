@@ -1239,4 +1239,8 @@ class AppLocalizationsTg extends AppLocalizations {
   @override
   String get voiceUnavailable =>
       'Шинохти нутқ дастрас нест. Дар Танзимот микрофон ва шинохти нутқро иҷозат диҳед.';
+
+  @override
+  String get voiceMicFailed =>
+      'Микрофон фаъол нашуд. Боз кӯшиш кунед; агар такрор шавад, иҷозати микрофонро дар Танзимот санҷед.';
 }

@@ -1245,4 +1245,8 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get voiceUnavailable =>
       'Распознавание речи недоступно. Разрешите микрофон и распознавание речи в Настройках.';
+
+  @override
+  String get voiceMicFailed =>
+      'Микрофон не включился. Попробуйте ещё раз; если повторяется — проверьте доступ к микрофону в Настройках.';
 }

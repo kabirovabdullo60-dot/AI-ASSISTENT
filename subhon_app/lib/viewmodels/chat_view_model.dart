@@ -27,6 +27,7 @@ class ChatViewModel extends ChangeNotifier {
   bool _voiceOn = false;
   String _heard = '';
   bool _voiceUnavailable = false;
+  bool _micFailed = false;
   bool _disposed = false;
 
   /// The API accepts 1–2000 characters per message.
@@ -47,6 +48,9 @@ class ChatViewModel extends ChangeNotifier {
   VoiceState get voiceState => _voiceState;
   String get heard => _heard;
   bool get voiceUnavailable => _voiceUnavailable;
+
+  /// The microphone stopped at once (no audio input, a recognizer error).
+  bool get micFailed => _micFailed;
   bool get hasVoice => voice != null;
 
   /// The last answer of the assistant, if any.
@@ -128,6 +132,7 @@ class ChatViewModel extends ChangeNotifier {
   Future<void> _listen(String language) async {
     if (!_voiceOn) return;
     _heard = '';
+    _micFailed = false;
     _setVoice(VoiceState.listening);
     var handled = false;
     final ok = await voice!.listen(
@@ -141,10 +146,11 @@ class ChatViewModel extends ChangeNotifier {
           _answerAloud(words, language);
         }
       },
-      onStop: () {
+      onStop: (failed) {
         if (handled || _voiceState != VoiceState.listening) return;
         handled = true;
-        // Silence: wait for a tap on the microphone.
+        // Silence or a failure: wait for a tap on the microphone.
+        _micFailed = failed;
         _setVoice(VoiceState.off);
       },
     );

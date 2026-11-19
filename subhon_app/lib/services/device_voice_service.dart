@@ -13,7 +13,8 @@ class DeviceVoiceService implements VoiceService {
   late final FlutterTts _tts = FlutterTts();
   bool _used = false;
   bool? _ready;
-  void Function()? _onStop;
+  void Function(bool failed)? _onStop;
+  DateTime _started = DateTime.now();
   bool _heard = false;
 
   /// The phone's locale for a language, preferring the region it is
@@ -25,22 +26,32 @@ class DeviceVoiceService implements VoiceService {
       if ((status == SpeechToText.doneStatus ||
               status == SpeechToText.notListeningStatus) &&
           !_heard) {
-        _onStop?.call();
+        // Stopping within a second without a word: the microphone did not
+        // really start (e.g. no audio input in the simulator).
+        final instant =
+            DateTime.now().difference(_started) < const Duration(seconds: 1);
+        _onStop?.call(instant);
       }
     },
-    onError: (SpeechRecognitionError _) => _onStop?.call(),
+    onError: (SpeechRecognitionError error) =>
+        // "No match" is silence; anything else is a failure.
+        _onStop?.call(
+          error.errorMsg != 'error_no_match' &&
+              error.errorMsg != 'error_speech_timeout',
+        ),
   );
 
   @override
   Future<bool> listen({
     required String language,
     required void Function(String words, bool done) onWords,
-    required void Function() onStop,
+    required void Function(bool failed) onStop,
   }) async {
     _used = true;
     if (!await _init()) return false;
     _onStop = onStop;
     _heard = false;
+    _started = DateTime.now();
     final available = (await _speech.locales()).map((l) => l.localeId);
     String? pick(String lang) {
       final wanted = _locales[lang]!;

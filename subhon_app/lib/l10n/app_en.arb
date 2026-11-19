@@ -697,5 +697,6 @@
   "voiceHint": "Ask anything: “employees”, “sales today”, “how much salary is left?”",
   "voiceMic": "Speak",
   "voiceEnd": "End",
-  "voiceUnavailable": "Speech recognition is not available. Allow the microphone and speech recognition in Settings."
+  "voiceUnavailable": "Speech recognition is not available. Allow the microphone and speech recognition in Settings.",
+  "voiceMicFailed": "The microphone didn't start. Try again; if it keeps happening, check the microphone permission in Settings."
 }

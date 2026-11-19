@@ -1239,4 +1239,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get voiceUnavailable =>
       'Speech recognition is not available. Allow the microphone and speech recognition in Settings.';
+
+  @override
+  String get voiceMicFailed =>
+      'The microphone didn\'t start. Try again; if it keeps happening, check the microphone permission in Settings.';
 }

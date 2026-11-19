@@ -59,6 +59,8 @@ class _VoiceChatViewState extends State<VoiceChatView> {
     final answer = vm.lastAnswer?.text;
     final error = vm.voiceUnavailable
         ? l10n.voiceUnavailable
+        : vm.micFailed
+        ? l10n.voiceMicFailed
         : vm.error == null
         ? null
         : errorText(l10n, vm.error!);

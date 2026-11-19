@@ -10,7 +10,7 @@ class FakeVoiceService implements VoiceService {
   final List<String> languages = [];
   int listens = 0;
   void Function(String words, bool done)? _onWords;
-  void Function()? _onStop;
+  void Function(bool failed)? _onStop;
 
   bool get isListening => _onWords != null;
 
@@ -25,14 +25,21 @@ class FakeVoiceService implements VoiceService {
   void silence() {
     final onStop = _onStop;
     _onWords = null;
-    onStop?.call();
+    onStop?.call(false);
+  }
+
+  /// The microphone stops at once (no audio input).
+  void fail() {
+    final onStop = _onStop;
+    _onWords = null;
+    onStop?.call(true);
   }
 
   @override
   Future<bool> listen({
     required String language,
     required void Function(String words, bool done) onWords,
-    required void Function() onStop,
+    required void Function(bool failed) onStop,
   }) async {
     if (!available) return false;
     listens++;

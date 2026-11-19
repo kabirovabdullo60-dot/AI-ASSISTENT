@@ -82,4 +82,16 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('the microphone stops at once: it says so', (tester) async {
+    final voice = FakeVoiceService();
+    await _openVoice(tester, voice);
+    voice.fail();
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Микрофон не включился'), findsOneWidget);
+    // A new try clears the message.
+    await tester.tap(find.byTooltip('Говорить'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Микрофон не включился'), findsNothing);
+  });
 }

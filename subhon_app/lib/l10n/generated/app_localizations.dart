@@ -2253,6 +2253,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Speech recognition is not available. Allow the microphone and speech recognition in Settings.'**
   String get voiceUnavailable;
+
+  /// No description provided for @voiceMicFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The microphone didn\'t start. Try again; if it keeps happening, check the microphone permission in Settings.'**
+  String get voiceMicFailed;
 }
 
 class _AppLocalizationsDelegate
