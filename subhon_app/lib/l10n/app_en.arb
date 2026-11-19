@@ -657,5 +657,17 @@
   "fieldReceiptNumber": "Receipt number",
   "validationSplit": "Cash and card must add up to the amount",
   "errSaleSplit": "Cash and card must add up to the amount.",
-  "homeByPayment": "By payment method"
+  "homeByPayment": "By payment method",
+  "fieldCity": "City",
+  "fieldRegion": "Region",
+  "fieldRegionHint": "Dushanbe, Sughd, Khatlon, GBAO, RRS",
+  "fieldStoreType": "Format",
+  "fieldStoreTypeHint": "Supermarket, kiosk…",
+  "fieldCounters": "Checkout counters",
+  "fieldOpeningHours": "Opening hours",
+  "fieldOpeningHoursHint": "09:00–21:00",
+  "fieldStatusNote": "Status reason",
+  "fieldStatusNoteHint": "E.g. renovation",
+  "validationCounters": "A whole number from 0 to 999",
+  "storeMoreDetails": "More details"
 }

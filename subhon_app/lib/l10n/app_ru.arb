@@ -325,5 +325,17 @@
   "fieldReceiptNumber": "Номер чека",
   "validationSplit": "Наличные и карта вместе должны равняться сумме",
   "errSaleSplit": "Наличные и карта вместе должны равняться сумме.",
-  "homeByPayment": "По способам оплаты"
+  "homeByPayment": "По способам оплаты",
+  "fieldCity": "Город",
+  "fieldRegion": "Регион",
+  "fieldRegionHint": "Душанбе, Согд, Хатлон, ГБАО, РРП",
+  "fieldStoreType": "Формат",
+  "fieldStoreTypeHint": "Супермаркет, киоск…",
+  "fieldCounters": "Кассы",
+  "fieldOpeningHours": "Часы работы",
+  "fieldOpeningHoursHint": "09:00–21:00",
+  "fieldStatusNote": "Причина статуса",
+  "fieldStatusNoteHint": "Например, ремонт",
+  "validationCounters": "Целое число от 0 до 999",
+  "storeMoreDetails": "Подробнее"
 }

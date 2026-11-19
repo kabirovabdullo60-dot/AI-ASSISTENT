@@ -325,5 +325,17 @@
   "fieldReceiptNumber": "Рақами чек",
   "validationSplit": "Нақд ва корт якҷоя бояд ба маблағ баробар бошанд",
   "errSaleSplit": "Нақд ва корт якҷоя бояд ба маблағ баробар бошанд.",
-  "homeByPayment": "Аз рӯи тарзи пардохт"
+  "homeByPayment": "Аз рӯи тарзи пардохт",
+  "fieldCity": "Шаҳр",
+  "fieldRegion": "Минтақа",
+  "fieldRegionHint": "Душанбе, Суғд, Хатлон, ВМКБ, НТМ",
+  "fieldStoreType": "Шакл",
+  "fieldStoreTypeHint": "Супермаркет, киоск…",
+  "fieldCounters": "Хазинаҳо",
+  "fieldOpeningHours": "Соатҳои корӣ",
+  "fieldOpeningHoursHint": "09:00–21:00",
+  "fieldStatusNote": "Сабаби вазъ",
+  "fieldStatusNoteHint": "Масалан, таъмир",
+  "validationCounters": "Адади бутун аз 0 то 999",
+  "storeMoreDetails": "Тафсилот"
 }

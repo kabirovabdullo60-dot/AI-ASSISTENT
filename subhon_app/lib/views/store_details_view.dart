@@ -144,17 +144,47 @@ class _StoreDetailsState extends State<_StoreDetails> {
                           active: store.status == StoreStatus.active,
                         ),
                       ),
+                      if (store.phone != null)
+                        SettingsRow(
+                          icon: Icons.phone_outlined,
+                          title: l10n.fieldPhone,
+                          value: store.phone,
+                        ),
+                      if (store.statusNote != null)
+                        SettingsRow(
+                          icon: Icons.info_outline_rounded,
+                          title: l10n.fieldStatusNote,
+                          value: store.statusNote,
+                        ),
                       if (store.address != null)
                         SettingsRow(
                           icon: Icons.place_outlined,
                           title: l10n.fieldAddress,
                           value: store.address,
                         ),
-                      if (store.phone != null)
+                      if (store.city != null || store.region != null)
                         SettingsRow(
-                          icon: Icons.phone_outlined,
-                          title: l10n.fieldPhone,
-                          value: store.phone,
+                          icon: Icons.location_city_outlined,
+                          title: l10n.fieldCity,
+                          value: [?store.city, ?store.region].join(', '),
+                        ),
+                      if (store.type != null)
+                        SettingsRow(
+                          icon: Icons.category_outlined,
+                          title: l10n.fieldStoreType,
+                          value: store.type,
+                        ),
+                      if (store.counters != null)
+                        SettingsRow(
+                          icon: Icons.point_of_sale_outlined,
+                          title: l10n.fieldCounters,
+                          value: '${store.counters}',
+                        ),
+                      if (store.openingHours != null)
+                        SettingsRow(
+                          icon: Icons.schedule_rounded,
+                          title: l10n.fieldOpeningHours,
+                          value: store.openingHours,
                         ),
                       if (store.description != null)
                         SettingsRow(

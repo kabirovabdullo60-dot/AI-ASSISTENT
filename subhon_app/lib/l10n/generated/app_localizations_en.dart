@@ -1129,4 +1129,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeByPayment => 'By payment method';
+
+  @override
+  String get fieldCity => 'City';
+
+  @override
+  String get fieldRegion => 'Region';
+
+  @override
+  String get fieldRegionHint => 'Dushanbe, Sughd, Khatlon, GBAO, RRS';
+
+  @override
+  String get fieldStoreType => 'Format';
+
+  @override
+  String get fieldStoreTypeHint => 'Supermarket, kiosk…';
+
+  @override
+  String get fieldCounters => 'Checkout counters';
+
+  @override
+  String get fieldOpeningHours => 'Opening hours';
+
+  @override
+  String get fieldOpeningHoursHint => '09:00–21:00';
+
+  @override
+  String get fieldStatusNote => 'Status reason';
+
+  @override
+  String get fieldStatusNoteHint => 'E.g. renovation';
+
+  @override
+  String get validationCounters => 'A whole number from 0 to 999';
+
+  @override
+  String get storeMoreDetails => 'More details';
 }

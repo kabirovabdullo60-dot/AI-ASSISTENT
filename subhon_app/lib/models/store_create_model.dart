@@ -8,6 +8,12 @@ class StoreCreateModel {
     this.phone,
     this.description,
     this.status = StoreStatus.active,
+    this.city,
+    this.region,
+    this.type,
+    this.counters,
+    this.openingHours,
+    this.statusNote,
   });
 
   final String name;
@@ -15,6 +21,21 @@ class StoreCreateModel {
   final String? phone;
   final String? description;
   final StoreStatus status;
+  final String? city;
+
+  /// E.g. `Dushanbe`, `Sughd`, `Khatlon`, `GBAO`, `RRS`; groups the store
+  /// comparison.
+  final String? region;
+
+  /// Store format, e.g. `Flagship`, `Supermarket`, `Kiosk`.
+  final String? type;
+
+  /// Checkout counters, 0–999.
+  final int? counters;
+  final String? openingHours;
+
+  /// Why the store has its status, e.g. `Renovation`.
+  final String? statusNote;
 
   Map<String, dynamic> toJson() => {
     'name': name,
@@ -22,5 +43,11 @@ class StoreCreateModel {
     'phone': ?phone,
     'description': ?description,
     'status': status.json,
+    'city': ?city,
+    'region': ?region,
+    'type': ?type,
+    'counters': ?counters,
+    'openingHours': ?openingHours,
+    'statusNote': ?statusNote,
   };
 }

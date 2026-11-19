@@ -1130,4 +1130,40 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get homeByPayment => 'Аз рӯи тарзи пардохт';
+
+  @override
+  String get fieldCity => 'Шаҳр';
+
+  @override
+  String get fieldRegion => 'Минтақа';
+
+  @override
+  String get fieldRegionHint => 'Душанбе, Суғд, Хатлон, ВМКБ, НТМ';
+
+  @override
+  String get fieldStoreType => 'Шакл';
+
+  @override
+  String get fieldStoreTypeHint => 'Супермаркет, киоск…';
+
+  @override
+  String get fieldCounters => 'Хазинаҳо';
+
+  @override
+  String get fieldOpeningHours => 'Соатҳои корӣ';
+
+  @override
+  String get fieldOpeningHoursHint => '09:00–21:00';
+
+  @override
+  String get fieldStatusNote => 'Сабаби вазъ';
+
+  @override
+  String get fieldStatusNoteHint => 'Масалан, таъмир';
+
+  @override
+  String get validationCounters => 'Адади бутун аз 0 то 999';
+
+  @override
+  String get storeMoreDetails => 'Тафсилот';
 }

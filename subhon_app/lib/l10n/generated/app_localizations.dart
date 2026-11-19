@@ -2055,6 +2055,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'By payment method'**
   String get homeByPayment;
+
+  /// No description provided for @fieldCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get fieldCity;
+
+  /// No description provided for @fieldRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get fieldRegion;
+
+  /// No description provided for @fieldRegionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Dushanbe, Sughd, Khatlon, GBAO, RRS'**
+  String get fieldRegionHint;
+
+  /// No description provided for @fieldStoreType.
+  ///
+  /// In en, this message translates to:
+  /// **'Format'**
+  String get fieldStoreType;
+
+  /// No description provided for @fieldStoreTypeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Supermarket, kiosk…'**
+  String get fieldStoreTypeHint;
+
+  /// No description provided for @fieldCounters.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout counters'**
+  String get fieldCounters;
+
+  /// No description provided for @fieldOpeningHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening hours'**
+  String get fieldOpeningHours;
+
+  /// No description provided for @fieldOpeningHoursHint.
+  ///
+  /// In en, this message translates to:
+  /// **'09:00–21:00'**
+  String get fieldOpeningHoursHint;
+
+  /// No description provided for @fieldStatusNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Status reason'**
+  String get fieldStatusNote;
+
+  /// No description provided for @fieldStatusNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g. renovation'**
+  String get fieldStatusNoteHint;
+
+  /// No description provided for @validationCounters.
+  ///
+  /// In en, this message translates to:
+  /// **'A whole number from 0 to 999'**
+  String get validationCounters;
+
+  /// No description provided for @storeMoreDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'More details'**
+  String get storeMoreDetails;
 }
 
 class _AppLocalizationsDelegate

@@ -46,11 +46,32 @@ class _StoreFormState extends State<_StoreForm> {
   late final _description = TextEditingController(
     text: widget.initial?.description,
   );
+  late final _city = TextEditingController(text: widget.initial?.city);
+  late final _region = TextEditingController(text: widget.initial?.region);
+  late final _type = TextEditingController(text: widget.initial?.type);
+  late final _counters = TextEditingController(
+    text: widget.initial?.counters?.toString(),
+  );
+  late final _hours = TextEditingController(text: widget.initial?.openingHours);
+  late final _statusNote = TextEditingController(
+    text: widget.initial?.statusNote,
+  );
   late StoreStatus _status = widget.initial?.status ?? StoreStatus.active;
 
   @override
   void dispose() {
-    for (final c in [_name, _address, _phone, _description]) {
+    for (final c in [
+      _name,
+      _address,
+      _phone,
+      _description,
+      _city,
+      _region,
+      _type,
+      _counters,
+      _hours,
+      _statusNote,
+    ]) {
       c.dispose();
     }
     super.dispose();
@@ -67,6 +88,12 @@ class _StoreFormState extends State<_StoreForm> {
       phone: _phone.text,
       description: _description.text,
       status: _status,
+      city: _city.text,
+      region: _region.text,
+      type: _type.text,
+      counters: int.tryParse(_counters.text.trim()),
+      openingHours: _hours.text,
+      statusNote: _statusNote.text,
     );
     if (ok) {
       feedback.showSuccess(l10n.storeSaved);
@@ -118,6 +145,72 @@ class _StoreFormState extends State<_StoreForm> {
               validator: (v) => Validators.phone(v, l10n),
             ),
             gap,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: AppTextField(
+                    controller: _city,
+                    label: l10n.fieldCity,
+                    hint: l10n.fieldOptional,
+                    maxLength: 100,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: AppTextField(
+                    controller: _region,
+                    label: l10n.fieldRegion,
+                    hint: l10n.fieldRegionHint,
+                    maxLength: 100,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ),
+              ],
+            ),
+            gap,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: AppTextField(
+                    controller: _type,
+                    label: l10n.fieldStoreType,
+                    hint: l10n.fieldStoreTypeHint,
+                    maxLength: 100,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: AppTextField(
+                    controller: _counters,
+                    label: l10n.fieldCounters,
+                    hint: '0',
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    validator: (v) {
+                      final text = (v ?? '').trim();
+                      if (text.isEmpty) return null;
+                      final n = int.tryParse(text);
+                      return n == null || n < 0 || n > 999
+                          ? l10n.validationCounters
+                          : null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            gap,
+            AppTextField(
+              controller: _hours,
+              label: l10n.fieldOpeningHours,
+              hint: l10n.fieldOpeningHoursHint,
+              maxLength: 100,
+              textInputAction: TextInputAction.next,
+            ),
+            gap,
             AppTextField(
               controller: _description,
               label: l10n.fieldDescription,
@@ -144,6 +237,13 @@ class _StoreFormState extends State<_StoreForm> {
               ],
               selected: {_status},
               onSelectionChanged: (s) => setState(() => _status = s.first),
+            ),
+            gap,
+            AppTextField(
+              controller: _statusNote,
+              label: l10n.fieldStatusNote,
+              hint: l10n.fieldStatusNoteHint,
+              maxLength: 255,
             ),
             if (vm.error != null) ...[
               gap,

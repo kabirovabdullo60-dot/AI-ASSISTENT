@@ -84,6 +84,12 @@ void main() {
       'address': null,
       'phone': null,
       'description': null,
+      'city': null,
+      'region': null,
+      'type': null,
+      'counters': null,
+      'openingHours': null,
+      'statusNote': null,
     });
     expect(
       EmployeeUpdateModel(

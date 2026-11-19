@@ -1133,4 +1133,40 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get homeByPayment => 'По способам оплаты';
+
+  @override
+  String get fieldCity => 'Город';
+
+  @override
+  String get fieldRegion => 'Регион';
+
+  @override
+  String get fieldRegionHint => 'Душанбе, Согд, Хатлон, ГБАО, РРП';
+
+  @override
+  String get fieldStoreType => 'Формат';
+
+  @override
+  String get fieldStoreTypeHint => 'Супермаркет, киоск…';
+
+  @override
+  String get fieldCounters => 'Кассы';
+
+  @override
+  String get fieldOpeningHours => 'Часы работы';
+
+  @override
+  String get fieldOpeningHoursHint => '09:00–21:00';
+
+  @override
+  String get fieldStatusNote => 'Причина статуса';
+
+  @override
+  String get fieldStatusNoteHint => 'Например, ремонт';
+
+  @override
+  String get validationCounters => 'Целое число от 0 до 999';
+
+  @override
+  String get storeMoreDetails => 'Подробнее';
 }
