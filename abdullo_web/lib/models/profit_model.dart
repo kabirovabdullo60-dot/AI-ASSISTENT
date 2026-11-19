@@ -2,7 +2,14 @@ import '../core/utils/json.dart';
 import 'expense_model.dart';
 
 /// `StoreProfitOut` — one row of the profit report; [storeId] null = expenses of the whole business.
-typedef StoreProfit = ({String? storeId, String? storeName, double sales, double expenses, double salaryDue, double profit});
+typedef StoreProfit = ({
+  String? storeId,
+  String? storeName,
+  double sales,
+  double expenses,
+  double salaryDue,
+  double profit,
+});
 
 /// `ProfitOut` from GET /api/reports/profit: sales − expenses − salary due.
 class ProfitModel {

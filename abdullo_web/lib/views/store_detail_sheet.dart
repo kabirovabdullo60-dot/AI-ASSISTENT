@@ -92,7 +92,7 @@ class _Body extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(store.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                      Text(store.address ?? '—', style: const TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                      Text(store.address ?? '—', style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
                     ],
                   ),
                 ),
@@ -144,13 +144,13 @@ class _Content extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+            Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
             const SizedBox(height: 2),
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 currency.format(value),
-                style: TextStyle(fontWeight: FontWeight.w800, color: accent ? AppColors.orange : AppColors.ink),
+                style: TextStyle(fontWeight: FontWeight.w800, color: accent ? AppColors.accentText : AppColors.ink),
               ),
             ),
             if (change != null)
@@ -166,7 +166,7 @@ class _Content extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
         children: [
-          Text(label, style: const TextStyle(fontSize: 12.5, color: AppColors.muted)),
+          Text(label, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -210,7 +210,7 @@ class _Content extends StatelessWidget {
                   ),
                   Text(
                     tr.avgPerDay(currency.format(vm.average)),
-                    style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+                    style: TextStyle(fontSize: 11.5, color: AppColors.muted),
                   ),
                 ],
               ),
@@ -240,9 +240,9 @@ class _Content extends StatelessWidget {
               const SizedBox(height: 6),
               Row(
                 children: [
-                  Text(tr.sixDaysAgo, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(tr.sixDaysAgo, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                   const Spacer(),
-                  Text(tr.todayCurrent, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(tr.todayCurrent, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                 ],
               ),
             ],
@@ -294,7 +294,7 @@ class _Content extends StatelessWidget {
             decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(8)),
             child: Row(
               children: [
-                const IconBox(
+                IconBox(
                   Icons.receipt_long_outlined,
                   size: 28,
                   color: AppColors.orange,
@@ -310,13 +310,13 @@ class _Content extends StatelessWidget {
                         style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
                       ),
                       if ((s.description ?? '').isNotEmpty)
-                        Text(s.description!, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                        Text(s.description!, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                     ],
                   ),
                 ),
                 Text(
                   '+${currency.format(s.amount)}',
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: AppColors.green),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: AppColors.green),
                 ),
               ],
             ),

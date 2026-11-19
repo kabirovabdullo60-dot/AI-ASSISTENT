@@ -23,6 +23,7 @@ import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
 import 'store_detail_sheet.dart';
 import 'store_form_dialog.dart';
+import '../core/motion/app_dialog.dart';
 
 /// "Store Management" — /api/stores + sales reports.
 class StoresView extends StatelessWidget {
@@ -271,7 +272,7 @@ class _ViewToggle extends StatelessWidget {
       visualDensity: VisualDensity.compact,
       isSelected: grid == value,
       style: IconButton.styleFrom(
-        backgroundColor: grid == value ? AppColors.navy : AppColors.surfaceSoft,
+        backgroundColor: grid == value ? AppColors.teal : AppColors.surfaceSoft,
         foregroundColor: grid == value ? Colors.white : AppColors.muted,
       ),
       onPressed: () => onChanged(value),
@@ -305,7 +306,7 @@ class _StoreActions extends StatelessWidget {
 
   Future<void> _delete(BuildContext context) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.deleteStoreTitle),
@@ -335,30 +336,40 @@ class _StoreActions extends StatelessWidget {
       mainAxisSize: showAnalytics ? MainAxisSize.max : MainAxisSize.min,
       children: [
         if (showAnalytics) ...[
-          TextButton(
-            key: Key('analytics-${store.id}'),
-            style: TextButton.styleFrom(
-              foregroundColor: store.isActive ? AppColors.orange : AppColors.muted,
-              padding: EdgeInsets.zero,
+          // Flexible: on narrow cards the label shortens (…) instead of pushing the icons out.
+          Flexible(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                key: Key('analytics-${store.id}'),
+                style: TextButton.styleFrom(
+                  foregroundColor: store.isActive ? AppColors.accentText : AppColors.muted,
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () => StoreDetailSheet.show(context, store.id),
+                child: Text(
+                  tr.viewAnalytics,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
             ),
-            onPressed: () => StoreDetailSheet.show(context, store.id),
-            child: Text(tr.viewAnalytics, style: const TextStyle(fontWeight: FontWeight.w600)),
           ),
-          const Spacer(),
         ],
         IconButton(
           key: Key('edit-${store.id}'),
           tooltip: tr.edit,
           visualDensity: VisualDensity.compact,
           onPressed: () => StoreFormDialog.show(context, store: store),
-          icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
+          icon: Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
         ),
         IconButton(
           key: Key('delete-${store.id}'),
           tooltip: tr.delete,
           visualDensity: VisualDensity.compact,
           onPressed: () => _delete(context),
-          icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
+          icon: Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
         ),
       ],
     );
@@ -380,7 +391,7 @@ class _StoreCard extends StatelessWidget {
     Widget figure(String label, String value, String sub, Color subColor) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+        Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
         const SizedBox(height: 2),
         FittedBox(
           fit: BoxFit.scaleDown,
@@ -402,7 +413,7 @@ class _StoreCard extends StatelessWidget {
         children: [
           Icon(icon, size: 15, color: AppColors.muted),
           const SizedBox(width: 6),
-          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -422,7 +433,7 @@ class _StoreCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Container(
         decoration: first
-            ? const BoxDecoration(
+            ? BoxDecoration(
                 border: Border(top: BorderSide(color: AppColors.orange, width: 3)),
               )
             : null,
@@ -443,7 +454,7 @@ class _StoreCard extends StatelessWidget {
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, height: 1.25),
                     ),
                   ),
-                  if (first) const Icon(Icons.workspace_premium_outlined, size: 18, color: AppColors.orange),
+                  if (first) Icon(Icons.workspace_premium_outlined, size: 18, color: AppColors.orange),
                   const SizedBox(width: 6),
                   _StatusBadge(store: s),
                 ],
@@ -452,14 +463,14 @@ class _StoreCard extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                const Icon(Icons.location_on_outlined, size: 13, color: AppColors.muted),
+                Icon(Icons.location_on_outlined, size: 13, color: AppColors.muted),
                 const SizedBox(width: 3),
                 Expanded(
                   child: Text(
                     s.address ?? '—',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted),
                   ),
                 ),
               ],
@@ -532,7 +543,7 @@ class _ShareCard extends StatelessWidget {
         decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(6)),
         child: Text(
           '${tr.endpoint}:\n${ApiConstants.reportStoreComparison}',
-          style: const TextStyle(fontSize: 10.5, fontFamily: 'monospace', color: AppColors.navy),
+          style: TextStyle(fontSize: 10.5, color: AppColors.ink),
         ),
       ),
       child: Column(
@@ -570,7 +581,7 @@ class _ShareCard extends StatelessWidget {
                       color: i == 0
                           ? AppColors.orange
                           : i == 1
-                          ? AppColors.navy
+                          ? AppColors.strong
                           : AppColors.barGray,
                     ),
                   ),
@@ -579,7 +590,7 @@ class _ShareCard extends StatelessWidget {
             ),
           Text(
             tr.registersSynced(vm.activeCount),
-            style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -597,7 +608,7 @@ class _RecentCard extends StatelessWidget {
     final tr = context.l10n;
     return SectionCard(
       title: tr.recentlyUpdated,
-      trailing: const Icon(Icons.history, color: AppColors.navy),
+      trailing: Icon(Icons.history, color: AppColors.ink),
       child: Column(
         children: [
           if (stores.isEmpty) Text(tr.noOperations),
@@ -620,7 +631,7 @@ class _RecentCard extends StatelessWidget {
                         Text(s.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                         Text(
                           tr.updatedOn(s.updatedAt == null ? '—' : formatTimeAgo(s.updatedAt!)),
-                          style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+                          style: TextStyle(fontSize: 11.5, color: AppColors.muted),
                         ),
                       ],
                     ),

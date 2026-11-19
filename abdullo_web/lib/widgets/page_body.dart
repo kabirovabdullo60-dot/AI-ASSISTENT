@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
+import '../core/motion/motion.dart';
 import '../core/responsive/breakpoints.dart';
 import '../core/theme/app_colors.dart';
 
@@ -13,6 +15,7 @@ class PageBody extends StatelessWidget {
     this.eyebrow = const [],
     this.badge,
     this.actions = const [],
+    this.entrance = false,
   });
 
   final String title;
@@ -23,6 +26,16 @@ class PageBody extends StatelessWidget {
   final Widget? badge;
   final List<Widget> actions;
   final List<Widget> children;
+
+  /// Play the page's one entrance: the title (lead) rises 12px while fading in; the
+  /// actions (decoration) only fade. Pages pass true just once per session.
+  final bool entrance;
+
+  Widget _enter(Widget child, {double rise = 0}) {
+    if (!entrance) return child;
+    final a = child.animate().fadeIn(duration: 520.ms, curve: Motion.easeOut);
+    return rise == 0 ? a : a.moveY(begin: rise, end: 0, duration: 520.ms, curve: Motion.easeOut);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,59 +52,40 @@ class PageBody extends StatelessWidget {
               spacing: 16,
               runSpacing: 12,
               children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (eyebrow.isNotEmpty) ...[
-                      Text.rich(
-                        TextSpan(
-                          style: const TextStyle(
-                            fontSize: 11.5,
-                            letterSpacing: 0.8,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.muted,
+                _enter(
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        spacing: 10,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(
+                            title,
+                            style: (mobile ? theme.textTheme.headlineSmall : theme.textTheme.headlineMedium)?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.ink,
+                            ),
                           ),
-                          children: [
-                            for (var i = 0; i < eyebrow.length; i++) ...[
-                              if (i > 0) const TextSpan(text: '  /  '),
-                              TextSpan(
-                                text: eyebrow[i],
-                                style: i == eyebrow.length - 1 && eyebrow.length > 1
-                                    ? const TextStyle(color: AppColors.orange)
-                                    : null,
-                              ),
-                            ],
-                          ],
-                        ),
+                          ?badge,
+                        ],
                       ),
-                      const SizedBox(height: 6),
-                    ],
-                    Wrap(
-                      spacing: 10,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          title,
-                          style: (mobile ? theme.textTheme.headlineSmall : theme.textTheme.headlineMedium)?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.ink,
-                          ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 4),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 460),
+                          child: Text(subtitle!, style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted)),
                         ),
-                        ?badge,
                       ],
-                    ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 4),
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 460),
-                        child: Text(subtitle!, style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted)),
-                      ),
                     ],
-                  ],
+                  ),
+                  rise: 12,
                 ),
                 if (actions.isNotEmpty)
-                  Wrap(spacing: 10, runSpacing: 10, crossAxisAlignment: WrapCrossAlignment.center, children: actions),
+                  _enter(
+                    Wrap(spacing: 10, runSpacing: 10, crossAxisAlignment: WrapCrossAlignment.center, children: actions),
+                  ),
               ],
             ),
             SizedBox(height: mobile ? 16 : 24),

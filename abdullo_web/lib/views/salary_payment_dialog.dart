@@ -8,6 +8,7 @@ import '../core/utils/format.dart';
 import '../models/payroll_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
+import '../core/motion/app_dialog.dart';
 
 /// "Record Salary Payment" → POST /api/payroll {employeeId, amount, month, year, paymentDate, note}.
 /// With [payroll] the employee is fixed, otherwise the user picks one who is still owed money.
@@ -16,7 +17,7 @@ class SalaryPaymentDialog extends StatefulWidget {
 
   final PayrollModel? payroll;
 
-  static Future<void> show(BuildContext context, {PayrollModel? payroll}) => showDialog<void>(
+  static Future<void> show(BuildContext context, {PayrollModel? payroll}) => showAppDialog<void>(
     context: context,
     builder: (_) => SalaryPaymentDialog(payroll: payroll),
   );
@@ -87,7 +88,7 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
                     children: [
                       Text(
                         tr.payFor(formatMonthYear(vm.month)),
-                        style: const TextStyle(color: AppColors.orange, fontWeight: FontWeight.w600),
+                        style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 8),
                       if (widget.payroll == null)
@@ -125,7 +126,7 @@ class _SalaryPaymentDialogState extends State<SalaryPaymentDialog> {
                           '${formatAmount(selected.disbursed)} TJS',
                           '${formatAmount(selected.remaining)} TJS',
                         ),
-                        style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
+                        style: TextStyle(fontSize: 12.5, color: AppColors.muted),
                       ),
                       const SizedBox(height: 14),
                       TextFormField(

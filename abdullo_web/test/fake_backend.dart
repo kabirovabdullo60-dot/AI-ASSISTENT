@@ -36,6 +36,9 @@ class FakeBackend {
   /// Business-wide sales targets set with PUT /api/targets: `{'WEEK': '5000.00'}`.
   final targets = <String, String>{};
 
+  /// Delay before every answer (to see loading states in tests). Zero = instant.
+  Duration latency = Duration.zero;
+
   /// GET /api/settings/exchange-rates.
   String usdRate = '10.95';
 
@@ -360,6 +363,7 @@ class FakeBackend {
 
   // ---------- router ----------
   Future<http.Response> _handle(http.Request r) async {
+    if (latency > Duration.zero) await Future<void>.delayed(latency);
     final path = r.url.path;
     final q = r.url.queryParameters;
     final m = r.method;

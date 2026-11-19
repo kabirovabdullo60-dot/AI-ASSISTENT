@@ -57,8 +57,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryAgain => 'Try again';
 
   @override
-  String get loadError =>
-      'Could not load data. Check the connection and try again.';
+  String get loadError => 'Could not load data. Check the connection and try again.';
 
   @override
   String get nothingFound => 'Nothing found';
@@ -173,11 +172,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessOverview => 'Business Overview';
 
   @override
-  String get liveAudit => 'LIVE AUDIT';
+  String get liveAudit => 'Live audit';
 
   @override
-  String get overviewSubtitle =>
-      'Real-time consolidated performance across all retail branches and capital flows';
+  String get overviewSubtitle => 'Real-time consolidated performance across all retail branches and capital flows';
 
   @override
   String get recordSale => 'Record Sale';
@@ -253,8 +251,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get revenueTitle => 'Revenue & Cashflow Analytics';
 
   @override
-  String get revenueSubtitle =>
-      'Daily gross revenue trajectory across the current operational month';
+  String get revenueSubtitle => 'Daily gross revenue trajectory across the current operational month';
 
   @override
   String get weekly => 'Weekly';
@@ -328,11 +325,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentActivity => 'Recent Business Activity';
 
   @override
-  String get liveFeed => 'LIVE FEED';
+  String get liveFeed => 'Live feed';
 
   @override
-  String get activitySubtitle =>
-      'Real-time financial audits, POS register closures, and staff deployments';
+  String get activitySubtitle => 'Real-time financial audits, POS register closures, and staff deployments';
 
   @override
   String get demoFeed => 'Demo feed';
@@ -386,8 +382,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actCancelled => 'cancelled';
 
   @override
-  String get assistantBusy =>
-      'Too many questions. Wait a minute and ask again.';
+  String get assistantBusy => 'Too many questions. Wait a minute and ask again.';
 
   @override
   String connectedTo(String endpoints) {
@@ -398,7 +393,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoBackend => 'Demo data — backend not connected yet';
 
   @override
-  String get salesEyebrow => 'FINANCIAL OPERATIONS · TAJIKISTAN ZONE';
+  String get salesEyebrow => 'Financial operations · tajikistan zone';
 
   @override
   String get salesTitle => 'Sales & Daily Entries';
@@ -408,10 +403,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Log daily store turnover in Tajikistani Somoni (TJS) and monitor real-time transaction logs.';
 
   @override
-  String get totalToday => 'TOTAL TODAY';
+  String get totalToday => 'Total today';
 
   @override
-  String get totalThisMonth => 'TOTAL THIS MONTH';
+  String get totalThisMonth => 'Total this month';
 
   @override
   String get successPrefix => 'Success: ';
@@ -442,7 +437,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get activeFilterVolume => 'ACTIVE FILTER VOLUME';
+  String get activeFilterVolume => 'Active filter volume';
 
   @override
   String get filteredTotal => 'Filtered Total: ';
@@ -458,19 +453,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get colDateTime => 'DATE & TIME';
+  String get colDateTime => 'Date & time';
 
   @override
-  String get colStoreName => 'STORE NAME';
+  String get colStoreName => 'Store name';
 
   @override
-  String get colSalesAmount => 'SALES AMOUNT';
+  String get colSalesAmount => 'Sales amount';
 
   @override
-  String get colRegisteredBy => 'REGISTERED BY';
+  String get colRegisteredBy => 'Registered by';
 
   @override
-  String get colNotesMethod => 'NOTES / METHOD';
+  String get colNotesMethod => 'Notes / method';
 
   @override
   String get noEntries => 'No entries for this filter';
@@ -543,8 +538,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get optional => '(optional)';
 
   @override
-  String get notesHint =>
-      'e.g. End of day cash & POS terminal reconciliation, promo event';
+  String get notesHint => 'e.g. End of day cash & POS terminal reconciliation, promo event';
 
   @override
   String get saveSaleRecord => 'Save Sale Record';
@@ -561,10 +555,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get storesEyebrow1 => 'ENTERPRISE FLEET';
+  String get storesEyebrow1 => 'Enterprise fleet';
 
   @override
-  String get storesEyebrow2 => 'STORE DIRECTORY';
+  String get storesEyebrow2 => 'Store directory';
 
   @override
   String get storesTitle => 'Store Management';
@@ -715,12 +709,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String branchesCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Branches',
-      one: '1 Branch',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count Branches', one: '1 Branch');
     return '$_temp0';
   }
 
@@ -842,7 +831,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noSalesYet => 'No sales yet';
 
   @override
-  String get payrollEyebrow => 'ENTERPRISE PORTAL';
+  String get payrollEyebrow => 'Enterprise portal';
 
   @override
   String fiscalYear(String year) {
@@ -907,28 +896,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeContracts => '100% active contracts';
 
   @override
-  String get colEmployee => 'EMPLOYEE & POSITION';
+  String get colEmployee => 'Employee & position';
 
   @override
-  String get colAssignedStore => 'ASSIGNED STORE';
+  String get colAssignedStore => 'Assigned store';
 
   @override
-  String get colTenure => 'TENURE';
+  String get colTenure => 'Tenure';
 
   @override
-  String get colMonthlySalary => 'MONTHLY SALARY';
+  String get colMonthlySalary => 'Monthly salary';
 
   @override
-  String get colDisbursed => 'DISBURSED';
+  String get colDisbursed => 'Disbursed';
 
   @override
-  String get colRemaining => 'REMAINING';
+  String get colRemaining => 'Remaining';
 
   @override
-  String get colStatus => 'STATUS';
+  String get colStatus => 'Status';
 
   @override
-  String get colActions => 'ACTIONS';
+  String get colActions => 'Actions';
 
   @override
   String noPayrollFor(String month) {
@@ -991,12 +980,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String tenure(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count mos',
-      one: '1 mo',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count mos', one: '1 mo');
     return '$_temp0';
   }
 
@@ -1024,8 +1008,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentDisbursements => 'Recent Payroll Disbursements';
 
   @override
-  String get disbursementsSubtitle =>
-      'Real-time payment audit log across retail branches';
+  String get disbursementsSubtitle => 'Real-time payment audit log across retail branches';
 
   @override
   String get viewFullAudit => 'View Full Audit →';
@@ -1034,8 +1017,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noPaymentsMonth => 'No payments recorded this month';
 
   @override
-  String get bankNote =>
-      'All bank settlements follow National Bank standard formats and are signed via TLS.';
+  String get bankNote => 'All bank settlements follow National Bank standard formats and are signed via TLS.';
 
   @override
   String ledgerCopied(String month) {
@@ -1083,8 +1065,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get paidBeforeRecords =>
-      'Paid before the records in this app (no separate payments listed).';
+  String get paidBeforeRecords => 'Paid before the records in this app (no separate payments listed).';
 
   @override
   String get employeesSubtitle => 'Staff across all stores and shifts';
@@ -1140,8 +1121,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signOut => 'Sign out';
 
   @override
-  String get signOutNote =>
-      'Sign in / sign out will work once the backend login is ready.';
+  String get signOutNote => 'Sign in / sign out will work once the backend login is ready.';
 
   @override
   String get business => 'Business';
@@ -1159,15 +1139,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoData => 'Demo data';
 
   @override
-  String get demoNote =>
-      'The web shows demo data until the endpoints below are connected.';
+  String get demoNote => 'The web shows demo data until the endpoints below are connected.';
 
   @override
   String get askAssistant => 'Ask your business assistant';
 
   @override
-  String get assistantIntro =>
-      'Sales, stores, staff, salaries or marketing — ask in Tajik, Russian or English.';
+  String get assistantIntro => 'Ask about sales, stores, staff, salaries or marketing in Tajik, Russian or English.';
 
   @override
   String get newChat => 'New chat';
@@ -1179,8 +1157,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get send => 'Send';
 
   @override
-  String get assistantError =>
-      'The assistant did not answer. Please try again.';
+  String get assistantError => 'The assistant did not answer. Please try again.';
 
   @override
   String get suggestSales => 'Sales today';
@@ -1211,15 +1188,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginTitle => 'Welcome back';
 
   @override
-  String get loginSubtitle =>
-      'Sign in to manage your stores, sales and payroll.';
+  String get loginSubtitle => 'Sign in to manage your stores, sales and payroll.';
 
   @override
   String get registerTitle => 'Create your business account';
 
   @override
-  String get registerSubtitle =>
-      'One account = one business. You can add stores and staff after signing up.';
+  String get registerSubtitle => 'One account = one business. You can add stores and staff after signing up.';
 
   @override
   String get emailLabel => 'Email';
@@ -1287,12 +1262,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errValidationShort => 'Please check the fields.';
 
   @override
-  String get errNetwork =>
-      'No connection to the server. Check the internet and try again.';
+  String get errNetwork => 'No connection to the server. Check the internet and try again.';
 
   @override
-  String get errRateLimited =>
-      'Too many requests. Wait a moment and try again.';
+  String get errRateLimited => 'Too many requests. Wait a moment and try again.';
 
   @override
   String get errServer => 'Server error. Try again later.';
@@ -1301,16 +1274,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errStoreNameTaken => 'A store with this name already exists.';
 
   @override
-  String get errStoreHasEmployees =>
-      'The store still has active employees. Move or deactivate them first.';
+  String get errStoreHasEmployees => 'The store still has active employees. Move or deactivate them first.';
 
   @override
-  String get errAlreadyPaid =>
-      'The salary for this month is already fully paid.';
+  String get errAlreadyPaid => 'The salary for this month is already fully paid.';
 
   @override
-  String get errExceedsRemaining =>
-      'The amount is larger than what remains for this month.';
+  String get errExceedsRemaining => 'The amount is larger than what remains for this month.';
 
   @override
   String get errNotEmployed => 'The employee did not work in this month.';
@@ -1601,8 +1571,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get assistantNote =>
-      'Answers use your real numbers. A full AI model can be connected when the backend adds it.';
+  String get assistantNote => 'Answers come from your real numbers, worked out by the AI on the server.';
 
   @override
   String get staffInStore => 'Staff';
@@ -1638,8 +1607,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navExpenses => 'Expenses';
 
   @override
-  String get expensesSubtitle =>
-      'Rent, utilities, delivery and other costs, and the profit that is left';
+  String get expensesSubtitle => 'Rent, utilities, delivery and other costs, and the profit that is left';
 
   @override
   String get addExpense => 'Add expense';
@@ -1678,8 +1646,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteExpenseTitle => 'Delete this expense?';
 
   @override
-  String get deleteExpenseBody =>
-      'It will no longer count in the profit report.';
+  String get deleteExpenseBody => 'It will no longer count in the profit report.';
 
   @override
   String get noExpenses => 'No expenses yet';
@@ -1740,4 +1707,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get targetsSaved => 'Targets saved';
+
+  @override
+  String get assistantThinking => 'Thinking…';
+
+  @override
+  String get loginHeadline => 'Every store, sale and salary in one calm place.';
+
+  @override
+  String get loginHeroBody => 'Ask the assistant about your numbers. It answers in Tajik, Russian or English.';
+
+  @override
+  String get assistantLiveData => 'Uses your real numbers';
+
+  @override
+  String get askSales => 'How much did I sell today?';
+
+  @override
+  String get askStores => 'Which store sells best this month?';
+
+  @override
+  String get askSalaries => 'Who is still waiting for salary?';
+
+  @override
+  String get askMarketing => 'Ideas to bring in more customers';
+
+  @override
+  String get themeLabel => 'Theme';
+
+  @override
+  String greeting(String name) {
+    return 'Hello, $name';
+  }
+
+  @override
+  String get greetingNoName => 'Hello';
+
+  @override
+  String get errSplitMismatch => 'Cash and card must add up to the sale amount.';
+
+  @override
+  String get clearDate => 'Clear date';
+
+  @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
 }

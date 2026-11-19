@@ -4,6 +4,7 @@ import '../core/l10n/l10n.dart';
 import '../core/utils/format.dart';
 import '../models/sale_model.dart';
 import 'sale_entry_form_view.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Record a sale (dashboard) or edit one (sales table) — the same form as on the Sales page.
 class RecordSaleDialog extends StatelessWidget {
@@ -11,7 +12,7 @@ class RecordSaleDialog extends StatelessWidget {
 
   final SaleModel? sale;
 
-  static Future<void> show(BuildContext context, {SaleModel? sale}) => showDialog<void>(
+  static Future<void> show(BuildContext context, {SaleModel? sale}) => showAppDialog<void>(
     context: context,
     builder: (_) => RecordSaleDialog(sale: sale),
   );

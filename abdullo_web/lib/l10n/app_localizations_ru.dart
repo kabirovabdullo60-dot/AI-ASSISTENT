@@ -57,8 +57,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tryAgain => 'Повторить';
 
   @override
-  String get loadError =>
-      'Не удалось загрузить данные. Проверьте подключение и повторите.';
+  String get loadError => 'Не удалось загрузить данные. Проверьте подключение и повторите.';
 
   @override
   String get nothingFound => 'Ничего не найдено';
@@ -173,11 +172,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get businessOverview => 'Обзор бизнеса';
 
   @override
-  String get liveAudit => 'LIVE-АУДИТ';
+  String get liveAudit => 'Live-аудит';
 
   @override
-  String get overviewSubtitle =>
-      'Сводные показатели всех филиалов и денежных потоков в реальном времени';
+  String get overviewSubtitle => 'Сводные показатели всех филиалов и денежных потоков в реальном времени';
 
   @override
   String get recordSale => 'Записать продажу';
@@ -327,11 +325,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recentActivity => 'Последние события';
 
   @override
-  String get liveFeed => 'ЛЕНТА';
+  String get liveFeed => 'Лента';
 
   @override
-  String get activitySubtitle =>
-      'Финансовые проверки, закрытие касс и движение персонала в реальном времени';
+  String get activitySubtitle => 'Финансовые проверки, закрытие касс и движение персонала в реальном времени';
 
   @override
   String get demoFeed => 'Демо-лента';
@@ -385,8 +382,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get actCancelled => 'отменено';
 
   @override
-  String get assistantBusy =>
-      'Слишком много вопросов. Подождите минуту и спросите снова.';
+  String get assistantBusy => 'Слишком много вопросов. Подождите минуту и спросите снова.';
 
   @override
   String connectedTo(String endpoints) {
@@ -397,7 +393,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get demoBackend => 'Демо-данные — сервер ещё не подключён';
 
   @override
-  String get salesEyebrow => 'ФИНАНСОВЫЕ ОПЕРАЦИИ · ТАДЖИКИСТАН';
+  String get salesEyebrow => 'Финансовые операции · таджикистан';
 
   @override
   String get salesTitle => 'Продажи и ежедневные записи';
@@ -407,10 +403,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Записывайте дневной оборот магазинов в сомони (TJS) и следите за операциями в реальном времени.';
 
   @override
-  String get totalToday => 'ИТОГО СЕГОДНЯ';
+  String get totalToday => 'Итого сегодня';
 
   @override
-  String get totalThisMonth => 'ИТОГО ЗА МЕСЯЦ';
+  String get totalThisMonth => 'Итого за месяц';
 
   @override
   String get successPrefix => 'Успешно: ';
@@ -441,7 +437,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get activeFilterVolume => 'ОБЪЁМ ПО ФИЛЬТРУ';
+  String get activeFilterVolume => 'Объём по фильтру';
 
   @override
   String get filteredTotal => 'Итого по фильтру: ';
@@ -457,19 +453,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get colDateTime => 'ДАТА И ВРЕМЯ';
+  String get colDateTime => 'Дата и время';
 
   @override
-  String get colStoreName => 'МАГАЗИН';
+  String get colStoreName => 'Магазин';
 
   @override
-  String get colSalesAmount => 'СУММА ПРОДАЖ';
+  String get colSalesAmount => 'Сумма продаж';
 
   @override
-  String get colRegisteredBy => 'ЗАПИСАЛ';
+  String get colRegisteredBy => 'Записал';
 
   @override
-  String get colNotesMethod => 'ЗАМЕТКИ / СПОСОБ';
+  String get colNotesMethod => 'Заметки / способ';
 
   @override
   String get noEntries => 'Нет записей по фильтру';
@@ -559,17 +555,16 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get storesEyebrow1 => 'СЕТЬ МАГАЗИНОВ';
+  String get storesEyebrow1 => 'Сеть магазинов';
 
   @override
-  String get storesEyebrow2 => 'СПРАВОЧНИК';
+  String get storesEyebrow2 => 'Справочник';
 
   @override
   String get storesTitle => 'Управление магазинами';
 
   @override
-  String get storesSubtitle =>
-      'Управляйте филиалами, следите за выручкой и состоянием магазинов по регионам.';
+  String get storesSubtitle => 'Управляйте филиалами, следите за выручкой и состоянием магазинов по регионам.';
 
   @override
   String get exportDirectory => 'Экспорт списка';
@@ -841,7 +836,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noSalesYet => 'Продаж пока нет';
 
   @override
-  String get payrollEyebrow => 'КОРПОРАТИВНЫЙ ПОРТАЛ';
+  String get payrollEyebrow => 'Корпоративный портал';
 
   @override
   String fiscalYear(String year) {
@@ -906,28 +901,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get activeContracts => '100% действующих договоров';
 
   @override
-  String get colEmployee => 'СОТРУДНИК И ДОЛЖНОСТЬ';
+  String get colEmployee => 'Сотрудник и должность';
 
   @override
-  String get colAssignedStore => 'МАГАЗИН';
+  String get colAssignedStore => 'Магазин';
 
   @override
-  String get colTenure => 'СТАЖ';
+  String get colTenure => 'Стаж';
 
   @override
-  String get colMonthlySalary => 'ОКЛАД';
+  String get colMonthlySalary => 'Оклад';
 
   @override
-  String get colDisbursed => 'ВЫПЛАЧЕНО';
+  String get colDisbursed => 'Выплачено';
 
   @override
-  String get colRemaining => 'ОСТАТОК';
+  String get colRemaining => 'Остаток';
 
   @override
-  String get colStatus => 'СТАТУС';
+  String get colStatus => 'Статус';
 
   @override
-  String get colActions => 'ДЕЙСТВИЯ';
+  String get colActions => 'Действия';
 
   @override
   String noPayrollFor(String month) {
@@ -1026,8 +1021,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noPaymentsMonth => 'За этот месяц выплат нет';
 
   @override
-  String get bankNote =>
-      'Все банковские переводы соответствуют стандартам Нацбанка и защищены TLS.';
+  String get bankNote => 'Все банковские переводы соответствуют стандартам Нацбанка и защищены TLS.';
 
   @override
   String ledgerCopied(String month) {
@@ -1131,8 +1125,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get signOut => 'Выйти';
 
   @override
-  String get signOutNote =>
-      'Вход и выход заработают после подключения авторизации на сервере.';
+  String get signOutNote => 'Вход и выход заработают после подключения авторизации на сервере.';
 
   @override
   String get business => 'Бизнес';
@@ -1150,15 +1143,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get demoData => 'Демо-данные';
 
   @override
-  String get demoNote =>
-      'Пока эндпоинты ниже не подключены, сайт показывает демо-данные.';
+  String get demoNote => 'Пока эндпоинты ниже не подключены, сайт показывает демо-данные.';
 
   @override
   String get askAssistant => 'Спросите бизнес-ассистента';
 
   @override
   String get assistantIntro =>
-      'Продажи, магазины, персонал, зарплаты или маркетинг — спрашивайте на таджикском, русском или английском.';
+      'Спрашивайте о продажах, магазинах, сотрудниках, зарплатах или маркетинге по-таджикски, по-русски или по-английски.';
 
   @override
   String get newChat => 'Новый чат';
@@ -1201,15 +1193,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get loginTitle => 'С возвращением';
 
   @override
-  String get loginSubtitle =>
-      'Войдите, чтобы управлять магазинами, продажами и зарплатами.';
+  String get loginSubtitle => 'Войдите, чтобы управлять магазинами, продажами и зарплатами.';
 
   @override
   String get registerTitle => 'Создайте аккаунт бизнеса';
 
   @override
-  String get registerSubtitle =>
-      'Один аккаунт = один бизнес. Магазины и сотрудников добавите после регистрации.';
+  String get registerSubtitle => 'Один аккаунт = один бизнес. Магазины и сотрудников добавите после регистрации.';
 
   @override
   String get emailLabel => 'Эл. почта';
@@ -1254,8 +1244,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errAccountDisabled => 'Этот аккаунт отключён.';
 
   @override
-  String get errAccountLocked =>
-      'Слишком много неудачных попыток. Попробуйте позже.';
+  String get errAccountLocked => 'Слишком много неудачных попыток. Попробуйте позже.';
 
   @override
   String get errSessionEnded => 'Сессия завершена. Войдите снова.';
@@ -1278,8 +1267,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errValidationShort => 'Проверьте заполненные поля.';
 
   @override
-  String get errNetwork =>
-      'Нет связи с сервером. Проверьте интернет и повторите.';
+  String get errNetwork => 'Нет связи с сервером. Проверьте интернет и повторите.';
 
   @override
   String get errRateLimited => 'Слишком много запросов. Подождите немного.';
@@ -1291,12 +1279,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errStoreNameTaken => 'Магазин с таким названием уже есть.';
 
   @override
-  String get errStoreHasEmployees =>
-      'В магазине есть активные сотрудники. Сначала переведите или отключите их.';
+  String get errStoreHasEmployees => 'В магазине есть активные сотрудники. Сначала переведите или отключите их.';
 
   @override
-  String get errAlreadyPaid =>
-      'Зарплата за этот месяц уже полностью выплачена.';
+  String get errAlreadyPaid => 'Зарплата за этот месяц уже полностью выплачена.';
 
   @override
   String get errExceedsRemaining => 'Сумма больше остатка за этот месяц.';
@@ -1590,8 +1576,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get assistantNote =>
-      'Ответы строятся на ваших реальных данных. Полноценный ИИ подключим, когда он появится на сервере.';
+  String get assistantNote => 'Ответы строятся на ваших реальных цифрах, их считает ИИ на сервере.';
 
   @override
   String get staffInStore => 'Сотрудники';
@@ -1627,8 +1612,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navExpenses => 'Расходы';
 
   @override
-  String get expensesSubtitle =>
-      'Аренда, коммунальные, доставка и другие расходы — и сколько остаётся прибыли';
+  String get expensesSubtitle => 'Аренда, коммунальные, доставка и другие расходы — и сколько остаётся прибыли';
 
   @override
   String get addExpense => 'Добавить расход';
@@ -1667,8 +1651,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deleteExpenseTitle => 'Удалить этот расход?';
 
   @override
-  String get deleteExpenseBody =>
-      'Он больше не будет учитываться в отчёте о прибыли.';
+  String get deleteExpenseBody => 'Он больше не будет учитываться в отчёте о прибыли.';
 
   @override
   String get noExpenses => 'Расходов пока нет';
@@ -1729,4 +1712,52 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get targetsSaved => 'Цели сохранены';
+
+  @override
+  String get assistantThinking => 'Думаю…';
+
+  @override
+  String get loginHeadline => 'Все магазины, продажи и зарплаты в одном месте.';
+
+  @override
+  String get loginHeroBody =>
+      'Спросите ассистента о своих цифрах. Он отвечает по-таджикски, по-русски или по-английски.';
+
+  @override
+  String get assistantLiveData => 'На ваших реальных данных';
+
+  @override
+  String get askSales => 'Сколько я продал сегодня?';
+
+  @override
+  String get askStores => 'Какой магазин лучше продаёт в этом месяце?';
+
+  @override
+  String get askSalaries => 'Кто ещё ждёт зарплату?';
+
+  @override
+  String get askMarketing => 'Идеи, как привлечь больше клиентов';
+
+  @override
+  String get themeLabel => 'Тема';
+
+  @override
+  String greeting(String name) {
+    return 'Здравствуйте, $name';
+  }
+
+  @override
+  String get greetingNoName => 'Здравствуйте';
+
+  @override
+  String get errSplitMismatch => 'Наличные и карта вместе должны равняться сумме продажи.';
+
+  @override
+  String get clearDate => 'Очистить дату';
+
+  @override
+  String get showPassword => 'Показать пароль';
+
+  @override
+  String get hidePassword => 'Скрыть пароль';
 }

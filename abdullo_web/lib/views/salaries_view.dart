@@ -196,7 +196,7 @@ class SalariesView extends StatelessWidget {
           ),
           TextSpan(
             text: ' ${cur.code}',
-            style: const TextStyle(fontSize: 10.5, color: AppColors.muted),
+            style: TextStyle(fontSize: 10.5, color: AppColors.muted),
           ),
         ],
       ),
@@ -224,7 +224,7 @@ class SalariesView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(p.employeeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-              Text(p.role, style: const TextStyle(fontSize: 11.5, color: AppColors.muted)),
+              Text(p.role, style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
             ],
           ),
         ],
@@ -232,7 +232,7 @@ class SalariesView extends StatelessWidget {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.location_on_outlined, size: 14, color: AppColors.muted),
+          Icon(Icons.location_on_outlined, size: 14, color: AppColors.muted),
           const SizedBox(width: 4),
           Text(p.storeName),
         ],
@@ -296,7 +296,7 @@ class _Filters extends StatelessWidget {
                         onPressed: vm.previousMonth,
                         icon: const Icon(Icons.chevron_left),
                       ),
-                      const Icon(Icons.calendar_month_outlined, size: 16, color: AppColors.orange),
+                      Icon(Icons.calendar_month_outlined, size: 16, color: AppColors.orange),
                       const SizedBox(width: 6),
                       Text(
                         formatMonthYear(vm.month),
@@ -361,7 +361,7 @@ class _BudgetCard extends StatelessWidget {
     final tr = context.l10n;
     final rows = vm.budgetByStore;
     final max = rows.isEmpty ? 1.0 : rows.first.total;
-    const colors = [AppColors.navy, AppColors.orange, Color(0xFF4B5675), Color(0xFFB8C0D6)];
+    final colors = [AppColors.navy, AppColors.orange, Color(0xFF4B5675), Color(0xFFB8C0D6)];
     final now = DateTime.now();
     return SectionCard(
       title: tr.budgetTitle,
@@ -433,7 +433,7 @@ class _DisbursementsCard extends StatelessWidget {
       title: tr.recentDisbursements,
       subtitle: tr.disbursementsSubtitle,
       trailing: TextButton(
-        style: TextButton.styleFrom(foregroundColor: AppColors.orange),
+        style: TextButton.styleFrom(foregroundColor: AppColors.accentText),
         onPressed: () => context.read<HomeViewModel>().select(AppSection.dashboard),
         child: Text(tr.viewFullAudit, style: TextStyle(fontWeight: FontWeight.w600)),
       ),
@@ -473,7 +473,7 @@ class _DisbursementsCard extends StatelessWidget {
                                 Text(
                                   '${tr.payStatus(d.status)} • ${formatMonthYear(DateTime(d.year, d.month))}${(d.note ?? '').isEmpty ? '' : ' • ${d.note}'}',
                                   maxLines: 2,
-                                  style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                  style: TextStyle(fontSize: 11, color: AppColors.muted),
                                 ),
                               ],
                             ),
@@ -488,7 +488,7 @@ class _DisbursementsCard extends StatelessWidget {
                               ),
                               Text(
                                 formatRelativeDay(d.paymentDate),
-                                style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                style: TextStyle(fontSize: 11, color: AppColors.muted),
                               ),
                             ],
                           ),

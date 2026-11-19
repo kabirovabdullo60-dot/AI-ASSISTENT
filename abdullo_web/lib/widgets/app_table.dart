@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/l10n/l10n.dart';
+import '../core/theme/app_colors.dart';
 
 /// DataTable that scrolls sideways on narrow screens instead of overflowing.
 class AppTable extends StatelessWidget {
@@ -17,8 +18,22 @@ class AppTable extends StatelessWidget {
     final tr = context.l10n;
     if (rows.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24),
-        child: Center(child: Text(empty ?? tr.nothingFound)),
+        padding: const EdgeInsets.symmetric(vertical: 32),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(color: AppColors.surfaceSoft, shape: BoxShape.circle),
+                child: Icon(Icons.inbox_outlined, size: 22, color: AppColors.muted),
+              ),
+              const SizedBox(height: 10),
+              Text(empty ?? tr.nothingFound, style: TextStyle(color: AppColors.muted, fontSize: 13.5)),
+            ],
+          ),
+        ),
       );
     }
     return LayoutBuilder(
@@ -27,9 +42,11 @@ class AppTable extends StatelessWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(minWidth: constraints.maxWidth),
           child: DataTable(
-            horizontalMargin: 8,
-            columnSpacing: 24,
-            headingRowHeight: 40,
+            horizontalMargin: 12,
+            columnSpacing: 28,
+            headingRowHeight: 42,
+            dataRowMinHeight: 52,
+            dataRowMaxHeight: 60,
             columns: [
               for (var i = 0; i < columns.length; i++)
                 DataColumn(label: Text(columns[i]), numeric: numeric.contains(i)),

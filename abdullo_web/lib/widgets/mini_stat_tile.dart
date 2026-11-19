@@ -43,7 +43,7 @@ class MiniStatTile extends StatelessWidget {
               ],
             ),
           ),
-          Icon(icon, size: 20, color: iconColor ?? AppColors.navy),
+          Icon(icon, size: 20, color: iconColor ?? AppColors.ink),
         ],
       ),
     );

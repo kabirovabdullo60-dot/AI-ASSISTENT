@@ -111,13 +111,13 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
               Expanded(child: Text(tr.selectStore, style: label)),
               Text(
                 tr.activeBranches(stores.activeCount),
-                style: const TextStyle(fontSize: 11.5, color: AppColors.orange, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 11.5, color: AppColors.accentText, fontWeight: FontWeight.w600),
               ),
             ],
           ),
           const SizedBox(height: 6),
           if (options.isEmpty)
-            Text(tr.selectStoreFirst, style: const TextStyle(color: AppColors.red))
+            Text(tr.selectStoreFirst, style: TextStyle(color: AppColors.red))
           else
             DropdownButtonFormField<String>(
               key: const Key('sale-store'),
@@ -205,13 +205,13 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
           const SizedBox(height: 8),
           Text.rich(
             TextSpan(
-              style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+              style: TextStyle(fontSize: 11.5, color: AppColors.muted),
               children: [
-                const WidgetSpan(child: Icon(Icons.sync, size: 13, color: AppColors.green)),
+                WidgetSpan(child: Icon(Icons.sync, size: 13, color: AppColors.green)),
                 TextSpan(text: tr.syncsTo),
-                const TextSpan(
+                TextSpan(
                   text: ApiConstants.sales,
-                  style: TextStyle(fontFamily: 'monospace', color: AppColors.ink),
+                  style: TextStyle(color: AppColors.ink),
                 ),
               ],
             ),

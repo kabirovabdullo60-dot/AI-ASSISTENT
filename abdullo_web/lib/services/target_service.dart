@@ -11,6 +11,9 @@ class TargetService {
   final ApiClient _api;
 
   /// PUT /api/targets — creates the target or changes its amount (`storeId: null` = whole business).
-  Future<void> put(TargetPeriod period, double amount, {String? storeId}) =>
-      _api.put(ApiConstants.targets, {'period': period.name.toUpperCase(), 'storeId': storeId, 'amount': money(amount)});
+  Future<void> put(TargetPeriod period, double amount, {String? storeId}) => _api.put(ApiConstants.targets, {
+    'period': period.name.toUpperCase(),
+    'storeId': storeId,
+    'amount': money(amount),
+  });
 }

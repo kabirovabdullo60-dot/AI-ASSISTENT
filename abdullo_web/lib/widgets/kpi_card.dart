@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_theme.dart';
+import 'motion/border_beam.dart';
+import 'motion/number_ticker.dart';
 import 'icon_box.dart';
 import 'status_badge.dart';
 
@@ -18,7 +21,13 @@ class KpiCard extends StatelessWidget {
     this.badgeDot = false,
     this.caption,
     this.highlight = false,
+    this.number,
+    this.format,
   });
+
+  /// When set, [value] is ignored and the number counts up to this (formatted by [format]).
+  final double? number;
+  final String Function(double)? format;
 
   static const height = 172.0;
 
@@ -38,19 +47,14 @@ class KpiCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final accent = highlight ? AppColors.orange : AppColors.ink;
+    final accent = highlight ? AppColors.amber : AppColors.ink;
 
-    return SizedBox(
+    final card = SizedBox(
       height: height,
       child: Card(
         clipBehavior: Clip.antiAlias,
         child: Container(
-          decoration: highlight
-              ? const BoxDecoration(
-                  border: Border(left: BorderSide(color: AppColors.orange, width: 3)),
-                )
-              : null,
-          padding: const EdgeInsets.fromLTRB(14, 14, 12, 12),
+          padding: const EdgeInsets.fromLTRB(16, 16, 14, 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,8 +73,8 @@ class KpiCard extends StatelessWidget {
                   IconBox(
                     icon,
                     size: 28,
-                    color: highlight ? AppColors.orange : AppColors.navy,
-                    background: highlight ? AppColors.orangeSoft : AppColors.surfaceSoft,
+                    color: highlight ? AppColors.amber : AppColors.teal,
+                    background: highlight ? AppColors.amberSoft : AppColors.tealSoft,
                   ),
                 ],
               ),
@@ -78,10 +82,28 @@ class KpiCard extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  value,
-                  style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, color: accent),
-                ),
+                child: number != null && format != null
+                    ? NumberTicker(
+                        value: number!,
+                        format: format!,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: accent,
+                          letterSpacing: -0.6,
+                          fontFamily: AppTheme.display,
+                          fontFeatures: AppTheme.numbers,
+                        ),
+                      )
+                    : Text(
+                        value,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: accent,
+                          letterSpacing: -0.6,
+                          fontFamily: AppTheme.display,
+                          fontFeatures: AppTheme.numbers,
+                        ),
+                      ),
               ),
               if (unit != null) Text(unit!, style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted)),
               const SizedBox(height: 8),
@@ -100,5 +122,7 @@ class KpiCard extends StatelessWidget {
         ),
       ),
     );
+    // Needs attention → a beam of light runs around it twice.
+    return highlight ? BorderBeam(radius: 14, loops: 2, onceId: 'kpi-$title', child: card) : card;
   }
 }

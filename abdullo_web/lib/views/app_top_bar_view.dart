@@ -5,7 +5,10 @@ import '../core/constants/api_constants.dart';
 import '../core/l10n/app_language.dart';
 import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
+import '../core/theme/app_palette.dart';
+import '../widgets/palette_swatch.dart';
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_theme.dart';
 import '../core/utils/format.dart';
 import '../models/activity_model.dart';
 import '../models/notification_model.dart';
@@ -37,6 +40,7 @@ class AppTopBarView extends StatelessWidget {
                   child: Align(alignment: Alignment.centerLeft, child: _BusinessChip()),
                 ),
                 _LanguageButton(),
+                _PaletteButton(),
                 _NotificationsButton(),
                 _UserMenu(showName: false),
               ],
@@ -48,40 +52,61 @@ class AppTopBarView extends StatelessWidget {
       );
     }
 
-    return Container(
-      height: 68,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: const BoxDecoration(
-        color: AppColors.card,
-        border: Border(bottom: BorderSide(color: AppColors.border)),
-      ),
+    // Desktop / tablet: no bar — the page opens with a greeting, and the tools sit to the right
+    // on the same line, floating on the page background.
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(28, 20, 20, 2),
       child: LayoutBuilder(
         builder: (context, constraints) => Row(
           children: [
-            Flexible(
-              flex: 2,
-              child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 260), child: const _BusinessChip()),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              flex: 3,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: const _SearchField()),
-              ),
-            ),
-            const SizedBox(width: 12),
-            if (constraints.maxWidth >= 1000) ...[
-              const Flexible(flex: 2, child: _ApiStatus()),
+            const Expanded(child: _Greeting()),
+            if (constraints.maxWidth >= 720) ...[
+              ConstrainedBox(constraints: const BoxConstraints(maxWidth: 300), child: const _SearchField()),
               const SizedBox(width: 8),
             ],
+            if (constraints.maxWidth >= 1000) ...[const _ApiStatus(), const SizedBox(width: 4)],
             const _LanguageButton(),
+            const _PaletteButton(),
             const _NotificationsButton(),
             const SizedBox(width: 6),
-            _UserMenu(showName: constraints.maxWidth >= 860),
+            _UserMenu(showName: constraints.maxWidth >= 1100),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// "Hello, Abdullo" in the display face, with today's date under it.
+class _Greeting extends StatelessWidget {
+  const _Greeting();
+
+  @override
+  Widget build(BuildContext context) {
+    final tr = context.l10n;
+    final name = context.select<AuthViewModel, String>((a) => (a.user?.fullName ?? '').split(' ').first);
+    // The app's own formatter (intl has no Tajik date data — DateFormat('tg') throws).
+    final now = DateTime.now();
+    final date = '${formatWeekday(now)}, ${formatDate(now)}';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          name.isEmpty ? tr.greetingNoName : tr.greeting(name),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontFamily: AppTheme.display,
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.4,
+            color: AppColors.ink,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(date, maxLines: 1, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+      ],
     );
   }
 }
@@ -103,14 +128,14 @@ class _BusinessChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.storefront_outlined, size: 16, color: AppColors.navy),
+          Icon(Icons.storefront_outlined, size: 16, color: AppColors.ink),
           const SizedBox(width: 6),
           Flexible(
             child: Text(
               name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.ink),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.ink),
             ),
           ),
         ],
@@ -132,6 +157,19 @@ class _SearchField extends StatelessWidget {
         hintText: context.l10n.searchHint,
         prefixIcon: const Icon(Icons.search, size: 18),
         contentPadding: const EdgeInsets.symmetric(vertical: 10),
+        fillColor: AppColors.card,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.border),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.teal, width: 1.6),
+        ),
       ),
     );
   }
@@ -156,6 +194,43 @@ class _ApiStatus extends StatelessWidget {
   }
 }
 
+class _PaletteButton extends StatelessWidget {
+  const _PaletteButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsViewModel>();
+    return PopupMenuButton<AppPalette>(
+      key: const Key('palette-menu'),
+      constraints: const BoxConstraints(minWidth: 240),
+      tooltip: context.l10n.themeLabel,
+      initialValue: settings.palette,
+      // Switch after the menu's close animation, so the old menu isn't torn down mid-flight.
+      onSelected: (p) => Future.delayed(const Duration(milliseconds: 260), () => settings.setPalette(p)),
+      icon: Icon(Icons.palette_outlined, color: AppColors.ink),
+      itemBuilder: (_) => [
+        for (final p in AppPalette.values)
+          PopupMenuItem(
+            value: p,
+            key: Key('palette-${p.name}'),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PaletteDots(p),
+                const SizedBox(width: 10),
+                Flexible(child: Text(paletteName(p), maxLines: 1, overflow: TextOverflow.ellipsis)),
+                if (p == settings.palette) ...[
+                  const SizedBox(width: 8),
+                  Icon(Icons.check, size: 16, color: AppColors.teal),
+                ],
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _LanguageButton extends StatelessWidget {
   const _LanguageButton();
 
@@ -176,7 +251,7 @@ class _LanguageButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.translate, size: 18, color: AppColors.navy),
+            Icon(Icons.translate, size: 18, color: AppColors.ink),
             const SizedBox(width: 4),
             Text(settings.language.short, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5)),
           ],
@@ -213,7 +288,7 @@ class _NotificationsButton extends StatelessWidget {
         isLabelVisible: vm.unreadCount > 0,
         backgroundColor: AppColors.orange,
         label: Text('${vm.unreadCount}'),
-        child: const Icon(Icons.notifications_none, color: AppColors.navy),
+        child: Icon(Icons.notifications_none, color: AppColors.ink),
       ),
       itemBuilder: (_) => [
         for (final n in vm.items)
@@ -269,7 +344,7 @@ class _NotificationsButton extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(formatTimeAgo(a.time), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(formatTimeAgo(a.time), style: TextStyle(fontSize: 11, color: AppColors.muted)),
                 ],
               ),
             ),
@@ -315,7 +390,7 @@ class _UserMenu extends StatelessWidget {
               backgroundColor: AppColors.orangeSoft,
               child: Text(
                 initials(name),
-                style: const TextStyle(color: AppColors.orange, fontWeight: FontWeight.w700, fontSize: 13),
+                style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.w700, fontSize: 13),
               ),
             ),
             if (showName && user != null) ...[
@@ -336,7 +411,7 @@ class _UserMenu extends StatelessWidget {
                       user.email,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                      style: TextStyle(fontSize: 11, color: AppColors.muted),
                     ),
                   ],
                 ),

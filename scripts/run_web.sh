@@ -10,7 +10,7 @@ case "${1:-chrome}" in
   chrome)
     flutter run -d chrome --web-port "$PORT" ;;
   simulator)
-    open -a Simulator
+    open -a Simulator 2>/dev/null || open -a DeviceHub  # Xcode 27+: Simulator is now DeviceHub
     until xcrun simctl list devices booted | grep -q Booted; do sleep 1; done
     ( until curl -s "http://localhost:$PORT" >/dev/null; do sleep 2; done
       xcrun simctl openurl booted "http://localhost:$PORT" ) &

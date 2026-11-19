@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
 import '../core/constants/api_constants.dart';
@@ -22,6 +23,14 @@ import '../widgets/page_body.dart';
 import '../widgets/revenue_chart.dart';
 import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
+import '../core/motion/motion.dart';
+import '../widgets/motion/pressable.dart';
+import '../widgets/motion/photo_slideshow.dart';
+import '../widgets/motion/number_ticker.dart';
+import '../widgets/motion/ai_orb.dart';
+import '../viewmodels/assistant_view_model.dart';
+import '../core/theme/app_theme.dart';
+import '../widgets/motion/shimmer_sweep.dart';
 import 'record_sale_dialog.dart';
 import 'targets_dialog.dart';
 
@@ -42,6 +51,9 @@ class DashboardView extends StatelessWidget {
 }
 
 class _DashboardContent extends StatelessWidget {
+  /// Whether the entrance already played in this session.
+  static bool _entered = false;
+
   const _DashboardContent({required this.vm, required this.d});
 
   final DashboardViewModel vm;
@@ -50,6 +62,8 @@ class _DashboardContent extends StatelessWidget {
   KpiCard _money(String title, double tjs, double? change, String caption, IconData icon, Currency cur) => KpiCard(
     title: title,
     value: cur.amount(tjs),
+    number: tjs,
+    format: cur.amount,
     unit: cur.code,
     icon: icon,
     badge: change == null ? null : formatPercent(change),
@@ -79,11 +93,11 @@ class _DashboardContent extends StatelessWidget {
         caption: tr.ofTotal(d.totalEmployees),
       ),
       _money(
-        tr.kpiTodaySales,
-        d.todaySales,
-        vm.todayChange,
-        tr.salesCount(d.todaySalesCount),
-        Icons.today_outlined,
+        tr.profitThisMonth,
+        d.monthProfit,
+        null,
+        '${tr.navExpenses}: ${cur.format(d.monthExpenses)}',
+        Icons.savings_outlined,
         cur,
       ),
       _money(
@@ -105,6 +119,8 @@ class _DashboardContent extends StatelessWidget {
       KpiCard(
         title: tr.kpiUnpaidSalaries,
         value: cur.amount(d.remainingSalaryThisMonth),
+        number: d.remainingSalaryThisMonth,
+        format: cur.amount,
         unit: cur.code,
         icon: Icons.account_balance_wallet_outlined,
         badge: tr.cycle(formatMonth(d.today)),
@@ -115,42 +131,76 @@ class _DashboardContent extends StatelessWidget {
       ),
     ];
 
+    // The dashboard is opened many times a day: its entrance plays once per session only.
+    final entrance = !_DashboardContent._entered && !Motion.reduced(context);
+    _DashboardContent._entered = true;
+    // KPI cards: non-uniform delays that shrink (60, 100, 130, 150, 165, 175 ms) read as one wave.
+    const kpiDelays = [60, 110, 140, 160, 175, 185];
+    Widget kpi(int i, Widget card) => entrance
+        ? card
+              .animate(delay: kpiDelays[i.clamp(0, 5)].ms)
+              .fadeIn(duration: 420.ms, curve: Motion.easeOut)
+              .moveY(begin: 8, end: 0, duration: 420.ms, curve: Motion.easeOut)
+        : card;
+    Widget support(Widget w) => entrance ? w.animate(delay: 190.ms).fadeIn(duration: 420.ms, curve: Motion.easeOut) : w;
+
     return PageBody(
+      entrance: entrance,
       title: tr.businessOverview,
-      badge: StatusBadge(tr.liveAudit, tone: BadgeTone.info),
       subtitle: tr.overviewSubtitle,
       actions: [
         const _DateChip(),
         _CurrencyToggle(selected: cur),
-        FilledButton.icon(
-          key: const Key('record-sale'),
-          onPressed: () => RecordSaleDialog.show(context),
-          icon: const Icon(Icons.add, size: 18),
-          label: Text(tr.recordSale),
-        ),
       ],
       children: [
-        LayoutBuilder(
-          builder: (context, c) =>
-              CardGrid(columns: c.maxWidth >= 1100 ? 6 : (c.maxWidth >= 620 ? 3 : 2), children: kpis),
-        ),
-        const SizedBox(height: 16),
-        _GoalsCard(d: d, currency: cur),
-        const SizedBox(height: 16),
+        // Bento top row: the hero (today's sales on a real photo) and the AI card.
         LayoutBuilder(
           builder: (context, c) {
-            final chart = _RevenueCard(vm: vm, d: d, currency: cur);
-            final stores = _TopStoresCard(stores: vm.topStores, currency: cur);
-            if (c.maxWidth < 1100) return Column(children: [chart, const SizedBox(height: 16), stores]);
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(flex: 5, child: chart),
-                const SizedBox(width: 16),
-                Expanded(flex: 3, child: stores),
-              ],
+            final hero = kpi(0, _HeroCard(d: d, change: vm.todayChange, currency: cur));
+            final ai = kpi(1, const _AiCard());
+            if (c.maxWidth < 900) return Column(children: [hero, const SizedBox(height: 16), ai]);
+            return SizedBox(
+              height: 252,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(flex: 3, child: hero),
+                  const SizedBox(width: 16),
+                  Expanded(flex: 2, child: ai),
+                ],
+              ),
             );
           },
+        ),
+        const SizedBox(height: 16),
+        LayoutBuilder(
+          builder: (context, c) => CardGrid(
+            columns: c.maxWidth >= 1100 ? 6 : (c.maxWidth >= 620 ? 3 : 2),
+            children: [
+              // Cards arrive as one wave on the first visit, and lift under the mouse.
+              for (var i = 0; i < kpis.length; i++) kpi(i, Pressable(child: kpis[i])),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        support(_GoalsCard(d: d, currency: cur)),
+        const SizedBox(height: 16),
+        support(
+          LayoutBuilder(
+            builder: (context, c) {
+              final chart = _RevenueCard(vm: vm, d: d, currency: cur);
+              final stores = _TopStoresCard(stores: vm.topStores, currency: cur);
+              if (c.maxWidth < 1100) return Column(children: [chart, const SizedBox(height: 16), stores]);
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(flex: 5, child: chart),
+                  const SizedBox(width: 16),
+                  Expanded(flex: 3, child: stores),
+                ],
+              );
+            },
+          ),
         ),
         const SizedBox(height: 16),
         _ActivityCard(vm: vm, currency: cur),
@@ -175,7 +225,7 @@ class _GoalsCard extends StatelessWidget {
         key: key,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
           const SizedBox(height: 4),
           Text(
             target == null
@@ -186,11 +236,17 @@ class _GoalsCard extends StatelessWidget {
           const SizedBox(height: 6),
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
-            child: LinearProgressIndicator(
-              value: ratio.clamp(0, 1).toDouble(),
-              minHeight: 8,
-              backgroundColor: AppColors.surfaceSoft,
-              color: ratio >= 1 ? AppColors.green : AppColors.orange,
+            // The bar fills up from 0 when the dashboard opens or a target changes.
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: ratio.clamp(0, 1).toDouble()),
+              duration: Motion.reveal,
+              curve: Motion.easeOut,
+              builder: (context, v, _) => LinearProgressIndicator(
+                value: v,
+                minHeight: 8,
+                backgroundColor: AppColors.surfaceSoft,
+                color: ratio >= 1 ? AppColors.green : AppColors.orange,
+              ),
             ),
           ),
         ],
@@ -201,7 +257,7 @@ class _GoalsCard extends StatelessWidget {
       key: const Key('month-profit'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(tr.profitThisMonth, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        Text(tr.profitThisMonth, style: TextStyle(fontSize: 12, color: AppColors.muted)),
         const SizedBox(height: 4),
         Text(
           currency.format(d.monthProfit),
@@ -216,7 +272,7 @@ class _GoalsCard extends StatelessWidget {
             '${tr.navExpenses}: ${currency.format(d.monthExpenses)}',
             if (d.monthMarginPercent != null) formatPercent(d.monthMarginPercent!),
           ].join(' · '),
-          style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+          style: TextStyle(fontSize: 11.5, color: AppColors.muted),
         ),
       ],
     );
@@ -270,7 +326,7 @@ class _DateChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.orange),
+          Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.orange),
           const SizedBox(width: 6),
           Text(
             context.l10n.todayDate(formatDate(DateTime.now())),
@@ -280,7 +336,7 @@ class _DateChip extends StatelessWidget {
           Container(
             width: 6,
             height: 6,
-            decoration: const BoxDecoration(color: AppColors.green, shape: BoxShape.circle),
+            decoration: BoxDecoration(color: AppColors.green, shape: BoxShape.circle),
           ),
         ],
       ),
@@ -300,9 +356,7 @@ class _CurrencyToggle extends StatelessWidget {
       showSelectedIcon: false,
       style: SegmentedButton.styleFrom(
         visualDensity: VisualDensity.compact,
-        selectedBackgroundColor: AppColors.navy,
-        selectedForegroundColor: Colors.white,
-        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        textStyle: const TextStyle(fontFamily: 'Onest', fontSize: 12, fontWeight: FontWeight.w600),
       ),
       segments: [for (final c in Currency.values) ButtonSegment(value: c, label: Text(c.label))],
       selected: {selected},
@@ -365,7 +419,7 @@ class _RevenueCard extends StatelessWidget {
                     showSelectedIcon: false,
                     style: SegmentedButton.styleFrom(
                       visualDensity: VisualDensity.compact,
-                      textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      textStyle: const TextStyle(fontFamily: 'Onest', fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                     segments: [
                       ButtonSegment(value: ChartRange.weekly, label: Text(tr.weekly)),
@@ -392,21 +446,26 @@ class _RevenueCard extends StatelessWidget {
                 decoration: BoxDecoration(color: AppColors.surfaceSoft, borderRadius: BorderRadius.circular(8)),
                 child: Text.rich(
                   TextSpan(
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted),
                     children: [
-                      const TextSpan(
-                        text: '● ',
-                        style: TextStyle(color: AppColors.green),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Container(
+                          width: 7,
+                          height: 7,
+                          margin: const EdgeInsets.only(right: 6),
+                          decoration: BoxDecoration(color: AppColors.green, shape: BoxShape.circle),
+                        ),
                       ),
                       TextSpan(text: tr.averageDaily),
                       TextSpan(
                         text: currency.format(vm.averageDaily),
-                        style: const TextStyle(color: AppColors.green, fontWeight: FontWeight.w700),
+                        style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w700),
                       ),
                       TextSpan(text: '   ·   ${tr.totalVolume}'),
                       TextSpan(
                         text: tr.salesCount(d.monthSalesCount),
-                        style: const TextStyle(color: AppColors.ink, fontWeight: FontWeight.w700),
+                        style: TextStyle(color: AppColors.ink, fontWeight: FontWeight.w700),
                       ),
                     ],
                   ),
@@ -472,7 +531,7 @@ class _TopStoresCard extends StatelessWidget {
       title: tr.topStores,
       badge: StatusBadge(tr.ranked, tone: BadgeTone.warning),
       subtitle: tr.rankedSubtitle,
-      trailing: const Icon(Icons.leaderboard_outlined, color: AppColors.navy),
+      trailing: Icon(Icons.leaderboard_outlined, color: AppColors.ink),
       child: Column(
         children: [
           if (top.isEmpty) Padding(padding: const EdgeInsets.all(16), child: Text(tr.noSalesThisMonth)),
@@ -490,7 +549,7 @@ class _TopStoresCard extends StatelessWidget {
               key: const Key('view-all-stores'),
               style: TextButton.styleFrom(
                 backgroundColor: AppColors.blueSoft,
-                foregroundColor: AppColors.navy,
+                foregroundColor: AppColors.ink,
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
@@ -543,7 +602,7 @@ class _StoreRankTile extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: first ? Colors.white : AppColors.navy,
+                    color: first ? Colors.white : AppColors.ink,
                   ),
                 ),
               ),
@@ -563,7 +622,7 @@ class _StoreRankTile extends StatelessWidget {
                       '${tr.salesCount(store.salesCount)}${change == null ? '' : ' · ${formatPercent(change)}'}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                      style: TextStyle(fontSize: 11, color: AppColors.muted),
                     ),
                   ],
                 ),
@@ -579,7 +638,7 @@ class _StoreRankTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     tr.shareValue(store.sharePercent.toStringAsFixed(0)),
-                    style: const TextStyle(fontSize: 11, color: AppColors.green, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 11, color: AppColors.green, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -638,7 +697,7 @@ class _ActivityCard extends StatelessWidget {
               const Divider(height: 24),
               Text(
                 tr.connectedTo(ApiConstants.mainEndpoints.join(', ')),
-                style: const TextStyle(fontSize: 11, fontFamily: 'monospace', color: AppColors.muted),
+                style: TextStyle(fontSize: 11, color: AppColors.muted),
               ),
             ],
           );
@@ -668,7 +727,7 @@ class _ActivityRow extends StatelessWidget {
     };
     final amount = a.amount;
     final detail = [if (a.action != null) tr.activityAction(a.action!), if (a.detail.isNotEmpty) a.detail].join(' · ');
-    final time = Text(formatTimeAgo(a.time), style: const TextStyle(fontSize: 11, color: AppColors.muted));
+    final time = Text(formatTimeAgo(a.time), style: TextStyle(fontSize: 11, color: AppColors.muted));
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 9),
@@ -683,7 +742,7 @@ class _ActivityRow extends StatelessWidget {
               children: [
                 Text.rich(
                   TextSpan(
-                    style: const TextStyle(fontSize: 13, color: AppColors.ink, height: 1.35),
+                    style: TextStyle(fontSize: 13, color: AppColors.ink, height: 1.35),
                     children: [
                       TextSpan(text: '${tr.activityType(a.type)}: '),
                       TextSpan(
@@ -708,8 +767,7 @@ class _ActivityRow extends StatelessWidget {
                     runSpacing: 4,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      if (detail.isNotEmpty)
-                        Text(detail, style: const TextStyle(fontSize: 11.5, color: AppColors.muted)),
+                      if (detail.isNotEmpty) Text(detail, style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
                       if (compact) time,
                     ],
                   ),
@@ -718,6 +776,236 @@ class _ActivityRow extends StatelessWidget {
             ),
           ),
           if (!compact) ...[const SizedBox(width: 12), time],
+        ],
+      ),
+    );
+  }
+}
+
+/// Lead of the dashboard: today's sales as a big counting number over a real photo of a
+/// cosmetics shop, tinted with the palette's dark surface; the two main actions live here.
+class _HeroCard extends StatelessWidget {
+  const _HeroCard({required this.d, required this.change, required this.currency});
+
+  final DashboardModel d;
+  final double? change;
+  final Currency currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final tr = context.l10n;
+    final tint = AppColors.navy;
+    final up = (change ?? 0) >= 0;
+    return Container(
+      key: const Key('dashboard-hero'),
+      constraints: const BoxConstraints(minHeight: 232),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: tint,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [BoxShadow(color: tint.withValues(alpha: 0.10), blurRadius: 18, offset: const Offset(0, 6))],
+      ),
+      child: Stack(
+        children: [
+          const Positioned.fill(
+            child: PhotoSlideshow(images: ['assets/images/cosmetics_shop.jpg'], hold: Duration(seconds: 9)),
+          ),
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [tint.withValues(alpha: 0.96), tint.withValues(alpha: 0.82), tint.withValues(alpha: 0.30)],
+                  stops: const [0, 0.5, 1],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(26, 24, 26, 22),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(tr.kpiTodaySales, style: const TextStyle(color: Color(0xFFD5DEE8), fontSize: 14)),
+                const SizedBox(height: 6),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.end,
+                  spacing: 10,
+                  children: [
+                    NumberTicker(
+                      value: d.todaySales,
+                      format: currency.amount,
+                      style: const TextStyle(
+                        fontFamily: AppTheme.display,
+                        color: Colors.white,
+                        fontSize: 52,
+                        height: 1,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -1.6,
+                        fontFeatures: AppTheme.numbers,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Text(
+                        currency.code,
+                        style: const TextStyle(color: Color(0xFFD5DEE8), fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    if (change != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.14),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(up ? Icons.trending_up : Icons.trending_down, size: 14, color: Colors.white),
+                            const SizedBox(width: 4),
+                            Text(
+                              formatPercent(change!),
+                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    Text(
+                      tr.salesCount(d.todaySalesCount),
+                      style: const TextStyle(color: Color(0xFFD5DEE8), fontSize: 12.5),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    ShimmerSweep(
+                      child: FilledButton.icon(
+                        key: const Key('record-sale'),
+                        style: FilledButton.styleFrom(backgroundColor: Colors.white, foregroundColor: AppColors.navy),
+                        onPressed: () => RecordSaleDialog.show(context),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: Text(tr.recordSale),
+                      ),
+                    ),
+                    OutlinedButton.icon(
+                      key: const Key('hero-ask-ai'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: BorderSide(color: Colors.white.withValues(alpha: 0.4)),
+                      ),
+                      onPressed: () => context.read<HomeViewModel>().select(AppSection.assistant),
+                      icon: const Icon(Icons.auto_awesome, size: 16),
+                      label: Text(tr.navAssistant),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Doorway to the assistant: the orb, one line, and two real questions that are sent on tap.
+class _AiCard extends StatelessWidget {
+  const _AiCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final tr = context.l10n;
+    void ask(String q) {
+      context.read<AssistantViewModel>().send(q, language: Localizations.localeOf(context).languageCode);
+      context.read<HomeViewModel>().select(AppSection.assistant);
+    }
+
+    Widget chip(Key key, String q) => Pressable(
+      lift: false,
+      radius: 12,
+      child: Material(
+        color: AppColors.card.withValues(alpha: AppColors.isDark ? 0.6 : 0.85),
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          key: key,
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => ask(q),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    q,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13, color: AppColors.ink),
+                  ),
+                ),
+                Icon(Icons.north_east, size: 15, color: AppColors.muted),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return Container(
+      key: const Key('dashboard-ai'),
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.goldSoft, AppColors.tealSoft],
+        ),
+        border: AppColors.isDark ? Border.all(color: AppColors.border) : null,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              const AiOrb(size: 40),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  tr.askAssistant,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: AppTheme.display,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.3,
+                    color: AppColors.ink,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(tr.assistantLiveData, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+          const SizedBox(height: 14),
+          chip(const Key('ai-card-sales'), tr.askSales),
+          const SizedBox(height: 8),
+          chip(const Key('ai-card-stores'), tr.askStores),
         ],
       ),
     );

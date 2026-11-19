@@ -18,6 +18,7 @@ import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
 import 'employee_form_dialog.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Employees — /api/employees (CRUD) + /api/reports/employees.
 class EmployeesView extends StatelessWidget {
@@ -25,7 +26,7 @@ class EmployeesView extends StatelessWidget {
 
   Future<void> _delete(BuildContext context, EmployeeModel e) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.deleteEmployeeTitle),
@@ -126,7 +127,7 @@ class EmployeesView extends StatelessWidget {
                             backgroundColor: AppColors.orangeSoft,
                             child: Text(
                               initials(e.fullName),
-                              style: const TextStyle(fontSize: 11, color: AppColors.orange),
+                              style: TextStyle(fontSize: 11, color: AppColors.accentText),
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -136,7 +137,7 @@ class EmployeesView extends StatelessWidget {
                             children: [
                               Text(e.fullName, style: const TextStyle(fontWeight: FontWeight.w600)),
                               if (e.phone != null)
-                                Text(e.phone!, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                                Text(e.phone!, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                             ],
                           ),
                         ],
@@ -158,14 +159,14 @@ class EmployeesView extends StatelessWidget {
                             tooltip: tr.edit,
                             visualDensity: VisualDensity.compact,
                             onPressed: () => EmployeeFormDialog.show(context, employee: e),
-                            icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
+                            icon: Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
                           ),
                           IconButton(
                             key: Key('delete-employee-${e.id}'),
                             tooltip: tr.delete,
                             visualDensity: VisualDensity.compact,
                             onPressed: () => _delete(context, e),
-                            icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
+                            icon: Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
                           ),
                         ],
                       ),

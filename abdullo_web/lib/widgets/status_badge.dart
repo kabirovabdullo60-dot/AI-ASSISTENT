@@ -3,16 +3,30 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 
 enum BadgeTone {
-  positive(AppColors.green, AppColors.greenSoft),
-  negative(AppColors.red, AppColors.redSoft),
-  warning(AppColors.orange, AppColors.orangeSoft),
-  info(AppColors.blue, AppColors.blueSoft),
-  neutral(AppColors.muted, AppColors.surfaceSoft),
-  dark(Colors.white, AppColors.navy);
+  positive,
+  negative,
+  warning,
+  info,
+  neutral,
+  dark;
 
-  const BadgeTone(this.foreground, this.background);
-  final Color foreground;
-  final Color background;
+  Color get foreground => switch (this) {
+    positive => AppColors.green,
+    negative => AppColors.red,
+    warning => AppColors.amber,
+    info => AppColors.blue,
+    neutral => AppColors.muted,
+    dark => Colors.white,
+  };
+
+  Color get background => switch (this) {
+    positive => AppColors.greenSoft,
+    negative => AppColors.redSoft,
+    warning => AppColors.amberSoft,
+    info => AppColors.blueSoft,
+    neutral => AppColors.surfaceSoft,
+    dark => AppColors.navy,
+  };
 }
 
 /// Small pill like "+12.4%", "LIVE AUDIT", "4 Pending".
@@ -28,7 +42,7 @@ class StatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-      decoration: BoxDecoration(color: tone.background, borderRadius: BorderRadius.circular(6)),
+      decoration: BoxDecoration(color: tone.background, borderRadius: BorderRadius.circular(20)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -46,7 +60,7 @@ class StatusBadge extends StatelessWidget {
               text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: tone.foreground, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.2),
+              style: TextStyle(color: tone.foreground, fontSize: 11, fontWeight: FontWeight.w600),
             ),
           ),
         ],

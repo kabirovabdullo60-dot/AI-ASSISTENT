@@ -14,7 +14,12 @@ import 'base_view_model.dart';
 enum ChartRange { weekly, monthly }
 
 class DashboardViewModel extends BaseViewModel {
-  DashboardViewModel(this._reports, this._sales, this._payroll, this._activityLog, this._targets);
+  DashboardViewModel(this._reports, this._sales, this._payroll, this._activityLog, this._targets, {DateTime? since})
+    : _since = since == null ? null : DateTime(since.year, since.month, since.day);
+
+  /// Registration day of the account: a new business sees its chart start on that day,
+  /// not 24 empty days earlier.
+  final DateTime? _since;
 
   static const chartDays = 24;
 
@@ -134,9 +139,15 @@ class DashboardViewModel extends BaseViewModel {
     ]..sort((a, b) => b.time.compareTo(a.time));
   }
 
-  /// Last [chartDays] days; falls back to this month's report if the backend limits the range.
+  /// Last [chartDays] days — but never before the registration day; falls back to this
+  /// month's report if the backend limits the range.
   Future<List<ChartPointModel>> _loadChart(DateTime today, SalesReportModel month) async {
-    final start = today.subtract(const Duration(days: chartDays - 1));
+    DateTime notBeforeSignUp(DateTime d) {
+      final since = _since;
+      return since != null && since.isAfter(d) && !since.isAfter(today) ? since : d;
+    }
+
+    final start = notBeforeSignUp(today.subtract(const Duration(days: chartDays - 1)));
     SalesReportModel report;
     try {
       report = await _reports.weeklySales(startDate: start, endDate: today);
@@ -144,7 +155,7 @@ class DashboardViewModel extends BaseViewModel {
       report = month;
     }
     final byDate = {for (final d in report.byDay) dateOnly(d.date): d};
-    final from = report == month ? DateTime(today.year, today.month) : start;
+    final from = report == month ? notBeforeSignUp(DateTime(today.year, today.month)) : start;
     return [
       for (var d = from; !d.isAfter(today); d = DateTime(d.year, d.month, d.day + 1))
         ChartPointModel(date: d, revenue: byDate[d]?.totalAmount ?? 0, count: byDate[d]?.salesCount ?? 0),
