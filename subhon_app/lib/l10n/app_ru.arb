@@ -301,5 +301,16 @@
   "notifUnpaidBody": "{count, plural, one{Осталось выплатить 1 сотруднику} other{Осталось выплатить {count} сотрудникам}} · {amount}",
   "notifNoSalesTitle": "Сегодня нет продаж",
   "notifNoSalesBody": "В «{store}» сегодня не записано ни одной продажи.",
-  "notifOther": "Требует внимания"
+  "notifOther": "Требует внимания",
+  "assistantTitle": "ИИ-ассистент",
+  "moreAssistantHint": "Спросите о продажах, магазинах и зарплатах",
+  "assistantIntro": "Спросите меня о своём бизнесе — я отвечу по вашим настоящим цифрам.",
+  "assistantHint": "Ваш вопрос…",
+  "assistantSend": "Отправить",
+  "assistantThinking": "Думаю…",
+  "assistantSuggestToday": "Как продажи сегодня?",
+  "assistantSuggestBestStore": "Какой магазин продаёт лучше всех?",
+  "assistantSuggestSalary": "Сколько зарплаты ещё не выплачено?",
+  "errAssistantUnavailable": "Ассистент сейчас недоступен. Попробуйте позже.",
+  "errAssistantRateLimited": "Слишком много вопросов. Подождите {seconds} с и попробуйте снова."
 }

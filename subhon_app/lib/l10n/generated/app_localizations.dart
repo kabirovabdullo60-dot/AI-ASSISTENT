@@ -1911,6 +1911,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something needs attention'**
   String get notifOther;
+
+  /// No description provided for @assistantTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI assistant'**
+  String get assistantTitle;
+
+  /// No description provided for @moreAssistantHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about your sales, stores and salaries'**
+  String get moreAssistantHint;
+
+  /// No description provided for @assistantIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me about your business — I answer with your real figures.'**
+  String get assistantIntro;
+
+  /// No description provided for @assistantHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your question…'**
+  String get assistantHint;
+
+  /// No description provided for @assistantSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get assistantSend;
+
+  /// No description provided for @assistantThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking…'**
+  String get assistantThinking;
+
+  /// No description provided for @assistantSuggestToday.
+  ///
+  /// In en, this message translates to:
+  /// **'How are my sales today?'**
+  String get assistantSuggestToday;
+
+  /// No description provided for @assistantSuggestBestStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Which store sells best?'**
+  String get assistantSuggestBestStore;
+
+  /// No description provided for @assistantSuggestSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'How much salary is still unpaid?'**
+  String get assistantSuggestSalary;
+
+  /// No description provided for @errAssistantUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The assistant is not available right now. Try again later.'**
+  String get errAssistantUnavailable;
+
+  /// No description provided for @errAssistantRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many questions. Wait {seconds} s and try again.'**
+  String errAssistantRateLimited(int seconds);
 }
 
 class _AppLocalizationsDelegate

@@ -1051,4 +1051,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifOther => 'Something needs attention';
+
+  @override
+  String get assistantTitle => 'AI assistant';
+
+  @override
+  String get moreAssistantHint => 'Ask about your sales, stores and salaries';
+
+  @override
+  String get assistantIntro =>
+      'Ask me about your business — I answer with your real figures.';
+
+  @override
+  String get assistantHint => 'Your question…';
+
+  @override
+  String get assistantSend => 'Send';
+
+  @override
+  String get assistantThinking => 'Thinking…';
+
+  @override
+  String get assistantSuggestToday => 'How are my sales today?';
+
+  @override
+  String get assistantSuggestBestStore => 'Which store sells best?';
+
+  @override
+  String get assistantSuggestSalary => 'How much salary is still unpaid?';
+
+  @override
+  String get errAssistantUnavailable =>
+      'The assistant is not available right now. Try again later.';
+
+  @override
+  String errAssistantRateLimited(int seconds) {
+    return 'Too many questions. Wait $seconds s and try again.';
+  }
 }

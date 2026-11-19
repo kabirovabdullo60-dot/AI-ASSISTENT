@@ -1054,4 +1054,41 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get notifOther => 'Требует внимания';
+
+  @override
+  String get assistantTitle => 'ИИ-ассистент';
+
+  @override
+  String get moreAssistantHint => 'Спросите о продажах, магазинах и зарплатах';
+
+  @override
+  String get assistantIntro =>
+      'Спросите меня о своём бизнесе — я отвечу по вашим настоящим цифрам.';
+
+  @override
+  String get assistantHint => 'Ваш вопрос…';
+
+  @override
+  String get assistantSend => 'Отправить';
+
+  @override
+  String get assistantThinking => 'Думаю…';
+
+  @override
+  String get assistantSuggestToday => 'Как продажи сегодня?';
+
+  @override
+  String get assistantSuggestBestStore => 'Какой магазин продаёт лучше всех?';
+
+  @override
+  String get assistantSuggestSalary => 'Сколько зарплаты ещё не выплачено?';
+
+  @override
+  String get errAssistantUnavailable =>
+      'Ассистент сейчас недоступен. Попробуйте позже.';
+
+  @override
+  String errAssistantRateLimited(int seconds) {
+    return 'Слишком много вопросов. Подождите $seconds с и попробуйте снова.';
+  }
 }

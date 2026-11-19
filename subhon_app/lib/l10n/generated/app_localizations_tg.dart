@@ -1050,4 +1050,41 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get notifOther => 'Диққат лозим';
+
+  @override
+  String get assistantTitle => 'Ёрдамчии ИИ';
+
+  @override
+  String get moreAssistantHint => 'Дар бораи фурӯш, мағозаҳо ва маош пурсед';
+
+  @override
+  String get assistantIntro =>
+      'Дар бораи тиҷорати худ пурсед — ман бо рақамҳои воқеии шумо ҷавоб медиҳам.';
+
+  @override
+  String get assistantHint => 'Саволи шумо…';
+
+  @override
+  String get assistantSend => 'Фиристодан';
+
+  @override
+  String get assistantThinking => 'Фикр мекунам…';
+
+  @override
+  String get assistantSuggestToday => 'Фурӯши имрӯз чӣ хел аст?';
+
+  @override
+  String get assistantSuggestBestStore => 'Кадом мағоза беҳтар мефурӯшад?';
+
+  @override
+  String get assistantSuggestSalary => 'Чӣ қадар маош ҳоло пардохт нашудааст?';
+
+  @override
+  String get errAssistantUnavailable =>
+      'Ёрдамчӣ ҳоло дастрас нест. Баъдтар кӯшиш кунед.';
+
+  @override
+  String errAssistantRateLimited(int seconds) {
+    return 'Саволҳо аз ҳад зиёданд. $seconds сония интизор шавед ва боз кӯшиш кунед.';
+  }
 }

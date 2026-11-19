@@ -39,7 +39,10 @@ String errorText(AppLocalizations l10n, Object error) {
     'PERMISSION_DENIED' => l10n.errPermission,
     'NOT_FOUND' => l10n.errNotFound,
     'CONFLICT' => l10n.errConflict,
+    'RATE_LIMITED' when error.meta['retryAfter'] is num =>
+      l10n.errAssistantRateLimited((error.meta['retryAfter'] as num).ceil()),
     'RATE_LIMITED' => l10n.errRateLimited,
+    'ASSISTANT_UNAVAILABLE' => l10n.errAssistantUnavailable,
     'INTERNAL_ERROR' => l10n.errServer,
     _ when error.statusCode >= 500 => l10n.errServer,
     _ => l10n.errUnknown,

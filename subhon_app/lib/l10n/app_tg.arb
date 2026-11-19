@@ -301,5 +301,16 @@
   "notifUnpaidBody": "{count, plural, other{Ба {count} корманд пардохт кардан лозим}} · {amount}",
   "notifNoSalesTitle": "Имрӯз фурӯш нест",
   "notifNoSalesBody": "Дар «{store}» имрӯз ягон фурӯш сабт нашудааст.",
-  "notifOther": "Диққат лозим"
+  "notifOther": "Диққат лозим",
+  "assistantTitle": "Ёрдамчии ИИ",
+  "moreAssistantHint": "Дар бораи фурӯш, мағозаҳо ва маош пурсед",
+  "assistantIntro": "Дар бораи тиҷорати худ пурсед — ман бо рақамҳои воқеии шумо ҷавоб медиҳам.",
+  "assistantHint": "Саволи шумо…",
+  "assistantSend": "Фиристодан",
+  "assistantThinking": "Фикр мекунам…",
+  "assistantSuggestToday": "Фурӯши имрӯз чӣ хел аст?",
+  "assistantSuggestBestStore": "Кадом мағоза беҳтар мефурӯшад?",
+  "assistantSuggestSalary": "Чӣ қадар маош ҳоло пардохт нашудааст?",
+  "errAssistantUnavailable": "Ёрдамчӣ ҳоло дастрас нест. Баъдтар кӯшиш кунед.",
+  "errAssistantRateLimited": "Саволҳо аз ҳад зиёданд. {seconds} сония интизор шавед ва боз кӯшиш кунед."
 }

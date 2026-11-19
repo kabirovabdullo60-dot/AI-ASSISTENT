@@ -616,5 +616,23 @@
       }
     }
   },
-  "notifOther": "Something needs attention"
+  "notifOther": "Something needs attention",
+  "assistantTitle": "AI assistant",
+  "moreAssistantHint": "Ask about your sales, stores and salaries",
+  "assistantIntro": "Ask me about your business — I answer with your real figures.",
+  "assistantHint": "Your question…",
+  "assistantSend": "Send",
+  "assistantThinking": "Thinking…",
+  "assistantSuggestToday": "How are my sales today?",
+  "assistantSuggestBestStore": "Which store sells best?",
+  "assistantSuggestSalary": "How much salary is still unpaid?",
+  "errAssistantUnavailable": "The assistant is not available right now. Try again later.",
+  "errAssistantRateLimited": "Too many questions. Wait {seconds} s and try again.",
+  "@errAssistantRateLimited": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -57,8 +57,13 @@ class ApiClient {
     bool auth = true,
   }) => _send('GET', path, query: query, auth: auth);
 
-  Future<dynamic> post(String path, {Object? body, bool auth = true}) =>
-      _send('POST', path, body: body, auth: auth);
+  /// [timeout] replaces the usual one for slow calls (the AI assistant).
+  Future<dynamic> post(
+    String path, {
+    Object? body,
+    bool auth = true,
+    Duration? timeout,
+  }) => _send('POST', path, body: body, auth: auth, timeout: timeout);
 
   Future<dynamic> put(String path, {Object? body}) =>
       _send('PUT', path, body: body);
@@ -88,6 +93,7 @@ class ApiClient {
     Object? body,
     bool auth = true,
     ({String field, Uint8List bytes, String filename})? file,
+    Duration? timeout,
   }) async {
     final uri = Uri.parse('$_baseUrl$path').replace(
       queryParameters: {
@@ -96,7 +102,7 @@ class ApiClient {
       }.nullIfEmpty,
     );
     var token = auth ? await tokens.readAccessToken() : null;
-    var response = await _request(method, uri, token, body, file);
+    var response = await _request(method, uri, token, body, file, timeout);
     if (auth && response.statusCode == 401) {
       final code = _errorCode(response);
       if (code == _expired) {
@@ -108,7 +114,7 @@ class ApiClient {
           await _refreshOnce();
           token = await tokens.readAccessToken();
         }
-        response = await _request(method, uri, token, body, file);
+        response = await _request(method, uri, token, body, file, timeout);
       }
       if (response.statusCode == 401) {
         await _endSession();
@@ -122,8 +128,9 @@ class ApiClient {
     Uri uri,
     String? token,
     Object? body,
-    ({String field, Uint8List bytes, String filename})? file,
-  ) async {
+    ({String field, Uint8List bytes, String filename})? file, [
+    Duration? timeout,
+  ]) async {
     final headers = {
       'Accept': 'application/json',
       'Accept-Language': language(),
@@ -150,7 +157,7 @@ class ApiClient {
       request.headers.addAll(headers);
       final streamed = await _client
           .send(request)
-          .timeout(ApiConstants.timeout);
+          .timeout(timeout ?? ApiConstants.timeout);
       return await http.Response.fromStream(streamed);
     } on SocketException catch (e) {
       throw ApiException(0, ApiException.networkError, message: '$e');
@@ -227,6 +234,7 @@ class ApiClient {
           for (final d in error['details'] as List<dynamic>? ?? const [])
             d as Map<String, dynamic>,
         ],
+        meta: error['meta'] as Map<String, dynamic>? ?? const {},
       );
     } on ApiException {
       rethrow;
