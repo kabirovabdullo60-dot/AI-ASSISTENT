@@ -21,6 +21,7 @@ import '../widgets/app_feedback.dart';
 import '../widgets/bottom_nav_item.dart';
 import '../widgets/quick_action_cell.dart';
 import 'employee_form_view.dart';
+import 'expense_form_view.dart';
 import 'home_view.dart';
 import 'more_view.dart';
 import 'payroll_view.dart';
@@ -107,6 +108,13 @@ class _ShellViewState extends State<ShellView> {
         () => _open(const SaleFormView()),
       ),
       (
+        Icons.receipt_long_outlined,
+        l10n.actionNewExpense,
+        p.error,
+        p.errorLight,
+        () => _open(const ExpenseFormView()),
+      ),
+      (
         Icons.payments_outlined,
         l10n.actionPaySalary,
         p.primary,
@@ -148,18 +156,22 @@ class _ShellViewState extends State<ShellView> {
                   children: [
                     for (var i = start; i < start + 2; i++) ...[
                       if (i > start) const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: QuickActionCell(
-                          icon: actions[i].$1,
-                          label: actions[i].$2,
-                          color: actions[i].$3,
-                          background: actions[i].$4,
-                          onTap: () {
-                            Navigator.of(sheet).pop();
-                            actions[i].$5();
-                          },
+                      // An odd last action keeps its half width.
+                      if (i >= actions.length)
+                        const Expanded(child: SizedBox())
+                      else
+                        Expanded(
+                          child: QuickActionCell(
+                            icon: actions[i].$1,
+                            label: actions[i].$2,
+                            color: actions[i].$3,
+                            background: actions[i].$4,
+                            onTap: () {
+                              Navigator.of(sheet).pop();
+                              actions[i].$5();
+                            },
+                          ),
                         ),
-                      ),
                     ],
                   ],
                 ),

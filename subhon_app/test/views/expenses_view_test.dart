@@ -111,4 +111,21 @@ void main() {
     await tapText(tester, 'Сохранить');
     expect(find.text('Дата расхода не может быть в будущем.'), findsOneWidget);
   });
+
+  testWidgets('"+" has "Расход": it opens the new expense form', (
+    tester,
+  ) async {
+    final backend = FakeBackend()
+      ..json('GET', '/api/auth/me', ApiJson.profile());
+    stubHome(backend);
+    await pumpApp(
+      tester,
+      backend,
+      tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
+    );
+    await tester.tap(find.byTooltip('Добавить'));
+    await tester.pumpAndSettle();
+    await tapText(tester, 'Расход');
+    expect(find.text('Новый расход'), findsOneWidget);
+  });
 }
