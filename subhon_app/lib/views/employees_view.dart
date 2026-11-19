@@ -11,11 +11,11 @@ import '../viewmodels/employees_view_model.dart';
 import '../widgets/active_status_badge.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_empty_view.dart';
-import '../widgets/app_text_field.dart';
 import '../widgets/async_state_view.dart';
 import '../widgets/figure_card.dart';
 import '../widgets/load_more_button.dart';
 import '../widgets/record_tile.dart';
+import '../widgets/search_field.dart';
 import 'employee_form_view.dart';
 
 /// Employees with the totals of `GET /api/reports/employees`; search,
@@ -109,12 +109,11 @@ class _Employees extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.md),
               ],
-              AppTextField(
+              SearchField(
                 initialValue: vm.search,
                 hint: l10n.employeesSearch,
-                prefixIcon: Icons.search_rounded,
-                textInputAction: TextInputAction.search,
-                onSubmitted: vm.setSearch,
+                clearTooltip: l10n.commonClear,
+                onChanged: vm.searchAsTyped,
               ),
               const SizedBox(height: AppSpacing.md),
               if (vm.items.isEmpty)
