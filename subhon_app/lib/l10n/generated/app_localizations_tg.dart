@@ -1671,4 +1671,164 @@ class AppLocalizationsTg extends AppLocalizations {
   String fxLive(String time) {
     return 'Воқеӣ · $time';
   }
+
+  @override
+  String get navDebts => 'Қарзҳо';
+
+  @override
+  String get debtsTitle => 'Қарзҳо ва кредитҳо';
+
+  @override
+  String get debtsOverview => 'Шарҳ';
+
+  @override
+  String get debtsOwedToMe => 'Ба ман қарздоранд';
+
+  @override
+  String get debtsIOwe => 'Ман қарздорам';
+
+  @override
+  String get debtsToPeople => 'Қарз ба одамон';
+
+  @override
+  String get debtsLoans => 'Кредитҳо ва насия';
+
+  @override
+  String debtsPeople(int count) {
+    return '$count нафар';
+  }
+
+  @override
+  String debtsCount(int count) {
+    return '$count қарз';
+  }
+
+  @override
+  String get debtsEmptyOwedTitle => 'Ба шумо пул қарздоранд';
+
+  @override
+  String get debtsEmptyOwedMessage =>
+      'Касеро илова кунед, ки ба шумо қарздор аст';
+
+  @override
+  String get debtsEmptyIOweTitle => 'Шумо пул қарздоред';
+
+  @override
+  String get debtsEmptyIOweMessage =>
+      'Касеро илова кунед, ки шумо ба ӯ қарздоред';
+
+  @override
+  String get debtsAdd => 'Илова кардани қарз';
+
+  @override
+  String get debtsActiveLoans => 'Кредитҳои фаъол';
+
+  @override
+  String get debtsAddLoan => 'Илова кардани кредит';
+
+  @override
+  String get debtsNoLoans => 'Кредит ва насияи фаъол нест';
+
+  @override
+  String get debtsClosed => 'Пардохтшуда';
+
+  @override
+  String get debtsLocalNote =>
+      'Танҳо дар ҳамин телефон: дар сервер ҳоло қарзҳо нест.';
+
+  @override
+  String debtLeft(String amount) {
+    return 'Монд $amount';
+  }
+
+  @override
+  String debtDue(String date) {
+    return 'То $date';
+  }
+
+  @override
+  String debtOverdue(String date) {
+    return 'Аз $date гузашта';
+  }
+
+  @override
+  String get debtNewOwed => 'Ба ман қарздоранд';
+
+  @override
+  String get debtNewIOwe => 'Ман қарздорам';
+
+  @override
+  String get debtNewLoan => 'Кредити нав';
+
+  @override
+  String get debtEditTitle => 'Тағйир';
+
+  @override
+  String get debtWho => 'Кӣ';
+
+  @override
+  String get debtWhoHint => 'Ном';
+
+  @override
+  String get debtBank => 'Бонк ё мағоза';
+
+  @override
+  String get debtLoanType => 'Навъ';
+
+  @override
+  String get debtCredit => 'Кредит';
+
+  @override
+  String get debtInstallment => 'Насия';
+
+  @override
+  String get debtAmountTotal => 'Ҳамагӣ баргардонидан';
+
+  @override
+  String get debtMonthly => 'Пардохти моҳона';
+
+  @override
+  String get debtDueDate => 'Баргардонидан то';
+
+  @override
+  String get debtNoDueDate => 'Бе мӯҳлат';
+
+  @override
+  String get debtSaved => 'Сабт шуд';
+
+  @override
+  String get debtRepay => 'Сабти пардохт';
+
+  @override
+  String get debtRepayAll => 'Пурра пардохт шуд';
+
+  @override
+  String get debtRepaid => 'Пардохт сабт шуд';
+
+  @override
+  String get debtPayments => 'Пардохтҳо';
+
+  @override
+  String get debtNoPayments => 'Ҳоло пардохт нест.';
+
+  @override
+  String debtPaidOf(String paid, String total) {
+    return 'Пардохт $paid аз $total';
+  }
+
+  @override
+  String get debtDeleteTitle => 'Нест кунем?';
+
+  @override
+  String get debtDeleteMessage =>
+      'Он ва пардохтҳояш аз ин телефон нест карда мешаванд.';
+
+  @override
+  String get debtDeleted => 'Нест шуд';
+
+  @override
+  String get debtClosedBadge => 'Пардохт шуд';
+
+  @override
+  String get actionSalesList => 'Фурӯш';
 }

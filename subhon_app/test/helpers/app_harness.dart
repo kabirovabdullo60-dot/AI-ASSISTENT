@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/core/storage/app_lock_storage.dart';
 import 'package:subhon_app/core/storage/chat_history_storage.dart';
+import 'package:subhon_app/core/storage/debt_storage.dart';
 import 'package:subhon_app/core/storage/statement_history_storage.dart';
 import 'package:subhon_app/main.dart';
 import 'package:subhon_app/services/biometric_service.dart';
@@ -49,6 +50,7 @@ Future<void> pumpApp(
   BiometricService? biometric,
   AppLockStorage? appLock,
   MarketService? market,
+  DebtStorage? debts,
 }) async {
   reduceMotion(tester);
   await tester.pumpWidget(
@@ -64,6 +66,7 @@ Future<void> pumpApp(
       biometric: biometric,
       appLock: appLock,
       market: market,
+      debts: debts,
     ),
   );
   await tester.pumpAndSettle();

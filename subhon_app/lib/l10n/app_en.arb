@@ -882,5 +882,98 @@
         "type": "String"
       }
     }
-  }
+  },
+  "navDebts": "Debts",
+  "debtsTitle": "Debts and credits",
+  "debtsOverview": "Overview",
+  "debtsOwedToMe": "Owed to me",
+  "debtsIOwe": "I owe",
+  "debtsToPeople": "Debts to people",
+  "debtsLoans": "Credits and installments",
+  "debtsPeople": "{count, plural, one{1 person} other{{count} people}}",
+  "@debtsPeople": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "debtsCount": "{count, plural, one{1 debt} other{{count} debts}}",
+  "@debtsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "debtsEmptyOwedTitle": "People owe you money",
+  "debtsEmptyOwedMessage": "Add someone who owes you",
+  "debtsEmptyIOweTitle": "You owe money",
+  "debtsEmptyIOweMessage": "Add someone you owe",
+  "debtsAdd": "Add a debt",
+  "debtsActiveLoans": "Active credits",
+  "debtsAddLoan": "Add a credit",
+  "debtsNoLoans": "No active credits or installments",
+  "debtsClosed": "Repaid",
+  "debtsLocalNote": "Kept only on this phone: the server has no debts yet.",
+  "debtLeft": "{amount} left",
+  "@debtLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "debtDue": "Due {date}",
+  "@debtDue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "debtOverdue": "Overdue since {date}",
+  "@debtOverdue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "debtNewOwed": "Owed to me",
+  "debtNewIOwe": "I owe",
+  "debtNewLoan": "New credit",
+  "debtEditTitle": "Edit",
+  "debtWho": "Who",
+  "debtWhoHint": "Name",
+  "debtBank": "Bank or shop",
+  "debtLoanType": "Type",
+  "debtCredit": "Credit",
+  "debtInstallment": "Installment",
+  "debtAmountTotal": "Total to repay",
+  "debtMonthly": "Monthly payment",
+  "debtDueDate": "Repay by",
+  "debtNoDueDate": "No date",
+  "debtSaved": "Saved",
+  "debtRepay": "Record a repayment",
+  "debtRepayAll": "Repaid in full",
+  "debtRepaid": "Repayment recorded",
+  "debtPayments": "Repayments",
+  "debtNoPayments": "No repayments yet.",
+  "debtPaidOf": "Repaid {paid} of {total}",
+  "@debtPaidOf": {
+    "placeholders": {
+      "paid": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "debtDeleteTitle": "Delete it?",
+  "debtDeleteMessage": "It and its repayments will be removed from this phone.",
+  "debtDeleted": "Deleted",
+  "debtClosedBadge": "Repaid",
+  "actionSalesList": "Sales"
 }

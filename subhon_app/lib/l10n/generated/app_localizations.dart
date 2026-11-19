@@ -3069,6 +3069,294 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Live · {time}'**
   String fxLive(String time);
+
+  /// No description provided for @navDebts.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts'**
+  String get navDebts;
+
+  /// No description provided for @debtsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts and credits'**
+  String get debtsTitle;
+
+  /// No description provided for @debtsOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get debtsOverview;
+
+  /// No description provided for @debtsOwedToMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Owed to me'**
+  String get debtsOwedToMe;
+
+  /// No description provided for @debtsIOwe.
+  ///
+  /// In en, this message translates to:
+  /// **'I owe'**
+  String get debtsIOwe;
+
+  /// No description provided for @debtsToPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts to people'**
+  String get debtsToPeople;
+
+  /// No description provided for @debtsLoans.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits and installments'**
+  String get debtsLoans;
+
+  /// No description provided for @debtsPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 person} other{{count} people}}'**
+  String debtsPeople(int count);
+
+  /// No description provided for @debtsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 debt} other{{count} debts}}'**
+  String debtsCount(int count);
+
+  /// No description provided for @debtsEmptyOwedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'People owe you money'**
+  String get debtsEmptyOwedTitle;
+
+  /// No description provided for @debtsEmptyOwedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add someone who owes you'**
+  String get debtsEmptyOwedMessage;
+
+  /// No description provided for @debtsEmptyIOweTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe money'**
+  String get debtsEmptyIOweTitle;
+
+  /// No description provided for @debtsEmptyIOweMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add someone you owe'**
+  String get debtsEmptyIOweMessage;
+
+  /// No description provided for @debtsAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a debt'**
+  String get debtsAdd;
+
+  /// No description provided for @debtsActiveLoans.
+  ///
+  /// In en, this message translates to:
+  /// **'Active credits'**
+  String get debtsActiveLoans;
+
+  /// No description provided for @debtsAddLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a credit'**
+  String get debtsAddLoan;
+
+  /// No description provided for @debtsNoLoans.
+  ///
+  /// In en, this message translates to:
+  /// **'No active credits or installments'**
+  String get debtsNoLoans;
+
+  /// No description provided for @debtsClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Repaid'**
+  String get debtsClosed;
+
+  /// No description provided for @debtsLocalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept only on this phone: the server has no debts yet.'**
+  String get debtsLocalNote;
+
+  /// No description provided for @debtLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} left'**
+  String debtLeft(String amount);
+
+  /// No description provided for @debtDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {date}'**
+  String debtDue(String date);
+
+  /// No description provided for @debtOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue since {date}'**
+  String debtOverdue(String date);
+
+  /// No description provided for @debtNewOwed.
+  ///
+  /// In en, this message translates to:
+  /// **'Owed to me'**
+  String get debtNewOwed;
+
+  /// No description provided for @debtNewIOwe.
+  ///
+  /// In en, this message translates to:
+  /// **'I owe'**
+  String get debtNewIOwe;
+
+  /// No description provided for @debtNewLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'New credit'**
+  String get debtNewLoan;
+
+  /// No description provided for @debtEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get debtEditTitle;
+
+  /// No description provided for @debtWho.
+  ///
+  /// In en, this message translates to:
+  /// **'Who'**
+  String get debtWho;
+
+  /// No description provided for @debtWhoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get debtWhoHint;
+
+  /// No description provided for @debtBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank or shop'**
+  String get debtBank;
+
+  /// No description provided for @debtLoanType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get debtLoanType;
+
+  /// No description provided for @debtCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit'**
+  String get debtCredit;
+
+  /// No description provided for @debtInstallment.
+  ///
+  /// In en, this message translates to:
+  /// **'Installment'**
+  String get debtInstallment;
+
+  /// No description provided for @debtAmountTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total to repay'**
+  String get debtAmountTotal;
+
+  /// No description provided for @debtMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly payment'**
+  String get debtMonthly;
+
+  /// No description provided for @debtDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Repay by'**
+  String get debtDueDate;
+
+  /// No description provided for @debtNoDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'No date'**
+  String get debtNoDueDate;
+
+  /// No description provided for @debtSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get debtSaved;
+
+  /// No description provided for @debtRepay.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a repayment'**
+  String get debtRepay;
+
+  /// No description provided for @debtRepayAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Repaid in full'**
+  String get debtRepayAll;
+
+  /// No description provided for @debtRepaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Repayment recorded'**
+  String get debtRepaid;
+
+  /// No description provided for @debtPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'Repayments'**
+  String get debtPayments;
+
+  /// No description provided for @debtNoPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'No repayments yet.'**
+  String get debtNoPayments;
+
+  /// No description provided for @debtPaidOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Repaid {paid} of {total}'**
+  String debtPaidOf(String paid, String total);
+
+  /// No description provided for @debtDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete it?'**
+  String get debtDeleteTitle;
+
+  /// No description provided for @debtDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'It and its repayments will be removed from this phone.'**
+  String get debtDeleteMessage;
+
+  /// No description provided for @debtDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get debtDeleted;
+
+  /// No description provided for @debtClosedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Repaid'**
+  String get debtClosedBadge;
+
+  /// No description provided for @actionSalesList.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get actionSalesList;
 }
 
 class _AppLocalizationsDelegate

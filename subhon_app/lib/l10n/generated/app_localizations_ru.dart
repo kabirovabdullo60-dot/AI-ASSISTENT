@@ -1680,4 +1680,170 @@ class AppLocalizationsRu extends AppLocalizations {
   String fxLive(String time) {
     return 'В реальном времени · $time';
   }
+
+  @override
+  String get navDebts => 'Долги';
+
+  @override
+  String get debtsTitle => 'Долги и кредиты';
+
+  @override
+  String get debtsOverview => 'Обзор';
+
+  @override
+  String get debtsOwedToMe => 'Мне должны';
+
+  @override
+  String get debtsIOwe => 'Я должен';
+
+  @override
+  String get debtsToPeople => 'Долги людям';
+
+  @override
+  String get debtsLoans => 'Кредиты и рассрочки';
+
+  @override
+  String debtsPeople(int count) {
+    return '$count чел.';
+  }
+
+  @override
+  String debtsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count долга',
+      many: '$count долгов',
+      few: '$count долга',
+      one: '$count долг',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get debtsEmptyOwedTitle => 'Вам должны деньги';
+
+  @override
+  String get debtsEmptyOwedMessage => 'Добавьте человека, который вам должен';
+
+  @override
+  String get debtsEmptyIOweTitle => 'Вы должны деньги';
+
+  @override
+  String get debtsEmptyIOweMessage => 'Добавьте человека, которому вы должны';
+
+  @override
+  String get debtsAdd => 'Добавить долг';
+
+  @override
+  String get debtsActiveLoans => 'Активные кредиты';
+
+  @override
+  String get debtsAddLoan => 'Добавить кредит';
+
+  @override
+  String get debtsNoLoans => 'Нет активных кредитов и рассрочек';
+
+  @override
+  String get debtsClosed => 'Погашенные';
+
+  @override
+  String get debtsLocalNote =>
+      'Хранится только на этом телефоне: на сервере долгов пока нет.';
+
+  @override
+  String debtLeft(String amount) {
+    return 'Осталось $amount';
+  }
+
+  @override
+  String debtDue(String date) {
+    return 'До $date';
+  }
+
+  @override
+  String debtOverdue(String date) {
+    return 'Просрочен с $date';
+  }
+
+  @override
+  String get debtNewOwed => 'Мне должны';
+
+  @override
+  String get debtNewIOwe => 'Я должен';
+
+  @override
+  String get debtNewLoan => 'Новый кредит';
+
+  @override
+  String get debtEditTitle => 'Изменить';
+
+  @override
+  String get debtWho => 'Кто';
+
+  @override
+  String get debtWhoHint => 'Имя';
+
+  @override
+  String get debtBank => 'Банк или магазин';
+
+  @override
+  String get debtLoanType => 'Тип';
+
+  @override
+  String get debtCredit => 'Кредит';
+
+  @override
+  String get debtInstallment => 'Рассрочка';
+
+  @override
+  String get debtAmountTotal => 'Всего вернуть';
+
+  @override
+  String get debtMonthly => 'Платёж в месяц';
+
+  @override
+  String get debtDueDate => 'Вернуть до';
+
+  @override
+  String get debtNoDueDate => 'Без срока';
+
+  @override
+  String get debtSaved => 'Сохранено';
+
+  @override
+  String get debtRepay => 'Записать погашение';
+
+  @override
+  String get debtRepayAll => 'Погашен полностью';
+
+  @override
+  String get debtRepaid => 'Погашение записано';
+
+  @override
+  String get debtPayments => 'Погашения';
+
+  @override
+  String get debtNoPayments => 'Погашений пока нет.';
+
+  @override
+  String debtPaidOf(String paid, String total) {
+    return 'Погашено $paid из $total';
+  }
+
+  @override
+  String get debtDeleteTitle => 'Удалить?';
+
+  @override
+  String get debtDeleteMessage =>
+      'Он и его погашения будут удалены с этого телефона.';
+
+  @override
+  String get debtDeleted => 'Удалено';
+
+  @override
+  String get debtClosedBadge => 'Погашен';
+
+  @override
+  String get actionSalesList => 'Продажи';
 }

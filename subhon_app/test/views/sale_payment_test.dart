@@ -22,6 +22,9 @@ Future<FakeBackend> _openNewSale(WidgetTester tester) async {
     backend,
     tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
   );
+  // The sales list opens from "+".
+  await tester.tap(find.byTooltip('Добавить'));
+  await tester.pumpAndSettle();
   await tapText(tester, 'Продажи');
   await tester.tap(find.byTooltip('Продажа'));
   await tester.pumpAndSettle();

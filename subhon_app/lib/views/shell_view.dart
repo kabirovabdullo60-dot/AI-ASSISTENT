@@ -12,9 +12,12 @@ import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
 import '../viewmodels/history_view_model.dart';
+import '../core/storage/debt_storage.dart';
 import '../services/market_service.dart';
 import '../viewmodels/currencies_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
+import '../viewmodels/debts_view_model.dart';
+import '../viewmodels/session_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
@@ -26,6 +29,7 @@ import '../widgets/quick_action_cell.dart';
 import 'history_view.dart';
 import 'chat_view.dart';
 import 'currencies_view.dart';
+import 'debts_view.dart';
 import 'employee_form_view.dart';
 import 'expense_form_view.dart';
 import 'home_view.dart';
@@ -37,7 +41,8 @@ import 'store_form_view.dart';
 import 'stores_view.dart';
 
 /// The app after login, with OFAR's bottom navigation:
-/// Главная · Валюты · [+] · Продажи · Ещё. Salaries and the history open
+/// Главная · Валюты · [+] · Долги · Ещё. Sales, salaries and the history
+/// open from "+" (the history also from home's app bar). Salaries and the history open
 /// from "+" (the history also from home's app bar).
 class ShellView extends StatefulWidget {
   const ShellView({super.key});
@@ -50,7 +55,6 @@ class _ShellViewState extends State<ShellView> {
   int _index = 0;
 
   /// The tabs, in the order of the bottom bar.
-  static const _salesTab = 2;
   static const _currenciesTab = 1;
 
   late final _dashboard = DashboardViewModel(
@@ -59,15 +63,23 @@ class _ShellViewState extends State<ShellView> {
     context.read<StoreService>(),
     context.read<ActivityService>(),
   )..load();
-  late final _sales = SalesViewModel(
+  /// Created the first time the sales list is opened (it is no longer a
+  /// tab).
+  SalesViewModel? _salesVm;
+  SalesViewModel get _sales => _salesVm ??= SalesViewModel(
     context.read<SalesService>(),
     context.read<StoreService>(),
-  )..load();
+  );
 
   /// Created the first time salaries are opened (they are no longer a tab).
   PayrollViewModel? _payrollVm;
   PayrollViewModel get _payroll =>
       _payrollVm ??= PayrollViewModel(context.read<PayrollService>());
+
+  late final _debts = DebtsViewModel(
+    context.read<DebtStorage>(),
+    context.read<SessionViewModel>().user?.id,
+  )..load();
 
   /// The "Валюты" tab, loaded the first time it is opened.
   CurrenciesViewModel? _currenciesVm;
@@ -88,10 +100,11 @@ class _ShellViewState extends State<ShellView> {
   @override
   void dispose() {
     _dashboard.dispose();
-    _sales.dispose();
+    _salesVm?.dispose();
     _payrollVm?.dispose();
     _historyVm?.dispose();
     _currenciesVm?.dispose();
+    _debts.dispose();
     _notifications.dispose();
     super.dispose();
   }
@@ -99,10 +112,24 @@ class _ShellViewState extends State<ShellView> {
   /// After something was added from the "+" sheet: the tabs show it.
   void _refreshAll() {
     _dashboard.load();
-    _sales.load();
+    _salesVm?.load();
     _payrollVm?.load();
     _historyVm?.load();
     _notifications.load();
+  }
+
+  /// The sales list: its own page, from "+", home or a notification.
+  Future<void> _openSales() async {
+    _sales.load();
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ChangeNotifierProvider.value(
+          value: _sales,
+          child: const SalesView(),
+        ),
+      ),
+    );
+    _refreshAll();
   }
 
   /// The history: its own page, from "+" or home's app bar.
@@ -139,7 +166,7 @@ class _ShellViewState extends State<ShellView> {
   void _openLink(NotificationLink link) {
     switch (link) {
       case NotificationLink.sales:
-        setState(() => _index = _salesTab);
+        _openSales();
       case NotificationLink.payroll:
         _openPayroll();
       case NotificationLink.stores:
@@ -166,6 +193,13 @@ class _ShellViewState extends State<ShellView> {
         p.success,
         p.successLight,
         () => _open(const SaleFormView()),
+      ),
+      (
+        Icons.receipt_outlined,
+        l10n.actionSalesList,
+        p.success,
+        p.successLight,
+        _openSales,
       ),
       (
         Icons.receipt_long_outlined,
@@ -266,9 +300,9 @@ class _ShellViewState extends State<ShellView> {
         l10n.navCurrencies,
       ),
       (
-        Icons.point_of_sale_outlined,
-        Icons.point_of_sale_rounded,
-        l10n.navSales,
+        Icons.account_balance_wallet_outlined,
+        Icons.account_balance_wallet_rounded,
+        l10n.navDebts,
       ),
       (Icons.grid_view_outlined, Icons.grid_view_rounded, l10n.navMore),
     ];
@@ -297,7 +331,7 @@ class _ShellViewState extends State<ShellView> {
               ChangeNotifierProvider.value(value: _notifications),
             ],
             child: HomeView(
-              onOpenSales: () => setState(() => _index = _salesTab),
+              onOpenSales: _openSales,
               onOpenLink: _openLink,
               onOpenHistory: _openHistory,
             ),
@@ -310,7 +344,7 @@ class _ShellViewState extends State<ShellView> {
             )
           else
             const SizedBox.shrink(),
-          ChangeNotifierProvider.value(value: _sales, child: const SalesView()),
+          ChangeNotifierProvider.value(value: _debts, child: const DebtsView()),
           MoreView(onChanged: _refreshAll),
         ],
       ),

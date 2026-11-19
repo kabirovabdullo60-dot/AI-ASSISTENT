@@ -8,9 +8,11 @@ import 'package:provider/provider.dart';
 import 'core/network/api_client.dart';
 import 'core/storage/app_lock_storage.dart';
 import 'core/storage/chat_history_storage.dart';
+import 'core/storage/debt_storage.dart';
 import 'core/storage/locale_storage.dart';
 import 'core/storage/secure_app_lock_storage.dart';
 import 'core/storage/secure_chat_history_storage.dart';
+import 'core/storage/secure_debt_storage.dart';
 import 'core/storage/secure_statement_history_storage.dart';
 import 'core/storage/statement_history_storage.dart';
 import 'core/storage/secure_locale_storage.dart';
@@ -67,6 +69,7 @@ class MobileApp extends StatefulWidget {
     this.biometric,
     this.appLock,
     this.market,
+    this.debts,
     super.key,
   });
 
@@ -94,6 +97,9 @@ class MobileApp extends StatefulWidget {
 
   /// Public exchange rates and crypto prices; tests pass a fake backend.
   final MarketService? market;
+
+  /// Debts kept on the phone; tests pass one in memory.
+  final DebtStorage? debts;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -141,6 +147,9 @@ class _MobileAppState extends State<MobileApp> {
         create: (_) => widget.fileShare ?? DeviceFileShareService(),
       ),
       Provider(create: (_) => widget.market ?? MarketService()),
+      Provider<DebtStorage>(
+        create: (_) => widget.debts ?? const SecureDebtStorage(),
+      ),
       Provider<ChatHistoryStorage>(
         create: (_) => widget.chatHistory ?? const SecureChatHistoryStorage(),
       ),

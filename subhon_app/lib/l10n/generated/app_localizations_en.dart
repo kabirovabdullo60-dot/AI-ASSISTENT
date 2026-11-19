@@ -1669,4 +1669,174 @@ class AppLocalizationsEn extends AppLocalizations {
   String fxLive(String time) {
     return 'Live · $time';
   }
+
+  @override
+  String get navDebts => 'Debts';
+
+  @override
+  String get debtsTitle => 'Debts and credits';
+
+  @override
+  String get debtsOverview => 'Overview';
+
+  @override
+  String get debtsOwedToMe => 'Owed to me';
+
+  @override
+  String get debtsIOwe => 'I owe';
+
+  @override
+  String get debtsToPeople => 'Debts to people';
+
+  @override
+  String get debtsLoans => 'Credits and installments';
+
+  @override
+  String debtsPeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people',
+      one: '1 person',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debtsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count debts',
+      one: '1 debt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get debtsEmptyOwedTitle => 'People owe you money';
+
+  @override
+  String get debtsEmptyOwedMessage => 'Add someone who owes you';
+
+  @override
+  String get debtsEmptyIOweTitle => 'You owe money';
+
+  @override
+  String get debtsEmptyIOweMessage => 'Add someone you owe';
+
+  @override
+  String get debtsAdd => 'Add a debt';
+
+  @override
+  String get debtsActiveLoans => 'Active credits';
+
+  @override
+  String get debtsAddLoan => 'Add a credit';
+
+  @override
+  String get debtsNoLoans => 'No active credits or installments';
+
+  @override
+  String get debtsClosed => 'Repaid';
+
+  @override
+  String get debtsLocalNote =>
+      'Kept only on this phone: the server has no debts yet.';
+
+  @override
+  String debtLeft(String amount) {
+    return '$amount left';
+  }
+
+  @override
+  String debtDue(String date) {
+    return 'Due $date';
+  }
+
+  @override
+  String debtOverdue(String date) {
+    return 'Overdue since $date';
+  }
+
+  @override
+  String get debtNewOwed => 'Owed to me';
+
+  @override
+  String get debtNewIOwe => 'I owe';
+
+  @override
+  String get debtNewLoan => 'New credit';
+
+  @override
+  String get debtEditTitle => 'Edit';
+
+  @override
+  String get debtWho => 'Who';
+
+  @override
+  String get debtWhoHint => 'Name';
+
+  @override
+  String get debtBank => 'Bank or shop';
+
+  @override
+  String get debtLoanType => 'Type';
+
+  @override
+  String get debtCredit => 'Credit';
+
+  @override
+  String get debtInstallment => 'Installment';
+
+  @override
+  String get debtAmountTotal => 'Total to repay';
+
+  @override
+  String get debtMonthly => 'Monthly payment';
+
+  @override
+  String get debtDueDate => 'Repay by';
+
+  @override
+  String get debtNoDueDate => 'No date';
+
+  @override
+  String get debtSaved => 'Saved';
+
+  @override
+  String get debtRepay => 'Record a repayment';
+
+  @override
+  String get debtRepayAll => 'Repaid in full';
+
+  @override
+  String get debtRepaid => 'Repayment recorded';
+
+  @override
+  String get debtPayments => 'Repayments';
+
+  @override
+  String get debtNoPayments => 'No repayments yet.';
+
+  @override
+  String debtPaidOf(String paid, String total) {
+    return 'Repaid $paid of $total';
+  }
+
+  @override
+  String get debtDeleteTitle => 'Delete it?';
+
+  @override
+  String get debtDeleteMessage =>
+      'It and its repayments will be removed from this phone.';
+
+  @override
+  String get debtDeleted => 'Deleted';
+
+  @override
+  String get debtClosedBadge => 'Repaid';
+
+  @override
+  String get actionSalesList => 'Sales';
 }

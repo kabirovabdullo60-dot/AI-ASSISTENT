@@ -103,7 +103,7 @@ void main() {
     stubHome(backend);
     backend.on(
       'GET',
-      '/api/sales',
+      '/api/reports/dashboard',
       (_) => FakeBackend.error(401, 'AUTH_SESSION_REVOKED', 'Revoked.'),
     );
     await pumpApp(tester, backend, tokens: tokens);
