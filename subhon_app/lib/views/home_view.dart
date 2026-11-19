@@ -3,10 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
-import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../l10n/payment_method_text.dart';
-import '../l10n/validators.dart';
 import '../models/sales_report_model.dart';
 import '../models/notification_link.dart';
 import '../models/payment_method.dart';
@@ -15,11 +13,7 @@ import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/sales_period.dart';
 import '../widgets/activity_tile.dart';
-import '../widgets/app_button.dart';
 import '../widgets/app_card.dart';
-import '../widgets/app_feedback.dart';
-import '../widgets/app_inline_message.dart';
-import '../widgets/app_text_field.dart';
 import '../widgets/async_state_view.dart';
 import '../widgets/figure_card.dart';
 import '../widgets/notification_bell.dart';
@@ -28,7 +22,7 @@ import '../widgets/section_header.dart';
 import '../widgets/share_bar_row.dart';
 import '../widgets/stat_tile.dart';
 import '../widgets/summary_card.dart';
-import '../widgets/target_progress_card.dart';
+import '../widgets/sales_target_card.dart';
 import 'activity_view.dart';
 import 'chat_view.dart';
 import 'notifications_view.dart';
@@ -198,20 +192,22 @@ class _Body extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: _Target(
-                  vm: vm,
+                child: SalesTargetCard(
                   period: TargetPeriod.week,
                   sales: d.weekSales,
                   target: d.weekTarget,
+                  hint: l10n.targetSheetHint,
+                  onSave: (amount) => vm.setTarget(TargetPeriod.week, amount),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: _Target(
-                  vm: vm,
+                child: SalesTargetCard(
                   period: TargetPeriod.month,
                   sales: d.monthSales,
                   target: d.monthTarget,
+                  hint: l10n.targetSheetHint,
+                  onSave: (amount) => vm.setTarget(TargetPeriod.month, amount),
                 ),
               ),
             ],
@@ -368,149 +364,6 @@ class _PeriodFigures extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// A business-wide sales target with its progress; tap to set or change it.
-class _Target extends StatelessWidget {
-  const _Target({
-    required this.vm,
-    required this.period,
-    required this.sales,
-    required this.target,
-  });
-
-  final DashboardViewModel vm;
-  final TargetPeriod period;
-  final double sales;
-  final double? target;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final goal = target;
-    return TargetProgressCard(
-      label: period == TargetPeriod.week ? l10n.targetWeek : l10n.targetMonth,
-      sales: sales,
-      salesText: context.money(sales),
-      target: goal,
-      targetText: goal == null ? null : context.money(goal),
-      percentText: goal == null || goal <= 0
-          ? null
-          : l10n.targetDone(context.percent(sales / goal * 100)),
-      emptyText: l10n.targetNotSet,
-      onTap: () => showAppBottomSheet<void>(
-        context,
-        title: period == TargetPeriod.week
-            ? l10n.targetSheetTitleWeek
-            : l10n.targetSheetTitleMonth,
-        builder: (_) => _TargetSheet(vm: vm, period: period, current: goal),
-      ),
-    );
-  }
-}
-
-/// Enter the target amount and save it (`PUT /api/targets`).
-class _TargetSheet extends StatefulWidget {
-  const _TargetSheet({required this.vm, required this.period, this.current});
-
-  final DashboardViewModel vm;
-  final TargetPeriod period;
-  final double? current;
-
-  @override
-  State<_TargetSheet> createState() => _TargetSheetState();
-}
-
-class _TargetSheetState extends State<_TargetSheet> {
-  final _form = GlobalKey<FormState>();
-  late final _amount = TextEditingController(
-    text: widget.current?.toStringAsFixed(2) ?? '',
-  );
-  bool _saving = false;
-  Object? _error;
-
-  @override
-  void dispose() {
-    _amount.dispose();
-    super.dispose();
-  }
-
-  Future<void> _save() async {
-    if (!(_form.currentState?.validate() ?? false)) return;
-    final navigator = Navigator.of(context);
-    final feedback = AppSnackbar.of(context);
-    final saved = context.l10n.targetSaved;
-    setState(() {
-      _saving = true;
-      _error = null;
-    });
-    final error = await widget.vm.setTarget(
-      widget.period,
-      Validators.parseAmount(_amount.text)!,
-    );
-    if (!mounted) return;
-    if (error == null) {
-      feedback.showSuccess(saved);
-      navigator.pop();
-    } else {
-      setState(() {
-        _saving = false;
-        _error = error;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Form(
-      key: _form,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.screen,
-          AppSpacing.lg,
-          AppSpacing.screen,
-          AppSpacing.xl,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              l10n.targetSheetHint,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            AppTextField(
-              controller: _amount,
-              label: l10n.fieldAmount,
-              hint: '0,00',
-              suffix: const Text('TJS'),
-              autofocus: true,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              validator: (v) => Validators.amount(v, l10n),
-              onSubmitted: (_) => _save(),
-            ),
-            if (_error != null) ...[
-              const SizedBox(height: AppSpacing.md),
-              AppInlineMessage(
-                type: InlineMessageType.error,
-                message: errorText(l10n, _error!),
-              ),
-            ],
-            const SizedBox(height: AppSpacing.lg),
-            AppButton(
-              label: l10n.commonSave,
-              isLoading: _saving,
-              onPressed: _save,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

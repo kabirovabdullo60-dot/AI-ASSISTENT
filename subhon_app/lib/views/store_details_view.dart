@@ -8,10 +8,13 @@ import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../models/employee_status.dart';
 import '../models/store_status.dart';
+import '../models/target_period.dart';
 import '../services/activity_service.dart';
 import '../services/employee_service.dart';
+import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
+import '../services/target_service.dart';
 import '../viewmodels/store_details_view_model.dart';
 import '../widgets/active_status_badge.dart';
 import '../widgets/activity_tile.dart';
@@ -20,6 +23,7 @@ import '../widgets/app_feedback.dart';
 import '../widgets/async_state_view.dart';
 import '../widgets/figure_card.dart';
 import '../widgets/record_tile.dart';
+import '../widgets/sales_target_card.dart';
 import '../widgets/section_header.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/settings_row.dart';
@@ -41,6 +45,8 @@ class StoreDetailsView extends StatelessWidget {
       context.read<SalesService>(),
       context.read<EmployeeService>(),
       context.read<ActivityService>(),
+      context.read<TargetService>(),
+      context.read<ReportsService>(),
       storeId,
     )..load(),
     child: const _StoreDetails(),
@@ -194,6 +200,38 @@ class _StoreDetailsState extends State<_StoreDetails> {
                         ),
                     ],
                   ),
+                  if (vm.goals case final goals?) ...[
+                    const SizedBox(height: AppSpacing.xl),
+                    SectionHeader(title: l10n.storeTargets),
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: SalesTargetCard(
+                              period: TargetPeriod.week,
+                              sales: goals.week,
+                              target: goals.weekTarget,
+                              hint: l10n.targetSheetHintStore,
+                              onSave: (amount) =>
+                                  vm.setTarget(TargetPeriod.week, amount),
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: SalesTargetCard(
+                              period: TargetPeriod.month,
+                              sales: goals.month,
+                              target: goals.monthTarget,
+                              hint: l10n.targetSheetHintStore,
+                              onSave: (amount) =>
+                                  vm.setTarget(TargetPeriod.month, amount),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: AppSpacing.md),
                   FigureCard(
                     label: l10n.salesTotal,

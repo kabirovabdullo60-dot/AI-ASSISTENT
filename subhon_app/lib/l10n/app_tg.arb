@@ -346,5 +346,7 @@
   "reportNoRegion": "Бе минтақа",
   "reportRegionStores": "{count, plural, other{{count} мағоза}}",
   "homeTodaySales": "Фурӯши имрӯз",
-  "homeMonth": "Дар як моҳ"
+  "homeMonth": "Дар як моҳ",
+  "storeTargets": "Ҳадафҳои мағоза",
+  "targetSheetHintStore": "Танҳо барои ҳамин мағоза. Ҳар вақт тағйир додан мумкин."
 }

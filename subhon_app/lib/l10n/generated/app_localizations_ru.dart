@@ -1206,4 +1206,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get homeMonth => 'За месяц';
+
+  @override
+  String get storeTargets => 'Цели магазина';
+
+  @override
+  String get targetSheetHintStore =>
+      'Только для этого магазина. Можно изменить в любой момент.';
 }

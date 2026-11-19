@@ -346,5 +346,7 @@
   "reportNoRegion": "Без региона",
   "reportRegionStores": "{count, plural, one{{count} магазин} few{{count} магазина} many{{count} магазинов} other{{count} магазина}}",
   "homeTodaySales": "Продажи за сегодня",
-  "homeMonth": "За месяц"
+  "homeMonth": "За месяц",
+  "storeTargets": "Цели магазина",
+  "targetSheetHintStore": "Только для этого магазина. Можно изменить в любой момент."
 }

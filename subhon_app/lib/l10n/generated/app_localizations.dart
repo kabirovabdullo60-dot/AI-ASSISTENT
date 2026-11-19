@@ -2181,6 +2181,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This month'**
   String get homeMonth;
+
+  /// No description provided for @storeTargets.
+  ///
+  /// In en, this message translates to:
+  /// **'Store targets'**
+  String get storeTargets;
+
+  /// No description provided for @targetSheetHintStore.
+  ///
+  /// In en, this message translates to:
+  /// **'For this store only. You can change it any time.'**
+  String get targetSheetHintStore;
 }
 
 class _AppLocalizationsDelegate

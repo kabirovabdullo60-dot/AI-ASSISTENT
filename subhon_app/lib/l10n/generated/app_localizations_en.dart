@@ -1200,4 +1200,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeMonth => 'This month';
+
+  @override
+  String get storeTargets => 'Store targets';
+
+  @override
+  String get targetSheetHintStore =>
+      'For this store only. You can change it any time.';
 }

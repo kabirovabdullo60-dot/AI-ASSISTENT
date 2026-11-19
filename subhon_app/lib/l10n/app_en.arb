@@ -685,5 +685,7 @@
     }
   },
   "homeTodaySales": "Sales today",
-  "homeMonth": "This month"
+  "homeMonth": "This month",
+  "storeTargets": "Store targets",
+  "targetSheetHintStore": "For this store only. You can change it any time."
 }

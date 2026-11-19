@@ -1200,4 +1200,11 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get homeMonth => 'Дар як моҳ';
+
+  @override
+  String get storeTargets => 'Ҳадафҳои мағоза';
+
+  @override
+  String get targetSheetHintStore =>
+      'Танҳо барои ҳамин мағоза. Ҳар вақт тағйир додан мумкин.';
 }
