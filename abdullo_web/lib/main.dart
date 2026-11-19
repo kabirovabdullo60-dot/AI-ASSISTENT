@@ -76,6 +76,7 @@ class _WebAppState extends State<WebApp> {
     }
     return _appKey;
   }
+
   Timer? _splashTimer;
 
   @override
@@ -181,7 +182,14 @@ class _SignedInState extends State<_SignedIn> {
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => NotificationsViewModel(NotificationService(api))..load()),
         ChangeNotifierProvider(
-          create: (_) => DashboardViewModel(reports, sales, payroll, ActivityService(api), TargetService(api))..load(),
+          create: (_) => DashboardViewModel(
+            reports,
+            sales,
+            payroll,
+            ActivityService(api),
+            TargetService(api),
+            since: context.read<AuthViewModel>().user?.createdAt,
+          )..load(),
         ),
         ChangeNotifierProvider(create: (_) => StoresViewModel(StoreService(api), sales, reports)..load()),
         ChangeNotifierProvider(create: (_) => SalesViewModel(sales)..load()),

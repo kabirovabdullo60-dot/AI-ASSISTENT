@@ -11,6 +11,7 @@ class ProfileModel {
     this.role = 'OWNER',
     required this.businessId,
     required this.businessName,
+    this.createdAt,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +25,7 @@ class ProfileModel {
       role: asString(json['role'], 'OWNER'),
       businessId: asString(business['id']),
       businessName: asString(business['name']),
+      createdAt: json['createdAt'] == null ? null : asDate(json['createdAt']),
     );
   }
 
@@ -37,4 +39,7 @@ class ProfileModel {
   final String role;
   final String businessId;
   final String businessName;
+
+  /// When the account was registered (local time). Charts never start before this day.
+  final DateTime? createdAt;
 }

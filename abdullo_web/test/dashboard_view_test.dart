@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+import 'package:abdullo_web/viewmodels/dashboard_view_model.dart';
 import 'package:abdullo_web/core/navigation/app_section.dart';
 import 'package:abdullo_web/widgets/kpi_card.dart';
 import 'package:flutter/gestures.dart';
@@ -73,5 +75,23 @@ void main() {
       {'role': 'user', 'text': 'How much did I sell today?'},
     ]);
     expect(find.text('Today you sold 1500.00 TJS.'), findsOneWidget);
+  });
+
+  testWidgets('a business registered today: the chart starts today, not 24 days back', (tester) async {
+    final backend = setUpBackend();
+    backend.user['createdAt'] = DateTime.now().toUtc().toIso8601String();
+    await pumpApp(tester, desktopWidth, backend: backend);
+    final vm = Provider.of<DashboardViewModel>(tester.element(find.byKey(const Key('dashboard-hero'))), listen: false);
+    expect(vm.chartPoints, hasLength(1));
+    final today = DateTime.now();
+    expect(vm.chartPoints.single.date, DateTime(today.year, today.month, today.day));
+  });
+
+  testWidgets('a business registered 5 days ago gets 6 days on the chart', (tester) async {
+    final backend = setUpBackend();
+    backend.user['createdAt'] = DateTime.now().subtract(const Duration(days: 5)).toUtc().toIso8601String();
+    await pumpApp(tester, desktopWidth, backend: backend);
+    final vm = Provider.of<DashboardViewModel>(tester.element(find.byKey(const Key('dashboard-hero'))), listen: false);
+    expect(vm.chartPoints, hasLength(6));
   });
 }
