@@ -1,14 +1,17 @@
-/// Turns a short request ("сотрудники", "сколько сотрудников", "sales
-/// today") into a clear question for the AI assistant, so it knows what
-/// the person means and answers with the business's main figures. Full
-/// questions are sent as they are.
+/// Turns a short request about the business ("сотрудники", "сколько
+/// сотрудников", "sales today") into a clear question for the AI
+/// assistant, so it knows what the person means and answers with the main
+/// figures. Full questions and small talk ("как ты", "привет", "спасибо")
+/// are sent as they are.
 ///
 /// [language]: `en`, `ru` or `tg` — the language of the added words.
 String expandQuestion(String text, String language) {
   final question = text.trim();
   if (question.isEmpty || !_isShort(question)) return question;
   final topic = _topicOf(question.toLowerCase());
-  final hint = topic == null ? '' : _hints[language]?[topic] ?? '';
+  // No business topic: a greeting or small talk — leave it alone.
+  if (topic == null) return question;
+  final hint = _hints[language]?[topic] ?? '';
   return switch (language) {
     'en' =>
       'Answer briefly about “$question” in my business: '

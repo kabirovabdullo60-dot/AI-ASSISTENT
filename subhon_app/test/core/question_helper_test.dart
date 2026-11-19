@@ -19,12 +19,14 @@ void main() {
     expect(expandQuestion('кормандон', 'tg'), contains('чанд корманд'));
   });
 
-  test('an unknown word still gets a clear frame', () {
-    expect(
-      expandQuestion('погода', 'ru'),
-      'Коротко ответь про «погода» в моём бизнесе: дай главные цифры.',
-    );
-  });
+  test(
+    'small talk and words without a business topic are sent as they are',
+    () {
+      for (final text in ['как ты', 'привет', 'спасибо', 'погода', 'hello']) {
+        expect(expandQuestion(text, 'ru'), text);
+      }
+    },
+  );
 
   test('full questions are sent as they are', () {
     const question = 'Какой магазин продаёт лучше всех в этом месяце?';
