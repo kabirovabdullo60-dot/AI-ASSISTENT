@@ -445,5 +445,138 @@
   "targetSheetTitleWeek": "Sales target for a week",
   "targetSheetTitleMonth": "Sales target for a month",
   "targetSheetHint": "For the whole business. You can change it any time.",
-  "targetSaved": "Target saved"
+  "targetSaved": "Target saved",
+  "activityTitle": "Recent activity",
+  "activityLogTitle": "Operations log",
+  "activityEmpty": "No changes yet.",
+  "activityStoreCreated": "Store “{name}” added",
+  "@activityStoreCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityStoreUpdated": "Store “{name}” edited",
+  "@activityStoreUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityStoreDeleted": "Store “{name}” deleted",
+  "@activityStoreDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityStoreStatus": "Store “{name}”: {status}",
+  "@activityStoreStatus": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySaleCreated": "Sale in “{name}”",
+  "@activitySaleCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySaleUpdated": "Sale in “{name}” edited",
+  "@activitySaleUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySaleDeleted": "Sale in “{name}” deleted",
+  "@activitySaleDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityEmployeeCreated": "Employee {name} added",
+  "@activityEmployeeCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityEmployeeUpdated": "Employee {name} edited",
+  "@activityEmployeeUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityEmployeeDeleted": "Employee {name} deleted",
+  "@activityEmployeeDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityEmployeeStatus": "{name}: {status}",
+  "@activityEmployeeStatus": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPayrollPaid": "Salary paid: {name}",
+  "@activityPayrollPaid": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPayrollCancelled": "Salary payment cancelled: {name}",
+  "@activityPayrollCancelled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityProfileUpdated": "Profile updated",
+  "activityOther": "{name}: changed",
+  "@activityOther": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBy": "{actor} · {time}",
+  "@activityBy": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

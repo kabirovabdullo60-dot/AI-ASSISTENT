@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../l10n/l10n.dart';
+import '../services/activity_service.dart';
 import '../services/payroll_service.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
@@ -40,6 +41,7 @@ class _ShellViewState extends State<ShellView> {
     context.read<ReportsService>(),
     context.read<SalesService>(),
     context.read<TargetService>(),
+    context.read<ActivityService>(),
   )..load();
   late final _sales = SalesViewModel(
     context.read<SalesService>(),

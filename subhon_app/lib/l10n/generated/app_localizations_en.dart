@@ -919,4 +919,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get targetSaved => 'Target saved';
+
+  @override
+  String get activityTitle => 'Recent activity';
+
+  @override
+  String get activityLogTitle => 'Operations log';
+
+  @override
+  String get activityEmpty => 'No changes yet.';
+
+  @override
+  String activityStoreCreated(String name) {
+    return 'Store “$name” added';
+  }
+
+  @override
+  String activityStoreUpdated(String name) {
+    return 'Store “$name” edited';
+  }
+
+  @override
+  String activityStoreDeleted(String name) {
+    return 'Store “$name” deleted';
+  }
+
+  @override
+  String activityStoreStatus(String name, String status) {
+    return 'Store “$name”: $status';
+  }
+
+  @override
+  String activitySaleCreated(String name) {
+    return 'Sale in “$name”';
+  }
+
+  @override
+  String activitySaleUpdated(String name) {
+    return 'Sale in “$name” edited';
+  }
+
+  @override
+  String activitySaleDeleted(String name) {
+    return 'Sale in “$name” deleted';
+  }
+
+  @override
+  String activityEmployeeCreated(String name) {
+    return 'Employee $name added';
+  }
+
+  @override
+  String activityEmployeeUpdated(String name) {
+    return 'Employee $name edited';
+  }
+
+  @override
+  String activityEmployeeDeleted(String name) {
+    return 'Employee $name deleted';
+  }
+
+  @override
+  String activityEmployeeStatus(String name, String status) {
+    return '$name: $status';
+  }
+
+  @override
+  String activityPayrollPaid(String name) {
+    return 'Salary paid: $name';
+  }
+
+  @override
+  String activityPayrollCancelled(String name) {
+    return 'Salary payment cancelled: $name';
+  }
+
+  @override
+  String get activityProfileUpdated => 'Profile updated';
+
+  @override
+  String activityOther(String name) {
+    return '$name: changed';
+  }
+
+  @override
+  String activityBy(String actor, String time) {
+    return '$actor · $time';
+  }
 }

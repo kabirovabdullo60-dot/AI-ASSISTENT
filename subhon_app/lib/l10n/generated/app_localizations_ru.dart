@@ -922,4 +922,91 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get targetSaved => 'Цель сохранена';
+
+  @override
+  String get activityTitle => 'Последние действия';
+
+  @override
+  String get activityLogTitle => 'Журнал операций';
+
+  @override
+  String get activityEmpty => 'Изменений пока нет.';
+
+  @override
+  String activityStoreCreated(String name) {
+    return 'Добавлен магазин «$name»';
+  }
+
+  @override
+  String activityStoreUpdated(String name) {
+    return 'Изменён магазин «$name»';
+  }
+
+  @override
+  String activityStoreDeleted(String name) {
+    return 'Удалён магазин «$name»';
+  }
+
+  @override
+  String activityStoreStatus(String name, String status) {
+    return 'Магазин «$name»: $status';
+  }
+
+  @override
+  String activitySaleCreated(String name) {
+    return 'Продажа в «$name»';
+  }
+
+  @override
+  String activitySaleUpdated(String name) {
+    return 'Изменена продажа в «$name»';
+  }
+
+  @override
+  String activitySaleDeleted(String name) {
+    return 'Удалена продажа в «$name»';
+  }
+
+  @override
+  String activityEmployeeCreated(String name) {
+    return 'Добавлен сотрудник $name';
+  }
+
+  @override
+  String activityEmployeeUpdated(String name) {
+    return 'Изменены данные: $name';
+  }
+
+  @override
+  String activityEmployeeDeleted(String name) {
+    return 'Удалён сотрудник $name';
+  }
+
+  @override
+  String activityEmployeeStatus(String name, String status) {
+    return '$name: $status';
+  }
+
+  @override
+  String activityPayrollPaid(String name) {
+    return 'Выплачена зарплата: $name';
+  }
+
+  @override
+  String activityPayrollCancelled(String name) {
+    return 'Отменена выплата: $name';
+  }
+
+  @override
+  String get activityProfileUpdated => 'Профиль изменён';
+
+  @override
+  String activityOther(String name) {
+    return '$name: изменение';
+  }
+
+  @override
+  String activityBy(String actor, String time) {
+    return '$actor · $time';
+  }
 }

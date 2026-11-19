@@ -383,4 +383,30 @@ abstract final class ApiJson {
       },
     ],
   };
+
+  static Map<String, Object?> activity({
+    String type = 'SALE',
+    String action = 'CREATED',
+    String entityName = 'Бахор — Сомони',
+    String? amount = '1250.50',
+    String? status,
+  }) => {
+    'id':
+        '77777777-7777-7777-7777-${(type + action).hashCode.abs().toString().padLeft(12, '0').substring(0, 12)}',
+    'type': type,
+    'action': action,
+    'entityId': '44444444-4444-4444-4444-444444444444',
+    'entityName': entityName,
+    'storeId': '33333333-3333-3333-3333-333333333333',
+    'storeName': 'Бахор — Сомони',
+    'employeeId': null,
+    'amount': amount,
+    'note': null,
+    'changedFields': null,
+    'status': status,
+    'period': null,
+    'actorId': '11111111-1111-1111-1111-111111111111',
+    'actorName': 'Фарход Назаров',
+    'createdAt': '2026-11-18T09:05:00Z',
+  };
 }

@@ -8,11 +8,13 @@ import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../models/employee_status.dart';
 import '../models/store_status.dart';
+import '../services/activity_service.dart';
 import '../services/employee_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
 import '../viewmodels/store_details_view_model.dart';
 import '../widgets/active_status_badge.dart';
+import '../widgets/activity_tile.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_feedback.dart';
 import '../widgets/async_state_view.dart';
@@ -21,6 +23,7 @@ import '../widgets/record_tile.dart';
 import '../widgets/section_header.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/settings_row.dart';
+import 'activity_view.dart';
 import 'store_form_view.dart';
 
 /// A store: its details, latest sales (`GET /api/sales/store/{id}`) and
@@ -37,6 +40,7 @@ class StoreDetailsView extends StatelessWidget {
       context.read<StoreService>(),
       context.read<SalesService>(),
       context.read<EmployeeService>(),
+      context.read<ActivityService>(),
       storeId,
     )..load(),
     child: const _StoreDetails(),
@@ -227,6 +231,33 @@ class _StoreDetailsState extends State<_StoreDetails> {
                         ],
                       ),
                     ),
+                  if (vm.log case final log? when log.items.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.xl),
+                    SectionHeader(
+                      title: l10n.activityLogTitle,
+                      actionLabel: log.hasMore ? l10n.homeShowAll : null,
+                      onAction: log.hasMore
+                          ? () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => ActivityView(
+                                  storeId: vm.storeId,
+                                  title: l10n.activityLogTitle,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    AppCard(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.md,
+                      ),
+                      child: Column(
+                        children: [
+                          for (final a in log.items) ActivityTile(activity: a),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               );
             },

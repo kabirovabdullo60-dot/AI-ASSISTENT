@@ -918,4 +918,91 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get targetSaved => 'Ҳадаф сабт шуд';
+
+  @override
+  String get activityTitle => 'Амалҳои охирин';
+
+  @override
+  String get activityLogTitle => 'Феҳристи амалиётҳо';
+
+  @override
+  String get activityEmpty => 'Ҳоло тағйирот нест.';
+
+  @override
+  String activityStoreCreated(String name) {
+    return 'Мағозаи «$name» илова шуд';
+  }
+
+  @override
+  String activityStoreUpdated(String name) {
+    return 'Мағозаи «$name» тағйир ёфт';
+  }
+
+  @override
+  String activityStoreDeleted(String name) {
+    return 'Мағозаи «$name» нест карда шуд';
+  }
+
+  @override
+  String activityStoreStatus(String name, String status) {
+    return 'Мағозаи «$name»: $status';
+  }
+
+  @override
+  String activitySaleCreated(String name) {
+    return 'Фурӯш дар «$name»';
+  }
+
+  @override
+  String activitySaleUpdated(String name) {
+    return 'Фурӯш дар «$name» тағйир ёфт';
+  }
+
+  @override
+  String activitySaleDeleted(String name) {
+    return 'Фурӯш дар «$name» нест карда шуд';
+  }
+
+  @override
+  String activityEmployeeCreated(String name) {
+    return 'Корманд $name илова шуд';
+  }
+
+  @override
+  String activityEmployeeUpdated(String name) {
+    return 'Маълумоти $name тағйир ёфт';
+  }
+
+  @override
+  String activityEmployeeDeleted(String name) {
+    return 'Корманд $name нест карда шуд';
+  }
+
+  @override
+  String activityEmployeeStatus(String name, String status) {
+    return '$name: $status';
+  }
+
+  @override
+  String activityPayrollPaid(String name) {
+    return 'Маош пардохт шуд: $name';
+  }
+
+  @override
+  String activityPayrollCancelled(String name) {
+    return 'Пардохт бекор шуд: $name';
+  }
+
+  @override
+  String get activityProfileUpdated => 'Профил тағйир ёфт';
+
+  @override
+  String activityOther(String name) {
+    return '$name: тағйирот';
+  }
+
+  @override
+  String activityBy(String actor, String time) {
+    return '$actor · $time';
+  }
 }

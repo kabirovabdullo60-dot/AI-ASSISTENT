@@ -33,6 +33,10 @@ extension L10nContext on BuildContext {
   String formatShortDate(DateTime date) =>
       DateFormat.yMd(_dateLocale).format(date);
 
+  /// `18.11.2026, 14:05` (local time).
+  String formatDateTime(DateTime time) =>
+      DateFormat.yMd(_dateLocale).add_Hm().format(time);
+
   /// `Ноябрь 2026`.
   String monthYear(int month, int year) {
     final text = DateFormat.yMMMM(_dateLocale).format(DateTime(year, month));

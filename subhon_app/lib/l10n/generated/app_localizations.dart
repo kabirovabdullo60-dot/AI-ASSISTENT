@@ -1731,6 +1731,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Target saved'**
   String get targetSaved;
+
+  /// No description provided for @activityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent activity'**
+  String get activityTitle;
+
+  /// No description provided for @activityLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Operations log'**
+  String get activityLogTitle;
+
+  /// No description provided for @activityEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No changes yet.'**
+  String get activityEmpty;
+
+  /// No description provided for @activityStoreCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Store “{name}” added'**
+  String activityStoreCreated(String name);
+
+  /// No description provided for @activityStoreUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Store “{name}” edited'**
+  String activityStoreUpdated(String name);
+
+  /// No description provided for @activityStoreDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Store “{name}” deleted'**
+  String activityStoreDeleted(String name);
+
+  /// No description provided for @activityStoreStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Store “{name}”: {status}'**
+  String activityStoreStatus(String name, String status);
+
+  /// No description provided for @activitySaleCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale in “{name}”'**
+  String activitySaleCreated(String name);
+
+  /// No description provided for @activitySaleUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale in “{name}” edited'**
+  String activitySaleUpdated(String name);
+
+  /// No description provided for @activitySaleDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale in “{name}” deleted'**
+  String activitySaleDeleted(String name);
+
+  /// No description provided for @activityEmployeeCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee {name} added'**
+  String activityEmployeeCreated(String name);
+
+  /// No description provided for @activityEmployeeUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee {name} edited'**
+  String activityEmployeeUpdated(String name);
+
+  /// No description provided for @activityEmployeeDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee {name} deleted'**
+  String activityEmployeeDeleted(String name);
+
+  /// No description provided for @activityEmployeeStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {status}'**
+  String activityEmployeeStatus(String name, String status);
+
+  /// No description provided for @activityPayrollPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary paid: {name}'**
+  String activityPayrollPaid(String name);
+
+  /// No description provided for @activityPayrollCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary payment cancelled: {name}'**
+  String activityPayrollCancelled(String name);
+
+  /// No description provided for @activityProfileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get activityProfileUpdated;
+
+  /// No description provided for @activityOther.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: changed'**
+  String activityOther(String name);
+
+  /// No description provided for @activityBy.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} · {time}'**
+  String activityBy(String actor, String time);
 }
 
 class _AppLocalizationsDelegate

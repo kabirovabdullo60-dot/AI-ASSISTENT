@@ -13,6 +13,7 @@ import 'core/storage/token_storage.dart';
 import 'core/theme/app_theme.dart';
 import 'l10n/fallback_localizations_delegate.dart';
 import 'l10n/l10n.dart';
+import 'services/activity_service.dart';
 import 'services/auth_service.dart';
 import 'services/employee_service.dart';
 import 'services/expense_service.dart';
@@ -76,6 +77,7 @@ class _MobileAppState extends State<MobileApp> {
       Provider(create: (_) => PayrollService(_api)),
       Provider(create: (_) => ExpenseService(_api)),
       Provider(create: (_) => TargetService(_api)),
+      Provider(create: (_) => ActivityService(_api)),
       Provider(create: (_) => ReportsService(_api)),
       ChangeNotifierProvider(
         create: (_) => SessionViewModel(_auth, _api)..restore(),

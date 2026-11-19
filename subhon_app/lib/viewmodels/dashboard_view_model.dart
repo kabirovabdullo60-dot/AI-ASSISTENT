@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 
 import '../core/network/api_client.dart';
+import '../models/activity_model.dart';
 import '../models/dashboard_model.dart';
 import '../models/sales_report_model.dart';
 import '../models/store_comparison_model.dart';
 import '../models/target_period.dart';
 import '../models/target_put_model.dart';
+import '../services/activity_service.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/target_service.dart';
@@ -15,15 +17,17 @@ import 'sales_period.dart';
 /// month, compared with the previous one), the top stores, this month's
 /// profit and the business-wide sales targets.
 class DashboardViewModel extends ChangeNotifier {
-  DashboardViewModel(this._reports, this._sales, this._targets);
+  DashboardViewModel(this._reports, this._sales, this._targets, this._activity);
 
   final ReportsService _reports;
   final SalesService _sales;
   final TargetService _targets;
+  final ActivityService _activity;
 
   DashboardModel? _dashboard;
   SalesReportModel? _periodReport;
   StoreComparisonModel? _topStores;
+  List<ActivityModel>? _recent;
   SalesPeriod _period = SalesPeriod.today;
   bool _isLoading = false;
   bool _isPeriodLoading = false;
@@ -32,6 +36,10 @@ class DashboardViewModel extends ChangeNotifier {
   DashboardModel? get dashboard => _dashboard;
   SalesReportModel? get periodReport => _periodReport;
   StoreComparisonModel? get topStores => _topStores;
+
+  /// The latest changes (5); `null` when they could not be loaded (the
+  /// rest of the dashboard still shows).
+  List<ActivityModel>? get recentActivity => _recent;
   SalesPeriod get period => _period;
   bool get isLoading => _isLoading;
   bool get isPeriodLoading => _isPeriodLoading;
@@ -51,6 +59,11 @@ class DashboardViewModel extends ChangeNotifier {
       _dashboard = results[0] as DashboardModel;
       _periodReport = results[1] as SalesReportModel;
       _topStores = results[2] as StoreComparisonModel;
+      try {
+        _recent = (await _activity.list(limit: 5)).items;
+      } on ApiException {
+        _recent = null;
+      }
     } on ApiException catch (e) {
       _error = e;
     } finally {

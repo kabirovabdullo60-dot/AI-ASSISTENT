@@ -10,6 +10,7 @@ import '../models/sales_report_model.dart';
 import '../models/target_period.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/sales_period.dart';
+import '../widgets/activity_tile.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_feedback.dart';
@@ -23,6 +24,7 @@ import '../widgets/share_bar_row.dart';
 import '../widgets/stat_tile.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/target_progress_card.dart';
+import 'activity_view.dart';
 
 /// Home (OFAR layout): month sales card, today, period figures with the
 /// change, this month's profit and the sales targets, salaries of the
@@ -228,6 +230,22 @@ class _Body extends StatelessWidget {
               ],
             ),
           ),
+        if (vm.recentActivity case final recent? when recent.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.xl),
+          SectionHeader(
+            title: l10n.activityTitle,
+            actionLabel: l10n.homeShowAll,
+            onAction: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const ActivityView()),
+            ),
+          ),
+          AppCard(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            child: Column(
+              children: [for (final a in recent) ActivityTile(activity: a)],
+            ),
+          ),
+        ],
       ],
     );
   }
