@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
 import '../models/chart_point_model.dart';
 
@@ -75,14 +76,23 @@ class _RevenueChartState extends State<RevenueChart> {
                       clipBehavior: Clip.none,
                       children: [
                         Positioned.fill(
-                          child: CustomPaint(
-                            painter: _RevenueChartPainter(
-                              points: points,
-                              peakIndex: widget.peakIndex,
-                              hoverIndex: hover,
-                              xLabels: widget.xLabels,
-                              peakLabel: hover == null ? widget.peakLabel : '',
-                              labelStyle: Theme.of(context).textTheme.labelSmall ?? const TextStyle(fontSize: 11),
+                          // Bars grow up in a left-to-right wave and the line draws itself when the
+                          // chart appears or its range changes (keyed by the number of days).
+                          child: TweenAnimationBuilder<double>(
+                            key: ValueKey(points.length),
+                            tween: Tween(begin: Motion.reduced(context) ? 1 : 0, end: 1),
+                            duration: const Duration(milliseconds: 900),
+                            curve: Curves.linear,
+                            builder: (context, growth, _) => CustomPaint(
+                              painter: _RevenueChartPainter(
+                                growth: growth,
+                                points: points,
+                                peakIndex: widget.peakIndex,
+                                hoverIndex: hover,
+                                xLabels: widget.xLabels,
+                                peakLabel: hover == null ? widget.peakLabel : '',
+                                labelStyle: Theme.of(context).textTheme.labelSmall ?? const TextStyle(fontSize: 11),
+                              ),
                             ),
                           ),
                         ),
@@ -144,6 +154,7 @@ class _Tooltip extends StatelessWidget {
 
 class _RevenueChartPainter extends CustomPainter {
   _RevenueChartPainter({
+    this.growth = 1,
     required this.points,
     required this.peakIndex,
     required this.hoverIndex,
@@ -152,6 +163,8 @@ class _RevenueChartPainter extends CustomPainter {
     required this.labelStyle,
   });
 
+  /// 0 → 1 while the chart enters.
+  final double growth;
   final List<ChartPointModel> points;
   final int peakIndex;
   final int? hoverIndex;
@@ -183,7 +196,9 @@ class _RevenueChartPainter extends CustomPainter {
     final maxRev = points.map((p) => p.revenue).reduce(math.max);
     double xOf(int i) => slot * (i + 0.5);
     for (var i = 0; i < n; i++) {
-      final h = maxRev <= 0 ? 0.0 : points[i].revenue / maxRev * chartH * 0.92;
+      // Each bar starts a little after the one to its left (a wave, not a block).
+      final local = ((growth - i / n * 0.45) / 0.55).clamp(0.0, 1.0);
+      final h = maxRev <= 0 ? 0.0 : points[i].revenue / maxRev * chartH * 0.92 * Motion.easeOut.transform(local);
       final rect = Rect.fromLTRB(xOf(i) - barW / 2, bottom - h, xOf(i) + barW / 2, bottom);
       final paint = Paint();
       if (i == peakIndex) {
@@ -224,11 +239,22 @@ class _RevenueChartPainter extends CustomPainter {
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.orange.withValues(alpha: 0.22), AppColors.orange.withValues(alpha: 0)],
+          colors: [
+            AppColors.orange.withValues(alpha: 0.22 * growth),
+            AppColors.orange.withValues(alpha: 0),
+          ],
         ).createShader(Rect.fromLTRB(0, _top, size.width, bottom)),
     );
+    // The cash-flow line draws itself from left to right during the entrance.
+    var drawn = line;
+    if (growth < 1) {
+      drawn = Path();
+      for (final m in line.computeMetrics()) {
+        drawn.addPath(m.extractPath(0, m.length * Motion.easeOut.transform(growth)), Offset.zero);
+      }
+    }
     canvas.drawPath(
-      line,
+      drawn,
       Paint()
         ..color = AppColors.orange
         ..style = PaintingStyle.stroke
@@ -312,6 +338,7 @@ class _RevenueChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RevenueChartPainter old) =>
+      old.growth != growth ||
       old.points != points ||
       old.peakIndex != peakIndex ||
       old.hoverIndex != hoverIndex ||

@@ -18,6 +18,7 @@ import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
 import 'employee_form_dialog.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Employees — /api/employees (CRUD) + /api/reports/employees.
 class EmployeesView extends StatelessWidget {
@@ -25,7 +26,7 @@ class EmployeesView extends StatelessWidget {
 
   Future<void> _delete(BuildContext context, EmployeeModel e) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.deleteEmployeeTitle),

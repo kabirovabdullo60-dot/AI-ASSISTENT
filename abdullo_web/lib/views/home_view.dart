@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,19 +45,15 @@ class HomeView extends StatelessWidget {
     final home = context.watch<HomeViewModel>();
     final brand = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? 'Apex Suite');
     // Page switch: the new page fades in while rising 8px (old one fades out quickly).
-    final page = AnimatedSwitcher(
-      duration: Motion.base,
-      reverseDuration: Motion.fast,
-      switchInCurve: Motion.easeOut,
-      switchOutCurve: Curves.easeOut,
-      transitionBuilder: (child, a) => FadeTransition(
-        opacity: a,
-        child: Motion.reduced(context)
-            ? child
-            : SlideTransition(
-                position: Tween(begin: const Offset(0, 0.012), end: Offset.zero).animate(a),
-                child: child,
-              ),
+    // Page switch: Material fade-through (package:animations) — the old page fades out
+    // quickly, the new one fades in while settling from 0.92 scale. Reduced motion: instant.
+    final page = PageTransitionSwitcher(
+      duration: Motion.reduced(context) ? Duration.zero : const Duration(milliseconds: 300),
+      transitionBuilder: (child, primary, secondary) => FadeThroughTransition(
+        animation: primary,
+        secondaryAnimation: secondary,
+        fillColor: Colors.transparent,
+        child: child,
       ),
       child: KeyedSubtree(key: ValueKey(home.section), child: _page(home.section)),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
 import '../core/constants/api_constants.dart';
@@ -23,7 +24,6 @@ import '../widgets/revenue_chart.dart';
 import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
 import '../core/motion/motion.dart';
-import '../widgets/motion/fade_slide_in.dart';
 import '../widgets/motion/pressable.dart';
 import '../widgets/motion/shimmer_sweep.dart';
 import 'record_sale_dialog.dart';
@@ -46,6 +46,9 @@ class DashboardView extends StatelessWidget {
 }
 
 class _DashboardContent extends StatelessWidget {
+  /// Whether the entrance already played in this session.
+  static bool _entered = false;
+
   const _DashboardContent({required this.vm, required this.d});
 
   final DashboardViewModel vm;
@@ -123,7 +126,21 @@ class _DashboardContent extends StatelessWidget {
       ),
     ];
 
+    // The dashboard is opened many times a day: its entrance plays once per session only.
+    final entrance = !_DashboardContent._entered && !Motion.reduced(context);
+    _DashboardContent._entered = true;
+    // KPI cards: non-uniform delays that shrink (60, 100, 130, 150, 165, 175 ms) read as one wave.
+    const kpiDelays = [60, 100, 130, 150, 165, 175];
+    Widget kpi(int i, Widget card) => entrance
+        ? card
+              .animate(delay: kpiDelays[i.clamp(0, 5)].ms)
+              .fadeIn(duration: 420.ms, curve: Motion.easeOut)
+              .moveY(begin: 8, end: 0, duration: 420.ms, curve: Motion.easeOut)
+        : card;
+    Widget support(Widget w) => entrance ? w.animate(delay: 190.ms).fadeIn(duration: 420.ms, curve: Motion.easeOut) : w;
+
     return PageBody(
+      entrance: entrance,
       title: tr.businessOverview,
       subtitle: tr.overviewSubtitle,
       actions: [
@@ -143,32 +160,30 @@ class _DashboardContent extends StatelessWidget {
           builder: (context, c) => CardGrid(
             columns: c.maxWidth >= 1100 ? 6 : (c.maxWidth >= 620 ? 3 : 2),
             children: [
-              // Cards cascade in one after another, and lift under the mouse.
-              for (var i = 0; i < kpis.length; i++)
-                FadeSlideIn(
-                  delay: Motion.staggerAt(i),
-                  child: Pressable(child: kpis[i]),
-                ),
+              // Cards arrive as one wave on the first visit, and lift under the mouse.
+              for (var i = 0; i < kpis.length; i++) kpi(i, Pressable(child: kpis[i])),
             ],
           ),
         ),
         const SizedBox(height: 16),
-        _GoalsCard(d: d, currency: cur),
+        support(_GoalsCard(d: d, currency: cur)),
         const SizedBox(height: 16),
-        LayoutBuilder(
-          builder: (context, c) {
-            final chart = _RevenueCard(vm: vm, d: d, currency: cur);
-            final stores = _TopStoresCard(stores: vm.topStores, currency: cur);
-            if (c.maxWidth < 1100) return Column(children: [chart, const SizedBox(height: 16), stores]);
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(flex: 5, child: chart),
-                const SizedBox(width: 16),
-                Expanded(flex: 3, child: stores),
-              ],
-            );
-          },
+        support(
+          LayoutBuilder(
+            builder: (context, c) {
+              final chart = _RevenueCard(vm: vm, d: d, currency: cur);
+              final stores = _TopStoresCard(stores: vm.topStores, currency: cur);
+              if (c.maxWidth < 1100) return Column(children: [chart, const SizedBox(height: 16), stores]);
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(flex: 5, child: chart),
+                  const SizedBox(width: 16),
+                  Expanded(flex: 3, child: stores),
+                ],
+              );
+            },
+          ),
         ),
         const SizedBox(height: 16),
         _ActivityCard(vm: vm, currency: cur),

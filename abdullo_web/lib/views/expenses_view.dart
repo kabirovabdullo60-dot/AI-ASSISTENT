@@ -18,6 +18,7 @@ import '../widgets/motion/shimmer_sweep.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
 import 'expense_form_dialog.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Expenses & profit — /api/expenses (CRUD) + /api/reports/profit.
 class ExpensesView extends StatelessWidget {
@@ -25,7 +26,7 @@ class ExpensesView extends StatelessWidget {
 
   Future<void> _delete(BuildContext context, ExpenseModel e) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.deleteExpenseTitle),

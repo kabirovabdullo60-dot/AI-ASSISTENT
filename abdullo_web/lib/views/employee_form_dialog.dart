@@ -10,6 +10,7 @@ import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/employees_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Add / edit an employee → POST /api/employees or PUT /api/employees/{id}.
 class EmployeeFormDialog extends StatefulWidget {
@@ -17,7 +18,7 @@ class EmployeeFormDialog extends StatefulWidget {
 
   final EmployeeModel? employee;
 
-  static Future<void> show(BuildContext context, {EmployeeModel? employee}) => showDialog<void>(
+  static Future<void> show(BuildContext context, {EmployeeModel? employee}) => showAppDialog<void>(
     context: context,
     builder: (_) => EmployeeFormDialog(employee: employee),
   );

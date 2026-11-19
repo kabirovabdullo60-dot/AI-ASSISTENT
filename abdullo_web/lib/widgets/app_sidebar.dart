@@ -27,8 +27,8 @@ class AppSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget item(AppSection s) =>
-        _SidebarItem(section: s, selected: s == selected, extended: extended, onTap: () => onSelect(s));
+    Widget group(List<AppSection> sections) =>
+        _NavGroup(sections: sections, selected: selected, extended: extended, onSelect: onSelect);
 
     return Container(
       key: const Key('app-sidebar'),
@@ -42,16 +42,13 @@ class AppSidebar extends StatelessWidget {
           children: [
             _Brand(name: brandName, extended: extended),
             Expanded(
-              child: ListView(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                children: [for (final s in AppSection.main) item(s)],
+                child: group(AppSection.main),
               ),
             ),
             Divider(color: AppColors.border, height: 1),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
-              child: Column(children: [for (final s in AppSection.footer) item(s)]),
-            ),
+            Padding(padding: const EdgeInsets.fromLTRB(10, 8, 10, 12), child: group(AppSection.footer)),
           ],
         ),
       ),
@@ -97,6 +94,58 @@ class _Brand extends StatelessWidget {
   }
 }
 
+/// A list of menu items with ONE selection pill that slides to the chosen item
+/// (one object moves, instead of one item fading out while another fades in).
+class _NavGroup extends StatelessWidget {
+  const _NavGroup({required this.sections, required this.selected, required this.extended, required this.onSelect});
+
+  static const extendedItem = 44.0;
+  static const compactItem = 58.0;
+  static const gap = 4.0; // 2px above + 2px below each item
+
+  final List<AppSection> sections;
+  final AppSection selected;
+  final bool extended;
+  final ValueChanged<AppSection> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    final itemH = extended ? extendedItem : compactItem;
+    final index = sections.indexOf(selected);
+    final reduced = Motion.reduced(context);
+    return Stack(
+      children: [
+        // Moves with a transform (no layout work), 240ms, and retargets mid-flight.
+        Positioned(
+          top: gap / 2,
+          left: 0,
+          right: 0,
+          height: itemH,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(end: (index < 0 ? 0 : index) * (itemH + gap)),
+            duration: reduced ? Duration.zero : const Duration(milliseconds: 240),
+            curve: Motion.easeInOut,
+            builder: (context, y, child) => Transform.translate(offset: Offset(0, y), child: child),
+            child: AnimatedOpacity(
+              duration: Motion.fast,
+              opacity: index < 0 ? 0 : 1,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: AppColors.tealSoft, borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+          ),
+        ),
+        Column(
+          children: [
+            for (final s in sections)
+              _SidebarItem(section: s, selected: s == selected, extended: extended, onTap: () => onSelect(s)),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class _SidebarItem extends StatelessWidget {
   const _SidebarItem({required this.section, required this.selected, required this.extended, required this.onTap});
 
@@ -112,13 +161,8 @@ class _SidebarItem extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
-      child: AnimatedContainer(
-        duration: Motion.base,
-        curve: Motion.easeOut,
-        decoration: BoxDecoration(
-          color: selected ? AppColors.tealSoft : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
+      child: SizedBox(
+        height: extended ? _NavGroup.extendedItem : _NavGroup.compactItem,
         child: Material(
           type: MaterialType.transparency,
           child: InkWell(

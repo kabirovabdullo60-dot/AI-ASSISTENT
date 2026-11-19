@@ -120,6 +120,6 @@ class KpiCard extends StatelessWidget {
       ),
     );
     // Needs attention → a beam of light runs around it twice.
-    return highlight ? BorderBeam(radius: 14, loops: 2, child: card) : card;
+    return highlight ? BorderBeam(radius: 14, loops: 2, onceId: 'kpi-$title', child: card) : card;
   }
 }

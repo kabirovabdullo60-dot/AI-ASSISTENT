@@ -8,6 +8,7 @@ import '../core/utils/format.dart';
 import '../models/payroll_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
+import '../core/motion/app_dialog.dart';
 
 /// "Record Salary Payment" → POST /api/payroll {employeeId, amount, month, year, paymentDate, note}.
 /// With [payroll] the employee is fixed, otherwise the user picks one who is still owed money.
@@ -16,7 +17,7 @@ class SalaryPaymentDialog extends StatefulWidget {
 
   final PayrollModel? payroll;
 
-  static Future<void> show(BuildContext context, {PayrollModel? payroll}) => showDialog<void>(
+  static Future<void> show(BuildContext context, {PayrollModel? payroll}) => showAppDialog<void>(
     context: context,
     builder: (_) => SalaryPaymentDialog(payroll: payroll),
   );

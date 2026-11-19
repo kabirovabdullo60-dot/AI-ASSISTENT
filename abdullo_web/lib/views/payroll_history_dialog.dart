@@ -9,6 +9,7 @@ import '../models/payroll_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../widgets/status_badge.dart';
+import '../core/motion/app_dialog.dart';
 
 /// All months and payments of one employee — GET /api/payroll/employee/{id}.
 /// A payment can be cancelled here (DELETE /api/payroll/{id}).
@@ -17,7 +18,7 @@ class PayrollHistoryDialog extends StatefulWidget {
 
   final PayrollModel payroll;
 
-  static Future<void> show(BuildContext context, PayrollModel payroll) => showDialog<void>(
+  static Future<void> show(BuildContext context, PayrollModel payroll) => showAppDialog<void>(
     context: context,
     builder: (_) => PayrollHistoryDialog(payroll: payroll),
   );
@@ -33,7 +34,7 @@ class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
 
   Future<void> _cancel(PaymentModel p) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.cancelPaymentTitle),

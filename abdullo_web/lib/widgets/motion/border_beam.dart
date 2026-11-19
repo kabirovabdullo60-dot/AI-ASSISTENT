@@ -16,7 +16,13 @@ class BorderBeam extends StatefulWidget {
     this.active = false,
     this.width = 1.6,
     this.lap = const Duration(milliseconds: 3200),
+    this.onceId,
   });
+
+  /// When set, the idle laps play only the first time a beam with this id appears in the
+  /// session (for decoration on screens people open many times a day).
+  final String? onceId;
+  static final _played = <String>{};
 
   final Widget child;
   final double radius;
@@ -40,6 +46,8 @@ class _BorderBeamState extends State<BorderBeam> with SingleTickerProviderStateM
   }
 
   void _run() {
+    final id = widget.onceId;
+    if (!widget.active && id != null && !BorderBeam._played.add(id)) return;
     if (widget.active) {
       _c.repeat();
     } else {

@@ -75,3 +75,21 @@ hover or while work is happening. Reduced motion removes all movement.
 ## Tests
 
 `test/motion_test.dart` covers the skeleton, the thinking indicator, the typed answer, and the whole chat with reduced motion turned on.
+
+## Choreography (emilkowalski/skills: choreograph, review-animations)
+
+- **Page switch:** Material fade-through (`package:animations` `PageTransitionSwitcher`), 300ms.
+- **Dialogs:** `showAppDialog` uses fade + scale from 0.8 (`showModal`), 220ms in and 150ms out.
+- **Menu:** one selection pill slides to the chosen item with a transform, 240ms, and it can be interrupted.
+- **Dashboard entrance (`flutter_animate`), once per session:**
+
+  | Element | Role | Start | Motion |
+  |---|---|---|---|
+  | Title + subtitle | Lead | 0ms | fade + 12px rise, 520ms |
+  | Header actions | Decoration | 0ms | fade only |
+  | KPI cards | Support | 60 / 100 / 130 / 150 / 165 / 175ms | fade + 8px, 420ms |
+  | Targets, chart, top stores | Support | 190ms | fade only (the chart grows its own bars) |
+  | Activity | Static | — | — |
+
+- **Chart:** bars grow in a left-to-right wave and the cash-flow line draws itself (900ms) when the chart appears or its range changes.
+- **Cut for frequency:** no shimmer on hover, the attention beam plays once per session, and no stagger on menus or table rows.

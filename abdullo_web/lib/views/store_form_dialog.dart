@@ -5,6 +5,7 @@ import '../core/l10n/l10n.dart';
 import '../models/store_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Add / edit a store → POST /api/stores or PUT /api/stores/{id}.
 class StoreFormDialog extends StatefulWidget {
@@ -13,7 +14,7 @@ class StoreFormDialog extends StatefulWidget {
   /// `null` = new store.
   final StoreModel? store;
 
-  static Future<void> show(BuildContext context, {StoreModel? store}) => showDialog<void>(
+  static Future<void> show(BuildContext context, {StoreModel? store}) => showAppDialog<void>(
     context: context,
     builder: (_) => StoreFormDialog(store: store),
   );

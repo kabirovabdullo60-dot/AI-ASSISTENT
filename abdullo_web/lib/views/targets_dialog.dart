@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../core/l10n/l10n.dart';
 import '../models/dashboard_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Business-wide weekly + monthly sales targets → PUT /api/targets.
 class TargetsDialog extends StatefulWidget {
@@ -12,7 +13,7 @@ class TargetsDialog extends StatefulWidget {
 
   final DashboardModel dashboard;
 
-  static Future<void> show(BuildContext context, DashboardModel d) => showDialog<void>(
+  static Future<void> show(BuildContext context, DashboardModel d) => showAppDialog<void>(
     context: context,
     builder: (_) => TargetsDialog(dashboard: d),
   );

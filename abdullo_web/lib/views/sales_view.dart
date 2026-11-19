@@ -25,6 +25,7 @@ import '../widgets/sparkline.dart';
 import '../widgets/status_badge.dart';
 import 'record_sale_dialog.dart';
 import 'sale_entry_form_view.dart';
+import '../core/motion/app_dialog.dart';
 
 /// "Sales & Daily Entries" — /api/sales (+ daily / weekly / monthly reports).
 class SalesView extends StatelessWidget {
@@ -256,7 +257,7 @@ class _EntriesColumn extends StatelessWidget {
 
   Future<void> _delete(BuildContext context, SaleModel sale) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.deleteSaleTitle),

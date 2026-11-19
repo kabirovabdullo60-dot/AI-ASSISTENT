@@ -250,7 +250,8 @@ class _EmptyChat extends StatelessWidget {
                                 SizedBox(
                                   width: cardWidth,
                                   child: FadeSlideIn(
-                                    delay: Motion.staggerAt(3 + i),
+                                    // Shrinking gaps (not a metronome): 140, 175, 200, 215 ms.
+                                    delay: Duration(milliseconds: const [140, 175, 200, 215][i]),
                                     child: _SuggestionCard(
                                       icon: suggestions[i].$1,
                                       title: suggestions[i].$2,
