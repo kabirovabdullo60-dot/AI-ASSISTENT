@@ -1186,4 +1186,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String payrollAllTimeCaption(String due, String paid) {
     return 'Начислено $due · выплачено $paid';
   }
+
+  @override
+  String get reportByRegion => 'По регионам';
+
+  @override
+  String get reportNoRegion => 'Без региона';
+
+  @override
+  String reportRegionStores(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count магазина',
+      many: '$count магазинов',
+      few: '$count магазина',
+      one: '$count магазин',
+    );
+    return '$_temp0';
+  }
 }

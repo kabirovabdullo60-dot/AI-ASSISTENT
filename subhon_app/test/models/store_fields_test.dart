@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:subhon_app/models/store_comparison_model.dart';
 import 'package:subhon_app/models/store_create_model.dart';
 import 'package:subhon_app/models/store_model.dart';
 import 'package:subhon_app/models/store_update_model.dart';
@@ -54,4 +55,34 @@ void main() {
       );
     },
   );
+
+  test('the store comparison is read with its regions', () {
+    final report = StoreComparisonModel.fromJson({
+      ...ApiJson.storeComparison(),
+      'regions': [
+        {
+          'region': 'Dushanbe',
+          'storesCount': 2,
+          'inactiveStores': 0,
+          'totalAmount': '80000.00',
+          'sharePercent': 71.4,
+        },
+        {
+          'region': null,
+          'storesCount': 1,
+          'inactiveStores': 1,
+          'totalAmount': '32028.00',
+          'sharePercent': 28.6,
+        },
+      ],
+    });
+    expect(report.regions, hasLength(2));
+    expect(report.regions.first.region, 'Dushanbe');
+    expect(report.regions.last.region, isNull);
+    // Older answers without regions still read.
+    expect(
+      StoreComparisonModel.fromJson(ApiJson.storeComparison()).regions,
+      isEmpty,
+    );
+  });
 }

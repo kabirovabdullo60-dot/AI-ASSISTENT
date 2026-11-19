@@ -138,6 +138,33 @@ class _Reports extends StatelessWidget {
                       ],
                     ),
                   ),
+                // Regions only help when the stores are in more than one.
+                if (stores.regions.length > 1) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    l10n.reportByRegion,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppCard(
+                    child: Column(
+                      children: [
+                        for (final (i, r) in stores.regions.indexed) ...[
+                          if (i > 0) const SizedBox(height: AppSpacing.md),
+                          ShareBarRow(
+                            icon: Icons.map_outlined,
+                            label:
+                                '${r.region ?? l10n.reportNoRegion} · '
+                                '${l10n.reportRegionStores(r.storesCount)}',
+                            value: context.money(r.totalAmount),
+                            share: r.sharePercent / 100,
+                            shareText: context.percent(r.sharePercent),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: AppSpacing.xl),
                 SectionHeader(title: l10n.reportPayroll),
                 PeriodSwitcher(

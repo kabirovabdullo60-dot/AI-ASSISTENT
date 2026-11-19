@@ -342,5 +342,8 @@
   "salaryMethodBank": "Интиқоли бонкӣ",
   "salaryMethodCash": "Нақд",
   "payrollAllTimeRemaining": "Пардохтнашуда барои ҳамаи моҳҳо",
-  "payrollAllTimeCaption": "Ҳисобшуда {due} · пардохтшуда {paid}"
+  "payrollAllTimeCaption": "Ҳисобшуда {due} · пардохтшуда {paid}",
+  "reportByRegion": "Аз рӯи минтақа",
+  "reportNoRegion": "Бе минтақа",
+  "reportRegionStores": "{count, plural, other{{count} мағоза}}"
 }

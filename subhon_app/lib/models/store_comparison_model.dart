@@ -1,6 +1,7 @@
 import '../core/utils/money.dart';
 
 import 'period_model.dart';
+import 'region_sales_model.dart';
 import 'store_comparison_row_model.dart';
 
 /// `StoreComparisonOut` from the API contract (API.md / Swagger).
@@ -14,6 +15,7 @@ class StoreComparisonModel {
     required this.storesCount,
     this.bestStore,
     required this.stores,
+    this.regions = const [],
   });
 
   factory StoreComparisonModel.fromJson(Map<String, dynamic> json) =>
@@ -35,6 +37,10 @@ class StoreComparisonModel {
           for (final e in json['stores'] as List<dynamic>)
             StoreComparisonRowModel.fromJson(e as Map<String, dynamic>),
         ],
+        regions: [
+          for (final e in json['regions'] as List<dynamic>? ?? const [])
+            RegionSalesModel.fromJson(e as Map<String, dynamic>),
+        ],
       );
 
   final String currency;
@@ -45,4 +51,7 @@ class StoreComparisonModel {
   final int storesCount;
   final StoreComparisonRowModel? bestStore;
   final List<StoreComparisonRowModel> stores;
+
+  /// The same stores grouped by region, best first.
+  final List<RegionSalesModel> regions;
 }

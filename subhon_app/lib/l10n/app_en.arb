@@ -684,5 +684,15 @@
         "type": "String"
       }
     }
+  },
+  "reportByRegion": "By region",
+  "reportNoRegion": "No region",
+  "reportRegionStores": "{count, plural, one{1 store} other{{count} stores}}",
+  "@reportRegionStores": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

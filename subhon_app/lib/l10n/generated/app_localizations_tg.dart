@@ -1183,4 +1183,20 @@ class AppLocalizationsTg extends AppLocalizations {
   String payrollAllTimeCaption(String due, String paid) {
     return 'Ҳисобшуда $due · пардохтшуда $paid';
   }
+
+  @override
+  String get reportByRegion => 'Аз рӯи минтақа';
+
+  @override
+  String get reportNoRegion => 'Бе минтақа';
+
+  @override
+  String reportRegionStores(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count мағоза',
+    );
+    return '$_temp0';
+  }
 }

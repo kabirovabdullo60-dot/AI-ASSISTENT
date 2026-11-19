@@ -2157,6 +2157,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Due {due} · paid {paid}'**
   String payrollAllTimeCaption(String due, String paid);
+
+  /// No description provided for @reportByRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'By region'**
+  String get reportByRegion;
+
+  /// No description provided for @reportNoRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'No region'**
+  String get reportNoRegion;
+
+  /// No description provided for @reportRegionStores.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 store} other{{count} stores}}'**
+  String reportRegionStores(int count);
 }
 
 class _AppLocalizationsDelegate

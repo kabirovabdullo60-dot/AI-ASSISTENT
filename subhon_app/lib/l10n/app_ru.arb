@@ -342,5 +342,8 @@
   "salaryMethodBank": "Банковский перевод",
   "salaryMethodCash": "Наличные",
   "payrollAllTimeRemaining": "Невыплачено за все месяцы",
-  "payrollAllTimeCaption": "Начислено {due} · выплачено {paid}"
+  "payrollAllTimeCaption": "Начислено {due} · выплачено {paid}",
+  "reportByRegion": "По регионам",
+  "reportNoRegion": "Без региона",
+  "reportRegionStores": "{count, plural, one{{count} магазин} few{{count} магазина} many{{count} магазинов} other{{count} магазина}}"
 }

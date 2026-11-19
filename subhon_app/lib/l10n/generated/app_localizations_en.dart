@@ -1182,4 +1182,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String payrollAllTimeCaption(String due, String paid) {
     return 'Due $due · paid $paid';
   }
+
+  @override
+  String get reportByRegion => 'By region';
+
+  @override
+  String get reportNoRegion => 'No region';
+
+  @override
+  String reportRegionStores(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count stores',
+      one: '1 store',
+    );
+    return '$_temp0';
+  }
 }
