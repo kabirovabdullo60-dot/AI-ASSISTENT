@@ -1978,12 +1978,6 @@ abstract class AppLocalizations {
   /// **'Too many questions. Wait {seconds} s and try again.'**
   String errAssistantRateLimited(int seconds);
 
-  /// No description provided for @homeInUsd.
-  ///
-  /// In en, this message translates to:
-  /// **'≈ {amount} · 1 USD = {rate}'**
-  String homeInUsd(String amount, String rate);
-
   /// No description provided for @fieldPaymentMethod.
   ///
   /// In en, this message translates to:
@@ -2175,6 +2169,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, one{1 store} other{{count} stores}}'**
   String reportRegionStores(int count);
+
+  /// No description provided for @homeTodaySales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales today'**
+  String get homeTodaySales;
+
+  /// No description provided for @homeMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get homeMonth;
 }
 
 class _AppLocalizationsDelegate

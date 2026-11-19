@@ -313,7 +313,6 @@
   "assistantSuggestSalary": "Сколько зарплаты ещё не выплачено?",
   "errAssistantUnavailable": "Ассистент сейчас недоступен. Попробуйте позже.",
   "errAssistantRateLimited": "Слишком много вопросов. Подождите {seconds} с и попробуйте снова.",
-  "homeInUsd": "≈ {amount} · 1 USD = {rate}",
   "fieldPaymentMethod": "Способ оплаты",
   "paymentNotSet": "Не указан",
   "paymentCash": "Наличные",
@@ -345,5 +344,7 @@
   "payrollAllTimeCaption": "Начислено {due} · выплачено {paid}",
   "reportByRegion": "По регионам",
   "reportNoRegion": "Без региона",
-  "reportRegionStores": "{count, plural, one{{count} магазин} few{{count} магазина} many{{count} магазинов} other{{count} магазина}}"
+  "reportRegionStores": "{count, plural, one{{count} магазин} few{{count} магазина} many{{count} магазинов} other{{count} магазина}}",
+  "homeTodaySales": "Продажи за сегодня",
+  "homeMonth": "За месяц"
 }

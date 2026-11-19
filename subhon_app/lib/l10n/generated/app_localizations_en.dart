@@ -1090,11 +1090,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String homeInUsd(String amount, String rate) {
-    return '≈ $amount · 1 USD = $rate';
-  }
-
-  @override
   String get fieldPaymentMethod => 'Payment method';
 
   @override
@@ -1199,4 +1194,10 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get homeTodaySales => 'Sales today';
+
+  @override
+  String get homeMonth => 'This month';
 }

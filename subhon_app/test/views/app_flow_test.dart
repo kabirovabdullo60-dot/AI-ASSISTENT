@@ -66,7 +66,7 @@ void main() {
     await pumpApp(tester, backend, tokens: tokens);
     await _signIn(tester, 'Ofar2026');
     expect(find.byType(ShellView), findsOneWidget);
-    expect(find.text('Продажи за месяц'), findsOneWidget);
+    expect(find.text('Продажи за сегодня'), findsOneWidget);
     expect(find.text('112\u00a0028 TJS'), findsOneWidget);
     expect(find.text('6\u00a0940,50 TJS'), findsWidgets);
     expect(tokens.accessToken, 'access-1');
@@ -130,7 +130,7 @@ void main() {
     expect(find.text('Не удалось загрузить'), findsOneWidget);
     online = true;
     await tapText(tester, 'Повторить');
-    expect(find.text('Продажи за месяц'), findsOneWidget);
+    expect(find.text('Продажи за сегодня'), findsOneWidget);
   });
 
   testWidgets('salary payment: open the month, pay the remaining amount; the '

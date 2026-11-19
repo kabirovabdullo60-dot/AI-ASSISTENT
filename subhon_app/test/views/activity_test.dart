@@ -109,7 +109,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    expect(find.text('Продажи за месяц'), findsOneWidget);
+    expect(find.text('Продажи за сегодня'), findsOneWidget);
     expect(find.text('Последние действия'), findsNothing);
   });
 }

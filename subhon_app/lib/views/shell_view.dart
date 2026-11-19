@@ -5,7 +5,6 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../l10n/l10n.dart';
 import '../services/activity_service.dart';
-import '../services/exchange_rate_service.dart';
 import '../models/notification_link.dart';
 import '../services/notification_service.dart';
 import '../services/payroll_service.dart';
@@ -47,7 +46,6 @@ class _ShellViewState extends State<ShellView> {
     context.read<SalesService>(),
     context.read<TargetService>(),
     context.read<ActivityService>(),
-    context.read<ExchangeRateService>(),
   )..load();
   late final _sales = SalesViewModel(
     context.read<SalesService>(),

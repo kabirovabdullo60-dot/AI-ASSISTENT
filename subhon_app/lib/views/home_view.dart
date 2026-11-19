@@ -115,26 +115,13 @@ class _Body extends StatelessWidget {
       ),
       children: [
         SummaryCard(
-          title: l10n.homeMonthSales,
-          value: context.money(d.monthSales),
+          title: l10n.homeTodaySales,
+          value: context.money(d.todaySales),
           parts: [
-            (l10n.homeToday, context.money(d.todaySales)),
             (l10n.homeWeek, context.money(d.weekSales)),
+            (l10n.homeMonth, context.money(d.monthSales)),
           ],
         ),
-        if (vm.exchangeRates?.rates['USD'] case final usd?) ...[
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            l10n.homeInUsd(
-              context.moneyIn(d.monthSales / usd, 'USD'),
-              context.money(usd),
-            ),
-            textAlign: TextAlign.end,
-            style: Theme.of(
-              context,
-            ).textTheme.labelSmall?.copyWith(color: p.textSecondary),
-          ),
-        ],
         gap,
         StatTile(
           icon: Icons.point_of_sale_rounded,
