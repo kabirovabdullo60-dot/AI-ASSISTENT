@@ -619,7 +619,7 @@
   "notifOther": "Something needs attention",
   "assistantTitle": "AI assistant",
   "moreAssistantHint": "Ask about your sales, stores and salaries",
-  "assistantIntro": "Ask me about your business — I answer with your real figures.",
+  "assistantIntro": "Ask me about your money or your business — I answer from your real figures.",
   "assistantHint": "Your question…",
   "assistantSend": "Send",
   "assistantThinking": "Thinking…",
@@ -1089,5 +1089,7 @@
   "quickPersonal": "Personal",
   "quickBusiness": "Business",
   "morePersonal": "My money",
-  "moreOperationsHint": "Every income, expense and transfer"
+  "moreOperationsHint": "Every income, expense and transfer",
+  "assistantSuggestSpending": "What do I spend the most on?",
+  "assistantSuggestMonth": "How much did I spend this month?"
 }

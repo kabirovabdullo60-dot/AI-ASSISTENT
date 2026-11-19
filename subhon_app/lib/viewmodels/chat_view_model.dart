@@ -21,8 +21,13 @@ class ChatViewModel extends ChangeNotifier {
     this.voice,
     this.history,
     this.userId,
+    this.personalContext,
     DateTime Function()? clock,
   }) : _clock = clock ?? DateTime.now;
+
+  /// My personal finances (kept on the phone) as a short note added before
+  /// the newest question only, so the assistant can answer about them.
+  final String? Function()? personalContext;
 
   final AssistantService _assistant;
 
@@ -153,7 +158,7 @@ class ChatViewModel extends ChangeNotifier {
     try {
       final reply = await _assistant.chat(
         language: language,
-        messages: _messages,
+        messages: _withContext(),
       );
       _messages.add(reply);
     } on ApiException catch (e) {
@@ -163,6 +168,25 @@ class ChatViewModel extends ChangeNotifier {
       notifyListeners();
     }
     await _save();
+  }
+
+  /// The conversation with the personal note before the last question
+  /// (left out when it would be too long for the API).
+  List<ChatMessageModel> _withContext() {
+    final note = personalContext?.call();
+    final last = _messages.lastOrNull;
+    if (note == null || last == null || !last.fromUser) return _messages;
+    final question = '$note\n${last.prompt ?? last.text}';
+    if (question.length > maxLength) return _messages;
+    return [
+      ..._messages.take(_messages.length - 1),
+      ChatMessageModel(
+        fromUser: true,
+        text: last.text,
+        time: last.time,
+        prompt: question,
+      ),
+    ];
   }
 
   /// Starts talking by voice: listen → answer → read it aloud → listen

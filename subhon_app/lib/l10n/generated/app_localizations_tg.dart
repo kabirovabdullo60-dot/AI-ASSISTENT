@@ -1059,7 +1059,7 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get assistantIntro =>
-      'Дар бораи тиҷорати худ пурсед — ман бо рақамҳои воқеии шумо ҷавоб медиҳам.';
+      'Дар бораи пул ё тиҷорати худ пурсед — ман бо рақамҳои воқеии шумо ҷавоб медиҳам.';
 
   @override
   String get assistantHint => 'Саволи шумо…';
@@ -2109,4 +2109,10 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get moreOperationsHint => 'Ҳамаи даромад, хароҷот ва интиқолҳо';
+
+  @override
+  String get assistantSuggestSpending => 'Ман бештар ба чӣ харҷ мекунам?';
+
+  @override
+  String get assistantSuggestMonth => 'Дар ин моҳ чӣ қадар харҷ кардам?';
 }

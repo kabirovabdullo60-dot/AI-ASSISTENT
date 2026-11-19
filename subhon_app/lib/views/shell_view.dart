@@ -424,9 +424,11 @@ class _ShellViewState extends State<ShellView> {
       // The AI assistant, always in the bottom-right corner on every tab.
       floatingActionButton: AssistantFab(
         tooltip: l10n.assistantTitle,
-        onPressed: () => Navigator.of(
-          context,
-        ).push(MaterialPageRoute<void>(builder: (_) => const ChatView())),
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => ChatView(personalContext: _personal.summary),
+          ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: IndexedStack(

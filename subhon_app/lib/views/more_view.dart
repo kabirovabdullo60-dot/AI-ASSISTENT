@@ -102,7 +102,14 @@ class MoreView extends StatelessWidget {
                 icon: Icons.auto_awesome_outlined,
                 title: l10n.assistantTitle,
                 hint: l10n.moreAssistantHint,
-                onTap: () => _open(context, const ChatView()),
+                onTap: () => _open(
+                  context,
+                  ChatView(
+                    personalContext: context
+                        .read<PersonalFinanceViewModel>()
+                        .summary,
+                  ),
+                ),
               ),
             ],
           ),

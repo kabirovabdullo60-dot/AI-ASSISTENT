@@ -304,7 +304,7 @@
   "notifOther": "Диққат лозим",
   "assistantTitle": "Ёрдамчии ИИ",
   "moreAssistantHint": "Дар бораи фурӯш, мағозаҳо ва маош пурсед",
-  "assistantIntro": "Дар бораи тиҷорати худ пурсед — ман бо рақамҳои воқеии шумо ҷавоб медиҳам.",
+  "assistantIntro": "Дар бораи пул ё тиҷорати худ пурсед — ман бо рақамҳои воқеии шумо ҷавоб медиҳам.",
   "assistantHint": "Саволи шумо…",
   "assistantSend": "Фиристодан",
   "assistantThinking": "Фикр мекунам…",
@@ -632,5 +632,7 @@
   "quickPersonal": "Шахсӣ",
   "quickBusiness": "Тиҷорат",
   "morePersonal": "Пули ман",
-  "moreOperationsHint": "Ҳамаи даромад, хароҷот ва интиқолҳо"
+  "moreOperationsHint": "Ҳамаи даромад, хароҷот ва интиқолҳо",
+  "assistantSuggestSpending": "Ман бештар ба чӣ харҷ мекунам?",
+  "assistantSuggestMonth": "Дар ин моҳ чӣ қадар харҷ кардам?"
 }

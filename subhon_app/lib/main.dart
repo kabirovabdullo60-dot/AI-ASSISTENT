@@ -154,8 +154,7 @@ class _MobileAppState extends State<MobileApp> {
       ),
       Provider(create: (_) => widget.market ?? MarketService()),
       Provider<PersonalFinanceStorage>(
-        create: (_) =>
-            widget.personal ?? const SecurePersonalFinanceStorage(),
+        create: (_) => widget.personal ?? const SecurePersonalFinanceStorage(),
       ),
       Provider<DebtStorage>(
         create: (_) => widget.debts ?? const SecureDebtStorage(),

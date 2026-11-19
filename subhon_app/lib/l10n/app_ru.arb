@@ -304,7 +304,7 @@
   "notifOther": "Требует внимания",
   "assistantTitle": "ИИ-ассистент",
   "moreAssistantHint": "Спросите о продажах, магазинах и зарплатах",
-  "assistantIntro": "Спросите меня о своём бизнесе — я отвечу по вашим настоящим цифрам.",
+  "assistantIntro": "Спросите меня о своих деньгах или о бизнесе — я отвечу по вашим настоящим цифрам.",
   "assistantHint": "Ваш вопрос…",
   "assistantSend": "Отправить",
   "assistantThinking": "Думаю…",
@@ -632,5 +632,7 @@
   "quickPersonal": "Личное",
   "quickBusiness": "Бизнес",
   "morePersonal": "Мои деньги",
-  "moreOperationsHint": "Все доходы, расходы и переводы"
+  "moreOperationsHint": "Все доходы, расходы и переводы",
+  "assistantSuggestSpending": "На что я трачу больше всего?",
+  "assistantSuggestMonth": "Сколько я потратил в этом месяце?"
 }

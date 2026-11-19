@@ -51,7 +51,12 @@ void main() {
     expect(body['language'], 'ru');
     final messages = body['messages'] as List<dynamic>;
     expect(messages.single, containsPair('role', 'user'));
-    expect(messages.single, containsPair('text', 'Как продажи сегодня?'));
+    // My personal finances (the cash wallet on the phone) go before it.
+    final sent = (messages.single as Map<String, dynamic>)['text'] as String;
+    expect(sent, startsWith('[My personal finances'));
+    expect(sent, contains('Total balance: 0.00'));
+    expect(sent, endsWith('[Question]\nКак продажи сегодня?'));
+    expect(find.textContaining('[My personal'), findsNothing);
     expect(find.text('Сегодня продажи 6 940,50 TJS.'), findsOneWidget);
   });
 

@@ -1063,7 +1063,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get assistantIntro =>
-      'Спросите меня о своём бизнесе — я отвечу по вашим настоящим цифрам.';
+      'Спросите меня о своих деньгах или о бизнесе — я отвечу по вашим настоящим цифрам.';
 
   @override
   String get assistantHint => 'Ваш вопрос…';
@@ -2124,4 +2124,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get moreOperationsHint => 'Все доходы, расходы и переводы';
+
+  @override
+  String get assistantSuggestSpending => 'На что я трачу больше всего?';
+
+  @override
+  String get assistantSuggestMonth => 'Сколько я потратил в этом месяце?';
 }

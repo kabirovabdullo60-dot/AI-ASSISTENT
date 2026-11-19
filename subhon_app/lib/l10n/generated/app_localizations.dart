@@ -1927,7 +1927,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantIntro.
   ///
   /// In en, this message translates to:
-  /// **'Ask me about your business — I answer with your real figures.'**
+  /// **'Ask me about your money or your business — I answer from your real figures.'**
   String get assistantIntro;
 
   /// No description provided for @assistantHint.
@@ -3897,6 +3897,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Every income, expense and transfer'**
   String get moreOperationsHint;
+
+  /// No description provided for @assistantSuggestSpending.
+  ///
+  /// In en, this message translates to:
+  /// **'What do I spend the most on?'**
+  String get assistantSuggestSpending;
+
+  /// No description provided for @assistantSuggestMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'How much did I spend this month?'**
+  String get assistantSuggestMonth;
 }
 
 class _AppLocalizationsDelegate

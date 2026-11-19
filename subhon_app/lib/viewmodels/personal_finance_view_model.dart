@@ -372,6 +372,49 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     );
   }
 
+  /// A short note of my personal finances for the AI assistant (English
+  /// labels; it answers in the app's language): balances, this month's
+  /// income and expenses, the largest categories, coming payments.
+  String? summary() {
+    if (!_loaded || (_data.accounts.isEmpty && _data.transactions.isEmpty)) {
+      return null;
+    }
+    String m(double v) => v.toStringAsFixed(2);
+    String d(DateTime v) =>
+        '${v.year}-${v.month.toString().padLeft(2, '0')}-'
+        '${v.day.toString().padLeft(2, '0')}';
+    final now = today;
+    final month = [
+      for (final t in _data.transactions)
+        if (t.date.year == now.year && t.date.month == now.month) t,
+    ];
+    double sum(MoneyTransactionKind k) =>
+        month.where((t) => t.kind == k).fold(0, (s, t) => s + t.amount);
+    final cats = <MoneyCategory, double>{};
+    for (final t in month) {
+      if (t.kind == MoneyTransactionKind.expense && t.category != null) {
+        cats[t.category!] = (cats[t.category!] ?? 0) + t.amount;
+      }
+    }
+    final top = cats.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    final coming = upcoming(days: 14);
+    return [
+      '[My personal finances, kept in the app on my phone; TJS; today ${d(now)}]',
+      'Total balance: ${m(totalBalance)}. Accounts: '
+          '${[for (final a in _data.accounts) '${a.name} ${m(balance(a.id))}'].join(', ')}.',
+      'This month: income ${m(sum(MoneyTransactionKind.income))}, '
+          'expenses ${m(sum(MoneyTransactionKind.expense))}.',
+      if (top.isNotEmpty)
+        'Expenses by category: '
+            '${[for (final e in top.take(6)) '${e.key.name} ${m(e.value)}'].join(', ')}.',
+      if (coming.isNotEmpty)
+        'Regular payments due: '
+            '${[for (final r in coming.take(5)) '${r.name} ${m(r.amount)} on ${d(r.nextDate)}'].join(', ')}.',
+      '[Question]',
+    ].join('\n');
+  }
+
   static String? _opt(String? text) =>
       text == null || text.trim().isEmpty ? null : text.trim();
 }

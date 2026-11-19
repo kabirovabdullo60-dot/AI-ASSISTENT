@@ -1060,7 +1060,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantIntro =>
-      'Ask me about your business — I answer with your real figures.';
+      'Ask me about your money or your business — I answer from your real figures.';
 
   @override
   String get assistantHint => 'Your question…';
@@ -2117,4 +2117,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreOperationsHint => 'Every income, expense and transfer';
+
+  @override
+  String get assistantSuggestSpending => 'What do I spend the most on?';
+
+  @override
+  String get assistantSuggestMonth => 'How much did I spend this month?';
 }

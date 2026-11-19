@@ -21,7 +21,10 @@ import 'voice_chat_view.dart';
 /// and get answers built from its real figures, in the app's language.
 /// The jelly mascot greets you and thinks while the answer is coming.
 class ChatView extends StatelessWidget {
-  const ChatView({super.key});
+  const ChatView({this.personalContext, super.key});
+
+  /// My personal finances as a note for the assistant.
+  final String? Function()? personalContext;
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
@@ -30,6 +33,7 @@ class ChatView extends StatelessWidget {
       voice: context.read<VoiceService>(),
       history: context.read<ChatHistoryStorage>(),
       userId: context.read<SessionViewModel>().user?.id,
+      personalContext: personalContext,
     ),
     child: const _Chat(),
   );
@@ -227,8 +231,9 @@ class _Welcome extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final suggestions = [
+      l10n.assistantSuggestSpending,
+      l10n.assistantSuggestMonth,
       l10n.assistantSuggestToday,
-      l10n.assistantSuggestBestStore,
       l10n.assistantSuggestSalary,
     ];
     return ListView(

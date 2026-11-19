@@ -117,4 +117,37 @@ void main() {
     expect(again.accounts.single.name, 'Наличные');
     expect((await storage.read('u2')).accounts, isEmpty);
   });
+
+  test('summary for the AI: balances, month, categories, due payments', () async {
+    final vm = PersonalFinanceViewModel(
+      MemoryPersonalFinanceStorage(),
+      'u1',
+      clock: () => DateTime(2026, 11, 19, 12),
+    );
+    await vm.load();
+    expect(vm.summary(), isNull);
+    final card = await vm.addAccount(
+      name: 'Алиф',
+      kind: MoneyAccountKind.card,
+      openingBalance: 1000,
+    );
+    await vm.addTransaction(
+      kind: MoneyTransactionKind.expense,
+      amount: 150,
+      accountId: card.id,
+      category: MoneyCategory.food,
+    );
+    await vm.saveRecurring(
+      name: 'Интернет',
+      amount: 200,
+      category: MoneyCategory.phone,
+      nextDate: DateTime(2026, 11, 25),
+    );
+    final note = vm.summary()!;
+    expect(note, contains('Total balance: 850.00'));
+    expect(note, contains('Алиф 850.00'));
+    expect(note, contains('expenses 150.00'));
+    expect(note, contains('food 150.00'));
+    expect(note, contains('Интернет 200.00 on 2026-11-25'));
+  });
 }
