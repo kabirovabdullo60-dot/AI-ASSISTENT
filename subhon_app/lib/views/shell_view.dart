@@ -37,7 +37,7 @@ import 'store_form_view.dart';
 import 'stores_view.dart';
 
 /// The app after login, with OFAR's bottom navigation:
-/// Главная · Продажи · [+] · Валюты · Ещё. Salaries and the history open
+/// Главная · Валюты · [+] · Продажи · Ещё. Salaries and the history open
 /// from "+" (the history also from home's app bar).
 class ShellView extends StatefulWidget {
   const ShellView({super.key});
@@ -48,6 +48,10 @@ class ShellView extends StatefulWidget {
 
 class _ShellViewState extends State<ShellView> {
   int _index = 0;
+
+  /// The tabs, in the order of the bottom bar.
+  static const _salesTab = 2;
+  static const _currenciesTab = 1;
 
   late final _dashboard = DashboardViewModel(
     context.read<ReportsService>(),
@@ -135,7 +139,7 @@ class _ShellViewState extends State<ShellView> {
   void _openLink(NotificationLink link) {
     switch (link) {
       case NotificationLink.sales:
-        setState(() => _index = 1);
+        setState(() => _index = _salesTab);
       case NotificationLink.payroll:
         _openPayroll();
       case NotificationLink.stores:
@@ -257,14 +261,14 @@ class _ShellViewState extends State<ShellView> {
         l10n.navHome,
       ),
       (
-        Icons.point_of_sale_outlined,
-        Icons.point_of_sale_rounded,
-        l10n.navSales,
-      ),
-      (
         Icons.currency_exchange_rounded,
         Icons.currency_exchange_rounded,
         l10n.navCurrencies,
+      ),
+      (
+        Icons.point_of_sale_outlined,
+        Icons.point_of_sale_rounded,
+        l10n.navSales,
       ),
       (Icons.grid_view_outlined, Icons.grid_view_rounded, l10n.navMore),
     ];
@@ -293,20 +297,20 @@ class _ShellViewState extends State<ShellView> {
               ChangeNotifierProvider.value(value: _notifications),
             ],
             child: HomeView(
-              onOpenSales: () => setState(() => _index = 1),
+              onOpenSales: () => setState(() => _index = _salesTab),
               onOpenLink: _openLink,
               onOpenHistory: _openHistory,
             ),
           ),
-          ChangeNotifierProvider.value(value: _sales, child: const SalesView()),
           // Built (and loaded) only once the tab is opened.
-          if (_index == 2 || _currenciesVm != null)
+          if (_index == _currenciesTab || _currenciesVm != null)
             ChangeNotifierProvider.value(
               value: _currencies,
               child: const CurrenciesView(),
             )
           else
             const SizedBox.shrink(),
+          ChangeNotifierProvider.value(value: _sales, child: const SalesView()),
           MoreView(onChanged: _refreshAll),
         ],
       ),
