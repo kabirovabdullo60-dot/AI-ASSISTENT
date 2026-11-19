@@ -37,6 +37,13 @@ extension L10nContext on BuildContext {
   String formatDateTime(DateTime time) =>
       DateFormat.yMd(_dateLocale).add_Hm().format(time);
 
+  /// `5 октября, понедельник` (a day header in the history).
+  String formatDayHeader(DateTime date) =>
+      DateFormat('d MMMM, EEEE', _dateLocale).format(date);
+
+  /// `ноябрь` (the month alone, as in "Расходы за ноябрь").
+  String monthName(DateTime date) => DateFormat.LLLL(_dateLocale).format(date);
+
   /// `Ноябрь 2026`.
   String monthYear(int month, int year) {
     final text = DateFormat.yMMMM(_dateLocale).format(DateTime(year, month));

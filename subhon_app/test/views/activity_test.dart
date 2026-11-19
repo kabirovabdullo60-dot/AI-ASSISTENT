@@ -128,6 +128,8 @@ void main() {
     );
     await tapText(tester, 'История');
     expect(find.widgetWithText(AppBar, 'История'), findsOneWidget);
-    expect(find.text('Продажа в «Бахор — Сомони»'), findsOneWidget);
+    // Bank-style: the store, what happened, the amount.
+    expect(find.text('Продажа'), findsOneWidget);
+    expect(find.textContaining('+1\u00a0250,50 TJS'), findsOneWidget);
   });
 }

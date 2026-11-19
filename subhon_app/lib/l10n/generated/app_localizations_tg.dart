@@ -1286,4 +1286,85 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get homeShowAllStores => 'Ҳама';
+
+  @override
+  String historyExpensesFor(String month) {
+    return 'Хароҷот дар $month';
+  }
+
+  @override
+  String historyOfSales(String percent) {
+    return '$percent аз фурӯш';
+  }
+
+  @override
+  String get historyStatement => 'Хулоса';
+
+  @override
+  String get historyShowAmount => 'Нишон додани маблағ';
+
+  @override
+  String get historyHideAmount => 'Пинҳон кардани маблағ';
+
+  @override
+  String get historySearch => 'Ҷустуҷӯ';
+
+  @override
+  String get historySearchHint => 'Мағоза, корманд ё шарҳ';
+
+  @override
+  String get historyAll => 'Ҳама';
+
+  @override
+  String get historyYesterday => 'Дирӯз';
+
+  @override
+  String get historyWeek => 'Ҳафта';
+
+  @override
+  String get historyNothing => 'Барои ин давра амалиёт нест.';
+
+  @override
+  String get opSale => 'Фурӯш';
+
+  @override
+  String get opSaleEdited => 'Фурӯш тағйир ёфт';
+
+  @override
+  String get opSaleDeleted => 'Фурӯш нест карда шуд';
+
+  @override
+  String get opSalary => 'Пардохти маош';
+
+  @override
+  String get opSalaryCancelled => 'Пардохт бекор шуд';
+
+  @override
+  String get opStoreNew => 'Мағозаи нав';
+
+  @override
+  String get opStoreEdited => 'Мағоза тағйир ёфт';
+
+  @override
+  String get opStoreDeleted => 'Мағоза нест карда шуд';
+
+  @override
+  String get opEmployeeNew => 'Корманди нав';
+
+  @override
+  String get opEmployeeEdited => 'Корманд тағйир ёфт';
+
+  @override
+  String get opEmployeeDeleted => 'Корманд нест карда шуд';
+
+  @override
+  String opStatus(String status) {
+    return 'Вазъ: $status';
+  }
+
+  @override
+  String get opProfile => 'Профил тағйир ёфт';
+
+  @override
+  String get opOther => 'Тағйирот';
 }

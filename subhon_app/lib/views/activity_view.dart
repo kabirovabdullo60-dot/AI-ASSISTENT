@@ -14,31 +14,18 @@ import '../widgets/load_more_button.dart';
 /// The whole activity log (`GET /api/activity`), or one store's operations
 /// log when [storeId] is given; newest first, page by page.
 class ActivityView extends StatelessWidget {
-  const ActivityView({this.storeId, this.title, this.viewModel, super.key});
+  const ActivityView({this.storeId, this.title, super.key});
 
   final String? storeId;
   final String? title;
 
-  /// Kept by the caller (the "История" tab reloads it); a new one
-  /// otherwise.
-  final ActivityViewModel? viewModel;
-
   @override
-  Widget build(BuildContext context) {
-    final vm = viewModel;
-    if (vm != null) {
-      return ChangeNotifierProvider.value(
-        value: vm,
-        child: _ActivityScreen(title: title),
-      );
-    }
-    return ChangeNotifierProvider(
-      create: (context) =>
-          ActivityViewModel(context.read<ActivityService>(), storeId: storeId)
-            ..load(),
-      child: _ActivityScreen(title: title),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+    create: (context) =>
+        ActivityViewModel(context.read<ActivityService>(), storeId: storeId)
+          ..load(),
+    child: _ActivityScreen(title: title),
+  );
 }
 
 class _ActivityScreen extends StatelessWidget {

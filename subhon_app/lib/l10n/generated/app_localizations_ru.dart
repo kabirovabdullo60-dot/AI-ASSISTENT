@@ -1292,4 +1292,85 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get homeShowAllStores => 'Все';
+
+  @override
+  String historyExpensesFor(String month) {
+    return 'Расходы за $month';
+  }
+
+  @override
+  String historyOfSales(String percent) {
+    return '$percent от продаж';
+  }
+
+  @override
+  String get historyStatement => 'Выписка';
+
+  @override
+  String get historyShowAmount => 'Показать сумму';
+
+  @override
+  String get historyHideAmount => 'Скрыть сумму';
+
+  @override
+  String get historySearch => 'Поиск';
+
+  @override
+  String get historySearchHint => 'Магазин, сотрудник или комментарий';
+
+  @override
+  String get historyAll => 'Все';
+
+  @override
+  String get historyYesterday => 'Вчера';
+
+  @override
+  String get historyWeek => 'Неделя';
+
+  @override
+  String get historyNothing => 'За этот период операций нет.';
+
+  @override
+  String get opSale => 'Продажа';
+
+  @override
+  String get opSaleEdited => 'Продажа изменена';
+
+  @override
+  String get opSaleDeleted => 'Продажа удалена';
+
+  @override
+  String get opSalary => 'Выплата зарплаты';
+
+  @override
+  String get opSalaryCancelled => 'Выплата отменена';
+
+  @override
+  String get opStoreNew => 'Новый магазин';
+
+  @override
+  String get opStoreEdited => 'Магазин изменён';
+
+  @override
+  String get opStoreDeleted => 'Магазин удалён';
+
+  @override
+  String get opEmployeeNew => 'Новый сотрудник';
+
+  @override
+  String get opEmployeeEdited => 'Сотрудник изменён';
+
+  @override
+  String get opEmployeeDeleted => 'Сотрудник удалён';
+
+  @override
+  String opStatus(String status) {
+    return 'Статус: $status';
+  }
+
+  @override
+  String get opProfile => 'Профиль изменён';
+
+  @override
+  String get opOther => 'Изменение';
 }

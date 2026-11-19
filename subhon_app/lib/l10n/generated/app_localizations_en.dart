@@ -1286,4 +1286,85 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeShowAllStores => 'All';
+
+  @override
+  String historyExpensesFor(String month) {
+    return 'Expenses in $month';
+  }
+
+  @override
+  String historyOfSales(String percent) {
+    return '$percent of sales';
+  }
+
+  @override
+  String get historyStatement => 'Statement';
+
+  @override
+  String get historyShowAmount => 'Show the amount';
+
+  @override
+  String get historyHideAmount => 'Hide the amount';
+
+  @override
+  String get historySearch => 'Search';
+
+  @override
+  String get historySearchHint => 'Store, employee or note';
+
+  @override
+  String get historyAll => 'All';
+
+  @override
+  String get historyYesterday => 'Yesterday';
+
+  @override
+  String get historyWeek => 'Week';
+
+  @override
+  String get historyNothing => 'No operations for this period.';
+
+  @override
+  String get opSale => 'Sale';
+
+  @override
+  String get opSaleEdited => 'Sale edited';
+
+  @override
+  String get opSaleDeleted => 'Sale deleted';
+
+  @override
+  String get opSalary => 'Salary paid';
+
+  @override
+  String get opSalaryCancelled => 'Payment cancelled';
+
+  @override
+  String get opStoreNew => 'New store';
+
+  @override
+  String get opStoreEdited => 'Store edited';
+
+  @override
+  String get opStoreDeleted => 'Store deleted';
+
+  @override
+  String get opEmployeeNew => 'New employee';
+
+  @override
+  String get opEmployeeEdited => 'Employee edited';
+
+  @override
+  String get opEmployeeDeleted => 'Employee deleted';
+
+  @override
+  String opStatus(String status) {
+    return 'Status: $status';
+  }
+
+  @override
+  String get opProfile => 'Profile updated';
+
+  @override
+  String get opOther => 'Change';
 }

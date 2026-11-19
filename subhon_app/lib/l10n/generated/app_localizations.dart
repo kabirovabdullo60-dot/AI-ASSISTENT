@@ -2337,6 +2337,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get homeShowAllStores;
+
+  /// No description provided for @historyExpensesFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses in {month}'**
+  String historyExpensesFor(String month);
+
+  /// No description provided for @historyOfSales.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} of sales'**
+  String historyOfSales(String percent);
+
+  /// No description provided for @historyStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Statement'**
+  String get historyStatement;
+
+  /// No description provided for @historyShowAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the amount'**
+  String get historyShowAmount;
+
+  /// No description provided for @historyHideAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide the amount'**
+  String get historyHideAmount;
+
+  /// No description provided for @historySearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get historySearch;
+
+  /// No description provided for @historySearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Store, employee or note'**
+  String get historySearchHint;
+
+  /// No description provided for @historyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get historyAll;
+
+  /// No description provided for @historyYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get historyYesterday;
+
+  /// No description provided for @historyWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get historyWeek;
+
+  /// No description provided for @historyNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No operations for this period.'**
+  String get historyNothing;
+
+  /// No description provided for @opSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale'**
+  String get opSale;
+
+  /// No description provided for @opSaleEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale edited'**
+  String get opSaleEdited;
+
+  /// No description provided for @opSaleDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale deleted'**
+  String get opSaleDeleted;
+
+  /// No description provided for @opSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary paid'**
+  String get opSalary;
+
+  /// No description provided for @opSalaryCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment cancelled'**
+  String get opSalaryCancelled;
+
+  /// No description provided for @opStoreNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New store'**
+  String get opStoreNew;
+
+  /// No description provided for @opStoreEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'Store edited'**
+  String get opStoreEdited;
+
+  /// No description provided for @opStoreDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Store deleted'**
+  String get opStoreDeleted;
+
+  /// No description provided for @opEmployeeNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New employee'**
+  String get opEmployeeNew;
+
+  /// No description provided for @opEmployeeEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee edited'**
+  String get opEmployeeEdited;
+
+  /// No description provided for @opEmployeeDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee deleted'**
+  String get opEmployeeDeleted;
+
+  /// No description provided for @opStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: {status}'**
+  String opStatus(String status);
+
+  /// No description provided for @opProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get opProfile;
+
+  /// No description provided for @opOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get opOther;
 }
 
 class _AppLocalizationsDelegate

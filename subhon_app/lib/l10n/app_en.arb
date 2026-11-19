@@ -718,5 +718,51 @@
   "homeStoreMonth": "This month",
   "homeAddStore": "Add a store",
   "homeProfit": "Profit",
-  "homeShowAllStores": "All"
+  "homeShowAllStores": "All",
+  "historyExpensesFor": "Expenses in {month}",
+  "@historyExpensesFor": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "historyOfSales": "{percent} of sales",
+  "@historyOfSales": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "historyStatement": "Statement",
+  "historyShowAmount": "Show the amount",
+  "historyHideAmount": "Hide the amount",
+  "historySearch": "Search",
+  "historySearchHint": "Store, employee or note",
+  "historyAll": "All",
+  "historyYesterday": "Yesterday",
+  "historyWeek": "Week",
+  "historyNothing": "No operations for this period.",
+  "opSale": "Sale",
+  "opSaleEdited": "Sale edited",
+  "opSaleDeleted": "Sale deleted",
+  "opSalary": "Salary paid",
+  "opSalaryCancelled": "Payment cancelled",
+  "opStoreNew": "New store",
+  "opStoreEdited": "Store edited",
+  "opStoreDeleted": "Store deleted",
+  "opEmployeeNew": "New employee",
+  "opEmployeeEdited": "Employee edited",
+  "opEmployeeDeleted": "Employee deleted",
+  "opStatus": "Status: {status}",
+  "@opStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "opProfile": "Profile updated",
+  "opOther": "Change"
 }

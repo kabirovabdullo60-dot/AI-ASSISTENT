@@ -1,5 +1,6 @@
 import '../core/constants/api_constants.dart';
 import '../core/network/api_client.dart';
+import '../core/utils/local_date.dart';
 import '../models/activity_model.dart';
 import '../models/page_model.dart';
 
@@ -14,6 +15,8 @@ class ActivityService {
   Future<PageModel<ActivityModel>> list({
     String? storeId,
     String? employeeId,
+    DateTime? startDate,
+    DateTime? endDate,
     int page = 1,
     int limit = ApiConstants.pageSize,
   }) async => PageModel.fromJson(
@@ -22,6 +25,8 @@ class ActivityService {
           query: {
             'storeId': storeId,
             'employeeId': employeeId,
+            'startDate': startDate == null ? null : formatLocalDate(startDate),
+            'endDate': endDate == null ? null : formatLocalDate(endDate),
             'page': page,
             'limit': limit,
           },

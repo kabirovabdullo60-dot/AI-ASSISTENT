@@ -11,7 +11,7 @@ import '../services/payroll_service.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
-import '../viewmodels/activity_view_model.dart';
+import '../viewmodels/history_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
@@ -21,7 +21,7 @@ import '../widgets/app_feedback.dart';
 import '../widgets/assistant_fab.dart';
 import '../widgets/bottom_nav_item.dart';
 import '../widgets/quick_action_cell.dart';
-import 'activity_view.dart';
+import 'history_view.dart';
 import 'chat_view.dart';
 import 'employee_form_view.dart';
 import 'expense_form_view.dart';
@@ -55,12 +55,15 @@ class _ShellViewState extends State<ShellView> {
     context.read<SalesService>(),
     context.read<StoreService>(),
   )..load();
+
   /// Created the first time salaries are opened (they are no longer a tab).
   PayrollViewModel? _payrollVm;
   PayrollViewModel get _payroll =>
       _payrollVm ??= PayrollViewModel(context.read<PayrollService>());
-  late final _history = ActivityViewModel(context.read<ActivityService>())
-    ..load();
+  late final _history = HistoryViewModel(
+    context.read<ActivityService>(),
+    context.read<ReportsService>(),
+  )..load();
   late final _notifications = NotificationsViewModel(
     context.read<NotificationService>(),
   )..load();
@@ -259,7 +262,10 @@ class _ShellViewState extends State<ShellView> {
             ),
           ),
           ChangeNotifierProvider.value(value: _sales, child: const SalesView()),
-          ActivityView(viewModel: _history, title: l10n.activityHistory),
+          ChangeNotifierProvider.value(
+            value: _history,
+            child: const HistoryView(),
+          ),
           MoreView(onChanged: _refreshAll),
         ],
       ),
