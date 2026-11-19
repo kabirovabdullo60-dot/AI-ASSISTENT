@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../core/theme/app_colors.dart';
+import 'jelly_blob.dart';
 
-/// The round AI-assistant button pinned to the bottom-right corner, in the
-/// brand gradient with the ✨ icon.
-class AssistantFab extends StatelessWidget {
+/// The AI-assistant button pinned to the bottom-right corner: the living
+/// jelly mascot (it wobbles and blinks) instead of a static icon. Still
+/// with "reduce motion".
+class AssistantFab extends StatefulWidget {
   const AssistantFab({
     required this.tooltip,
     required this.onPressed,
@@ -14,36 +15,40 @@ class AssistantFab extends StatelessWidget {
   final String tooltip;
   final VoidCallback onPressed;
 
-  static const double size = 56;
+  /// The tap area; the jelly is drawn a little larger so it reads as a
+  /// round button with its soft shadow.
+  static const double size = 64;
+
+  @override
+  State<AssistantFab> createState() => _AssistantFabState();
+}
+
+class _AssistantFabState extends State<AssistantFab> {
+  /// The eyes look straight ahead; nothing to follow here.
+  final _lookAt = ValueNotifier<Offset?>(null);
+
+  @override
+  void dispose() {
+    _lookAt.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Tooltip(
-    message: tooltip,
+    message: widget.tooltip,
     child: Semantics(
       button: true,
-      label: tooltip,
-      child: Material(
-        shape: const CircleBorder(),
-        clipBehavior: Clip.antiAlias,
-        elevation: 6,
-        shadowColor: AppColors.primary.withValues(alpha: 0.5),
-        child: Ink(
-          width: size,
-          height: size,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF9B7BFF), AppColors.primary, Color(0xFF5A35D6)],
-            ),
-          ),
-          child: InkWell(
-            onTap: onPressed,
-            child: const Icon(
-              Icons.auto_awesome_rounded,
-              color: Colors.white,
-              size: 26,
-            ),
+      label: widget.tooltip,
+      excludeSemantics: true,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.onPressed,
+        child: SizedBox.square(
+          dimension: AssistantFab.size,
+          child: OverflowBox(
+            maxWidth: AssistantFab.size * 1.35,
+            maxHeight: AssistantFab.size * 1.35,
+            child: JellyBlob(lookAt: _lookAt, size: AssistantFab.size * 1.35),
           ),
         ),
       ),
