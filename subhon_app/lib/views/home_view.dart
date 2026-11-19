@@ -121,7 +121,6 @@ class _Body extends StatelessWidget {
           ],
         ),
         gap,
-        if (vm.stores case final stores?) _StoresStrip(vm: vm, stores: stores),
         const SizedBox(height: AppSpacing.xl),
         PeriodChips<SalesPeriod>(
           values: SalesPeriod.values,
@@ -171,6 +170,9 @@ class _Body extends StatelessWidget {
             ),
           ),
         ],
+        // The stores come after the period's sales.
+        const SizedBox(height: AppSpacing.md),
+        if (vm.stores case final stores?) _StoresStrip(vm: vm, stores: stores),
         const SizedBox(height: AppSpacing.xl),
         SectionHeader(title: l10n.homeProfit),
         FigureCard(
