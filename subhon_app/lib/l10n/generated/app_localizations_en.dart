@@ -2072,4 +2072,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pfCatOtherIncome => 'Other income';
+
+  @override
+  String get phMonthIncome => 'Income this month';
+
+  @override
+  String get phMonthExpense => 'Expenses this month';
+
+  @override
+  String get phMyBusiness => 'My business';
+
+  @override
+  String phBusinessToday(String amount, String profit) {
+    return 'Sales today $amount · profit this month $profit';
+  }
+
+  @override
+  String get phStartBusinessTitle => 'Have a shop?';
+
+  @override
+  String get phStartBusinessMessage =>
+      'Add it: sales, employees, salaries and its expenses will appear.';
+
+  @override
+  String get phAddStore => 'Add a store';
+
+  @override
+  String get phAddAccount => 'Add an account';
+
+  @override
+  String get phOpen => 'Open';
+
+  @override
+  String get actionStoreExpense => 'Store expense';
+
+  @override
+  String get quickPersonal => 'Personal';
+
+  @override
+  String get quickBusiness => 'Business';
+
+  @override
+  String get morePersonal => 'My money';
+
+  @override
+  String get moreOperationsHint => 'Every income, expense and transfer';
 }

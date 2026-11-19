@@ -76,6 +76,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
+    await openBusiness(tester);
     expect(find.text('Последние действия'), findsOneWidget);
     expect(find.text('Продажа в «Бахор — Сомони»'), findsOneWidget);
     expect(find.text('Отменена выплата: Шерзод Рахимов'), findsOneWidget);
@@ -112,6 +113,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
+    await openBusiness(tester);
     expect(find.text('Продажи за сегодня'), findsOneWidget);
     expect(find.text('Последние действия'), findsNothing);
   });
@@ -128,6 +130,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
+    await openBusiness(tester);
     await tester.tap(find.byTooltip('История'));
     await tester.pumpAndSettle();
     expect(find.widgetWithText(AppBar, 'История'), findsOneWidget);

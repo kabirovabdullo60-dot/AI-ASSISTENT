@@ -1065,5 +1065,29 @@
   "pfCatSideJob": "Side job",
   "pfCatGiftIn": "Gift",
   "pfCatRefund": "Refund",
-  "pfCatOtherIncome": "Other income"
+  "pfCatOtherIncome": "Other income",
+  "phMonthIncome": "Income this month",
+  "phMonthExpense": "Expenses this month",
+  "phMyBusiness": "My business",
+  "phBusinessToday": "Sales today {amount} · profit this month {profit}",
+  "@phBusinessToday": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "profit": {
+        "type": "String"
+      }
+    }
+  },
+  "phStartBusinessTitle": "Have a shop?",
+  "phStartBusinessMessage": "Add it: sales, employees, salaries and its expenses will appear.",
+  "phAddStore": "Add a store",
+  "phAddAccount": "Add an account",
+  "phOpen": "Open",
+  "actionStoreExpense": "Store expense",
+  "quickPersonal": "Personal",
+  "quickBusiness": "Business",
+  "morePersonal": "My money",
+  "moreOperationsHint": "Every income, expense and transfer"
 }

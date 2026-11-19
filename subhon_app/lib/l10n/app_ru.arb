@@ -618,5 +618,19 @@
   "pfCatSideJob": "Подработка",
   "pfCatGiftIn": "Подарок",
   "pfCatRefund": "Возврат",
-  "pfCatOtherIncome": "Другой доход"
+  "pfCatOtherIncome": "Другой доход",
+  "phMonthIncome": "Доходы за месяц",
+  "phMonthExpense": "Расходы за месяц",
+  "phMyBusiness": "Мой бизнес",
+  "phBusinessToday": "Продажи сегодня {amount} · прибыль за месяц {profit}",
+  "phStartBusinessTitle": "Есть магазин?",
+  "phStartBusinessMessage": "Добавьте его — появятся продажи, сотрудники, зарплаты и его расходы.",
+  "phAddStore": "Добавить магазин",
+  "phAddAccount": "Добавить счёт",
+  "phOpen": "Открыть",
+  "actionStoreExpense": "Расход магазина",
+  "quickPersonal": "Личное",
+  "quickBusiness": "Бизнес",
+  "morePersonal": "Мои деньги",
+  "moreOperationsHint": "Все доходы, расходы и переводы"
 }

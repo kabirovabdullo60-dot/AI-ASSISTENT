@@ -27,6 +27,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
+    await openBusiness(tester);
 
     expect(find.text('Магазины · 1'), findsOneWidget);
     expect(find.byType(StoreStripCard), findsOneWidget);

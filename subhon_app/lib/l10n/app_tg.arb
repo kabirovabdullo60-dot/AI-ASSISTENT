@@ -618,5 +618,19 @@
   "pfCatSideJob": "Кори иловагӣ",
   "pfCatGiftIn": "Тӯҳфа",
   "pfCatRefund": "Бозгашт",
-  "pfCatOtherIncome": "Даромади дигар"
+  "pfCatOtherIncome": "Даромади дигар",
+  "phMonthIncome": "Даромади моҳ",
+  "phMonthExpense": "Хароҷоти моҳ",
+  "phMyBusiness": "Тиҷорати ман",
+  "phBusinessToday": "Фурӯши имрӯз {amount} · фоидаи моҳ {profit}",
+  "phStartBusinessTitle": "Мағоза доред?",
+  "phStartBusinessMessage": "Илова кунед — фурӯш, кормандон, маош ва хароҷоташ пайдо мешаванд.",
+  "phAddStore": "Илова кардани мағоза",
+  "phAddAccount": "Илова кардани ҳисоб",
+  "phOpen": "Кушодан",
+  "actionStoreExpense": "Хароҷоти мағоза",
+  "quickPersonal": "Шахсӣ",
+  "quickBusiness": "Тиҷорат",
+  "morePersonal": "Пули ман",
+  "moreOperationsHint": "Ҳамаи даромад, хароҷот ва интиқолҳо"
 }

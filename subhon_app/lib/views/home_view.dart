@@ -37,6 +37,7 @@ class HomeView extends StatelessWidget {
     required this.onOpenSales,
     required this.onOpenLink,
     required this.onOpenHistory,
+    this.title,
     super.key,
   });
 
@@ -48,6 +49,9 @@ class HomeView extends StatelessWidget {
   /// Opens the history (the icon next to the bell).
   final VoidCallback onOpenHistory;
 
+  /// The app bar title ("Мой бизнес" when opened from the personal home).
+  final String? title;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -55,7 +59,7 @@ class HomeView extends StatelessWidget {
     final notifications = context.watch<NotificationsViewModel>();
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.navHome),
+        title: Text(title ?? l10n.navHome),
         actions: [
           IconButton(
             tooltip: l10n.activityHistory,

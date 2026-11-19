@@ -3813,6 +3813,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other income'**
   String get pfCatOtherIncome;
+
+  /// No description provided for @phMonthIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income this month'**
+  String get phMonthIncome;
+
+  /// No description provided for @phMonthExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses this month'**
+  String get phMonthExpense;
+
+  /// No description provided for @phMyBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'My business'**
+  String get phMyBusiness;
+
+  /// No description provided for @phBusinessToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales today {amount} · profit this month {profit}'**
+  String phBusinessToday(String amount, String profit);
+
+  /// No description provided for @phStartBusinessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Have a shop?'**
+  String get phStartBusinessTitle;
+
+  /// No description provided for @phStartBusinessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add it: sales, employees, salaries and its expenses will appear.'**
+  String get phStartBusinessMessage;
+
+  /// No description provided for @phAddStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a store'**
+  String get phAddStore;
+
+  /// No description provided for @phAddAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an account'**
+  String get phAddAccount;
+
+  /// No description provided for @phOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get phOpen;
+
+  /// No description provided for @actionStoreExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Store expense'**
+  String get actionStoreExpense;
+
+  /// No description provided for @quickPersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal'**
+  String get quickPersonal;
+
+  /// No description provided for @quickBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get quickBusiness;
+
+  /// No description provided for @morePersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'My money'**
+  String get morePersonal;
+
+  /// No description provided for @moreOperationsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Every income, expense and transfer'**
+  String get moreOperationsHint;
 }
 
 class _AppLocalizationsDelegate

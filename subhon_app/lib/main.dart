@@ -9,10 +9,12 @@ import 'core/network/api_client.dart';
 import 'core/storage/app_lock_storage.dart';
 import 'core/storage/chat_history_storage.dart';
 import 'core/storage/debt_storage.dart';
+import 'core/storage/personal_finance_storage.dart';
 import 'core/storage/locale_storage.dart';
 import 'core/storage/secure_app_lock_storage.dart';
 import 'core/storage/secure_chat_history_storage.dart';
 import 'core/storage/secure_debt_storage.dart';
+import 'core/storage/secure_personal_finance_storage.dart';
 import 'core/storage/secure_statement_history_storage.dart';
 import 'core/storage/statement_history_storage.dart';
 import 'core/storage/secure_locale_storage.dart';
@@ -70,6 +72,7 @@ class MobileApp extends StatefulWidget {
     this.appLock,
     this.market,
     this.debts,
+    this.personal,
     super.key,
   });
 
@@ -100,6 +103,9 @@ class MobileApp extends StatefulWidget {
 
   /// Debts kept on the phone; tests pass one in memory.
   final DebtStorage? debts;
+
+  /// The personal accountant's data; tests pass one in memory.
+  final PersonalFinanceStorage? personal;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -147,6 +153,10 @@ class _MobileAppState extends State<MobileApp> {
         create: (_) => widget.fileShare ?? DeviceFileShareService(),
       ),
       Provider(create: (_) => widget.market ?? MarketService()),
+      Provider<PersonalFinanceStorage>(
+        create: (_) =>
+            widget.personal ?? const SecurePersonalFinanceStorage(),
+      ),
       Provider<DebtStorage>(
         create: (_) => widget.debts ?? const SecureDebtStorage(),
       ),

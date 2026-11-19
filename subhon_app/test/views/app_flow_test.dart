@@ -66,6 +66,7 @@ void main() {
     await pumpApp(tester, backend, tokens: tokens);
     await _signIn(tester, 'Ofar2026');
     expect(find.byType(ShellView), findsOneWidget);
+    await openBusiness(tester);
     expect(find.text('Продажи за сегодня'), findsOneWidget);
     expect(find.text('112\u00a0028 TJS'), findsOneWidget);
     expect(find.text('6\u00a0940,50 TJS'), findsWidgets);
@@ -118,19 +119,24 @@ void main() {
     final backend = FakeBackend()
       ..json('GET', '/api/auth/me', ApiJson.profile());
     stubHome(backend);
-    backend.on('GET', '/api/reports/dashboard', (_) {
-      if (!online) throw http.ClientException('offline');
-      return FakeBackend.respond(ApiJson.dashboard());
-    });
+    backend
+      ..json('GET', '/api/reports/profit', ApiJson.profit())
+      ..json('GET', '/api/reports/payroll', ApiJson.payrollYear())
+      ..on('GET', '/api/reports/employees', (_) {
+        if (!online) throw http.ClientException('offline');
+        return FakeBackend.respond(ApiJson.employeesReport());
+      });
     await pumpApp(
       tester,
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
+    await tapText(tester, 'Ещё');
+    await tapText(tester, 'Отчёты');
     expect(find.text('Не удалось загрузить'), findsOneWidget);
     online = true;
     await tapText(tester, 'Повторить');
-    expect(find.text('Продажи за сегодня'), findsOneWidget);
+    expect(find.text('Прибыль'), findsWidgets);
   });
 
   testWidgets('salary payment: open the month, pay the remaining amount; the '

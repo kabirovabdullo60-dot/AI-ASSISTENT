@@ -2064,4 +2064,49 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get pfCatOtherIncome => 'Даромади дигар';
+
+  @override
+  String get phMonthIncome => 'Даромади моҳ';
+
+  @override
+  String get phMonthExpense => 'Хароҷоти моҳ';
+
+  @override
+  String get phMyBusiness => 'Тиҷорати ман';
+
+  @override
+  String phBusinessToday(String amount, String profit) {
+    return 'Фурӯши имрӯз $amount · фоидаи моҳ $profit';
+  }
+
+  @override
+  String get phStartBusinessTitle => 'Мағоза доред?';
+
+  @override
+  String get phStartBusinessMessage =>
+      'Илова кунед — фурӯш, кормандон, маош ва хароҷоташ пайдо мешаванд.';
+
+  @override
+  String get phAddStore => 'Илова кардани мағоза';
+
+  @override
+  String get phAddAccount => 'Илова кардани ҳисоб';
+
+  @override
+  String get phOpen => 'Кушодан';
+
+  @override
+  String get actionStoreExpense => 'Хароҷоти мағоза';
+
+  @override
+  String get quickPersonal => 'Шахсӣ';
+
+  @override
+  String get quickBusiness => 'Тиҷорат';
+
+  @override
+  String get morePersonal => 'Пули ман';
+
+  @override
+  String get moreOperationsHint => 'Ҳамаи даромад, хароҷот ва интиқолҳо';
 }

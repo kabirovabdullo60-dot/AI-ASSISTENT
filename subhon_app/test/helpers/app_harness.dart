@@ -3,6 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/core/storage/app_lock_storage.dart';
 import 'package:subhon_app/core/storage/chat_history_storage.dart';
 import 'package:subhon_app/core/storage/debt_storage.dart';
+import 'package:subhon_app/core/storage/personal_finance_storage.dart';
+
+import 'memory_personal_finance_storage.dart';
 import 'package:subhon_app/core/storage/statement_history_storage.dart';
 import 'package:subhon_app/main.dart';
 import 'package:subhon_app/services/biometric_service.dart';
@@ -51,6 +54,7 @@ Future<void> pumpApp(
   AppLockStorage? appLock,
   MarketService? market,
   DebtStorage? debts,
+  PersonalFinanceStorage? personal,
 }) async {
   reduceMotion(tester);
   await tester.pumpWidget(
@@ -67,6 +71,7 @@ Future<void> pumpApp(
       appLock: appLock,
       market: market,
       debts: debts,
+      personal: personal ?? MemoryPersonalFinanceStorage(),
     ),
   );
   await tester.pumpAndSettle();
@@ -91,4 +96,17 @@ Future<void> openPayroll(WidgetTester tester) async {
   await tester.tap(find.byTooltip('Добавить'));
   await tester.pumpAndSettle();
   await tapText(tester, 'Зарплаты');
+}
+
+/// Home is the personal accountant; the shop's dashboard opens from "Мой
+/// бизнес" → "Открыть" (there is a store in [stubHome]).
+Future<void> openBusiness(WidgetTester tester) async {
+  final open = find.text('Открыть');
+  await tester.scrollUntilVisible(
+    open,
+    300,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.tap(open);
+  await tester.pumpAndSettle();
 }

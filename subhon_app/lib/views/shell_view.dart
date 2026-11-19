@@ -13,6 +13,8 @@ import '../services/sales_service.dart';
 import '../services/store_service.dart';
 import '../viewmodels/history_view_model.dart';
 import '../core/storage/debt_storage.dart';
+import '../core/storage/personal_finance_storage.dart';
+import '../models/money_transaction_kind.dart';
 import '../services/market_service.dart';
 import '../viewmodels/currencies_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
@@ -20,6 +22,7 @@ import '../viewmodels/debts_view_model.dart';
 import '../viewmodels/session_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
+import '../viewmodels/personal_finance_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../widgets/add_nav_button.dart';
 import '../widgets/app_feedback.dart';
@@ -33,17 +36,21 @@ import 'debts_view.dart';
 import 'employee_form_view.dart';
 import 'expense_form_view.dart';
 import 'home_view.dart';
+import 'money_transaction_form_view.dart';
 import 'more_view.dart';
+import 'notifications_view.dart';
 import 'payroll_view.dart';
+import 'personal_home_view.dart';
+import 'recurring_payments_view.dart';
 import 'sale_form_view.dart';
 import 'sales_view.dart';
 import 'store_form_view.dart';
 import 'stores_view.dart';
 
-/// The app after login, with OFAR's bottom navigation:
-/// Главная · Валюты · [+] · Долги · Ещё. Sales, salaries and the history
-/// open from "+" (the history also from home's app bar). Salaries and the history open
-/// from "+" (the history also from home's app bar).
+/// The app after login: a personal accountant first. Bottom bar:
+/// Главная · Валюты · [+] · Долги · Ещё. Home is "Мои финансы"; the
+/// business (stores, sales, employees, salaries) shows up — on home, in
+/// "+" and in "Ещё" — once there is a store.
 class ShellView extends StatefulWidget {
   const ShellView({super.key});
 
@@ -63,6 +70,7 @@ class _ShellViewState extends State<ShellView> {
     context.read<StoreService>(),
     context.read<ActivityService>(),
   )..load();
+
   /// Created the first time the sales list is opened (it is no longer a
   /// tab).
   SalesViewModel? _salesVm;
@@ -97,9 +105,33 @@ class _ShellViewState extends State<ShellView> {
     context.read<NotificationService>(),
   )..load();
 
+  /// The personal accountant (kept on the phone).
+  late final _personal = PersonalFinanceViewModel(
+    context.read<PersonalFinanceStorage>(),
+    context.read<SessionViewModel>().user?.id,
+  )..load();
+
+  /// The business part appears once there is a store.
+  bool get _hasBusiness => _dashboard.stores?.isNotEmpty ?? false;
+  bool _hadBusiness = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _dashboard.addListener(_businessChanged);
+  }
+
+  void _businessChanged() {
+    if (_hasBusiness != _hadBusiness && mounted) {
+      setState(() => _hadBusiness = _hasBusiness);
+    }
+  }
+
   @override
   void dispose() {
+    _dashboard.removeListener(_businessChanged);
     _dashboard.dispose();
+    _personal.dispose();
     _salesVm?.dispose();
     _payrollVm?.dispose();
     _historyVm?.dispose();
@@ -162,6 +194,45 @@ class _ShellViewState extends State<ShellView> {
     _refreshAll();
   }
 
+  /// The shop's dashboard (the former home), as a page.
+  Future<void> _openBusiness() async {
+    final l10n = context.l10n;
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: _dashboard),
+            ChangeNotifierProvider.value(value: _notifications),
+          ],
+          child: HomeView(
+            title: l10n.phMyBusiness,
+            onOpenSales: _openSales,
+            onOpenLink: _openLink,
+            onOpenHistory: _openHistory,
+          ),
+        ),
+      ),
+    );
+    _refreshAll();
+  }
+
+  Future<void> _openNotifications() => Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => ChangeNotifierProvider.value(
+        value: _notifications,
+        child: NotificationsView(onOpenLink: _openLink),
+      ),
+    ),
+  );
+
+  /// A personal expense / income / transfer, or the regular payments.
+  Future<void> _openPersonal(Widget page) => Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) =>
+          ChangeNotifierProvider.value(value: _personal, child: page),
+    ),
+  );
+
   /// A notification was tapped: its screen.
   void _openLink(NotificationLink link) {
     switch (link) {
@@ -186,55 +257,91 @@ class _ShellViewState extends State<ShellView> {
   void _quickActions() {
     final l10n = context.l10n;
     final p = context.palette;
+    final business = _hasBusiness;
     final actions = [
       (
-        Icons.point_of_sale_rounded,
-        l10n.actionNewSale,
-        p.success,
-        p.successLight,
-        () => _open(const SaleFormView()),
-      ),
-      (
-        Icons.receipt_outlined,
-        l10n.actionSalesList,
-        p.success,
-        p.successLight,
-        _openSales,
-      ),
-      (
-        Icons.receipt_long_outlined,
-        l10n.actionNewExpense,
+        Icons.north_east_rounded,
+        l10n.pfExpense,
         p.error,
         p.errorLight,
-        () => _open(const ExpenseFormView()),
+        () => _openPersonal(const MoneyTransactionFormView()),
       ),
       (
-        Icons.payments_outlined,
-        l10n.navPayroll,
+        Icons.south_west_rounded,
+        l10n.pfIncome,
+        p.success,
+        p.successLight,
+        () => _openPersonal(
+          const MoneyTransactionFormView(kind: MoneyTransactionKind.income),
+        ),
+      ),
+      (
+        Icons.swap_horiz_rounded,
+        l10n.pfTransfer,
         p.primary,
         p.primaryLight,
-        _openPayroll,
+        () => _openPersonal(
+          const MoneyTransactionFormView(kind: MoneyTransactionKind.transfer),
+        ),
       ),
+      (
+        Icons.event_repeat_rounded,
+        l10n.pfRecurring,
+        p.warning,
+        p.warningLight,
+        () => _openPersonal(const RecurringPaymentsView()),
+      ),
+      if (business) ...[
+        (
+          Icons.point_of_sale_rounded,
+          l10n.actionNewSale,
+          p.success,
+          p.successLight,
+          () => _open(const SaleFormView()),
+        ),
+        (
+          Icons.receipt_outlined,
+          l10n.actionSalesList,
+          p.success,
+          p.successLight,
+          _openSales,
+        ),
+        (
+          Icons.receipt_long_outlined,
+          l10n.actionStoreExpense,
+          p.error,
+          p.errorLight,
+          () => _open(const ExpenseFormView()),
+        ),
+        (
+          Icons.payments_outlined,
+          l10n.navPayroll,
+          p.primary,
+          p.primaryLight,
+          _openPayroll,
+        ),
+        (
+          Icons.person_add_alt_1_outlined,
+          l10n.actionNewEmployee,
+          p.primary,
+          p.primaryLight,
+          () => _open(const EmployeeFormView()),
+        ),
+        (
+          Icons.history_rounded,
+          l10n.activityHistory,
+          p.warning,
+          p.warningLight,
+          _openHistory,
+        ),
+      ],
+      // A store starts the business part.
       (
         Icons.storefront_outlined,
         l10n.actionNewStore,
         p.warning,
         p.warningLight,
         () => _open(const StoreFormView()),
-      ),
-      (
-        Icons.person_add_alt_1_outlined,
-        l10n.actionNewEmployee,
-        p.primary,
-        p.primaryLight,
-        () => _open(const EmployeeFormView()),
-      ),
-      (
-        Icons.history_rounded,
-        l10n.activityHistory,
-        p.warning,
-        p.warningLight,
-        _openHistory,
       ),
     ];
     showAppBottomSheet<void>(
@@ -327,13 +434,15 @@ class _ShellViewState extends State<ShellView> {
         children: [
           MultiProvider(
             providers: [
+              ChangeNotifierProvider.value(value: _personal),
               ChangeNotifierProvider.value(value: _dashboard),
               ChangeNotifierProvider.value(value: _notifications),
             ],
-            child: HomeView(
-              onOpenSales: _openSales,
-              onOpenLink: _openLink,
-              onOpenHistory: _openHistory,
+            child: PersonalHomeView(
+              hasBusiness: _hasBusiness,
+              onOpenBusiness: _openBusiness,
+              onAddStore: () => _open(const StoreFormView()),
+              onOpenNotifications: _openNotifications,
             ),
           ),
           // Built (and loaded) only once the tab is opened.
@@ -345,7 +454,10 @@ class _ShellViewState extends State<ShellView> {
           else
             const SizedBox.shrink(),
           ChangeNotifierProvider.value(value: _debts, child: const DebtsView()),
-          MoreView(onChanged: _refreshAll),
+          ChangeNotifierProvider.value(
+            value: _personal,
+            child: MoreView(onChanged: _refreshAll, hasBusiness: _hasBusiness),
+          ),
         ],
       ),
       bottomNavigationBar: DecoratedBox(

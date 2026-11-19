@@ -2079,4 +2079,49 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pfCatOtherIncome => 'Другой доход';
+
+  @override
+  String get phMonthIncome => 'Доходы за месяц';
+
+  @override
+  String get phMonthExpense => 'Расходы за месяц';
+
+  @override
+  String get phMyBusiness => 'Мой бизнес';
+
+  @override
+  String phBusinessToday(String amount, String profit) {
+    return 'Продажи сегодня $amount · прибыль за месяц $profit';
+  }
+
+  @override
+  String get phStartBusinessTitle => 'Есть магазин?';
+
+  @override
+  String get phStartBusinessMessage =>
+      'Добавьте его — появятся продажи, сотрудники, зарплаты и его расходы.';
+
+  @override
+  String get phAddStore => 'Добавить магазин';
+
+  @override
+  String get phAddAccount => 'Добавить счёт';
+
+  @override
+  String get phOpen => 'Открыть';
+
+  @override
+  String get actionStoreExpense => 'Расход магазина';
+
+  @override
+  String get quickPersonal => 'Личное';
+
+  @override
+  String get quickBusiness => 'Бизнес';
+
+  @override
+  String get morePersonal => 'Мои деньги';
+
+  @override
+  String get moreOperationsHint => 'Все доходы, расходы и переводы';
 }

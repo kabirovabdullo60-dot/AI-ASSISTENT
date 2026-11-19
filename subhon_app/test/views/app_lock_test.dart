@@ -88,7 +88,7 @@ void main() {
     face.answer = true;
     await tapText(tester, 'Разблокировать');
     expect(find.byType(LockView), findsNothing);
-    expect(find.text('Продажи за сегодня'), findsOneWidget);
+    expect(find.text('Мои деньги'), findsOneWidget);
 
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
