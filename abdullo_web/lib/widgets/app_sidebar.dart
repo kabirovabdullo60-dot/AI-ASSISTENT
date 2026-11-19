@@ -32,37 +32,65 @@ class AppSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget group(List<AppSection> sections) =>
-        _NavGroup(sections: sections, selected: selected, extended: extended, onSelect: onSelect);
-
-    // A floating panel: inset from the window edges, rounded, lifted off the page.
-    return Container(
-      key: const Key('app-sidebar'),
-      width: extended ? extendedWidth : compactWidth,
-      margin: const EdgeInsets.fromLTRB(12, 12, 0, 12),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(22),
-        border: AppColors.isDark ? Border.all(color: AppColors.border) : null,
-        boxShadow: AppColors.isDark
-            ? null
-            : [BoxShadow(color: AppColors.navy.withValues(alpha: 0.08), blurRadius: 28, offset: const Offset(0, 10))],
-      ),
-      child: SafeArea(
-        child: Column(
-          children: [
-            _Brand(name: brandName, extended: extended, onToggle: onToggle),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: group(AppSection.main),
-              ),
+    Widget content(bool wide) => SafeArea(
+      child: Column(
+        children: [
+          _Brand(name: brandName, extended: wide, onToggle: onToggle),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: _NavGroup(sections: AppSection.main, selected: selected, extended: wide, onSelect: onSelect),
             ),
-            Divider(color: AppColors.border, height: 1, indent: 14, endIndent: 14),
-            Padding(padding: const EdgeInsets.fromLTRB(10, 8, 10, 12), child: group(AppSection.footer)),
-          ],
-        ),
+          ),
+          Divider(color: AppColors.border, height: 1, indent: 14, endIndent: 14),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+            child: _NavGroup(sections: AppSection.footer, selected: selected, extended: wide, onSelect: onSelect),
+          ),
+        ],
       ),
+    );
+
+    // Folding / unfolding: the panel width slides (280ms); each layout keeps its own width and is
+    // clipped by the panel, and at the halfway point the wide and compact layouts crossfade.
+    return TweenAnimationBuilder<double>(
+      tween: Tween(end: extended ? extendedWidth : compactWidth),
+      duration: Motion.reduced(context) ? Duration.zero : const Duration(milliseconds: 280),
+      curve: Motion.easeInOut,
+      builder: (context, width, _) {
+        final wide = width > (extendedWidth + compactWidth) / 2;
+        // A floating panel: inset from the window edges, rounded, lifted off the page.
+        return Container(
+          key: const Key('app-sidebar'),
+          width: width,
+          margin: const EdgeInsets.fromLTRB(12, 12, 0, 12),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(22),
+            border: AppColors.isDark ? Border.all(color: AppColors.border) : null,
+            boxShadow: AppColors.isDark
+                ? null
+                : [
+                    BoxShadow(
+                      color: AppColors.navy.withValues(alpha: 0.08),
+                      blurRadius: 28,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+          ),
+          child: AnimatedSwitcher(
+            duration: Motion.fast,
+            child: OverflowBox(
+              key: ValueKey(wide),
+              alignment: wide ? Alignment.topLeft : Alignment.topCenter,
+              minWidth: wide ? extendedWidth : compactWidth,
+              maxWidth: wide ? extendedWidth : compactWidth,
+              child: content(wide),
+            ),
+          ),
+        );
+      },
     );
   }
 }

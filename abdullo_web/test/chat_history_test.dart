@@ -114,12 +114,19 @@ void main() {
     expect(tester.getTopLeft(panel).dx, greaterThan(tester.getTopRight(find.byKey(const Key('chat-input'))).dx));
     expect(tester.getTopRight(panel).dx, greaterThan(desktopWidth - 40));
 
+    double slot() => tester.getSize(find.byKey(const Key('history-slot'))).width;
+    expect(slot(), 292);
+
     await tester.tap(find.byKey(const Key('history-hide')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 150));
+    expect(slot(), allOf(greaterThan(0), lessThan(292)), reason: 'slides, not jumps');
     await tester.pumpAndSettle();
-    expect(panel, findsNothing);
+    expect(slot(), 0);
+
     await tester.tap(find.byKey(const Key('history-show')));
     await tester.pumpAndSettle();
-    expect(panel, findsOneWidget);
+    expect(slot(), 292);
   });
 
   testWidgets('desktop: the button next to the logo collapses the menu', (tester) async {
@@ -127,6 +134,13 @@ void main() {
     double sidebarWidth() => tester.getSize(find.byKey(const Key('app-sidebar'))).width - 12; // minus its left margin
     expect(sidebarWidth(), AppSidebar.extendedWidth);
     await tester.tap(find.byKey(const Key('sidebar-toggle')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 140));
+    expect(
+      sidebarWidth(),
+      allOf(greaterThan(AppSidebar.compactWidth), lessThan(AppSidebar.extendedWidth)),
+      reason: 'slides, not jumps',
+    );
     await tester.pumpAndSettle();
     expect(sidebarWidth(), AppSidebar.compactWidth);
     // Still navigates while folded.

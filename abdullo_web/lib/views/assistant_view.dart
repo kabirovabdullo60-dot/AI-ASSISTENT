@@ -146,54 +146,91 @@ class _AssistantViewState extends State<AssistantView> {
     );
 
     // Wide page: history panel on the right, full height, with a hide button at its top.
-    // Hidden → a small history button stays in the top-right corner. Narrow: a sheet.
+    // Hiding slides it out to the right while it fades, and the chat widens with it;
+    // then a small history button fades in at the top-right corner. Narrow: a sheet.
     return LayoutBuilder(
       builder: (context, page) {
         if (page.maxWidth < _historyPanelMinWidth) return chat(true);
-        final reduced = Motion.reduced(context);
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        final duration = Motion.reduced(context) ? Duration.zero : const Duration(milliseconds: 300);
+        final open = _historyOpen;
+        return Stack(
           children: [
-            Expanded(child: chat(false)),
-            AnimatedSize(
-              duration: reduced ? Duration.zero : Motion.base,
-              curve: Motion.easeOut,
-              alignment: Alignment.topRight,
-              child: _historyOpen
-                  ? Container(
-                      key: const Key('history-panel'),
-                      width: 280,
-                      margin: const EdgeInsets.fromLTRB(0, 12, 12, 12),
-                      padding: const EdgeInsets.only(top: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.card,
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: _history(vm, onHide: () => setState(() => _historyOpen = false)),
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 12, 12, 0),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: Material(
-                          color: AppColors.card,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(color: AppColors.border),
-                          ),
-                          child: IconButton(
-                            key: const Key('history-show'),
-                            tooltip: context.l10n.showHistory,
-                            onPressed: () => setState(() => _historyOpen = true),
-                            icon: Icon(Icons.history, color: AppColors.muted),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: chat(false)),
+                AnimatedContainer(
+                  key: const Key('history-slot'),
+                  duration: duration,
+                  curve: Motion.easeInOut,
+                  width: open ? _historyPanelWidth + 12 : 0,
+                  child: ClipRect(
+                    child: OverflowBox(
+                      alignment: Alignment.centerLeft,
+                      minWidth: _historyPanelWidth + 12,
+                      maxWidth: _historyPanelWidth + 12,
+                      child: AnimatedSlide(
+                        duration: duration,
+                        curve: Motion.easeInOut,
+                        offset: open ? Offset.zero : const Offset(0.25, 0),
+                        child: AnimatedOpacity(
+                          duration: duration,
+                          curve: Motion.easeOut,
+                          opacity: open ? 1 : 0,
+                          child: IgnorePointer(
+                            ignoring: !open,
+                            child: Container(
+                              key: const Key('history-panel'),
+                              margin: const EdgeInsets.fromLTRB(0, 12, 12, 12),
+                              padding: const EdgeInsets.only(top: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.card,
+                                borderRadius: BorderRadius.circular(18),
+                                border: Border.all(color: AppColors.border),
+                              ),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: _history(vm, onHide: () => setState(() => _historyOpen = false)),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 12,
+              right: 12,
+              child: IgnorePointer(
+                ignoring: open,
+                child: AnimatedOpacity(
+                  // Waits for the panel to leave before appearing; leaves at once when it opens.
+                  duration: open ? Motion.fast : duration,
+                  curve: open ? Curves.linear : const Interval(0.5, 1, curve: Curves.easeOut),
+                  opacity: open ? 0 : 1,
+                  child: AnimatedScale(
+                    duration: duration,
+                    curve: Motion.easeOut,
+                    scale: open ? 0.85 : 1,
+                    child: Material(
+                      color: AppColors.card,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(color: AppColors.border),
+                      ),
+                      child: IconButton(
+                        key: const Key('history-show'),
+                        tooltip: context.l10n.showHistory,
+                        onPressed: () => setState(() => _historyOpen = true),
+                        icon: Icon(Icons.history, color: AppColors.muted),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         );
@@ -258,6 +295,9 @@ class _AssistantViewState extends State<AssistantView> {
 
 /// Page width from which the history sits beside the chat instead of in a sheet.
 const double _historyPanelMinWidth = 900;
+
+/// Width of the history panel on the right.
+const double _historyPanelWidth = 280;
 
 /// Empty chat: orb + one line of intro + a "live data" pill, then four example questions
 /// in a 2×2 grid (one column on phones). Faint Pamir ridgelines sit at the bottom.
