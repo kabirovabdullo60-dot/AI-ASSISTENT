@@ -881,4 +881,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String profitStoreLine(String sales, String expenses, String salary) {
     return 'Sales $sales · expenses $expenses · salaries $salary';
   }
+
+  @override
+  String get homeTargetsProfit => 'Targets & profit';
+
+  @override
+  String get homeMonthProfit => 'Profit this month';
+
+  @override
+  String homeProfitCaption(String expenses, String margin) {
+    return 'Expenses $expenses · $margin';
+  }
+
+  @override
+  String get targetWeek => 'Weekly target';
+
+  @override
+  String get targetMonth => 'Monthly target';
+
+  @override
+  String get targetNotSet => 'Set a target';
+
+  @override
+  String targetDone(String percent) {
+    return '$percent reached';
+  }
+
+  @override
+  String get targetSheetTitleWeek => 'Sales target for a week';
+
+  @override
+  String get targetSheetTitleMonth => 'Sales target for a month';
+
+  @override
+  String get targetSheetHint =>
+      'For the whole business. You can change it any time.';
+
+  @override
+  String get targetSaved => 'Target saved';
 }

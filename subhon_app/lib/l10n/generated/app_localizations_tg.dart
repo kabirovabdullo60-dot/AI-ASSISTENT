@@ -880,4 +880,42 @@ class AppLocalizationsTg extends AppLocalizations {
   String profitStoreLine(String sales, String expenses, String salary) {
     return 'Фурӯш $sales · хароҷот $expenses · маош $salary';
   }
+
+  @override
+  String get homeTargetsProfit => 'Ҳадафҳо ва фоида';
+
+  @override
+  String get homeMonthProfit => 'Фоидаи моҳ';
+
+  @override
+  String homeProfitCaption(String expenses, String margin) {
+    return 'Хароҷот $expenses · $margin';
+  }
+
+  @override
+  String get targetWeek => 'Ҳадафи ҳафта';
+
+  @override
+  String get targetMonth => 'Ҳадафи моҳ';
+
+  @override
+  String get targetNotSet => 'Ҳадаф гузоштан';
+
+  @override
+  String targetDone(String percent) {
+    return 'Иҷро шуд $percent';
+  }
+
+  @override
+  String get targetSheetTitleWeek => 'Ҳадафи фурӯш барои ҳафта';
+
+  @override
+  String get targetSheetTitleMonth => 'Ҳадафи фурӯш барои моҳ';
+
+  @override
+  String get targetSheetHint =>
+      'Барои тамоми тиҷорат. Ҳар вақт тағйир додан мумкин.';
+
+  @override
+  String get targetSaved => 'Ҳадаф сабт шуд';
 }

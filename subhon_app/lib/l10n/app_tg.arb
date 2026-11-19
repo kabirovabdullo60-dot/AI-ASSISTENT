@@ -260,5 +260,16 @@
   "profitByCategory": "Хароҷот аз рӯи категория",
   "profitByStore": "Фоида аз рӯи мағоза",
   "profitNoExpenses": "Дар ин давра хароҷот нест.",
-  "profitStoreLine": "Фурӯш {sales} · хароҷот {expenses} · маош {salary}"
+  "profitStoreLine": "Фурӯш {sales} · хароҷот {expenses} · маош {salary}",
+  "homeTargetsProfit": "Ҳадафҳо ва фоида",
+  "homeMonthProfit": "Фоидаи моҳ",
+  "homeProfitCaption": "Хароҷот {expenses} · {margin}",
+  "targetWeek": "Ҳадафи ҳафта",
+  "targetMonth": "Ҳадафи моҳ",
+  "targetNotSet": "Ҳадаф гузоштан",
+  "targetDone": "Иҷро шуд {percent}",
+  "targetSheetTitleWeek": "Ҳадафи фурӯш барои ҳафта",
+  "targetSheetTitleMonth": "Ҳадафи фурӯш барои моҳ",
+  "targetSheetHint": "Барои тамоми тиҷорат. Ҳар вақт тағйир додан мумкин.",
+  "targetSaved": "Ҳадаф сабт шуд"
 }

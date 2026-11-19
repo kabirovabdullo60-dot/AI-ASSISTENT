@@ -417,5 +417,33 @@
         "type": "String"
       }
     }
-  }
+  },
+  "homeTargetsProfit": "Targets & profit",
+  "homeMonthProfit": "Profit this month",
+  "homeProfitCaption": "Expenses {expenses} · {margin}",
+  "@homeProfitCaption": {
+    "placeholders": {
+      "expenses": {
+        "type": "String"
+      },
+      "margin": {
+        "type": "String"
+      }
+    }
+  },
+  "targetWeek": "Weekly target",
+  "targetMonth": "Monthly target",
+  "targetNotSet": "Set a target",
+  "targetDone": "{percent} reached",
+  "@targetDone": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "targetSheetTitleWeek": "Sales target for a week",
+  "targetSheetTitleMonth": "Sales target for a month",
+  "targetSheetHint": "For the whole business. You can change it any time.",
+  "targetSaved": "Target saved"
 }

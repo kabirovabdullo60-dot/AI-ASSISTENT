@@ -4,17 +4,22 @@ import '../core/network/api_client.dart';
 import '../models/dashboard_model.dart';
 import '../models/sales_report_model.dart';
 import '../models/store_comparison_model.dart';
+import '../models/target_period.dart';
+import '../models/target_put_model.dart';
 import '../services/reports_service.dart';
 import '../services/sales_service.dart';
+import '../services/target_service.dart';
 import 'sales_period.dart';
 
 /// Home: the business dashboard, sales of the chosen period (today / week /
-/// month, compared with the previous one) and the top stores.
+/// month, compared with the previous one), the top stores, this month's
+/// profit and the business-wide sales targets.
 class DashboardViewModel extends ChangeNotifier {
-  DashboardViewModel(this._reports, this._sales);
+  DashboardViewModel(this._reports, this._sales, this._targets);
 
   final ReportsService _reports;
   final SalesService _sales;
+  final TargetService _targets;
 
   DashboardModel? _dashboard;
   SalesReportModel? _periodReport;
@@ -66,6 +71,20 @@ class DashboardViewModel extends ChangeNotifier {
     } finally {
       _isPeriodLoading = false;
       notifyListeners();
+    }
+  }
+
+  /// Sets the business-wide [period] target (`PUT /api/targets`) and reloads
+  /// the dashboard; the error, if any, is returned (not shown as the page
+  /// error).
+  Future<ApiException?> setTarget(TargetPeriod period, double amount) async {
+    try {
+      await _targets.put(TargetPutModel(period: period, amount: amount));
+      _dashboard = await _reports.dashboard();
+      notifyListeners();
+      return null;
+    } on ApiException catch (e) {
+      return e;
     }
   }
 

@@ -260,5 +260,16 @@
   "profitByCategory": "Расходы по категориям",
   "profitByStore": "Прибыль по магазинам",
   "profitNoExpenses": "Расходов за этот период нет.",
-  "profitStoreLine": "Продажи {sales} · расходы {expenses} · зарплаты {salary}"
+  "profitStoreLine": "Продажи {sales} · расходы {expenses} · зарплаты {salary}",
+  "homeTargetsProfit": "Цели и прибыль",
+  "homeMonthProfit": "Прибыль за месяц",
+  "homeProfitCaption": "Расходы {expenses} · {margin}",
+  "targetWeek": "Цель на неделю",
+  "targetMonth": "Цель на месяц",
+  "targetNotSet": "Задать цель",
+  "targetDone": "Выполнено {percent}",
+  "targetSheetTitleWeek": "Цель продаж на неделю",
+  "targetSheetTitleMonth": "Цель продаж на месяц",
+  "targetSheetHint": "Для всего бизнеса. Можно изменить в любой момент.",
+  "targetSaved": "Цель сохранена"
 }

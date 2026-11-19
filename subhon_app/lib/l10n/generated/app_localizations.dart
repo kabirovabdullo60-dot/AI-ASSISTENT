@@ -1665,6 +1665,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sales {sales} · expenses {expenses} · salaries {salary}'**
   String profitStoreLine(String sales, String expenses, String salary);
+
+  /// No description provided for @homeTargetsProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Targets & profit'**
+  String get homeTargetsProfit;
+
+  /// No description provided for @homeMonthProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit this month'**
+  String get homeMonthProfit;
+
+  /// No description provided for @homeProfitCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses {expenses} · {margin}'**
+  String homeProfitCaption(String expenses, String margin);
+
+  /// No description provided for @targetWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly target'**
+  String get targetWeek;
+
+  /// No description provided for @targetMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly target'**
+  String get targetMonth;
+
+  /// No description provided for @targetNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a target'**
+  String get targetNotSet;
+
+  /// No description provided for @targetDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} reached'**
+  String targetDone(String percent);
+
+  /// No description provided for @targetSheetTitleWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales target for a week'**
+  String get targetSheetTitleWeek;
+
+  /// No description provided for @targetSheetTitleMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales target for a month'**
+  String get targetSheetTitleMonth;
+
+  /// No description provided for @targetSheetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For the whole business. You can change it any time.'**
+  String get targetSheetHint;
+
+  /// No description provided for @targetSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Target saved'**
+  String get targetSaved;
 }
 
 class _AppLocalizationsDelegate

@@ -884,4 +884,42 @@ class AppLocalizationsRu extends AppLocalizations {
   String profitStoreLine(String sales, String expenses, String salary) {
     return 'Продажи $sales · расходы $expenses · зарплаты $salary';
   }
+
+  @override
+  String get homeTargetsProfit => 'Цели и прибыль';
+
+  @override
+  String get homeMonthProfit => 'Прибыль за месяц';
+
+  @override
+  String homeProfitCaption(String expenses, String margin) {
+    return 'Расходы $expenses · $margin';
+  }
+
+  @override
+  String get targetWeek => 'Цель на неделю';
+
+  @override
+  String get targetMonth => 'Цель на месяц';
+
+  @override
+  String get targetNotSet => 'Задать цель';
+
+  @override
+  String targetDone(String percent) {
+    return 'Выполнено $percent';
+  }
+
+  @override
+  String get targetSheetTitleWeek => 'Цель продаж на неделю';
+
+  @override
+  String get targetSheetTitleMonth => 'Цель продаж на месяц';
+
+  @override
+  String get targetSheetHint =>
+      'Для всего бизнеса. Можно изменить в любой момент.';
+
+  @override
+  String get targetSaved => 'Цель сохранена';
 }

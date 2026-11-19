@@ -21,6 +21,7 @@ import 'services/profile_service.dart';
 import 'services/reports_service.dart';
 import 'services/sales_service.dart';
 import 'services/store_service.dart';
+import 'services/target_service.dart';
 import 'viewmodels/locale_view_model.dart';
 import 'viewmodels/session_view_model.dart';
 import 'views/session_gate_view.dart';
@@ -74,6 +75,7 @@ class _MobileAppState extends State<MobileApp> {
       Provider(create: (_) => EmployeeService(_api)),
       Provider(create: (_) => PayrollService(_api)),
       Provider(create: (_) => ExpenseService(_api)),
+      Provider(create: (_) => TargetService(_api)),
       Provider(create: (_) => ReportsService(_api)),
       ChangeNotifierProvider(
         create: (_) => SessionViewModel(_auth, _api)..restore(),

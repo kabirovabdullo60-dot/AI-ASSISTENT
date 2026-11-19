@@ -214,7 +214,10 @@ abstract final class ApiJson {
     ],
   };
 
-  static Map<String, Object?> dashboard() => {
+  static Map<String, Object?> dashboard({
+    String? weekTarget,
+    String? monthTarget = '150000.00',
+  }) => {
     'currency': 'TJS',
     'today': '2026-11-18',
     'weekStartDate': '2026-11-16',
@@ -241,6 +244,11 @@ abstract final class ApiJson {
       'totalAmount': '80000.00',
       'salesCount': 40,
     },
+    'monthExpenses': '12000.00',
+    'monthProfit': '82028.00',
+    'monthMarginPercent': 73.22,
+    'weekTarget': weekTarget,
+    'monthTarget': monthTarget,
   };
 
   static Map<String, Object?> storeComparison() => {
