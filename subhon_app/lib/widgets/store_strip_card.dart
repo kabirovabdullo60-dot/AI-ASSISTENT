@@ -47,7 +47,10 @@ class StoreStripCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // The icon with the name next to it; the status in the
+                // corner.
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppIconBox(
                       icon: Icons.storefront_outlined,
@@ -56,25 +59,31 @@ class StoreStripCard extends StatelessWidget {
                       size: 36,
                     ),
                     const SizedBox(width: AppSpacing.sm),
-                    const Spacer(),
-                    // Shrinks rather than overflows on narrow cards.
-                    Flexible(flex: 4, child: ActiveStatusBadge(active: active)),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleSmall,
+                          ),
+                          if (place != null)
+                            Text(
+                              place!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: p.textSecondary,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                    ActiveStatusBadge(active: active),
                   ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleSmall,
-                ),
-                Text(
-                  place ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: p.textSecondary,
-                  ),
                 ),
                 const Spacer(),
                 Text(salesLabel, style: theme.textTheme.labelSmall),
