@@ -1,6 +1,8 @@
 import '../core/utils/money.dart';
 
 import 'day_sales_model.dart';
+import 'hour_sales_model.dart';
+import 'payment_method_sales_model.dart';
 import 'period_model.dart';
 import 'store_sales_model.dart';
 
@@ -20,6 +22,8 @@ class SalesReportModel {
     required this.storesCount,
     required this.stores,
     required this.byDay,
+    this.byPaymentMethod = const [],
+    this.byHour,
   });
 
   factory SalesReportModel.fromJson(Map<String, dynamic> json) =>
@@ -47,6 +51,13 @@ class SalesReportModel {
           for (final e in json['byDay'] as List<dynamic>)
             DaySalesModel.fromJson(e as Map<String, dynamic>),
         ],
+        byPaymentMethod: [
+          for (final e in json['byPaymentMethod'] as List<dynamic>? ?? const [])
+            PaymentMethodSalesModel.fromJson(e as Map<String, dynamic>),
+        ],
+        byHour: (json['byHour'] as List<dynamic>?)
+            ?.map((e) => HourSalesModel.fromJson(e as Map<String, dynamic>))
+            .toList(),
       );
 
   final String currency;
@@ -62,4 +73,11 @@ class SalesReportModel {
   final int storesCount;
   final List<StoreSalesModel> stores;
   final List<DaySalesModel> byDay;
+
+  /// CASH, CARD, QR, MIXED (zeros included), plus `null` for sales without
+  /// a method.
+  final List<PaymentMethodSalesModel> byPaymentMethod;
+
+  /// Daily reports only: 24 hours.
+  final List<HourSalesModel>? byHour;
 }

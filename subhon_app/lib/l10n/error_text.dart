@@ -24,6 +24,7 @@ String errorText(AppLocalizations l10n, Object error) {
     'STORE_HAS_ACTIVE_EMPLOYEES' => l10n.errStoreHasEmployees,
     'SALE_NOT_FOUND' => l10n.errSaleNotFound,
     'SALE_DATE_IN_FUTURE' => l10n.errSaleDateFuture,
+    'SALE_SPLIT_MISMATCH' => l10n.errSaleSplit,
     'EMPLOYEE_NOT_FOUND' => l10n.errEmployeeNotFound,
     'INVALID_EMPLOYMENT_DATES' => l10n.errEmploymentDates,
     'EMPLOYEE_NOT_EMPLOYED_IN_PERIOD' => l10n.errNotEmployedInPeriod,

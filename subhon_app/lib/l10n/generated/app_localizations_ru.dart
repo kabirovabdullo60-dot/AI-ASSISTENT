@@ -1096,4 +1096,41 @@ class AppLocalizationsRu extends AppLocalizations {
   String homeInUsd(String amount, String rate) {
     return '≈ $amount · 1 USD = $rate';
   }
+
+  @override
+  String get fieldPaymentMethod => 'Способ оплаты';
+
+  @override
+  String get paymentNotSet => 'Не указан';
+
+  @override
+  String get paymentCash => 'Наличные';
+
+  @override
+  String get paymentCard => 'Карта';
+
+  @override
+  String get paymentQr => 'QR-код';
+
+  @override
+  String get paymentMixed => 'Наличные + карта';
+
+  @override
+  String get fieldCashAmount => 'Из них наличными';
+
+  @override
+  String get fieldCardAmount => 'Из них картой';
+
+  @override
+  String get fieldReceiptNumber => 'Номер чека';
+
+  @override
+  String get validationSplit =>
+      'Наличные и карта вместе должны равняться сумме';
+
+  @override
+  String get errSaleSplit => 'Наличные и карта вместе должны равняться сумме.';
+
+  @override
+  String get homeByPayment => 'По способам оплаты';
 }

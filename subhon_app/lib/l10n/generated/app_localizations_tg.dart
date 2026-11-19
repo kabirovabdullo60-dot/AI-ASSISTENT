@@ -1092,4 +1092,42 @@ class AppLocalizationsTg extends AppLocalizations {
   String homeInUsd(String amount, String rate) {
     return '≈ $amount · 1 USD = $rate';
   }
+
+  @override
+  String get fieldPaymentMethod => 'Тарзи пардохт';
+
+  @override
+  String get paymentNotSet => 'Нишон дода нашудааст';
+
+  @override
+  String get paymentCash => 'Нақд';
+
+  @override
+  String get paymentCard => 'Корт';
+
+  @override
+  String get paymentQr => 'QR-код';
+
+  @override
+  String get paymentMixed => 'Нақд + корт';
+
+  @override
+  String get fieldCashAmount => 'Аз он нақд';
+
+  @override
+  String get fieldCardAmount => 'Аз он бо корт';
+
+  @override
+  String get fieldReceiptNumber => 'Рақами чек';
+
+  @override
+  String get validationSplit =>
+      'Нақд ва корт якҷоя бояд ба маблағ баробар бошанд';
+
+  @override
+  String get errSaleSplit =>
+      'Нақд ва корт якҷоя бояд ба маблағ баробар бошанд.';
+
+  @override
+  String get homeByPayment => 'Аз рӯи тарзи пардохт';
 }

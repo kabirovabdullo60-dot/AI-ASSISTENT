@@ -5,9 +5,11 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
+import '../l10n/payment_method_text.dart';
 import '../l10n/validators.dart';
 import '../models/sales_report_model.dart';
 import '../models/notification_link.dart';
+import '../models/payment_method.dart';
 import '../models/target_period.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
@@ -159,6 +161,37 @@ class _Body extends StatelessWidget {
             duration: const Duration(milliseconds: 150),
             child: _PeriodFigures(report: report, period: vm.period),
           ),
+        if (vm.periodReport?.byPaymentMethod.where((m) => m.totalAmount > 0)
+            case final methods? when methods.isNotEmpty) ...[
+          gap,
+          Text(
+            l10n.homeByPayment,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          AppCard(
+            child: Column(
+              children: [
+                for (final (i, m) in methods.indexed) ...[
+                  if (i > 0) const SizedBox(height: AppSpacing.md),
+                  ShareBarRow(
+                    icon: switch (m.paymentMethod) {
+                      PaymentMethod.cash => Icons.payments_outlined,
+                      PaymentMethod.card => Icons.credit_card_rounded,
+                      PaymentMethod.qr => Icons.qr_code_2_rounded,
+                      PaymentMethod.mixed => Icons.call_split_rounded,
+                      null => Icons.help_outline_rounded,
+                    },
+                    label: paymentMethodText(l10n, m.paymentMethod),
+                    value: context.money(m.totalAmount),
+                    share: m.sharePercent / 100,
+                    shareText: context.percent(m.sharePercent),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
         const SizedBox(height: AppSpacing.xl),
         SectionHeader(title: l10n.homeTargetsProfit),
         FigureCard(

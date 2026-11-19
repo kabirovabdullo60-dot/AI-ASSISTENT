@@ -1,4 +1,5 @@
 import '../core/network/api_client.dart';
+import '../models/payment_method.dart';
 import '../models/sale_create_model.dart';
 import '../models/sale_model.dart';
 import '../models/sale_update_model.dart';
@@ -49,8 +50,15 @@ class SaleFormViewModel extends FormViewModel {
     required double amount,
     required DateTime saleDate,
     required String description,
+    PaymentMethod? paymentMethod,
+    double? cashAmount,
+    double? cardAmount,
+    String receiptNumber = '',
   }) => submit(() async {
     final text = description.trim().isEmpty ? null : description.trim();
+    final receipt = receiptNumber.trim().isEmpty ? null : receiptNumber.trim();
+    // The split is only sent for a mixed payment.
+    final split = paymentMethod == PaymentMethod.mixed;
     final current = initial;
     if (current == null) {
       await _sales.create(
@@ -59,6 +67,10 @@ class SaleFormViewModel extends FormViewModel {
           amount: amount,
           saleDate: saleDate,
           description: text,
+          paymentMethod: paymentMethod,
+          cashAmount: split ? cashAmount : null,
+          cardAmount: split ? cardAmount : null,
+          receiptNumber: receipt,
         ),
       );
     } else {
@@ -69,6 +81,10 @@ class SaleFormViewModel extends FormViewModel {
           amount: amount,
           saleDate: saleDate,
           description: text,
+          paymentMethod: paymentMethod,
+          cashAmount: split ? cashAmount : null,
+          cardAmount: split ? cardAmount : null,
+          receiptNumber: receipt,
         ),
         clear: SaleUpdateModel.clearable,
       );

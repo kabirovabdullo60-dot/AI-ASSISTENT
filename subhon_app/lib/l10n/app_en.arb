@@ -645,5 +645,17 @@
         "type": "String"
       }
     }
-  }
+  },
+  "fieldPaymentMethod": "Payment method",
+  "paymentNotSet": "Not specified",
+  "paymentCash": "Cash",
+  "paymentCard": "Card",
+  "paymentQr": "QR",
+  "paymentMixed": "Cash + card",
+  "fieldCashAmount": "Of it in cash",
+  "fieldCardAmount": "Of it by card",
+  "fieldReceiptNumber": "Receipt number",
+  "validationSplit": "Cash and card must add up to the amount",
+  "errSaleSplit": "Cash and card must add up to the amount.",
+  "homeByPayment": "By payment method"
 }

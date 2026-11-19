@@ -313,5 +313,17 @@
   "assistantSuggestSalary": "Сколько зарплаты ещё не выплачено?",
   "errAssistantUnavailable": "Ассистент сейчас недоступен. Попробуйте позже.",
   "errAssistantRateLimited": "Слишком много вопросов. Подождите {seconds} с и попробуйте снова.",
-  "homeInUsd": "≈ {amount} · 1 USD = {rate}"
+  "homeInUsd": "≈ {amount} · 1 USD = {rate}",
+  "fieldPaymentMethod": "Способ оплаты",
+  "paymentNotSet": "Не указан",
+  "paymentCash": "Наличные",
+  "paymentCard": "Карта",
+  "paymentQr": "QR-код",
+  "paymentMixed": "Наличные + карта",
+  "fieldCashAmount": "Из них наличными",
+  "fieldCardAmount": "Из них картой",
+  "fieldReceiptNumber": "Номер чека",
+  "validationSplit": "Наличные и карта вместе должны равняться сумме",
+  "errSaleSplit": "Наличные и карта вместе должны равняться сумме.",
+  "homeByPayment": "По способам оплаты"
 }

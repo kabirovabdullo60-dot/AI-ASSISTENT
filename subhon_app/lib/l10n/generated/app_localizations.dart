@@ -1983,6 +1983,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'≈ {amount} · 1 USD = {rate}'**
   String homeInUsd(String amount, String rate);
+
+  /// No description provided for @fieldPaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method'**
+  String get fieldPaymentMethod;
+
+  /// No description provided for @paymentNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not specified'**
+  String get paymentNotSet;
+
+  /// No description provided for @paymentCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get paymentCash;
+
+  /// No description provided for @paymentCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card'**
+  String get paymentCard;
+
+  /// No description provided for @paymentQr.
+  ///
+  /// In en, this message translates to:
+  /// **'QR'**
+  String get paymentQr;
+
+  /// No description provided for @paymentMixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash + card'**
+  String get paymentMixed;
+
+  /// No description provided for @fieldCashAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Of it in cash'**
+  String get fieldCashAmount;
+
+  /// No description provided for @fieldCardAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Of it by card'**
+  String get fieldCardAmount;
+
+  /// No description provided for @fieldReceiptNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt number'**
+  String get fieldReceiptNumber;
+
+  /// No description provided for @validationSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash and card must add up to the amount'**
+  String get validationSplit;
+
+  /// No description provided for @errSaleSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash and card must add up to the amount.'**
+  String get errSaleSplit;
+
+  /// No description provided for @homeByPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'By payment method'**
+  String get homeByPayment;
 }
 
 class _AppLocalizationsDelegate

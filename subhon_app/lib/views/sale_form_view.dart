@@ -5,7 +5,9 @@ import '../core/theme/app_dimensions.dart';
 import '../core/utils/local_date.dart';
 import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
+import '../l10n/payment_method_text.dart';
 import '../l10n/validators.dart';
+import '../models/payment_method.dart';
 import '../models/sale_model.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
@@ -54,6 +56,16 @@ class _SaleFormState extends State<_SaleForm> {
   late final _description = TextEditingController(
     text: widget.initial?.description ?? '',
   );
+  late final _cash = TextEditingController(
+    text: widget.initial?.cashAmount?.toStringAsFixed(2) ?? '',
+  );
+  late final _card = TextEditingController(
+    text: widget.initial?.cardAmount?.toStringAsFixed(2) ?? '',
+  );
+  late final _receipt = TextEditingController(
+    text: widget.initial?.receiptNumber ?? '',
+  );
+  late PaymentMethod? _method = widget.initial?.paymentMethod;
   late String? _storeId = widget.initial?.storeId;
   late DateTime _date = widget.initial?.saleDate ?? today();
   bool _storeMissing = false;
@@ -62,6 +74,9 @@ class _SaleFormState extends State<_SaleForm> {
   void dispose() {
     _amount.dispose();
     _description.dispose();
+    _cash.dispose();
+    _card.dispose();
+    _receipt.dispose();
     super.dispose();
   }
 
@@ -78,6 +93,37 @@ class _SaleFormState extends State<_SaleForm> {
         _storeMissing = false;
       });
     }
+  }
+
+  Future<void> _pickMethod() async {
+    final l10n = context.l10n;
+    final picked = await showOptionsSheet<String>(
+      context,
+      title: l10n.fieldPaymentMethod,
+      selected: _method?.json ?? '',
+      options: [
+        ('', l10n.paymentNotSet),
+        for (final m in PaymentMethod.values)
+          (m.json, paymentMethodText(l10n, m)),
+      ],
+    );
+    if (picked != null) {
+      setState(() => _method = PaymentMethod.fromJson(picked));
+    }
+  }
+
+  /// Cash + card must add up to the amount (checked again by the server).
+  String? _splitError(String? _) {
+    if (_method != PaymentMethod.mixed) return null;
+    final l10n = context.l10n;
+    final amount = Validators.parseAmount(_amount.text);
+    final cash = Validators.parseAmount(_cash.text);
+    final card = Validators.parseAmount(_card.text);
+    if (cash == null || card == null) return l10n.validationAmount;
+    if (amount != null && ((cash + card) - amount).abs() > 0.004) {
+      return l10n.validationSplit;
+    }
+    return null;
   }
 
   Future<void> _pickDate() async {
@@ -102,6 +148,10 @@ class _SaleFormState extends State<_SaleForm> {
       amount: Validators.parseAmount(_amount.text)!,
       saleDate: _date,
       description: _description.text,
+      paymentMethod: _method,
+      cashAmount: Validators.parseAmount(_cash.text),
+      cardAmount: Validators.parseAmount(_card.text),
+      receiptNumber: _receipt.text,
     );
     if (ok) {
       feedback.showSuccess(vm.isEdit ? l10n.saleUpdated : l10n.saleSaved);
@@ -204,6 +254,51 @@ class _SaleFormState extends State<_SaleForm> {
               value: context.formatDate(_date),
               leading: const Icon(Icons.event_outlined),
               onTap: _pickDate,
+            ),
+            gap,
+            AppPickerField(
+              label: l10n.fieldPaymentMethod,
+              value: paymentMethodText(l10n, _method),
+              leading: const Icon(Icons.payments_outlined),
+              onTap: _pickMethod,
+            ),
+            if (_method == PaymentMethod.mixed) ...[
+              gap,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: AppTextField(
+                      controller: _cash,
+                      label: l10n.fieldCashAmount,
+                      hint: '0,00',
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: _splitError,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: AppTextField(
+                      controller: _card,
+                      label: l10n.fieldCardAmount,
+                      hint: '0,00',
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: _splitError,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            gap,
+            AppTextField(
+              controller: _receipt,
+              label: l10n.fieldReceiptNumber,
+              hint: l10n.fieldOptional,
+              maxLength: 64,
             ),
             gap,
             AppTextField(

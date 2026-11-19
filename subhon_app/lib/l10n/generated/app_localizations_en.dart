@@ -1093,4 +1093,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String homeInUsd(String amount, String rate) {
     return '≈ $amount · 1 USD = $rate';
   }
+
+  @override
+  String get fieldPaymentMethod => 'Payment method';
+
+  @override
+  String get paymentNotSet => 'Not specified';
+
+  @override
+  String get paymentCash => 'Cash';
+
+  @override
+  String get paymentCard => 'Card';
+
+  @override
+  String get paymentQr => 'QR';
+
+  @override
+  String get paymentMixed => 'Cash + card';
+
+  @override
+  String get fieldCashAmount => 'Of it in cash';
+
+  @override
+  String get fieldCardAmount => 'Of it by card';
+
+  @override
+  String get fieldReceiptNumber => 'Receipt number';
+
+  @override
+  String get validationSplit => 'Cash and card must add up to the amount';
+
+  @override
+  String get errSaleSplit => 'Cash and card must add up to the amount.';
+
+  @override
+  String get homeByPayment => 'By payment method';
 }
