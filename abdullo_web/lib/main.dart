@@ -8,7 +8,6 @@ import 'core/network/token_storage.dart';
 import 'core/theme/app_palette.dart';
 import 'core/theme/app_theme.dart';
 import 'services/activity_service.dart';
-import 'widgets/brand_mark.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
 import 'services/employee_service.dart';
@@ -35,6 +34,7 @@ import 'viewmodels/settings_view_model.dart';
 import 'viewmodels/stores_view_model.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
+import 'views/splash_view.dart';
 
 void main() {
   runApp(const WebApp());
@@ -89,11 +89,16 @@ class _WebAppState extends State<WebApp> {
             locale: Locale(context.select<SettingsViewModel, String>((s) => s.language.name)),
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: appLocalizationsDelegates,
-            home: switch (status) {
-              AuthStatus.checking => const _Splash(),
-              AuthStatus.signedOut => const LoginView(),
-              AuthStatus.signedIn => const HomeView(),
-            },
+            // Splash → login / app cross-fades instead of cutting.
+            home: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 520),
+              switchInCurve: Curves.easeOut,
+              child: switch (status) {
+                AuthStatus.checking => const SplashView(key: ValueKey('splash')),
+                AuthStatus.signedOut => const LoginView(key: ValueKey('login')),
+                AuthStatus.signedIn => const HomeView(key: ValueKey('home')),
+              },
+            ),
           );
           // Data providers sit ABOVE MaterialApp so dialogs (which open on the root navigator) see them too.
           if (status != AuthStatus.signedIn) return app;
@@ -147,22 +152,6 @@ class _SignedInState extends State<_SignedIn> {
         ChangeNotifierProvider(create: (_) => AssistantViewModel(AssistantService(api, reports))),
       ],
       child: widget.child,
-    );
-  }
-}
-
-class _Splash extends StatelessWidget {
-  const _Splash();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [const BrandMark(size: 48), const SizedBox(height: 16), const CircularProgressIndicator()],
-        ),
-      ),
     );
   }
 }

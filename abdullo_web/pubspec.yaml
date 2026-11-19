@@ -66,6 +66,10 @@ flutter:
   uses-material-design: true
 
   # Onest (variable weight, full Tajik Cyrillic) — SIL Open Font License, see assets/fonts/OFL.txt.
+  # Unsplash photos (see assets/images/CREDITS.md).
+  assets:
+    - assets/images/
+
   fonts:
     - family: Onest
       fonts:

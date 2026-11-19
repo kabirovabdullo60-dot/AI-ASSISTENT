@@ -5,7 +5,10 @@ import '../core/l10n/app_language.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../widgets/brand_mark.dart';
+import '../core/motion/motion.dart';
 import '../widgets/motion/aurora.dart';
+import '../widgets/motion/fade_slide_in.dart';
+import '../widgets/motion/photo_slideshow.dart';
 import '../widgets/pamir_ridge.dart';
 import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
@@ -197,7 +200,15 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, c) => c.maxWidth < 900
-            ? form
+            // Phones: the same photos under a deep tint, the form card on top.
+            ? Stack(
+                fit: StackFit.expand,
+                children: [
+                  const PhotoSlideshow(images: _LoginHero.photos),
+                  ColoredBox(color: AppColors.navy.withValues(alpha: 0.86)),
+                  form,
+                ],
+              )
             : Row(
                 children: [
                   const Expanded(flex: 5, child: _LoginHero()),
@@ -209,54 +220,85 @@ class _LoginViewState extends State<LoginView> {
   }
 }
 
-/// Left half of the wide login: ink panel, brand, one plain promise, and the Pamir
-/// ridgelines drawing themselves along the bottom.
+/// Left half of the wide login: real photos (a cosmetics shop, cash, a shop counter) slowly
+/// zooming and cross-fading under a tint of the palette's dark surface, aurora light, the
+/// Pamir ridgelines, and the promise rising in.
 class _LoginHero extends StatelessWidget {
   const _LoginHero();
+
+  static const photos = [
+    'assets/images/cosmetics_shop.jpg',
+    'assets/images/money_hand.jpg',
+    'assets/images/shop_counter.jpg',
+  ];
 
   @override
   Widget build(BuildContext context) {
     final tr = context.l10n;
-    const soft = Color(0xFFB9C6D3); // secondary text tinted from the ink surface
-    return Container(
-      color: AppColors.navy,
+    const soft = Color(0xFFD5DEE8); // secondary text on the tinted photo
+    final tint = AppColors.navy;
+    return ColoredBox(
+      color: tint,
       child: Stack(
+        fit: StackFit.expand,
         children: [
-          const Positioned.fill(child: AuroraBackground()),
-          const Positioned(left: 0, right: 0, bottom: 0, height: 260, child: PamirRidges(color: Colors.white)),
+          const PhotoSlideshow(images: photos),
+          // Darker at the bottom-left where the text sits, lighter top-right so the photo shows.
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [tint.withValues(alpha: 0.96), tint.withValues(alpha: 0.78), tint.withValues(alpha: 0.35)],
+                stops: const [0, 0.55, 1],
+              ),
+            ),
+          ),
+          const AuroraBackground(),
+          const Positioned(left: 0, right: 0, bottom: 0, height: 240, child: PamirRidges(color: Colors.white)),
           Padding(
             padding: const EdgeInsets.fromLTRB(48, 44, 48, 48),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
-                  children: [
-                    BrandMark(size: 36),
-                    SizedBox(width: 12),
-                    Text(
-                      'Apex Suite',
-                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
-                    ),
-                  ],
+                const FadeSlideIn(
+                  child: Row(
+                    children: [
+                      BrandMark(size: 36),
+                      SizedBox(width: 12),
+                      Text(
+                        'Apex Suite',
+                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
                 ),
                 const Spacer(flex: 2),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 480),
-                  child: Text(
-                    tr.loginHeadline,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
-                      height: 1.12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -1.2,
+                FadeSlideIn(
+                  delay: Motion.staggerAt(3),
+                  offset: const Offset(0, 16),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    child: Text(
+                      tr.loginHeadline,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 42,
+                        height: 1.1,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -1.3,
+                        shadows: [Shadow(color: Color(0x66000000), blurRadius: 24)],
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 420),
-                  child: Text(tr.loginHeroBody, style: const TextStyle(color: soft, fontSize: 16, height: 1.5)),
+                FadeSlideIn(
+                  delay: Motion.staggerAt(5),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: Text(tr.loginHeroBody, style: const TextStyle(color: soft, fontSize: 16, height: 1.5)),
+                  ),
                 ),
                 const Spacer(flex: 3),
               ],
