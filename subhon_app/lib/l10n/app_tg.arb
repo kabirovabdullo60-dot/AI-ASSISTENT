@@ -250,5 +250,15 @@
   "expenseDeleteTitle": "Хароҷотро нест кунем?",
   "expenseDeleteMessage": "Он дигар дар хароҷот ва фоида ҳисоб карда намешавад.",
   "errExpenseNotFound": "Ин хароҷот дигар вуҷуд надорад.",
-  "errExpenseDateFuture": "Санаи хароҷот наметавонад дар оянда бошад."
+  "errExpenseDateFuture": "Санаи хароҷот наметавонад дар оянда бошад.",
+  "reportProfit": "Фоида",
+  "profitSales": "Фурӯш",
+  "profitExpenses": "Хароҷот",
+  "profitSalaryDue": "Маоши ҳисобшуда",
+  "profitMargin": "Маржа {percent}",
+  "profitNoSales": "Дар ин давра фурӯш нест",
+  "profitByCategory": "Хароҷот аз рӯи категория",
+  "profitByStore": "Фоида аз рӯи мағоза",
+  "profitNoExpenses": "Дар ин давра хароҷот нест.",
+  "profitStoreLine": "Фурӯш {sales} · хароҷот {expenses} · маош {salary}"
 }

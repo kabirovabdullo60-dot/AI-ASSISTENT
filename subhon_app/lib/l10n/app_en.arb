@@ -387,5 +387,35 @@
   "expenseDeleteTitle": "Delete the expense?",
   "expenseDeleteMessage": "It will no longer count in expenses and profit.",
   "errExpenseNotFound": "This expense no longer exists.",
-  "errExpenseDateFuture": "The expense date can't be in the future."
+  "errExpenseDateFuture": "The expense date can't be in the future.",
+  "reportProfit": "Profit",
+  "profitSales": "Sales",
+  "profitExpenses": "Expenses",
+  "profitSalaryDue": "Salaries due",
+  "profitMargin": "Margin {percent}",
+  "@profitMargin": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "profitNoSales": "No sales in this period",
+  "profitByCategory": "Expenses by category",
+  "profitByStore": "Profit by store",
+  "profitNoExpenses": "No expenses in this period.",
+  "profitStoreLine": "Sales {sales} · expenses {expenses} · salaries {salary}",
+  "@profitStoreLine": {
+    "placeholders": {
+      "sales": {
+        "type": "String"
+      },
+      "expenses": {
+        "type": "String"
+      },
+      "salary": {
+        "type": "String"
+      }
+    }
+  }
 }

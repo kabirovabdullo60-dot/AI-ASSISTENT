@@ -847,4 +847,38 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get errExpenseDateFuture =>
       'The expense date can\'t be in the future.';
+
+  @override
+  String get reportProfit => 'Profit';
+
+  @override
+  String get profitSales => 'Sales';
+
+  @override
+  String get profitExpenses => 'Expenses';
+
+  @override
+  String get profitSalaryDue => 'Salaries due';
+
+  @override
+  String profitMargin(String percent) {
+    return 'Margin $percent';
+  }
+
+  @override
+  String get profitNoSales => 'No sales in this period';
+
+  @override
+  String get profitByCategory => 'Expenses by category';
+
+  @override
+  String get profitByStore => 'Profit by store';
+
+  @override
+  String get profitNoExpenses => 'No expenses in this period.';
+
+  @override
+  String profitStoreLine(String sales, String expenses, String salary) {
+    return 'Sales $sales · expenses $expenses · salaries $salary';
+  }
 }

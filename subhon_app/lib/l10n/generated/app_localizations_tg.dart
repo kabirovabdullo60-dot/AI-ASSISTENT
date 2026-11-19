@@ -846,4 +846,38 @@ class AppLocalizationsTg extends AppLocalizations {
   @override
   String get errExpenseDateFuture =>
       'Санаи хароҷот наметавонад дар оянда бошад.';
+
+  @override
+  String get reportProfit => 'Фоида';
+
+  @override
+  String get profitSales => 'Фурӯш';
+
+  @override
+  String get profitExpenses => 'Хароҷот';
+
+  @override
+  String get profitSalaryDue => 'Маоши ҳисобшуда';
+
+  @override
+  String profitMargin(String percent) {
+    return 'Маржа $percent';
+  }
+
+  @override
+  String get profitNoSales => 'Дар ин давра фурӯш нест';
+
+  @override
+  String get profitByCategory => 'Хароҷот аз рӯи категория';
+
+  @override
+  String get profitByStore => 'Фоида аз рӯи мағоза';
+
+  @override
+  String get profitNoExpenses => 'Дар ин давра хароҷот нест.';
+
+  @override
+  String profitStoreLine(String sales, String expenses, String salary) {
+    return 'Фурӯш $sales · хароҷот $expenses · маош $salary';
+  }
 }

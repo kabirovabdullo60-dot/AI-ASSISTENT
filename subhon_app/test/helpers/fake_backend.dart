@@ -331,4 +331,48 @@ abstract final class ApiJson {
     'byStore': <Object>[],
     'byPosition': <Object>[],
   };
+
+  static Map<String, Object?> payrollYear() => {
+    'currency': 'TJS',
+    'year': 2026,
+    'totalDue': '18000.00',
+    'totalPaid': '9000.00',
+    'totalRemaining': '9000.00',
+    'months': <Object>[],
+  };
+
+  static Map<String, Object?> profit({
+    String gross = '82028.00',
+    double? margin = 73.22,
+  }) => {
+    'currency': 'TJS',
+    'period': period('2026-11-01', '2026-11-18', 18),
+    'salesTotal': '112028.00',
+    'expensesTotal': '12000.00',
+    'salaryDue': '18000.00',
+    'grossProfit': gross,
+    'marginPercent': margin,
+    'byCategory': [
+      {'category': 'RENT', 'totalAmount': '9000.00'},
+      {'category': 'UTILITIES', 'totalAmount': '3000.00'},
+    ],
+    'byStore': [
+      {
+        'storeId': '33333333-3333-3333-3333-333333333333',
+        'storeName': 'Бахор — Сомони',
+        'salesTotal': '112028.00',
+        'expensesTotal': '3000.00',
+        'salaryDue': '18000.00',
+        'profit': '91028.00',
+      },
+      {
+        'storeId': null,
+        'storeName': null,
+        'salesTotal': '0.00',
+        'expensesTotal': '9000.00',
+        'salaryDue': '0.00',
+        'profit': '-9000.00',
+      },
+    ],
+  };
 }

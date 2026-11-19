@@ -850,4 +850,38 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get errExpenseDateFuture => 'Дата расхода не может быть в будущем.';
+
+  @override
+  String get reportProfit => 'Прибыль';
+
+  @override
+  String get profitSales => 'Продажи';
+
+  @override
+  String get profitExpenses => 'Расходы';
+
+  @override
+  String get profitSalaryDue => 'Зарплаты начислено';
+
+  @override
+  String profitMargin(String percent) {
+    return 'Маржа $percent';
+  }
+
+  @override
+  String get profitNoSales => 'В этом периоде нет продаж';
+
+  @override
+  String get profitByCategory => 'Расходы по категориям';
+
+  @override
+  String get profitByStore => 'Прибыль по магазинам';
+
+  @override
+  String get profitNoExpenses => 'Расходов за этот период нет.';
+
+  @override
+  String profitStoreLine(String sales, String expenses, String salary) {
+    return 'Продажи $sales · расходы $expenses · зарплаты $salary';
+  }
 }

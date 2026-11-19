@@ -250,5 +250,15 @@
   "expenseDeleteTitle": "Удалить расход?",
   "expenseDeleteMessage": "Он больше не будет учитываться в расходах и прибыли.",
   "errExpenseNotFound": "Этот расход больше не существует.",
-  "errExpenseDateFuture": "Дата расхода не может быть в будущем."
+  "errExpenseDateFuture": "Дата расхода не может быть в будущем.",
+  "reportProfit": "Прибыль",
+  "profitSales": "Продажи",
+  "profitExpenses": "Расходы",
+  "profitSalaryDue": "Зарплаты начислено",
+  "profitMargin": "Маржа {percent}",
+  "profitNoSales": "В этом периоде нет продаж",
+  "profitByCategory": "Расходы по категориям",
+  "profitByStore": "Прибыль по магазинам",
+  "profitNoExpenses": "Расходов за этот период нет.",
+  "profitStoreLine": "Продажи {sales} · расходы {expenses} · зарплаты {salary}"
 }

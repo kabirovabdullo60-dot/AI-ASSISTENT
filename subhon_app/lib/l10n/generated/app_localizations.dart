@@ -1605,6 +1605,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The expense date can\'t be in the future.'**
   String get errExpenseDateFuture;
+
+  /// No description provided for @reportProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit'**
+  String get reportProfit;
+
+  /// No description provided for @profitSales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get profitSales;
+
+  /// No description provided for @profitExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get profitExpenses;
+
+  /// No description provided for @profitSalaryDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Salaries due'**
+  String get profitSalaryDue;
+
+  /// No description provided for @profitMargin.
+  ///
+  /// In en, this message translates to:
+  /// **'Margin {percent}'**
+  String profitMargin(String percent);
+
+  /// No description provided for @profitNoSales.
+  ///
+  /// In en, this message translates to:
+  /// **'No sales in this period'**
+  String get profitNoSales;
+
+  /// No description provided for @profitByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses by category'**
+  String get profitByCategory;
+
+  /// No description provided for @profitByStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit by store'**
+  String get profitByStore;
+
+  /// No description provided for @profitNoExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses in this period.'**
+  String get profitNoExpenses;
+
+  /// No description provided for @profitStoreLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales {sales} · expenses {expenses} · salaries {salary}'**
+  String profitStoreLine(String sales, String expenses, String salary);
 }
 
 class _AppLocalizationsDelegate
