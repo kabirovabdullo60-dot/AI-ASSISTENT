@@ -135,6 +135,27 @@ abstract final class ApiJson {
     'totalAmount': ?totalAmount,
   };
 
+  static Map<String, Object?> expense({
+    String id = '55555555-5555-5555-5555-555555555555',
+    String category = 'RENT',
+    String amount = '3000.00',
+    String? storeId,
+    String? storeName,
+    String? description = 'Аренда за ноябрь',
+  }) => {
+    'id': id,
+    'storeId': storeId,
+    'storeName': storeName,
+    'category': category,
+    'amount': amount,
+    'expenseDate': '2026-11-05',
+    'description': description,
+    'registeredById': '11111111-1111-1111-1111-111111111111',
+    'registeredByName': 'Фарход Назаров',
+    'createdAt': '2026-11-05T06:00:00Z',
+    'updatedAt': '2026-11-05T06:00:00Z',
+  };
+
   static Map<String, Object?> sale({
     String id = '44444444-4444-4444-4444-444444444444',
     String amount = '1250.50',

@@ -32,6 +32,8 @@ String errorText(AppLocalizations l10n, Object error) {
     'PAYROLL_ALREADY_PAID' => l10n.errPayrollAlreadyPaid,
     'PAYROLL_PERIOD_IN_FUTURE' => l10n.errPayrollFuture,
     'PAYMENT_DATE_IN_FUTURE' => l10n.errPaymentDateFuture,
+    'EXPENSE_NOT_FOUND' => l10n.errExpenseNotFound,
+    'EXPENSE_DATE_IN_FUTURE' => l10n.errExpenseDateFuture,
     'INVALID_DATE_RANGE' => l10n.errDateRange,
     'VALIDATION_ERROR' => l10n.errValidation,
     'PERMISSION_DENIED' => l10n.errPermission,

@@ -1443,6 +1443,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Try again.'**
   String get errUnknown;
+
+  /// No description provided for @navExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get navExpenses;
+
+  /// No description provided for @moreExpensesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent, utilities, delivery and more'**
+  String get moreExpensesHint;
+
+  /// No description provided for @actionNewExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get actionNewExpense;
+
+  /// No description provided for @fieldCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get fieldCategory;
+
+  /// No description provided for @expenseCategoryRent.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get expenseCategoryRent;
+
+  /// No description provided for @expenseCategoryUtilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Utilities'**
+  String get expenseCategoryUtilities;
+
+  /// No description provided for @expenseCategoryDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery'**
+  String get expenseCategoryDelivery;
+
+  /// No description provided for @expenseCategorySupplies.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplies'**
+  String get expenseCategorySupplies;
+
+  /// No description provided for @expenseCategoryMarketing.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketing'**
+  String get expenseCategoryMarketing;
+
+  /// No description provided for @expenseCategoryTaxes.
+  ///
+  /// In en, this message translates to:
+  /// **'Taxes'**
+  String get expenseCategoryTaxes;
+
+  /// No description provided for @expenseCategoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get expenseCategoryOther;
+
+  /// No description provided for @expensesAllCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get expensesAllCategories;
+
+  /// No description provided for @expenseWholeBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole business'**
+  String get expenseWholeBusiness;
+
+  /// No description provided for @expensesTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total expenses'**
+  String get expensesTotal;
+
+  /// No description provided for @expensesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No expenses} one{{count} expense} other{{count} expenses}}'**
+  String expensesCount(int count);
+
+  /// No description provided for @expensesNothingFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses for this filter.'**
+  String get expensesNothingFound;
+
+  /// No description provided for @expensesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses yet'**
+  String get expensesEmptyTitle;
+
+  /// No description provided for @expensesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Record rent, utilities and other costs to see your real profit.'**
+  String get expensesEmptyMessage;
+
+  /// No description provided for @expenseNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New expense'**
+  String get expenseNewTitle;
+
+  /// No description provided for @expenseEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get expenseEditTitle;
+
+  /// No description provided for @expenseSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense added'**
+  String get expenseSaved;
+
+  /// No description provided for @expenseUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense updated'**
+  String get expenseUpdated;
+
+  /// No description provided for @expenseDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense deleted'**
+  String get expenseDeleted;
+
+  /// No description provided for @expenseDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the expense?'**
+  String get expenseDeleteTitle;
+
+  /// No description provided for @expenseDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'It will no longer count in expenses and profit.'**
+  String get expenseDeleteMessage;
+
+  /// No description provided for @errExpenseNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This expense no longer exists.'**
+  String get errExpenseNotFound;
+
+  /// No description provided for @errExpenseDateFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'The expense date can\'t be in the future.'**
+  String get errExpenseDateFuture;
 }
 
 class _AppLocalizationsDelegate

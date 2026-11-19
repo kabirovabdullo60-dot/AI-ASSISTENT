@@ -753,4 +753,97 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get errUnknown => 'Чизе хато рафт. Аз нав кӯшиш кунед.';
+
+  @override
+  String get navExpenses => 'Хароҷот';
+
+  @override
+  String get moreExpensesHint =>
+      'Иҷора, хизматрасониҳои коммуналӣ, расонидан ва ғайра';
+
+  @override
+  String get actionNewExpense => 'Хароҷот';
+
+  @override
+  String get fieldCategory => 'Категория';
+
+  @override
+  String get expenseCategoryRent => 'Иҷора';
+
+  @override
+  String get expenseCategoryUtilities => 'Хизматрасониҳои коммуналӣ';
+
+  @override
+  String get expenseCategoryDelivery => 'Расонидан';
+
+  @override
+  String get expenseCategorySupplies => 'Маводи истеъмолӣ';
+
+  @override
+  String get expenseCategoryMarketing => 'Реклама';
+
+  @override
+  String get expenseCategoryTaxes => 'Андозҳо';
+
+  @override
+  String get expenseCategoryOther => 'Дигар';
+
+  @override
+  String get expensesAllCategories => 'Ҳамаи категорияҳо';
+
+  @override
+  String get expenseWholeBusiness => 'Тамоми тиҷорат';
+
+  @override
+  String get expensesTotal => 'Ҳамагӣ хароҷот';
+
+  @override
+  String expensesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count хароҷот',
+      zero: 'Хароҷот нест',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get expensesNothingFound => 'Аз рӯи ин филтр хароҷот нест.';
+
+  @override
+  String get expensesEmptyTitle => 'Ҳоло хароҷот нест';
+
+  @override
+  String get expensesEmptyMessage =>
+      'Иҷора, коммуналӣ ва дигар хароҷотро сабт кунед, то фоидаи воқеиро бинед.';
+
+  @override
+  String get expenseNewTitle => 'Хароҷоти нав';
+
+  @override
+  String get expenseEditTitle => 'Хароҷот';
+
+  @override
+  String get expenseSaved => 'Хароҷот илова шуд';
+
+  @override
+  String get expenseUpdated => 'Хароҷот тағйир ёфт';
+
+  @override
+  String get expenseDeleted => 'Хароҷот нест карда шуд';
+
+  @override
+  String get expenseDeleteTitle => 'Хароҷотро нест кунем?';
+
+  @override
+  String get expenseDeleteMessage =>
+      'Он дигар дар хароҷот ва фоида ҳисоб карда намешавад.';
+
+  @override
+  String get errExpenseNotFound => 'Ин хароҷот дигар вуҷуд надорад.';
+
+  @override
+  String get errExpenseDateFuture =>
+      'Санаи хароҷот наметавонад дар оянда бошад.';
 }

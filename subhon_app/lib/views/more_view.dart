@@ -10,6 +10,7 @@ import '../widgets/section_header.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/settings_row.dart';
 import 'employees_view.dart';
+import 'expenses_view.dart';
 import 'profile_view.dart';
 import 'reports_view.dart';
 import 'stores_view.dart';
@@ -69,6 +70,12 @@ class MoreView extends StatelessWidget {
                 title: l10n.navEmployees,
                 hint: l10n.moreEmployeesHint,
                 onTap: () => _open(context, const EmployeesView()),
+              ),
+              SettingsRow(
+                icon: Icons.receipt_long_outlined,
+                title: l10n.navExpenses,
+                hint: l10n.moreExpensesHint,
+                onTap: () => _open(context, const ExpensesView()),
               ),
               SettingsRow(
                 icon: Icons.insights_outlined,

@@ -756,4 +756,98 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get errUnknown => 'Что-то пошло не так. Повторите.';
+
+  @override
+  String get navExpenses => 'Расходы';
+
+  @override
+  String get moreExpensesHint => 'Аренда, коммуналка, доставка и другое';
+
+  @override
+  String get actionNewExpense => 'Расход';
+
+  @override
+  String get fieldCategory => 'Категория';
+
+  @override
+  String get expenseCategoryRent => 'Аренда';
+
+  @override
+  String get expenseCategoryUtilities => 'Коммунальные услуги';
+
+  @override
+  String get expenseCategoryDelivery => 'Доставка';
+
+  @override
+  String get expenseCategorySupplies => 'Расходники';
+
+  @override
+  String get expenseCategoryMarketing => 'Реклама';
+
+  @override
+  String get expenseCategoryTaxes => 'Налоги';
+
+  @override
+  String get expenseCategoryOther => 'Другое';
+
+  @override
+  String get expensesAllCategories => 'Все категории';
+
+  @override
+  String get expenseWholeBusiness => 'Весь бизнес';
+
+  @override
+  String get expensesTotal => 'Сумма расходов';
+
+  @override
+  String expensesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count расхода',
+      many: '$count расходов',
+      few: '$count расхода',
+      one: '$count расход',
+      zero: 'Нет расходов',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get expensesNothingFound => 'Нет расходов по этому фильтру.';
+
+  @override
+  String get expensesEmptyTitle => 'Расходов пока нет';
+
+  @override
+  String get expensesEmptyMessage =>
+      'Записывайте аренду, коммуналку и другие траты, чтобы видеть настоящую прибыль.';
+
+  @override
+  String get expenseNewTitle => 'Новый расход';
+
+  @override
+  String get expenseEditTitle => 'Расход';
+
+  @override
+  String get expenseSaved => 'Расход добавлен';
+
+  @override
+  String get expenseUpdated => 'Расход изменён';
+
+  @override
+  String get expenseDeleted => 'Расход удалён';
+
+  @override
+  String get expenseDeleteTitle => 'Удалить расход?';
+
+  @override
+  String get expenseDeleteMessage =>
+      'Он больше не будет учитываться в расходах и прибыли.';
+
+  @override
+  String get errExpenseNotFound => 'Этот расход больше не существует.';
+
+  @override
+  String get errExpenseDateFuture => 'Дата расхода не может быть в будущем.';
 }

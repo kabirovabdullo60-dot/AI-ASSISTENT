@@ -15,6 +15,7 @@ import 'l10n/fallback_localizations_delegate.dart';
 import 'l10n/l10n.dart';
 import 'services/auth_service.dart';
 import 'services/employee_service.dart';
+import 'services/expense_service.dart';
 import 'services/payroll_service.dart';
 import 'services/profile_service.dart';
 import 'services/reports_service.dart';
@@ -72,6 +73,7 @@ class _MobileAppState extends State<MobileApp> {
       Provider(create: (_) => SalesService(_api)),
       Provider(create: (_) => EmployeeService(_api)),
       Provider(create: (_) => PayrollService(_api)),
+      Provider(create: (_) => ExpenseService(_api)),
       Provider(create: (_) => ReportsService(_api)),
       ChangeNotifierProvider(
         create: (_) => SessionViewModel(_auth, _api)..restore(),

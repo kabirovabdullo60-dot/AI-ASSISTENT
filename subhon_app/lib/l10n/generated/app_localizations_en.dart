@@ -754,4 +754,97 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errUnknown => 'Something went wrong. Try again.';
+
+  @override
+  String get navExpenses => 'Expenses';
+
+  @override
+  String get moreExpensesHint => 'Rent, utilities, delivery and more';
+
+  @override
+  String get actionNewExpense => 'Expense';
+
+  @override
+  String get fieldCategory => 'Category';
+
+  @override
+  String get expenseCategoryRent => 'Rent';
+
+  @override
+  String get expenseCategoryUtilities => 'Utilities';
+
+  @override
+  String get expenseCategoryDelivery => 'Delivery';
+
+  @override
+  String get expenseCategorySupplies => 'Supplies';
+
+  @override
+  String get expenseCategoryMarketing => 'Marketing';
+
+  @override
+  String get expenseCategoryTaxes => 'Taxes';
+
+  @override
+  String get expenseCategoryOther => 'Other';
+
+  @override
+  String get expensesAllCategories => 'All categories';
+
+  @override
+  String get expenseWholeBusiness => 'Whole business';
+
+  @override
+  String get expensesTotal => 'Total expenses';
+
+  @override
+  String expensesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count expenses',
+      one: '$count expense',
+      zero: 'No expenses',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get expensesNothingFound => 'No expenses for this filter.';
+
+  @override
+  String get expensesEmptyTitle => 'No expenses yet';
+
+  @override
+  String get expensesEmptyMessage =>
+      'Record rent, utilities and other costs to see your real profit.';
+
+  @override
+  String get expenseNewTitle => 'New expense';
+
+  @override
+  String get expenseEditTitle => 'Expense';
+
+  @override
+  String get expenseSaved => 'Expense added';
+
+  @override
+  String get expenseUpdated => 'Expense updated';
+
+  @override
+  String get expenseDeleted => 'Expense deleted';
+
+  @override
+  String get expenseDeleteTitle => 'Delete the expense?';
+
+  @override
+  String get expenseDeleteMessage =>
+      'It will no longer count in expenses and profit.';
+
+  @override
+  String get errExpenseNotFound => 'This expense no longer exists.';
+
+  @override
+  String get errExpenseDateFuture =>
+      'The expense date can\'t be in the future.';
 }

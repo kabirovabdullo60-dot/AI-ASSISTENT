@@ -353,5 +353,39 @@
   "errConflict": "This conflicts with the current data. Refresh and try again.",
   "errRateLimited": "Too many requests. Wait a little and try again.",
   "errServer": "The server is not responding properly. Try again later.",
-  "errUnknown": "Something went wrong. Try again."
+  "errUnknown": "Something went wrong. Try again.",
+  "navExpenses": "Expenses",
+  "moreExpensesHint": "Rent, utilities, delivery and more",
+  "actionNewExpense": "Expense",
+  "fieldCategory": "Category",
+  "expenseCategoryRent": "Rent",
+  "expenseCategoryUtilities": "Utilities",
+  "expenseCategoryDelivery": "Delivery",
+  "expenseCategorySupplies": "Supplies",
+  "expenseCategoryMarketing": "Marketing",
+  "expenseCategoryTaxes": "Taxes",
+  "expenseCategoryOther": "Other",
+  "expensesAllCategories": "All categories",
+  "expenseWholeBusiness": "Whole business",
+  "expensesTotal": "Total expenses",
+  "expensesCount": "{count, plural, =0{No expenses} one{{count} expense} other{{count} expenses}}",
+  "@expensesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "expensesNothingFound": "No expenses for this filter.",
+  "expensesEmptyTitle": "No expenses yet",
+  "expensesEmptyMessage": "Record rent, utilities and other costs to see your real profit.",
+  "expenseNewTitle": "New expense",
+  "expenseEditTitle": "Expense",
+  "expenseSaved": "Expense added",
+  "expenseUpdated": "Expense updated",
+  "expenseDeleted": "Expense deleted",
+  "expenseDeleteTitle": "Delete the expense?",
+  "expenseDeleteMessage": "It will no longer count in expenses and profit.",
+  "errExpenseNotFound": "This expense no longer exists.",
+  "errExpenseDateFuture": "The expense date can't be in the future."
 }
