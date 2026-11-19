@@ -372,7 +372,7 @@ class _StoresStrip extends StatelessWidget {
           onAction: () => _open(context, const StoresView()),
         ),
         SizedBox(
-          height: 190,
+          height: 150,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             // Full width: the cards scroll from edge to edge.

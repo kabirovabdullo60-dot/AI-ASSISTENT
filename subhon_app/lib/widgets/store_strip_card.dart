@@ -25,7 +25,7 @@ class StoreStripCard extends StatelessWidget {
   final String salesText;
   final VoidCallback onTap;
 
-  static const double width = 180;
+  static const double width = 240;
 
   @override
   Widget build(BuildContext context) {
