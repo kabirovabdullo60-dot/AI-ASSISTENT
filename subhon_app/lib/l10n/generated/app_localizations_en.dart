@@ -2173,4 +2173,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get qeButton => 'Say or type: “taxi 50”';
+
+  @override
+  String get remTitle => 'AI accountant';
+
+  @override
+  String remPaymentTomorrow(String name, String amount) {
+    return 'Tomorrow: $name, $amount';
+  }
+
+  @override
+  String remPaymentToday(String name, String amount) {
+    return 'Today: $name, $amount. Tap “Paid” in the app.';
+  }
+
+  @override
+  String remDebtTomorrow(String name, String amount) {
+    return 'Tomorrow the debt is due: $name, $amount';
+  }
+
+  @override
+  String remDebtToday(String name, String amount) {
+    return 'Today the debt is due: $name, $amount';
+  }
 }

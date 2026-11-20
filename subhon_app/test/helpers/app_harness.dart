@@ -5,6 +5,9 @@ import 'package:subhon_app/core/storage/chat_history_storage.dart';
 import 'package:subhon_app/core/storage/debt_storage.dart';
 import 'package:subhon_app/core/storage/personal_finance_storage.dart';
 
+import 'package:subhon_app/services/reminder_service.dart';
+
+import 'fake_reminder_service.dart';
 import 'memory_personal_finance_storage.dart';
 import 'package:subhon_app/core/storage/statement_history_storage.dart';
 import 'package:subhon_app/main.dart';
@@ -55,6 +58,7 @@ Future<void> pumpApp(
   MarketService? market,
   DebtStorage? debts,
   PersonalFinanceStorage? personal,
+  ReminderService? reminders,
 }) async {
   reduceMotion(tester);
   await tester.pumpWidget(
@@ -72,6 +76,7 @@ Future<void> pumpApp(
       market: market,
       debts: debts,
       personal: personal ?? MemoryPersonalFinanceStorage(),
+      reminders: reminders ?? FakeReminderService(),
     ),
   );
   await tester.pumpAndSettle();

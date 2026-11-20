@@ -4005,6 +4005,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Say or type: “taxi 50”'**
   String get qeButton;
+
+  /// No description provided for @remTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI accountant'**
+  String get remTitle;
+
+  /// No description provided for @remPaymentTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow: {name}, {amount}'**
+  String remPaymentTomorrow(String name, String amount);
+
+  /// No description provided for @remPaymentToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today: {name}, {amount}. Tap “Paid” in the app.'**
+  String remPaymentToday(String name, String amount);
+
+  /// No description provided for @remDebtTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow the debt is due: {name}, {amount}'**
+  String remDebtTomorrow(String name, String amount);
+
+  /// No description provided for @remDebtToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today the debt is due: {name}, {amount}'**
+  String remDebtToday(String name, String amount);
 }
 
 class _AppLocalizationsDelegate

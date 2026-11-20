@@ -2181,4 +2181,27 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get qeButton => 'Скажите или напишите: «такси 50»';
+
+  @override
+  String get remTitle => 'ИИ-бухгалтер';
+
+  @override
+  String remPaymentTomorrow(String name, String amount) {
+    return 'Завтра платёж: $name, $amount';
+  }
+
+  @override
+  String remPaymentToday(String name, String amount) {
+    return 'Сегодня платёж: $name, $amount. Отметьте «Оплатить» в приложении.';
+  }
+
+  @override
+  String remDebtTomorrow(String name, String amount) {
+    return 'Завтра срок долга: $name, $amount';
+  }
+
+  @override
+  String remDebtToday(String name, String amount) {
+    return 'Сегодня срок долга: $name, $amount';
+  }
 }

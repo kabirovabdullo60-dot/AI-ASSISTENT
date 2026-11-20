@@ -1107,5 +1107,50 @@
   "qeEdit": "Change",
   "qeNoCategory": "Category: choose in “Change”",
   "qeMicFailed": "The microphone did not start: type instead.",
-  "qeButton": "Say or type: “taxi 50”"
+  "qeButton": "Say or type: “taxi 50”",
+  "remTitle": "AI accountant",
+  "remPaymentTomorrow": "Tomorrow: {name}, {amount}",
+  "@remPaymentTomorrow": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remPaymentToday": "Today: {name}, {amount}. Tap “Paid” in the app.",
+  "@remPaymentToday": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remDebtTomorrow": "Tomorrow the debt is due: {name}, {amount}",
+  "@remDebtTomorrow": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remDebtToday": "Today the debt is due: {name}, {amount}",
+  "@remDebtToday": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

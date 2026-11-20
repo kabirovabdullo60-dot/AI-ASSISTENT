@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +23,8 @@ import '../viewmodels/session_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../viewmodels/personal_finance_view_model.dart';
+import '../viewmodels/reminder_planner.dart';
+import '../services/reminder_service.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../widgets/add_nav_button.dart';
 import '../widgets/app_feedback.dart';
@@ -109,6 +113,37 @@ class _ShellViewState extends State<ShellView> {
   void initState() {
     super.initState();
     _dashboard.addListener(_businessChanged);
+    _personal.addListener(_remindersChanged);
+    _debts.addListener(_remindersChanged);
+  }
+
+  Timer? _reminderTimer;
+
+  /// Regular payments or debts changed: plan the phone's reminders again
+  /// (once things settle).
+  void _remindersChanged() {
+    _reminderTimer?.cancel();
+    _reminderTimer = Timer(const Duration(seconds: 1), _syncReminders);
+  }
+
+  void _syncReminders() {
+    if (!mounted || !_personal.hasData) return;
+    final l10n = context.l10n;
+    final planner = ReminderPlanner(
+      title: l10n.remTitle,
+      paymentTomorrow: l10n.remPaymentTomorrow,
+      paymentToday: l10n.remPaymentToday,
+      debtTomorrow: l10n.remDebtTomorrow,
+      debtToday: l10n.remDebtToday,
+      money: context.money,
+    );
+    context.read<ReminderService>().replaceAll(
+      planner.plan(
+        recurring: _personal.recurring,
+        debts: [..._debts.owedToMe, ..._debts.iOwe, ..._debts.loans],
+        now: DateTime.now(),
+      ),
+    );
   }
 
   void _businessChanged() {
@@ -119,6 +154,9 @@ class _ShellViewState extends State<ShellView> {
 
   @override
   void dispose() {
+    _reminderTimer?.cancel();
+    _personal.removeListener(_remindersChanged);
+    _debts.removeListener(_remindersChanged);
     _dashboard.removeListener(_businessChanged);
     _dashboard.dispose();
     _personal.dispose();

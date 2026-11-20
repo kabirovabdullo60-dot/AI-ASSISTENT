@@ -10,6 +10,8 @@ import 'core/storage/app_lock_storage.dart';
 import 'core/storage/chat_history_storage.dart';
 import 'core/storage/debt_storage.dart';
 import 'core/storage/intro_storage.dart';
+import 'services/device_reminder_service.dart';
+import 'services/reminder_service.dart';
 import 'core/storage/personal_finance_storage.dart';
 import 'core/storage/locale_storage.dart';
 import 'core/storage/secure_app_lock_storage.dart';
@@ -76,6 +78,7 @@ class MobileApp extends StatefulWidget {
     this.debts,
     this.personal,
     this.showIntro = false,
+    this.reminders,
     super.key,
   });
 
@@ -112,6 +115,9 @@ class MobileApp extends StatefulWidget {
 
   /// The launch intro plays only the first time the app is opened.
   final bool showIntro;
+
+  /// Payment and debt reminders on the phone; tests pass a fake.
+  final ReminderService? reminders;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -159,6 +165,9 @@ class _MobileAppState extends State<MobileApp> {
         create: (_) => widget.fileShare ?? DeviceFileShareService(),
       ),
       Provider(create: (_) => widget.market ?? MarketService()),
+      Provider<ReminderService>(
+        create: (_) => widget.reminders ?? DeviceReminderService(),
+      ),
       Provider<PersonalFinanceStorage>(
         create: (_) => widget.personal ?? const SecurePersonalFinanceStorage(),
       ),

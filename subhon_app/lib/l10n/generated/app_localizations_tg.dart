@@ -2166,4 +2166,27 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get qeButton => 'Бигӯед ё нависед: «такси 50»';
+
+  @override
+  String get remTitle => 'ИИ-муҳосиб';
+
+  @override
+  String remPaymentTomorrow(String name, String amount) {
+    return 'Пагоҳ пардохт: $name, $amount';
+  }
+
+  @override
+  String remPaymentToday(String name, String amount) {
+    return 'Имрӯз пардохт: $name, $amount.';
+  }
+
+  @override
+  String remDebtTomorrow(String name, String amount) {
+    return 'Пагоҳ мӯҳлати қарз: $name, $amount';
+  }
+
+  @override
+  String remDebtToday(String name, String amount) {
+    return 'Имрӯз мӯҳлати қарз: $name, $amount';
+  }
 }

@@ -650,5 +650,10 @@
   "qeEdit": "Изменить",
   "qeNoCategory": "Категория: выберите в «Изменить»",
   "qeMicFailed": "Микрофон не включился — напишите текстом.",
-  "qeButton": "Скажите или напишите: «такси 50»"
+  "qeButton": "Скажите или напишите: «такси 50»",
+  "remTitle": "ИИ-бухгалтер",
+  "remPaymentTomorrow": "Завтра платёж: {name}, {amount}",
+  "remPaymentToday": "Сегодня платёж: {name}, {amount}. Отметьте «Оплатить» в приложении.",
+  "remDebtTomorrow": "Завтра срок долга: {name}, {amount}",
+  "remDebtToday": "Сегодня срок долга: {name}, {amount}"
 }

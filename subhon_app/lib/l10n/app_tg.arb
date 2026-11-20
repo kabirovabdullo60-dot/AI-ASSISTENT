@@ -650,5 +650,10 @@
   "qeEdit": "Тағйир додан",
   "qeNoCategory": "Категория: дар «Тағйир додан» интихоб кунед",
   "qeMicFailed": "Микрофон кор накард — бо матн нависед.",
-  "qeButton": "Бигӯед ё нависед: «такси 50»"
+  "qeButton": "Бигӯед ё нависед: «такси 50»",
+  "remTitle": "ИИ-муҳосиб",
+  "remPaymentTomorrow": "Пагоҳ пардохт: {name}, {amount}",
+  "remPaymentToday": "Имрӯз пардохт: {name}, {amount}.",
+  "remDebtTomorrow": "Пагоҳ мӯҳлати қарз: {name}, {amount}",
+  "remDebtToday": "Имрӯз мӯҳлати қарз: {name}, {amount}"
 }
