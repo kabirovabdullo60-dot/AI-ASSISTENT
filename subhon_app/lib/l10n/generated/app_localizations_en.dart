@@ -2274,4 +2274,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goalDeleteMessage => 'Its account and the money on it stay.';
+
+  @override
+  String get opsSearch => 'Search: note, category, account';
+
+  @override
+  String get opsClear => 'Clear';
+
+  @override
+  String get opsAll => 'All';
+
+  @override
+  String get opsExpenses => 'Expenses';
+
+  @override
+  String get opsIncome => 'Income';
+
+  @override
+  String get opsTransfers => 'Transfers';
+
+  @override
+  String get opsAllAccounts => 'All accounts';
+
+  @override
+  String get opsAllCategories => 'All categories';
+
+  @override
+  String get opsReset => 'Reset filters';
+
+  @override
+  String opsFound(int count, String income, String expense) {
+    return 'Found: $count · income $income · expenses $expense';
+  }
+
+  @override
+  String get opsNothing => 'Nothing found.';
+
+  @override
+  String get opsExcel => 'Excel';
+
+  @override
+  String get opsExcelTitle => 'My operations';
+
+  @override
+  String get opsColType => 'Type';
+
+  @override
+  String get opsColTo => 'To account';
+
+  @override
+  String get opsTotalIncome => 'Income, TJS';
+
+  @override
+  String get opsTotalExpense => 'Expenses, TJS';
 }

@@ -2266,4 +2266,57 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get goalDeleteMessage => 'Ҳисоб ва пули он мемонад.';
+
+  @override
+  String get opsSearch => 'Ҷустуҷӯ: эзоҳ, категория, ҳисоб';
+
+  @override
+  String get opsClear => 'Тоза кардан';
+
+  @override
+  String get opsAll => 'Ҳама';
+
+  @override
+  String get opsExpenses => 'Хароҷот';
+
+  @override
+  String get opsIncome => 'Даромад';
+
+  @override
+  String get opsTransfers => 'Интиқолҳо';
+
+  @override
+  String get opsAllAccounts => 'Ҳамаи ҳисобҳо';
+
+  @override
+  String get opsAllCategories => 'Ҳамаи категорияҳо';
+
+  @override
+  String get opsReset => 'Бекор кардани филтрҳо';
+
+  @override
+  String opsFound(int count, String income, String expense) {
+    return 'Ёфт шуд: $count · даромад $income · хароҷот $expense';
+  }
+
+  @override
+  String get opsNothing => 'Ҳеҷ чиз ёфт нашуд.';
+
+  @override
+  String get opsExcel => 'Ба Excel';
+
+  @override
+  String get opsExcelTitle => 'Амалиётҳои ман';
+
+  @override
+  String get opsColType => 'Навъ';
+
+  @override
+  String get opsColTo => 'Ба ҳисоб';
+
+  @override
+  String get opsTotalIncome => 'Даромад, TJS';
+
+  @override
+  String get opsTotalExpense => 'Хароҷот, TJS';
 }

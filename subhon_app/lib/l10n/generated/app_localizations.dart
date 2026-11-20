@@ -4167,6 +4167,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Its account and the money on it stay.'**
   String get goalDeleteMessage;
+
+  /// No description provided for @opsSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search: note, category, account'**
+  String get opsSearch;
+
+  /// No description provided for @opsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get opsClear;
+
+  /// No description provided for @opsAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get opsAll;
+
+  /// No description provided for @opsExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get opsExpenses;
+
+  /// No description provided for @opsIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get opsIncome;
+
+  /// No description provided for @opsTransfers.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfers'**
+  String get opsTransfers;
+
+  /// No description provided for @opsAllAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'All accounts'**
+  String get opsAllAccounts;
+
+  /// No description provided for @opsAllCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get opsAllCategories;
+
+  /// No description provided for @opsReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset filters'**
+  String get opsReset;
+
+  /// No description provided for @opsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found: {count} · income {income} · expenses {expense}'**
+  String opsFound(int count, String income, String expense);
+
+  /// No description provided for @opsNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing found.'**
+  String get opsNothing;
+
+  /// No description provided for @opsExcel.
+  ///
+  /// In en, this message translates to:
+  /// **'Excel'**
+  String get opsExcel;
+
+  /// No description provided for @opsExcelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My operations'**
+  String get opsExcelTitle;
+
+  /// No description provided for @opsColType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get opsColType;
+
+  /// No description provided for @opsColTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To account'**
+  String get opsColTo;
+
+  /// No description provided for @opsTotalIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income, TJS'**
+  String get opsTotalIncome;
+
+  /// No description provided for @opsTotalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses, TJS'**
+  String get opsTotalExpense;
 }
 
 class _AppLocalizationsDelegate

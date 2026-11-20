@@ -2281,4 +2281,57 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get goalDeleteMessage => 'Счёт и деньги на нём останутся.';
+
+  @override
+  String get opsSearch => 'Поиск: заметка, категория, счёт';
+
+  @override
+  String get opsClear => 'Очистить';
+
+  @override
+  String get opsAll => 'Все';
+
+  @override
+  String get opsExpenses => 'Расходы';
+
+  @override
+  String get opsIncome => 'Доходы';
+
+  @override
+  String get opsTransfers => 'Переводы';
+
+  @override
+  String get opsAllAccounts => 'Все счета';
+
+  @override
+  String get opsAllCategories => 'Все категории';
+
+  @override
+  String get opsReset => 'Сбросить фильтры';
+
+  @override
+  String opsFound(int count, String income, String expense) {
+    return 'Найдено: $count · доходы $income · расходы $expense';
+  }
+
+  @override
+  String get opsNothing => 'Ничего не найдено.';
+
+  @override
+  String get opsExcel => 'В Excel';
+
+  @override
+  String get opsExcelTitle => 'Мои операции';
+
+  @override
+  String get opsColType => 'Тип';
+
+  @override
+  String get opsColTo => 'На счёт';
+
+  @override
+  String get opsTotalIncome => 'Доходы, TJS';
+
+  @override
+  String get opsTotalExpense => 'Расходы, TJS';
 }

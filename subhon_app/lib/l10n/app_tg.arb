@@ -677,5 +677,22 @@
   "goalPerMonth": "≈ {amount} дар як моҳ",
   "goalEmpty": "Ҳоло ҳадаф нест. Пули ҳар ҳадаф дар ҳисоби алоҳида меистад.",
   "goalDeleteTitle": "Ҳадафро нест кунем?",
-  "goalDeleteMessage": "Ҳисоб ва пули он мемонад."
+  "goalDeleteMessage": "Ҳисоб ва пули он мемонад.",
+  "opsSearch": "Ҷустуҷӯ: эзоҳ, категория, ҳисоб",
+  "opsClear": "Тоза кардан",
+  "opsAll": "Ҳама",
+  "opsExpenses": "Хароҷот",
+  "opsIncome": "Даромад",
+  "opsTransfers": "Интиқолҳо",
+  "opsAllAccounts": "Ҳамаи ҳисобҳо",
+  "opsAllCategories": "Ҳамаи категорияҳо",
+  "opsReset": "Бекор кардани филтрҳо",
+  "opsFound": "Ёфт шуд: {count} · даромад {income} · хароҷот {expense}",
+  "opsNothing": "Ҳеҷ чиз ёфт нашуд.",
+  "opsExcel": "Ба Excel",
+  "opsExcelTitle": "Амалиётҳои ман",
+  "opsColType": "Навъ",
+  "opsColTo": "Ба ҳисоб",
+  "opsTotalIncome": "Даромад, TJS",
+  "opsTotalExpense": "Хароҷот, TJS"
 }

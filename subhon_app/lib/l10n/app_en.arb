@@ -1208,5 +1208,35 @@
   },
   "goalEmpty": "No goals yet. Each goal keeps its money on its own savings account.",
   "goalDeleteTitle": "Delete the goal?",
-  "goalDeleteMessage": "Its account and the money on it stay."
+  "goalDeleteMessage": "Its account and the money on it stay.",
+  "opsSearch": "Search: note, category, account",
+  "opsClear": "Clear",
+  "opsAll": "All",
+  "opsExpenses": "Expenses",
+  "opsIncome": "Income",
+  "opsTransfers": "Transfers",
+  "opsAllAccounts": "All accounts",
+  "opsAllCategories": "All categories",
+  "opsReset": "Reset filters",
+  "opsFound": "Found: {count} · income {income} · expenses {expense}",
+  "@opsFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "income": {
+        "type": "String"
+      },
+      "expense": {
+        "type": "String"
+      }
+    }
+  },
+  "opsNothing": "Nothing found.",
+  "opsExcel": "Excel",
+  "opsExcelTitle": "My operations",
+  "opsColType": "Type",
+  "opsColTo": "To account",
+  "opsTotalIncome": "Income, TJS",
+  "opsTotalExpense": "Expenses, TJS"
 }

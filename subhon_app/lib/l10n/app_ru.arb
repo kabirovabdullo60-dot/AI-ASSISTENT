@@ -677,5 +677,22 @@
   "goalPerMonth": "≈ {amount} в месяц",
   "goalEmpty": "Целей пока нет. Деньги каждой цели лежат на своём счёте-копилке.",
   "goalDeleteTitle": "Удалить цель?",
-  "goalDeleteMessage": "Счёт и деньги на нём останутся."
+  "goalDeleteMessage": "Счёт и деньги на нём останутся.",
+  "opsSearch": "Поиск: заметка, категория, счёт",
+  "opsClear": "Очистить",
+  "opsAll": "Все",
+  "opsExpenses": "Расходы",
+  "opsIncome": "Доходы",
+  "opsTransfers": "Переводы",
+  "opsAllAccounts": "Все счета",
+  "opsAllCategories": "Все категории",
+  "opsReset": "Сбросить фильтры",
+  "opsFound": "Найдено: {count} · доходы {income} · расходы {expense}",
+  "opsNothing": "Ничего не найдено.",
+  "opsExcel": "В Excel",
+  "opsExcelTitle": "Мои операции",
+  "opsColType": "Тип",
+  "opsColTo": "На счёт",
+  "opsTotalIncome": "Доходы, TJS",
+  "opsTotalExpense": "Расходы, TJS"
 }

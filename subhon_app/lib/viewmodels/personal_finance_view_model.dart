@@ -137,6 +137,109 @@ class PersonalFinanceViewModel extends ChangeNotifier {
       ..sort((a, b) => b.$2.compareTo(a.$2));
   }
 
+  // Search and filters of "Операции".
+
+  String _query = '';
+  MoneyTransactionKind? _kindFilter;
+  String? _accountFilter;
+  MoneyCategory? _categoryFilter;
+
+  String get query => _query;
+  MoneyTransactionKind? get kindFilter => _kindFilter;
+  String? get accountFilter => _accountFilter;
+  MoneyCategory? get categoryFilter => _categoryFilter;
+  bool get isFiltered =>
+      _query.isNotEmpty ||
+      _kindFilter != null ||
+      _accountFilter != null ||
+      _categoryFilter != null;
+
+  void setQuery(String value) {
+    _query = value.trim().toLowerCase();
+    notifyListeners();
+  }
+
+  void setKindFilter(MoneyTransactionKind? kind) {
+    _kindFilter = kind;
+    if (kind == MoneyTransactionKind.transfer ||
+        (_categoryFilter != null &&
+            kind != null &&
+            _categoryFilter!.income != (kind == MoneyTransactionKind.income))) {
+      _categoryFilter = null;
+    }
+    notifyListeners();
+  }
+
+  void setAccountFilter(String? accountId) {
+    _accountFilter = accountId;
+    notifyListeners();
+  }
+
+  void setCategoryFilter(MoneyCategory? category) {
+    _categoryFilter = category;
+    notifyListeners();
+  }
+
+  void clearFilters() {
+    _query = '';
+    _kindFilter = null;
+    _accountFilter = null;
+    _categoryFilter = null;
+    notifyListeners();
+  }
+
+  /// The operations that match the search and filters, newest first.
+  /// [categoryText] gives a category's name on screen, so it can be
+  /// searched too.
+  List<MoneyTransactionModel> filtered({
+    String Function(MoneyCategory)? categoryText,
+  }) => [
+    for (final t in transactions)
+      if ((_kindFilter == null || t.kind == _kindFilter) &&
+          (_accountFilter == null ||
+              t.accountId == _accountFilter ||
+              t.toAccountId == _accountFilter) &&
+          (_categoryFilter == null || t.category == _categoryFilter) &&
+          (_query.isEmpty || _matches(t, categoryText)))
+        t,
+  ];
+
+  bool _matches(
+    MoneyTransactionModel t,
+    String Function(MoneyCategory)? categoryText,
+  ) {
+    final words = [
+      t.note,
+      account(t.accountId)?.name,
+      account(t.toAccountId)?.name,
+      if (t.category != null) categoryText?.call(t.category!),
+      t.amount.toStringAsFixed(2),
+    ];
+    return words.any((w) => w != null && w.toLowerCase().contains(_query));
+  }
+
+  /// [list]'s income and expenses, in somoni.
+  (double income, double expense) totals(List<MoneyTransactionModel> list) {
+    var income = 0.0;
+    var expense = 0.0;
+    for (final t in list) {
+      if (t.kind == MoneyTransactionKind.income) income += _tjs(t);
+      if (t.kind == MoneyTransactionKind.expense) expense += _tjs(t);
+    }
+    return (income, expense);
+  }
+
+  /// [list] grouped by day, newest first.
+  List<(DateTime, List<MoneyTransactionModel>)> groupByDay(
+    List<MoneyTransactionModel> list,
+  ) {
+    final groups = <DateTime, List<MoneyTransactionModel>>{};
+    for (final t in list) {
+      (groups[t.date] ??= []).add(t);
+    }
+    return [for (final e in groups.entries) (e.key, e.value)];
+  }
+
   /// All operations grouped by day, newest first.
   List<(DateTime, List<MoneyTransactionModel>)> get days {
     final groups = <DateTime, List<MoneyTransactionModel>>{};
