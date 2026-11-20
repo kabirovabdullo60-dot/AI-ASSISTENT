@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../core/network/api_exception.dart';
+import '../models/assistant_action_model.dart';
 import '../models/chat_message_model.dart';
 import '../models/conversation_model.dart';
 import '../services/assistant_service.dart';
@@ -8,12 +9,23 @@ import '../services/chat_history_service.dart';
 
 class AssistantViewModel extends ChangeNotifier {
   /// [history] saves every chat so it can be opened again from the history list.
-  AssistantViewModel(this._service, {this._history}) {
+  /// [onDataChanged] runs after a confirmed action changed data, so the pages reload.
+  AssistantViewModel(this._service, {this._history, this.onDataChanged}) {
     loadHistory();
   }
 
   final AssistantService _service;
   final ChatHistoryService? _history;
+  final void Function(AssistantActionModel action)? onDataChanged;
+
+  final Set<String> _busyActions = {};
+  final Map<String, String> _actionErrors = {};
+
+  /// Confirm / cancel of this action is running.
+  bool isActionBusy(String id) => _busyActions.contains(id);
+
+  /// Error code when the last confirm / cancel request failed (e.g. NETWORK_ERROR).
+  String? actionError(String id) => _actionErrors[id];
 
   List<ConversationModel> _conversations = [];
   String? _currentId;
@@ -61,6 +73,61 @@ class AssistantViewModel extends ChangeNotifier {
     } finally {
       _isSending = false;
       _notify();
+    }
+  }
+
+  Future<void> confirmAction(String id) => _runAction(id, () => _service.confirmAction(id));
+
+  Future<void> cancelAction(String id) => _runAction(id, () => _service.cancelAction(id));
+
+  Future<void> _runAction(String id, Future<AssistantActionModel> Function() request) async {
+    if (_busyActions.contains(id)) return;
+    _busyActions.add(id);
+    _actionErrors.remove(id);
+    _notify();
+    try {
+      final action = await request();
+      _replaceAction(action);
+      if (action.status == ActionStatus.done) onDataChanged?.call(action);
+    } on ApiException catch (e) {
+      debugPrint('AssistantViewModel action $id: $e');
+      if (e.code == 'ACTION_EXPIRED') {
+        _setStatus(id, ActionStatus.expired);
+      } else if (e.code == 'ACTION_ALREADY_HANDLED') {
+        // Handled elsewhere (another tab, the phone) → show what really happened.
+        try {
+          _replaceAction(await _service.getAction(id));
+        } catch (_) {
+          _actionErrors[id] = e.code;
+        }
+      } else {
+        _actionErrors[id] = e.code;
+      }
+    } catch (e) {
+      debugPrint('AssistantViewModel action $id: $e');
+      _actionErrors[id] = 'NETWORK_ERROR';
+    } finally {
+      _busyActions.remove(id);
+      await _saveCurrent();
+      _notify();
+    }
+  }
+
+  void _setStatus(String id, ActionStatus status) {
+    for (final m in _messages) {
+      for (final a in m.actions) {
+        if (a.id == id) return _replaceAction(a.copyWith(status: status));
+      }
+    }
+  }
+
+  void _replaceAction(AssistantActionModel action) {
+    for (var i = 0; i < _messages.length; i++) {
+      final actions = _messages[i].actions;
+      final j = actions.indexWhere((a) => a.id == action.id);
+      if (j < 0) continue;
+      _messages[i] = _messages[i].copyWith(actions: [...actions]..[j] = action);
+      return;
     }
   }
 

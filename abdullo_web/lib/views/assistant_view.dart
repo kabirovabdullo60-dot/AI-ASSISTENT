@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +8,10 @@ import '../core/motion/app_dialog.dart';
 import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
 import '../viewmodels/assistant_view_model.dart';
+import '../viewmodels/home_view_model.dart';
+import '../models/chat_message_model.dart';
 import '../viewmodels/voice_view_model.dart';
+import '../widgets/assistant_action_card.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/chat_history_list.dart';
 import '../widgets/motion/ai_orb.dart';
@@ -89,13 +94,14 @@ class _AssistantViewState extends State<AssistantView> {
                           padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
                           itemCount: itemCount,
                           itemBuilder: (context, i) => i < messages.length
-                              ? ChatBubble(
+                              ? _MessageWithActions(
                                   key: ValueKey('m$i'),
+                                  vm: vm,
                                   message: messages[i],
                                   maxWidth: constraints.maxWidth,
                                   fresh: i >= _freshFrom! && i >= messages.length - 2,
                                 )
-                              : TypingIndicator(label: tr.assistantThinking),
+                              : _Thinking(label: tr.assistantThinking, slowLabel: tr.assistantSlow),
                         ),
                 ),
               ),
@@ -675,4 +681,106 @@ class _SpeakRepliesButton extends StatelessWidget {
       icon: Icon(icon, color: vm.isSpeaking || vm.speakReplies ? AppColors.teal : AppColors.muted),
     );
   }
+}
+
+/// An answer plus the changes it proposes (each with Confirm / Cancel), lined up under the bubble.
+class _MessageWithActions extends StatelessWidget {
+  const _MessageWithActions({
+    super.key,
+    required this.vm,
+    required this.message,
+    required this.maxWidth,
+    required this.fresh,
+  });
+
+  final AssistantViewModel vm;
+  final ChatMessageModel message;
+  final double maxWidth;
+  final bool fresh;
+
+  @override
+  Widget build(BuildContext context) {
+    final bubble = ChatBubble(message: message, maxWidth: maxWidth, fresh: fresh);
+    if (message.actions.isEmpty) return bubble;
+    final card = Padding(
+      // Under the bubble, past the orb (30) + gap (10).
+      padding: const EdgeInsets.only(left: 40, bottom: 6),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 560),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final a in message.actions)
+              AssistantActionCard(
+                action: a,
+                busy: vm.isActionBusy(a.id),
+                requestError: vm.actionError(a.id),
+                onConfirm: () => vm.confirmAction(a.id),
+                onCancel: () => vm.cancelAction(a.id),
+                onOpen: context.read<HomeViewModel>().select,
+              ),
+          ],
+        ),
+      ),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        bubble,
+        fresh ? FadeSlideIn(delay: Motion.staggerAt(4), offset: const Offset(0, 8), child: card) : card,
+      ],
+    );
+  }
+}
+
+/// "Thinking…" dots; after a few seconds a note that answers which use tools can take up to 30 s.
+class _Thinking extends StatefulWidget {
+  const _Thinking({required this.label, required this.slowLabel});
+
+  final String label;
+  final String slowLabel;
+
+  @override
+  State<_Thinking> createState() => _ThinkingState();
+}
+
+class _ThinkingState extends State<_Thinking> {
+  bool _slow = false;
+  late final Timer _timer = Timer(const Duration(seconds: 6), () {
+    if (mounted) setState(() => _slow = true);
+  });
+
+  @override
+  void initState() {
+    super.initState();
+    _timer;
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      TypingIndicator(label: widget.label),
+      AnimatedSize(
+        duration: Motion.base,
+        curve: Motion.easeOut,
+        child: _slow
+            ? FadeSlideIn(
+                offset: const Offset(0, 4),
+                child: Padding(
+                  key: const Key('assistant-slow'),
+                  padding: const EdgeInsets.only(left: 40, top: 2, bottom: 6),
+                  child: Text(widget.slowLabel, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                ),
+              )
+            : const SizedBox(width: double.infinity),
+      ),
+    ],
+  );
 }

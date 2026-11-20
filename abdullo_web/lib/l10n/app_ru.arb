@@ -542,5 +542,15 @@
   "hideHistory": "Скрыть историю",
   "showHistory": "Показать историю",
   "collapseMenu": "Свернуть меню",
-  "expandMenu": "Развернуть меню"
+  "expandMenu": "Развернуть меню",
+  "actionConfirm": "Подтвердить",
+  "actionDone": "Выполнено",
+  "actionCancelled": "Отменено",
+  "actionExpired": "Срок истёк — спросите ещё раз",
+  "actionWaiting": "Нужно ваше подтверждение",
+  "actionOpen": "Открыть: {section}",
+  "actionDetails": "Подробнее",
+  "assistantSlow": "Работаю… это может занять до 30 секунд.",
+  "errActionNotFound": "Это действие больше не существует.",
+  "errActionHandled": "Это действие уже обработано."
 }

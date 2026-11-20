@@ -1884,4 +1884,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get expandMenu => 'Expand menu';
+
+  @override
+  String get actionConfirm => 'Confirm';
+
+  @override
+  String get actionDone => 'Done';
+
+  @override
+  String get actionCancelled => 'Cancelled';
+
+  @override
+  String get actionExpired => 'Expired — ask again';
+
+  @override
+  String get actionWaiting => 'Needs your confirmation';
+
+  @override
+  String actionOpen(String section) {
+    return 'Open $section';
+  }
+
+  @override
+  String get actionDetails => 'Details';
+
+  @override
+  String get assistantSlow => 'Working on it… this can take up to 30 seconds.';
+
+  @override
+  String get errActionNotFound => 'This action no longer exists.';
+
+  @override
+  String get errActionHandled => 'This action was already handled.';
 }

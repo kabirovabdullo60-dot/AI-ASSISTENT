@@ -110,6 +110,29 @@ void main() {
       await tester.enterText(find.byKey(const Key('chat-input')), 'How are my sales this month?');
       await tester.tap(find.byKey(const Key('chat-send')));
       await _shot(tester, '$label-${i++}-assistant-chat');
+
+      // Proposed changes: a new store (confirm → done), a delete (red), an expense (pending).
+      final add = backend.proposeAction('CREATE_STORE', {
+        'name': 'Navruz Mall',
+        'address': '7 Ismoili Somoni Ave',
+        'phone': '+992 900 11 22 33',
+      }, summary: 'Add store «Navruz Mall», 7 Ismoili Somoni Ave');
+      final del = backend.proposeAction('DELETE_STORE', {'id': 's3'}, summary: 'Delete store «Bokhtar Express»');
+      final exp = backend.proposeAction('CREATE_EXPENSE', {
+        'category': 'RENT',
+        'amount': '2500.00',
+      }, summary: 'Add expense: rent 2,500 TJS for Central Plaza');
+      backend
+        ..assistantReply = 'Sure — here are the three changes. Press Confirm on each one you want.'
+        ..nextActions = [add, del, exp];
+      await tester.enterText(find.byKey(const Key('chat-input')), 'Add Navruz Mall, delete Bokhtar, add rent');
+      await tester.tap(find.byKey(const Key('chat-send')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action-confirm-${add['id']}')));
+      await tester.pumpAndSettle();
+      final list = find.byKey(const Key('chat-list'));
+      await tester.drag(list, const Offset(0, -2000));
+      await _shot(tester, '$label-${i++}-assistant-actions');
     }, skip: !_capture);
   }
 

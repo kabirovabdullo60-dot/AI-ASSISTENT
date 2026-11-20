@@ -1850,4 +1850,37 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get expandMenu => 'Калон кардани меню';
+
+  @override
+  String get actionConfirm => 'Тасдиқ';
+
+  @override
+  String get actionDone => 'Иҷро шуд';
+
+  @override
+  String get actionCancelled => 'Бекор шуд';
+
+  @override
+  String get actionExpired => 'Мӯҳлат гузашт — боз пурсед';
+
+  @override
+  String get actionWaiting => 'Тасдиқи шумо лозим аст';
+
+  @override
+  String actionOpen(String section) {
+    return 'Кушодан: $section';
+  }
+
+  @override
+  String get actionDetails => 'Тафсилот';
+
+  @override
+  String get assistantSlow =>
+      'Кор карда истодаам… ин то 30 сония вақт мегирад.';
+
+  @override
+  String get errActionNotFound => 'Ин амал дигар вуҷуд надорад.';
+
+  @override
+  String get errActionHandled => 'Ин амал аллакай иҷро ё бекор шудааст.';
 }

@@ -542,5 +542,15 @@
   "hideHistory": "Пинҳон кардани таърих",
   "showHistory": "Нишон додани таърих",
   "collapseMenu": "Хурд кардани меню",
-  "expandMenu": "Калон кардани меню"
+  "expandMenu": "Калон кардани меню",
+  "actionConfirm": "Тасдиқ",
+  "actionDone": "Иҷро шуд",
+  "actionCancelled": "Бекор шуд",
+  "actionExpired": "Мӯҳлат гузашт — боз пурсед",
+  "actionWaiting": "Тасдиқи шумо лозим аст",
+  "actionOpen": "Кушодан: {section}",
+  "actionDetails": "Тафсилот",
+  "assistantSlow": "Кор карда истодаам… ин то 30 сония вақт мегирад.",
+  "errActionNotFound": "Ин амал дигар вуҷуд надорад.",
+  "errActionHandled": "Ин амал аллакай иҷро ё бекор шудааст."
 }

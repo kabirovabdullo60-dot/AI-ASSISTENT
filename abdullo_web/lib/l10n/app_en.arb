@@ -1253,5 +1253,22 @@
   "hideHistory": "Hide history",
   "showHistory": "Show history",
   "collapseMenu": "Collapse menu",
-  "expandMenu": "Expand menu"
+  "expandMenu": "Expand menu",
+  "actionConfirm": "Confirm",
+  "actionDone": "Done",
+  "actionCancelled": "Cancelled",
+  "actionExpired": "Expired — ask again",
+  "actionWaiting": "Needs your confirmation",
+  "actionOpen": "Open {section}",
+  "actionDetails": "Details",
+  "assistantSlow": "Working on it… this can take up to 30 seconds.",
+  "errActionNotFound": "This action no longer exists.",
+  "errActionHandled": "This action was already handled.",
+  "@actionOpen": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  }
 }

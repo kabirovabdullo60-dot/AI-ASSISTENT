@@ -1872,4 +1872,36 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get expandMenu => 'Развернуть меню';
+
+  @override
+  String get actionConfirm => 'Подтвердить';
+
+  @override
+  String get actionDone => 'Выполнено';
+
+  @override
+  String get actionCancelled => 'Отменено';
+
+  @override
+  String get actionExpired => 'Срок истёк — спросите ещё раз';
+
+  @override
+  String get actionWaiting => 'Нужно ваше подтверждение';
+
+  @override
+  String actionOpen(String section) {
+    return 'Открыть: $section';
+  }
+
+  @override
+  String get actionDetails => 'Подробнее';
+
+  @override
+  String get assistantSlow => 'Работаю… это может занять до 30 секунд.';
+
+  @override
+  String get errActionNotFound => 'Это действие больше не существует.';
+
+  @override
+  String get errActionHandled => 'Это действие уже обработано.';
 }

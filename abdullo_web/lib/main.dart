@@ -205,9 +205,32 @@ class _SignedInState extends State<_SignedIn> {
         ChangeNotifierProvider(create: (_) => ExpensesViewModel(ExpenseService(api), reports)..load()),
         ChangeNotifierProvider(create: (_) => ReportsViewModel(reports)..load()),
         ChangeNotifierProvider(
-          create: (_) => AssistantViewModel(
+          create: (c) => AssistantViewModel(
             AssistantService(api, reports),
             history: ChatHistoryService(userId: context.read<AuthViewModel>().user?.id ?? 'me'),
+            // A confirmed AI action changed data → reload the pages that show it.
+            onDataChanged: (action) {
+              final reload = <Future<void> Function()>[
+                c.read<DashboardViewModel>().load,
+                c.read<ReportsViewModel>().load,
+                c.read<NotificationsViewModel>().load,
+                ...switch (action.subject) {
+                  'STORE' => [c.read<StoresViewModel>().load],
+                  'SALE' => [c.read<SalesViewModel>().load, c.read<StoresViewModel>().load],
+                  'EMPLOYEE' => [
+                    c.read<EmployeesViewModel>().load,
+                    c.read<StoresViewModel>().load,
+                    c.read<PayrollViewModel>().load,
+                  ],
+                  'PAYROLL' => [c.read<PayrollViewModel>().load, c.read<EmployeesViewModel>().load],
+                  'EXPENSE' => [c.read<ExpensesViewModel>().load],
+                  _ => <Future<void> Function()>[],
+                },
+              ];
+              for (final load in reload) {
+                load();
+              }
+            },
           ),
         ),
         ChangeNotifierProvider(

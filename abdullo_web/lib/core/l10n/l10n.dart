@@ -146,6 +146,9 @@ extension EnumLabels on AppLocalizations {
     'ASSISTANT_UNAVAILABLE' => assistantError,
     'SALE_SPLIT_MISMATCH' => errSplitMismatch,
     'INTERNAL_ERROR' => errServer,
+    'ACTION_NOT_FOUND' => errActionNotFound,
+    'ACTION_EXPIRED' => actionExpired,
+    'ACTION_ALREADY_HANDLED' => errActionHandled,
     _ => errUnknown(code),
   };
 }

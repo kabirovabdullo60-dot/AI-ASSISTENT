@@ -2,6 +2,7 @@ import '../core/constants/api_constants.dart';
 import '../core/network/api_client.dart';
 import '../core/utils/format.dart';
 import '../core/utils/json.dart';
+import '../models/assistant_action_model.dart';
 import '../models/chat_message_model.dart';
 import '../models/dashboard_model.dart';
 import '../models/sales_report_model.dart';
@@ -36,13 +37,34 @@ class AssistantService {
           ApiConstants.assistantTimeout,
         ),
       );
-      return ChatMessageModel(role: ChatRole.assistant, text: asString(json['text']), time: asDate(json['time']));
+      return ChatMessageModel(
+        role: ChatRole.assistant,
+        text: asString(json['text']),
+        time: asDate(json['time']),
+        actions: [
+          for (final a in (json['actions'] as List? ?? const []))
+            if (a is Map<String, dynamic>) AssistantActionModel.fromJson(a),
+        ],
+      );
     } on ApiException catch (e) {
       // AI down or too slow → answer from the reports instead.
       if (e.statusCode != 503 && e.code != 'ASSISTANT_UNAVAILABLE' && e.code != 'NETWORK_ERROR') rethrow;
       return _localReply(history, language);
     }
   }
+
+  /// Runs a proposed change. [params] = the user's corrections (optional).
+  /// Throws [ApiException]: ACTION_NOT_FOUND, ACTION_EXPIRED, ACTION_ALREADY_HANDLED.
+  Future<AssistantActionModel> confirmAction(String id, {Map<String, dynamic>? params}) async =>
+      AssistantActionModel.fromJson(
+        asJsonMap(await _api.post('${ApiConstants.assistantActions}/$id/confirm', {'params': ?params})),
+      );
+
+  Future<AssistantActionModel> cancelAction(String id) async =>
+      AssistantActionModel.fromJson(asJsonMap(await _api.post('${ApiConstants.assistantActions}/$id/cancel')));
+
+  Future<AssistantActionModel> getAction(String id) async =>
+      AssistantActionModel.fromJson(asJsonMap(await _api.get('${ApiConstants.assistantActions}/$id')));
 
   Future<ChatMessageModel> _localReply(List<ChatMessageModel> history, String language) async {
     final last = history.lastWhere((m) => m.isUser, orElse: () => history.last);

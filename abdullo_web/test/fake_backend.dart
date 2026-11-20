@@ -24,6 +24,35 @@ class FakeBackend {
   /// Answer of POST /api/assistant/chat. Null → `503 ASSISTANT_UNAVAILABLE` (AI not configured).
   String? assistantReply;
 
+  /// `AssistantActionOut` rows the next chat answer proposes (then kept in [actions] by id).
+  List<Map<String, dynamic>> nextActions = [];
+
+  /// Every proposed action by id (POST /api/assistant/actions/{id}/confirm|cancel, GET).
+  final actions = <String, Map<String, dynamic>>{};
+
+  /// Builds an `AssistantActionOut` in PROPOSED state.
+  Map<String, dynamic> proposeAction(
+    String type,
+    Map<String, dynamic> params, {
+    String? summary,
+    bool expired = false,
+  }) {
+    final now = DateTime.now().toUtc();
+    return {
+      'id': _id('act'),
+      'type': type,
+      'status': 'PROPOSED',
+      'summary': summary ?? '$type ${params['name'] ?? ''}'.trim(),
+      'danger': type.startsWith('DELETE_'),
+      'params': params,
+      'result': null,
+      'error': null,
+      'createdAt': now.toIso8601String(),
+      'expiresAt': (expired ? now.subtract(const Duration(minutes: 1)) : now.add(const Duration(minutes: 30)))
+          .toIso8601String(),
+    };
+  }
+
   /// When true, POST /api/assistant/chat answers `429 RATE_LIMITED`.
   bool assistantRateLimited = false;
 
@@ -902,7 +931,63 @@ class FakeBackend {
       }
       if (assistantRateLimited) return _error(429, 'RATE_LIMITED');
       if (assistantReply == null) return _error(503, 'ASSISTANT_UNAVAILABLE');
-      return _json({'role': 'assistant', 'text': assistantReply, 'time': DateTime.now().toUtc().toIso8601String()});
+      final proposed = nextActions;
+      nextActions = [];
+      for (final a in proposed) {
+        actions[a['id'] as String] = a;
+      }
+      return _json({
+        'role': 'assistant',
+        'text': assistantReply,
+        'time': DateTime.now().toUtc().toIso8601String(),
+        'conversationId': '00000000-0000-0000-0000-000000000001',
+        'actions': proposed,
+      });
+    }
+
+    final actionMatch = RegExp(r'^/api/assistant/actions/([^/]+)(/confirm|/cancel)?$').firstMatch(path);
+    if (actionMatch != null) {
+      final a = actions[actionMatch.group(1)];
+      if (a == null) return _error(404, 'ACTION_NOT_FOUND');
+      final op = actionMatch.group(2);
+      if (op == null && m == 'GET') return _json(a);
+      if (a['status'] == 'PROPOSED' && DateTime.parse(a['expiresAt'] as String).isBefore(DateTime.now())) {
+        a['status'] = 'EXPIRED';
+        return _error(409, 'ACTION_EXPIRED');
+      }
+      if (op == '/cancel' && m == 'POST') {
+        if (a['status'] == 'CANCELLED') return _json(a);
+        if (a['status'] != 'PROPOSED') return _error(409, 'ACTION_ALREADY_HANDLED');
+        a['status'] = 'CANCELLED';
+        return _json(a);
+      }
+      if (op == '/confirm' && m == 'POST') {
+        if (a['status'] == 'DONE') return _json(a);
+        if (a['status'] != 'PROPOSED') return _error(409, 'ACTION_ALREADY_HANDLED');
+        final params = {...a['params'] as Map<String, dynamic>, ...?(body()['params'] as Map<String, dynamic>?)};
+        if (a['type'] == 'CREATE_STORE') {
+          if (stores.any((s) => s['deletedAt'] == null && s['name'] == params['name'])) {
+            a['status'] = 'FAILED';
+            a['error'] = {'code': 'STORE_NAME_TAKEN', 'message': 'Taken.'};
+            return _json(a);
+          }
+          final now = DateTime.now().toUtc().toIso8601String();
+          final store = {
+            'id': _id('s'),
+            ...params,
+            'status': params['status'] ?? 'ACTIVE',
+            'createdAt': now,
+            'updatedAt': now,
+            'deletedAt': null,
+          };
+          stores.add(store);
+          a['result'] = store;
+        } else if (a['type'] == 'DELETE_STORE') {
+          _store(params['id'] as String)?['deletedAt'] = DateTime.now().toUtc().toIso8601String();
+        }
+        a['status'] = 'DONE';
+        return _json(a);
+      }
     }
 
     return _error(404, 'NOT_FOUND');

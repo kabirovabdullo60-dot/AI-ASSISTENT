@@ -3357,6 +3357,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expand menu'**
   String get expandMenu;
+
+  /// No description provided for @actionConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get actionConfirm;
+
+  /// No description provided for @actionDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get actionDone;
+
+  /// No description provided for @actionCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get actionCancelled;
+
+  /// No description provided for @actionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired — ask again'**
+  String get actionExpired;
+
+  /// No description provided for @actionWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs your confirmation'**
+  String get actionWaiting;
+
+  /// No description provided for @actionOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {section}'**
+  String actionOpen(String section);
+
+  /// No description provided for @actionDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get actionDetails;
+
+  /// No description provided for @assistantSlow.
+  ///
+  /// In en, this message translates to:
+  /// **'Working on it… this can take up to 30 seconds.'**
+  String get assistantSlow;
+
+  /// No description provided for @errActionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This action no longer exists.'**
+  String get errActionNotFound;
+
+  /// No description provided for @errActionHandled.
+  ///
+  /// In en, this message translates to:
+  /// **'This action was already handled.'**
+  String get errActionHandled;
 }
 
 class _AppLocalizationsDelegate
