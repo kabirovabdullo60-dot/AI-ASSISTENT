@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/app_language.dart';
 import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_palette.dart';
 import '../widgets/palette_swatch.dart';
 import '../core/theme/app_colors.dart';
-import '../core/theme/app_theme.dart';
 import '../core/utils/format.dart';
 import '../models/activity_model.dart';
 import '../models/notification_model.dart';
@@ -17,7 +15,6 @@ import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/home_view_model.dart';
 import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
-import '../widgets/status_badge.dart';
 import '../widgets/voice_mic_button.dart';
 
 /// White bar above every page: business, search, API status, language, notifications, user.
@@ -54,19 +51,20 @@ class AppTopBarView extends StatelessWidget {
       );
     }
 
-    // Desktop / tablet: no bar — the page opens with a greeting, and the tools sit to the right
-    // on the same line, floating on the page background.
+    // Desktop / tablet: no bar chrome. Search on the left on the canvas's edge, tools on the right;
+    // the page's own title (the h1) sits under it, so no greeting here.
     return Padding(
-      padding: const EdgeInsets.fromLTRB(28, 20, 20, 2),
+      padding: const EdgeInsets.fromLTRB(24, 14, 20, 0),
       child: LayoutBuilder(
         builder: (context, constraints) => Row(
           children: [
-            const Expanded(child: _Greeting()),
-            if (constraints.maxWidth >= 720) ...[
-              ConstrainedBox(constraints: const BoxConstraints(maxWidth: 300), child: const _SearchField()),
-              const SizedBox(width: 8),
-            ],
-            if (constraints.maxWidth >= 1000) ...[const _ApiStatus(), const SizedBox(width: 4)],
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: const _SearchField()),
+              ),
+            ),
+            const SizedBox(width: 12),
             const VoiceMicButton(),
             const _LanguageButton(),
             const _PaletteButton(),
@@ -76,40 +74,6 @@ class AppTopBarView extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// "Hello, Abdullo" in the display face, with today's date under it.
-class _Greeting extends StatelessWidget {
-  const _Greeting();
-
-  @override
-  Widget build(BuildContext context) {
-    final tr = context.l10n;
-    final name = context.select<AuthViewModel, String>((a) => (a.user?.fullName ?? '').split(' ').first);
-    // The app's own formatter (intl has no Tajik date data — DateFormat('tg') throws).
-    final now = DateTime.now();
-    final date = '${formatWeekday(now)}, ${formatDate(now)}';
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          name.isEmpty ? tr.greetingNoName : tr.greeting(name),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontFamily: AppTheme.display,
-            fontSize: 20,
-            fontWeight: FontWeight.w800,
-            letterSpacing: -0.4,
-            color: AppColors.ink,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(date, maxLines: 1, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
-      ],
     );
   }
 }
@@ -159,39 +123,8 @@ class _SearchField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: context.l10n.searchHint,
         prefixIcon: const Icon(Icons.search, size: 18),
-        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(vertical: 9),
         fillColor: AppColors.card,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: AppColors.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: AppColors.border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: AppColors.teal, width: 1.6),
-        ),
-      ),
-    );
-  }
-}
-
-class _ApiStatus extends StatelessWidget {
-  const _ApiStatus();
-
-  @override
-  Widget build(BuildContext context) {
-    final tr = context.l10n;
-    final online = context.select<DashboardViewModel, bool?>((d) => d.apiOnline);
-    if (online == null) return const SizedBox.shrink();
-    return Tooltip(
-      message: ApiConstants.baseUrl,
-      child: StatusBadge(
-        online ? '${tr.apiOnline} (/api)' : tr.apiOffline,
-        tone: online ? BadgeTone.positive : BadgeTone.negative,
-        dot: true,
       ),
     );
   }
@@ -289,7 +222,8 @@ class _NotificationsButton extends StatelessWidget {
       icon: Badge(
         key: const Key('notifications-badge'),
         isLabelVisible: vm.unreadCount > 0,
-        backgroundColor: AppColors.orange,
+        backgroundColor: AppColors.red,
+        textColor: Colors.white,
         label: Text('${vm.unreadCount}'),
         child: Icon(Icons.notifications_none, color: AppColors.ink),
       ),

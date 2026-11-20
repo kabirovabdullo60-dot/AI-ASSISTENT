@@ -563,5 +563,11 @@
   "actionSaveConfirm": "Сохранить и подтвердить",
   "actionSureTitle": "Вы уверены?",
   "actionSureBody": "Будет удалено:\n{summary}",
-  "colWorkedDays": "Дней в месяце"
+  "colWorkedDays": "Дней в месяце",
+  "vsLastWeek": "к прошлой неделе",
+  "overviewFinding": "Сегодня {today}, продаж: {count} · зарплат к выплате в этом месяце: {unpaid}",
+  "overviewTitle": "Обзор",
+  "storesActiveShort": "Работающие магазины",
+  "staffActiveShort": "Сотрудники в штате",
+  "navAssistantShort": "ИИ"
 }

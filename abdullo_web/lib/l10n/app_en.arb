@@ -1295,5 +1295,24 @@
       }
     }
   },
-  "colWorkedDays": "Days this month"
+  "colWorkedDays": "Days this month",
+  "vsLastWeek": "vs last week",
+  "overviewFinding": "Today {today} from {count} sales · {unpaid} of salaries still to pay this month",
+  "overviewTitle": "Overview",
+  "storesActiveShort": "Stores open",
+  "staffActiveShort": "Staff at work",
+  "@overviewFinding": {
+    "placeholders": {
+      "today": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "unpaid": {
+        "type": "String"
+      }
+    }
+  },
+  "navAssistantShort": "AI"
 }

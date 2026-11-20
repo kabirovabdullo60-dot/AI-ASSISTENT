@@ -107,15 +107,7 @@ class _TotalChip extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 10.5,
-                    letterSpacing: 0.6,
-                    color: AppColors.muted,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 Text.rich(
                   TextSpan(
                     children: [
@@ -384,7 +376,11 @@ class _EntriesColumn extends StatelessWidget {
         Container(
           key: const Key('filtered-total'),
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.border),
+          ),
           child: Row(
             children: [
               IconBox(Icons.calculate_outlined, color: Colors.white, background: AppColors.navy),
@@ -393,15 +389,7 @@ class _EntriesColumn extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      tr.activeFilterVolume,
-                      style: TextStyle(
-                        fontSize: 11,
-                        letterSpacing: 0.6,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.muted,
-                      ),
-                    ),
+                    Text(tr.activeFilterVolume, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     Text.rich(
                       TextSpan(
                         style: const TextStyle(fontSize: 14),
@@ -539,7 +527,7 @@ class _EntriesColumn extends StatelessWidget {
                   : Text(
                       tr.peakLabel(formatWeekday(week[peak].date), currency.format(week[peak].revenue)),
                       textAlign: TextAlign.right,
-                      style: TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 12, color: AppColors.muted),
                     ),
               child: Sparkline(values: [for (final p in week) p.revenue]),
             );
@@ -553,11 +541,15 @@ class _EntriesColumn extends StatelessWidget {
                       children: [
                         Text(
                           '${(ratio * 100).toStringAsFixed(0)}%',
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
                         ),
                         Text(
                           tr.storesReportedValue(reported, active),
-                          style: TextStyle(fontSize: 12, color: AppColors.green, fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted),
                         ),
                       ],
                     ),

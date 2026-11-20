@@ -16,7 +16,7 @@ import '../helpers.dart';
 
 const _capture = bool.fromEnvironment('CAPTURE');
 const _out = String.fromEnvironment('OUT', defaultValue: 'build/screens');
-const _paletteName = String.fromEnvironment('PALETTE', defaultValue: 'aurora');
+const _paletteName = String.fromEnvironment('PALETTE', defaultValue: 'ledger');
 const _fonts = '/Users/abdullo/Documents/flutter/bin/cache/artifacts/material_fonts';
 
 Future<void> _loadFonts() async {

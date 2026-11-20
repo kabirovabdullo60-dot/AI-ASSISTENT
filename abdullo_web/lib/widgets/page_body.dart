@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-
-import '../core/motion/motion.dart';
 import '../core/responsive/breakpoints.dart';
 import '../core/theme/app_colors.dart';
 
@@ -31,11 +28,9 @@ class PageBody extends StatelessWidget {
   /// actions (decoration) only fade. Pages pass true just once per session.
   final bool entrance;
 
-  Widget _enter(Widget child, {double rise = 0}) {
-    if (!entrance) return child;
-    final a = child.animate().fadeIn(duration: 520.ms, curve: Motion.easeOut);
-    return rise == 0 ? a : a.moveY(begin: rise, end: 0, duration: 520.ms, curve: Motion.easeOut);
-  }
+  /// App screens perform no entrance (the content is there when the page opens); kept so
+  /// callers need not change.
+  Widget _enter(Widget child, {double rise = 0}) => child;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +39,7 @@ class PageBody extends StatelessWidget {
       builder: (context, constraints) {
         final mobile = Breakpoints.of(constraints.maxWidth) == ScreenType.mobile;
         return ListView(
-          padding: EdgeInsets.all(mobile ? 16 : 28),
+          padding: EdgeInsets.fromLTRB(mobile ? 16 : 24, mobile ? 16 : 20, mobile ? 16 : 24, 32),
           children: [
             Wrap(
               alignment: WrapAlignment.spaceBetween,
@@ -63,8 +58,10 @@ class PageBody extends StatelessWidget {
                         children: [
                           Text(
                             title,
+                            // The screen's one h1: a noun at 24/600 (20 on a phone).
+                            semanticsLabel: title,
                             style: (mobile ? theme.textTheme.headlineSmall : theme.textTheme.headlineMedium)?.copyWith(
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.ink,
                             ),
                           ),

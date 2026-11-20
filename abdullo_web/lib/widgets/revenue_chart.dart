@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
 import '../models/chart_point_model.dart';
 
@@ -41,7 +40,9 @@ class _RevenueChartState extends State<RevenueChart> {
   void _setHover(Offset local, double width) {
     final n = widget.points.length;
     if (n == 0 || width <= 0) return;
-    final i = (local.dx / (width / n)).floor().clamp(0, n - 1);
+    const lane = _RevenueChartPainter._yLane;
+    if (local.dx < lane) return _clear();
+    final i = ((local.dx - lane) / ((width - lane) / n)).floor().clamp(0, n - 1);
     if (i != _hover) setState(() => _hover = i);
   }
 
@@ -61,7 +62,7 @@ class _RevenueChartState extends State<RevenueChart> {
           : LayoutBuilder(
               builder: (context, c) {
                 final hover = _hover != null && _hover! < points.length ? _hover : null;
-                final slot = c.maxWidth / points.length;
+                final slot = (c.maxWidth - _RevenueChartPainter._yLane) / points.length;
                 const tipWidth = 170.0;
                 return MouseRegion(
                   cursor: SystemMouseCursors.precise,
@@ -76,22 +77,17 @@ class _RevenueChartState extends State<RevenueChart> {
                       clipBehavior: Clip.none,
                       children: [
                         Positioned.fill(
-                          // Bars grow up in a left-to-right wave and the line draws itself when the
-                          // chart appears or its range changes (keyed by the number of days).
-                          child: TweenAnimationBuilder<double>(
-                            key: ValueKey(points.length),
-                            tween: Tween(begin: Motion.reduced(context) ? 1 : 0, end: 1),
-                            duration: const Duration(milliseconds: 900),
-                            curve: Curves.linear,
-                            builder: (context, growth, _) => CustomPaint(
-                              painter: _RevenueChartPainter(
-                                growth: growth,
-                                points: points,
-                                peakIndex: widget.peakIndex,
-                                hoverIndex: hover,
-                                xLabels: widget.xLabels,
-                                peakLabel: hover == null ? widget.peakLabel : '',
-                                labelStyle: Theme.of(context).textTheme.labelSmall ?? const TextStyle(fontSize: 11),
+                          child: CustomPaint(
+                            painter: _RevenueChartPainter(
+                              points: points,
+                              peakIndex: widget.peakIndex,
+                              hoverIndex: hover,
+                              xLabels: widget.xLabels,
+                              peakLabel: hover == null ? widget.peakLabel : '',
+                              labelStyle: const TextStyle(
+                                fontFamily: 'Onest',
+                                fontSize: 12,
+                                fontFeatures: [FontFeature.tabularFigures()],
                               ),
                             ),
                           ),
@@ -100,7 +96,7 @@ class _RevenueChartState extends State<RevenueChart> {
                           Positioned(
                             key: const Key('chart-tooltip'),
                             top: 0,
-                            left: (slot * (hover + 0.5) - tipWidth / 2).clamp(
+                            left: (_RevenueChartPainter._yLane + slot * (hover + 0.5) - tipWidth / 2).clamp(
                               0.0,
                               math.max(0.0, c.maxWidth - tipWidth),
                             ),
@@ -154,7 +150,6 @@ class _Tooltip extends StatelessWidget {
 
 class _RevenueChartPainter extends CustomPainter {
   _RevenueChartPainter({
-    this.growth = 1,
     required this.points,
     required this.peakIndex,
     required this.hoverIndex,
@@ -163,8 +158,6 @@ class _RevenueChartPainter extends CustomPainter {
     required this.labelStyle,
   });
 
-  /// 0 → 1 while the chart enters.
-  final double growth;
   final List<ChartPointModel> points;
   final int peakIndex;
   final int? hoverIndex;
@@ -172,159 +165,104 @@ class _RevenueChartPainter extends CustomPainter {
   final String peakLabel;
   final TextStyle labelStyle;
 
-  static const _top = 30.0;
+  static const _top = 24.0;
   static const _bottomLabels = 26.0;
+
+  /// Width of the y-axis lane on the left (ticks never sit on the bars).
+  static const _yLane = 44.0;
+
+  /// A round step so 4 ticks cover [max] with the top tick above it.
+  static double _niceStep(double max) {
+    if (max <= 0) return 1;
+    final raw = max / 4;
+    final mag = math.pow(10, (math.log(raw) / math.ln10).floor()).toDouble();
+    for (final m in const [1.0, 2.0, 2.5, 5.0, 10.0]) {
+      if (m * mag * 4 > max) return m * mag;
+    }
+    return 10 * mag;
+  }
+
+  static String _tick(double v) {
+    if (v >= 1000000) return '${(v / 1000000).toStringAsFixed(v % 1000000 == 0 ? 0 : 1)}M';
+    if (v >= 1000) return '${(v / 1000).toStringAsFixed(v % 1000 == 0 ? 0 : 1)}k';
+    return v.toStringAsFixed(0);
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
     final n = points.length;
     final chartH = size.height - _top - _bottomLabels;
     final bottom = _top + chartH;
-    final slot = size.width / n;
-    final barW = (slot * 0.34).clamp(3.0, 14.0);
+    final plotW = size.width - _yLane;
+    final slot = plotW / n;
+    final barW = (slot * 0.56).clamp(3.0, 28.0);
+    double xOf(int i) => _yLane + slot * (i + 0.5);
 
-    // grid
+    // One series, per day: takings. The scale: 4 round steps, the top tick above the maximum.
+    final maxRev = points.map((p) => p.revenue).reduce(math.max);
+    final step = _niceStep(maxRev);
+    final top = step * 4;
+    double yOf(double v) => bottom - v / top * chartH;
+
     final grid = Paint()
       ..color = AppColors.border
       ..strokeWidth = 1;
-    for (var k = 0; k <= 3; k++) {
-      final y = _top + chartH * k / 3;
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
-    }
-
-    // bars
-    final maxRev = points.map((p) => p.revenue).reduce(math.max);
-    double xOf(int i) => slot * (i + 0.5);
-    for (var i = 0; i < n; i++) {
-      // Each bar starts a little after the one to its left (a wave, not a block).
-      final local = ((growth - i / n * 0.45) / 0.55).clamp(0.0, 1.0);
-      final h = maxRev <= 0 ? 0.0 : points[i].revenue / maxRev * chartH * 0.92 * Motion.easeOut.transform(local);
-      final rect = Rect.fromLTRB(xOf(i) - barW / 2, bottom - h, xOf(i) + barW / 2, bottom);
-      final paint = Paint();
-      if (i == peakIndex) {
-        paint.color = AppColors.orange;
-      } else if (i == n - 1) {
-        paint.color = AppColors.strong;
-      } else {
-        paint.shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.barGray, AppColors.barGray.withValues(alpha: 0.12)],
-        ).createShader(rect);
-      }
-      canvas.drawRRect(
-        RRect.fromRectAndCorners(rect, topLeft: Radius.circular(barW / 2), topRight: Radius.circular(barW / 2)),
-        paint,
+    for (var k = 0; k <= 4; k++) {
+      final y = yOf(step * k);
+      canvas.drawLine(
+        Offset(_yLane, y),
+        Offset(size.width, y),
+        k == 0 ? (Paint()..color = AppColors.muted.withValues(alpha: 0.5)) : grid,
       );
+      final tp = _text(_tick(step * k), labelStyle.copyWith(color: AppColors.muted));
+      tp.paint(canvas, Offset(_yLane - 8 - tp.width, y - tp.height / 2));
+      tp.dispose();
     }
 
-    // cashflow line
-    final cash = points.map((p) => p.count.toDouble()).toList();
-    final minC = cash.reduce(math.min);
-    final maxC = cash.reduce(math.max);
-    final span = maxC - minC == 0 ? 1 : maxC - minC;
-    final pts = [for (var i = 0; i < n; i++) Offset(xOf(i), bottom - ((cash[i] - minC) / span * 0.78 + 0.12) * chartH)];
-    final line = Path()..moveTo(pts.first.dx, pts.first.dy);
-    for (var i = 1; i < n; i++) {
-      final midX = (pts[i - 1].dx + pts[i].dx) / 2;
-      line.cubicTo(midX, pts[i - 1].dy, midX, pts[i].dy, pts[i].dx, pts[i].dy);
-    }
-    final area = Path.from(line)
-      ..lineTo(pts.last.dx, bottom)
-      ..lineTo(pts.first.dx, bottom)
-      ..close();
-    canvas.drawPath(
-      area,
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.orange.withValues(alpha: 0.22 * growth),
-            AppColors.orange.withValues(alpha: 0),
-          ],
-        ).createShader(Rect.fromLTRB(0, _top, size.width, bottom)),
-    );
-    // The cash-flow line draws itself from left to right during the entrance.
-    var drawn = line;
-    if (growth < 1) {
-      drawn = Path();
-      for (final m in line.computeMetrics()) {
-        drawn.addPath(m.extractPath(0, m.length * Motion.easeOut.transform(growth)), Offset.zero);
-      }
-    }
-    canvas.drawPath(
-      drawn,
-      Paint()
-        ..color = AppColors.orange
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.2
-        ..strokeCap = StrokeCap.round,
-    );
-
-    // hover guide
+    // Bars: square corners, grey; today's bar (the last) carries the one data hue.
     final h = hoverIndex;
+    for (var i = 0; i < n; i++) {
+      final v = points[i].revenue;
+      if (v <= 0) continue; // an empty day has no bar, not a stub
+      final rect = Rect.fromLTRB(xOf(i) - barW / 2, yOf(v), xOf(i) + barW / 2, bottom);
+      final isToday = i == n - 1;
+      final color = isToday ? AppColors.data : (h == i ? AppColors.muted : AppColors.barGray);
+      canvas.drawRect(rect, Paint()..color = color);
+    }
+
+    // Hover: a 1px guide in ink.
     if (h != null && h < n) {
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTRB(xOf(h) - slot / 2 + 1, _top, xOf(h) + slot / 2 - 1, bottom),
-          const Radius.circular(4),
-        ),
-        Paint()..color = AppColors.strong.withValues(alpha: 0.06),
-      );
       canvas.drawLine(
         Offset(xOf(h), _top),
         Offset(xOf(h), bottom),
         Paint()
-          ..color = AppColors.strong.withValues(alpha: 0.35)
+          ..color = AppColors.ink.withValues(alpha: 0.25)
           ..strokeWidth = 1,
       );
     }
 
-    // dots
-    void dot(Offset o, Color c) {
-      canvas.drawCircle(o, 4.5, Paint()..color = Colors.white);
-      canvas.drawCircle(
-        o,
-        4.5,
-        Paint()
-          ..color = c
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2,
-      );
-    }
-
-    if (peakIndex >= 0 && peakIndex < n) dot(pts[peakIndex], AppColors.orange);
-    dot(pts.last, AppColors.strong);
-    if (h != null && h < n) dot(pts[h], AppColors.orange);
-
-    // peak label
-    if (peakIndex >= 0 && peakIndex < n && peakLabel.isNotEmpty) {
-      final tp = _text(peakLabel, labelStyle.copyWith(color: Colors.white, fontWeight: FontWeight.w700));
-      final w = tp.width + 12;
-      final h = tp.height + 6;
-      final cx = xOf(peakIndex).clamp(w / 2, math.max(w / 2, size.width - w / 2)).toDouble();
-      final r = RRect.fromRectAndRadius(
-        Rect.fromCenter(center: Offset(cx, _top - h / 2 - 2), width: w, height: h),
-        const Radius.circular(4),
-      );
-      canvas.drawRRect(r, Paint()..color = AppColors.tooltip);
-      tp.paint(canvas, Offset(cx - tp.width / 2, r.top + 3));
+    // The event that matters: the best day, labelled above its bar in plain 12px text.
+    if (peakIndex >= 0 && peakIndex < n && peakLabel.isNotEmpty && peakIndex != n - 1) {
+      final tp = _text(peakLabel, labelStyle.copyWith(color: AppColors.ink, fontWeight: FontWeight.w600));
+      final cx = xOf(
+        peakIndex,
+      ).clamp(_yLane + tp.width / 2, math.max(_yLane + tp.width / 2, size.width - tp.width / 2)).toDouble();
+      final y = (yOf(points[peakIndex].revenue) - tp.height - 4).clamp(0.0, size.height).toDouble();
+      tp.paint(canvas, Offset(cx - tp.width / 2, y));
       tp.dispose();
     }
 
-    // x labels
+    // x labels: grey, today in ink.
     for (var i = 0; i < n && i < xLabels.length; i++) {
       if (xLabels[i].isEmpty) continue;
-      final isPeak = i == peakIndex;
       final tp = _text(
         xLabels[i],
         labelStyle.copyWith(
-          color: isPeak ? AppColors.orange : AppColors.muted,
-          fontWeight: isPeak || i == n - 1 ? FontWeight.w700 : FontWeight.w500,
+          color: i == n - 1 ? AppColors.ink : AppColors.muted,
+          fontWeight: i == n - 1 ? FontWeight.w600 : FontWeight.w400,
         ),
       );
-      final x = (xOf(i) - tp.width / 2).clamp(0.0, math.max(0.0, size.width - tp.width)).toDouble();
+      final x = (xOf(i) - tp.width / 2).clamp(_yLane, math.max(_yLane, size.width - tp.width)).toDouble();
       tp.paint(canvas, Offset(x, bottom + 8));
       tp.dispose();
     }
@@ -338,7 +276,6 @@ class _RevenueChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RevenueChartPainter old) =>
-      old.growth != growth ||
       old.points != points ||
       old.peakIndex != peakIndex ||
       old.hoverIndex != hoverIndex ||

@@ -73,44 +73,41 @@ class StoresView extends StatelessWidget {
             ),
           ],
           children: [
-            LayoutBuilder(
-              builder: (context, c) => CardGrid(
-                columns: c.maxWidth >= 900 ? 4 : 2,
-                children: [
-                  KpiCard(
-                    title: tr.networkScope,
-                    value: tr.nLocations(vm.stores.length),
-                    icon: Icons.apartment_outlined,
-                    badge: tr.opRatio((vm.operatingRatio * 100).round()),
-                    caption: tr.activeInactive(vm.activeCount, vm.inactiveCount),
-                  ),
-                  KpiCard(
-                    title: tr.fleetVelocity,
-                    value: cur.amount(vm.todayTotal),
-                    unit: cur.code,
-                    icon: Icons.payments_outlined,
-                    badge: vm.todayChange == null ? null : formatPercent(vm.todayChange!),
-                    badgeTone: (vm.todayChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
-                    caption: tr.allBranchesToday,
-                  ),
-                  KpiCard(
-                    title: tr.totalMonthlyRevenue,
-                    value: cur.amount(vm.monthTotal),
-                    unit: cur.code,
-                    icon: Icons.insights_outlined,
-                    badge: vm.monthChange == null ? null : formatPercent(vm.monthChange!),
-                    badgeTone: (vm.monthChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
-                    caption: vm.monthChange == null ? null : tr.vsLastMonth,
-                  ),
-                  KpiCard(
-                    title: tr.allocatedWorkforce,
-                    value: '${vm.workforce}',
-                    icon: Icons.badge_outlined,
-                    badge: tr.acrossBranches(vm.staffedBranches),
-                    badgeTone: BadgeTone.info,
-                  ),
-                ],
-              ),
+            KpiStrip(
+              children: [
+                KpiCard(
+                  title: tr.networkScope,
+                  value: tr.nLocations(vm.stores.length),
+                  icon: Icons.apartment_outlined,
+                  badge: tr.opRatio((vm.operatingRatio * 100).round()),
+                  caption: tr.activeInactive(vm.activeCount, vm.inactiveCount),
+                ),
+                KpiCard(
+                  title: tr.fleetVelocity,
+                  value: cur.amount(vm.todayTotal),
+                  unit: cur.code,
+                  icon: Icons.payments_outlined,
+                  badge: vm.todayChange == null ? null : formatPercent(vm.todayChange!),
+                  badgeTone: (vm.todayChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
+                  caption: tr.allBranchesToday,
+                ),
+                KpiCard(
+                  title: tr.totalMonthlyRevenue,
+                  value: cur.amount(vm.monthTotal),
+                  unit: cur.code,
+                  icon: Icons.insights_outlined,
+                  badge: vm.monthChange == null ? null : formatPercent(vm.monthChange!),
+                  badgeTone: (vm.monthChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
+                  caption: vm.monthChange == null ? null : tr.vsLastMonth,
+                ),
+                KpiCard(
+                  title: tr.allocatedWorkforce,
+                  value: '${vm.workforce}',
+                  icon: Icons.badge_outlined,
+                  badge: tr.acrossBranches(vm.staffedBranches),
+                  badgeTone: BadgeTone.info,
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             _FilterBar(vm: vm),
@@ -500,7 +497,7 @@ class _StoreCard extends StatelessWidget {
                           : stats.monthChange == null
                           ? tr.shareValue((stats.share * 100).toStringAsFixed(0))
                           : '${formatPercent(stats.monthChange!)} · ${tr.vsLastMonth}',
-                      first ? AppColors.orange : AppColors.green,
+                      AppColors.muted,
                     ),
                   ),
                 ],

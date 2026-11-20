@@ -3,37 +3,57 @@ import 'package:flutter/material.dart';
 import '../motion/motion.dart';
 import 'app_colors.dart';
 
+/// Achromatic ledger (design-taste-frontend, app screens): one grotesk, flat surfaces split by a
+/// 1px line, a tight radius pair (8 for cards, 6 for controls), a near-black primary, and colour
+/// kept for data and status.
 class AppTheme {
   AppTheme._();
 
-  /// Display face for headings and big numbers.
-  static const display = 'Raleway';
+  /// One face everywhere: Onest (bundled, full Tajik Cyrillic, real tabular figures).
+  /// Kept as a name so headings and figures can ask for it explicitly.
+  static const display = 'Onest';
 
-  /// Lining, tabular figures (Raleway defaults to old-style numerals).
+  /// Lining, tabular figures: every number in a table or a row, so digits line up.
   static const numbers = [FontFeature.liningFigures(), FontFeature.tabularFigures()];
+
+  /// Lining, proportional figures for a large figure that stands alone (KPIs, the day's
+  /// takings): Onest's tabular digits are too wide at 30px+ and read as letter-spaced.
+  static const figure = [FontFeature.liningFigures(), FontFeature.proportionalFigures()];
+
+  static const radiusCard = 8.0;
+  static const radiusControl = 6.0;
+
+  /// One gutter, horizontally and vertically.
+  static const gap = 12.0;
 
   /// Theme for the current [AppColors.palette] (light or dark).
   static ThemeData get light {
+    final dark = AppColors.isDark;
     final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.teal,
-      brightness: AppColors.isDark ? Brightness.dark : Brightness.light,
+      seedColor: AppColors.ink,
+      brightness: dark ? Brightness.dark : Brightness.light,
       primary: AppColors.orange,
       onPrimary: Colors.white,
       surface: AppColors.card,
       onSurface: AppColors.ink,
       error: AppColors.red,
     );
-    // Onest everywhere (bundled, full Tajik Cyrillic).
     final base = ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       fontFamily: 'Onest',
     ).textTheme.apply(bodyColor: AppColors.ink, displayColor: AppColors.ink);
-    const radius = BorderRadius.all(Radius.circular(12));
-    const buttonShape = RoundedRectangleBorder(borderRadius: radius);
+    const control = BorderRadius.all(Radius.circular(radiusControl));
+    const buttonShape = RoundedRectangleBorder(borderRadius: control);
+    const controlSize = Size(0, 36);
+    OutlineInputBorder field(Color c, [double w = 1]) => OutlineInputBorder(
+      borderRadius: control,
+      borderSide: BorderSide(color: c, width: w),
+    );
+
     return ThemeData(
       useMaterial3: true,
-      brightness: AppColors.isDark ? Brightness.dark : Brightness.light,
+      brightness: dark ? Brightness.dark : Brightness.light,
       colorScheme: scheme.copyWith(
         surfaceContainerHighest: AppColors.surfaceSoft,
         surfaceContainerHigh: AppColors.surfaceSoft,
@@ -43,199 +63,194 @@ class AppTheme {
       ),
       canvasColor: AppColors.card,
       fontFamily: 'Onest',
-      // Browser surfaces carry the palette too: selection, caret, scrollbars.
       textSelectionTheme: TextSelectionThemeData(
-        cursorColor: AppColors.teal,
-        selectionColor: AppColors.teal.withValues(alpha: 0.22),
-        selectionHandleColor: AppColors.teal,
+        cursorColor: AppColors.ink,
+        selectionColor: AppColors.data.withValues(alpha: 0.22),
+        selectionHandleColor: AppColors.ink,
       ),
       scrollbarTheme: ScrollbarThemeData(
         thickness: const WidgetStatePropertyAll(6),
         radius: const Radius.circular(6),
         thumbColor: WidgetStatePropertyAll(AppColors.muted.withValues(alpha: 0.35)),
       ),
-      focusColor: AppColors.teal.withValues(alpha: 0.14),
+      focusColor: AppColors.ink.withValues(alpha: 0.08),
       hoverColor: AppColors.ink.withValues(alpha: 0.04),
-      // Tighter, heavier headings; calm body text.
-      // Display voice: Raleway (headings, big numbers). Reading voice: Onest.
+      splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
+      // App type is not display type: titles 24/600, sections 16/600, body 14, small 12.
       textTheme: base.copyWith(
-        displaySmall: base.displaySmall?.copyWith(
-          fontFamily: AppTheme.display,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -1,
-        ),
-        headlineLarge: base.headlineLarge?.copyWith(
-          fontFamily: AppTheme.display,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -0.9,
-        ),
+        displaySmall: base.displaySmall?.copyWith(fontSize: 30, fontWeight: FontWeight.w600, letterSpacing: -0.6),
+        headlineLarge: base.headlineLarge?.copyWith(fontSize: 28, fontWeight: FontWeight.w600, letterSpacing: -0.5),
         headlineMedium: base.headlineMedium?.copyWith(
-          fontFamily: AppTheme.display,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -0.8,
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.4,
           color: AppColors.ink,
         ),
         headlineSmall: base.headlineSmall?.copyWith(
-          fontFamily: AppTheme.display,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -0.5,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.3,
           color: AppColors.ink,
         ),
-        titleLarge: base.titleLarge?.copyWith(
-          fontFamily: AppTheme.display,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.2,
-        ),
-        titleMedium: base.titleMedium?.copyWith(fontFamily: AppTheme.display, fontWeight: FontWeight.w700),
-        bodyMedium: base.bodyMedium?.copyWith(height: 1.45),
+        titleLarge: base.titleLarge?.copyWith(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.2),
+        titleMedium: base.titleMedium?.copyWith(fontSize: 16, fontWeight: FontWeight.w600),
+        titleSmall: base.titleSmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+        bodyMedium: base.bodyMedium?.copyWith(fontSize: 14, height: 1.43),
+        bodySmall: base.bodySmall?.copyWith(fontSize: 12, color: AppColors.muted),
+        labelMedium: base.labelMedium?.copyWith(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.muted),
+        labelSmall: base.labelSmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w400, color: AppColors.muted),
       ),
+      // One near-black primary per screen; a grey pill as the secondary; text for the rest.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
+          backgroundColor: AppColors.orange,
+          foregroundColor: Colors.white,
           shape: buttonShape,
-          minimumSize: const Size(0, 44),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          textStyle: const TextStyle(fontFamily: 'Onest', fontWeight: FontWeight.w600, letterSpacing: 0.1),
+          minimumSize: controlSize,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          textStyle: const TextStyle(fontFamily: 'Onest', fontSize: 14, fontWeight: FontWeight.w500),
+          elevation: 0,
           animationDuration: Motion.fast,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.ink,
+          backgroundColor: AppColors.card,
           shape: buttonShape,
-          side: BorderSide(color: AppColors.border),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          minimumSize: controlSize,
+          side: BorderSide(color: dark ? const Color(0xFF444444) : const Color(0xFFD4D4D4)),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          textStyle: const TextStyle(fontFamily: 'Onest', fontSize: 14, fontWeight: FontWeight.w500),
           animationDuration: Motion.fast,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           shape: buttonShape,
+          minimumSize: controlSize,
+          foregroundColor: AppColors.ink,
+          textStyle: const TextStyle(fontFamily: 'Onest', fontSize: 14, fontWeight: FontWeight.w500),
           animationDuration: Motion.fast,
-          foregroundColor: AppColors.accentText,
         ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(foregroundColor: AppColors.muted, shape: buttonShape),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: AppColors.card,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-        titleTextStyle: TextStyle(
-          fontFamily: 'Onest',
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.3,
-          color: AppColors.ink,
-        ),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+        titleTextStyle: TextStyle(fontFamily: 'Onest', fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.ink),
       ),
+      // What floats may cast a shadow: menus, popovers, dialogs.
       popupMenuTheme: PopupMenuThemeData(
         color: AppColors.card,
         surfaceTintColor: Colors.transparent,
-        elevation: 8,
+        elevation: 6,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14)),
+          borderRadius: const BorderRadius.all(Radius.circular(radiusCard)),
           side: BorderSide(color: AppColors.border),
         ),
-        shadowColor: Color(0x29142235),
+        shadowColor: const Color(0x1F000000),
       ),
       tooltipTheme: TooltipThemeData(
-        waitDuration: Duration(milliseconds: 450),
-        decoration: BoxDecoration(color: AppColors.tooltip, borderRadius: BorderRadius.all(Radius.circular(8))),
-        textStyle: TextStyle(fontFamily: 'Onest', color: Colors.white, fontSize: 12),
+        waitDuration: const Duration(milliseconds: 450),
+        decoration: BoxDecoration(
+          color: AppColors.tooltip,
+          borderRadius: const BorderRadius.all(Radius.circular(radiusControl)),
+        ),
+        textStyle: const TextStyle(fontFamily: 'Onest', color: Colors.white, fontSize: 12),
       ),
-      // Fixed (not floating): a floating bar would cover buttons at the bottom of phone screens.
       snackBarTheme: SnackBarThemeData(backgroundColor: AppColors.tooltip),
-      progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.teal),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.ink),
       scaffoldBackgroundColor: AppColors.background,
       dividerColor: AppColors.border,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.card,
+        backgroundColor: AppColors.background,
         foregroundColor: AppColors.ink,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
       ),
-      // Cards: 20px radius. Light looks float on a soft shadow; the dark look uses a hairline instead.
+      // Surfaces are flat: a white card, a 1px edge, no shadow at rest.
       cardTheme: CardThemeData(
         color: AppColors.card,
-        elevation: AppColors.isDark ? 0 : 1.5,
-        shadowColor: AppColors.navy.withValues(alpha: 0.10),
+        elevation: 0,
         surfaceTintColor: Colors.transparent,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-          side: AppColors.isDark ? BorderSide(color: AppColors.border) : BorderSide.none,
+          borderRadius: const BorderRadius.all(Radius.circular(radiusCard)),
+          side: BorderSide(color: AppColors.border),
         ),
       ),
-      // Inputs: white field, hairline border, teal focus.
+      // Fields: white, 1px border, label above (Flutter floats it; it stays inside the frame).
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.card,
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         labelStyle: TextStyle(color: AppColors.muted),
         hintStyle: TextStyle(color: AppColors.muted),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.teal, width: 1.6),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.red),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.red, width: 1.6),
-        ),
+        border: field(AppColors.border),
+        enabledBorder: field(AppColors.border),
+        focusedBorder: field(AppColors.ink, 1.5),
+        errorBorder: field(AppColors.red),
+        focusedErrorBorder: field(AppColors.red, 1.5),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
           side: WidgetStatePropertyAll(BorderSide(color: AppColors.border)),
-          shape: const WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-          ),
+          shape: const WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: control)),
           backgroundColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected) ? AppColors.tealSoft : AppColors.card,
+            (s) => s.contains(WidgetState.selected) ? AppColors.surfaceSoft : AppColors.card,
           ),
-          foregroundColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected) ? AppColors.accentText : AppColors.ink,
-          ),
+          foregroundColor: WidgetStatePropertyAll(AppColors.ink),
         ),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.card,
-        selectedColor: AppColors.tealSoft,
+        selectedColor: AppColors.surfaceSoft,
         side: BorderSide(color: AppColors.border),
-        shape: StadiumBorder(),
+        shape: const RoundedRectangleBorder(borderRadius: control),
         labelStyle: TextStyle(fontFamily: 'Onest', color: AppColors.ink, fontSize: 13),
       ),
+      // Toggles: on = near-black (light) / white (dark), never the brand hue.
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? Colors.white : null),
-        trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? AppColors.teal : null),
+        thumbColor: WidgetStateProperty.resolveWith(
+          (s) => s.contains(WidgetState.selected) ? (dark ? Colors.black : Colors.white) : null,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (s) => s.contains(WidgetState.selected) ? (dark ? Colors.white : AppColors.ink) : null,
+        ),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.card,
-        indicatorColor: AppColors.tealSoft,
+        indicatorColor: AppColors.surfaceSoft,
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (s) => TextStyle(
+            fontFamily: 'Onest',
+            fontSize: 12,
+            fontWeight: s.contains(WidgetState.selected) ? FontWeight.w600 : FontWeight.w400,
+            color: s.contains(WidgetState.selected) ? AppColors.ink : AppColors.muted,
+          ),
+        ),
         iconTheme: WidgetStateProperty.resolveWith(
-          (s) => IconThemeData(color: s.contains(WidgetState.selected) ? AppColors.orange : AppColors.muted),
+          (s) => IconThemeData(color: s.contains(WidgetState.selected) ? AppColors.ink : AppColors.muted),
         ),
       ),
+      // Tables: 12px grey sentence-case header, no band, row rules only.
       dataTableTheme: DataTableThemeData(
         headingTextStyle: TextStyle(
           fontFamily: 'Onest',
           color: AppColors.muted,
-          fontWeight: FontWeight.w600,
-          fontSize: 12.5,
+          fontWeight: FontWeight.w400,
+          fontSize: 12,
         ),
-        dataTextStyle: TextStyle(fontFamily: 'Onest', color: AppColors.ink, fontSize: 13.5),
+        dataTextStyle: TextStyle(fontFamily: 'Onest', color: AppColors.ink, fontSize: 14),
         dividerThickness: 1,
-        headingRowColor: WidgetStatePropertyAll(AppColors.surfaceSoft),
+        headingRowColor: const WidgetStatePropertyAll(Colors.transparent),
         dataRowColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.hovered) ? AppColors.tealSoft.withValues(alpha: 0.45) : null,
+          (s) => s.contains(WidgetState.hovered) ? AppColors.ink.withValues(alpha: 0.03) : null,
         ),
       ),
       dividerTheme: DividerThemeData(color: AppColors.border, thickness: 1, space: 1),

@@ -45,7 +45,7 @@ class ChatHistoryList extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(12, 14, 12, 4),
             child: Text(
               label,
-              style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: AppColors.muted, letterSpacing: 0.3),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.muted),
             ),
           ),
         );

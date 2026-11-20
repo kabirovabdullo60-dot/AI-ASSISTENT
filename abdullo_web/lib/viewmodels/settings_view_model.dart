@@ -23,7 +23,7 @@ class SettingsViewModel extends ChangeNotifier {
 
   Currency get currency => _currency;
 
-  /// The look (Midnight Aurora / Zinc / Emerald). Saved in the browser.
+  /// The look (Ledger light / Graphite dark). Saved in the browser.
   AppPalette get palette => AppColors.palette;
 
   void setPalette(AppPalette p) {

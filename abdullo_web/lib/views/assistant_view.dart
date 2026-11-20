@@ -15,13 +15,11 @@ import '../widgets/assistant_action_card.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/chat_history_list.dart';
 import '../widgets/motion/ai_orb.dart';
-import '../widgets/motion/aurora.dart';
 import '../widgets/motion/border_beam.dart';
 import '../widgets/motion/gradient_text.dart';
 import '../widgets/motion/fade_slide_in.dart';
 import '../widgets/motion/pressable.dart';
 import '../widgets/motion/typing_indicator.dart';
-import '../widgets/pamir_ridge.dart';
 import '../widgets/voice_mic_button.dart';
 
 /// AI assistant — POST /api/assistant/chat (answers in the selected language).
@@ -332,16 +330,6 @@ class _EmptyChat extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, viewport) => Stack(
         children: [
-          const Positioned.fill(child: AuroraBackground()),
-          // Ridges only where there is room — on phones they would sit behind the cards.
-          if (viewport.maxWidth >= 600 && viewport.maxHeight >= 640)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: 150,
-              child: IgnorePointer(child: PamirRidges(color: AppColors.teal.withValues(alpha: 0.45))),
-            ),
           SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             child: ConstrainedBox(
@@ -502,12 +490,7 @@ class _SuggestionCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Row(
                 children: [
-                  Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(color: AppColors.tealSoft, borderRadius: BorderRadius.circular(10)),
-                    child: Icon(icon, size: 19, color: AppColors.teal),
-                  ),
+                  Icon(icon, size: 18, color: AppColors.muted),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(

@@ -8,31 +8,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'helpers.dart';
 
 void main() {
-  tearDown(() => AppColors.use(AppPalette.aurora));
+  tearDown(() => AppColors.use(AppPalette.ledger));
 
   testWidgets('top-bar palette menu switches the look and remembers it', (tester) async {
     await pumpApp(tester, desktopWidth);
-    expect(AppColors.palette, AppPalette.aurora);
-    expect(Theme.of(tester.element(find.byType(Scaffold).first)).brightness, Brightness.dark);
+    expect(AppColors.palette, AppPalette.ledger);
+    expect(Theme.of(tester.element(find.byType(Scaffold).first)).brightness, Brightness.light);
 
     await tester.tap(find.byKey(const Key('palette-menu')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('palette-zinc')));
+    await tester.tap(find.byKey(const Key('palette-graphite')));
     await tester.pumpAndSettle();
-    expect(AppColors.palette, AppPalette.zinc);
-    expect(Theme.of(tester.element(find.byType(Scaffold).first)).brightness, Brightness.light);
-    expect((await SharedPreferences.getInstance()).getString('palette'), 'zinc');
+    expect(AppColors.palette, AppPalette.graphite);
+    expect(Theme.of(tester.element(find.byType(Scaffold).first)).brightness, Brightness.dark);
+    expect((await SharedPreferences.getInstance()).getString('palette'), 'graphite');
   });
 
   for (final width in [mobileWidth, desktopWidth]) {
-    testWidgets('settings at ${width.toInt()}px: pick Emerald, page stays open', (tester) async {
+    testWidgets('settings at ${width.toInt()}px: pick Graphite, page stays open', (tester) async {
       await pumpApp(tester, width);
       await openSection(tester, AppSection.settings);
-      await scrollTo(tester, find.byKey(const Key('settings-palette-emerald')));
-      await tester.tap(find.byKey(const Key('settings-palette-emerald')));
+      await scrollTo(tester, find.byKey(const Key('settings-palette-graphite')));
+      await tester.tap(find.byKey(const Key('settings-palette-graphite')));
       await tester.pumpAndSettle();
-      expect(AppColors.palette, AppPalette.emerald);
-      expect(find.byKey(const Key('settings-palette-emerald')), findsOneWidget); // still on Settings
+      expect(AppColors.palette, AppPalette.graphite);
+      expect(find.byKey(const Key('settings-palette-graphite')), findsOneWidget); // still on Settings
     });
   }
 }

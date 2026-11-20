@@ -32,13 +32,6 @@ class ChatBubble extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 11),
         decoration: BoxDecoration(
           color: isUser ? AppColors.navy : AppColors.card,
-          gradient: isUser
-              ? LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppColors.navyLight, AppColors.navy],
-                )
-              : null,
           border: isUser ? null : Border.all(color: AppColors.border),
           borderRadius: BorderRadius.only(
             topLeft: isUser ? radius : corner,
@@ -46,13 +39,6 @@ class ChatBubble extends StatelessWidget {
             bottomLeft: radius,
             bottomRight: radius,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.navy.withValues(alpha: isUser ? 0.16 : 0.05),
-              blurRadius: isUser ? 14 : 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
         ),
         child: isUser
             ? SelectableText(message.text, style: const TextStyle(color: Colors.white, height: 1.45, fontSize: 14))

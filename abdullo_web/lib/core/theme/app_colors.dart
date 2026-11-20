@@ -10,8 +10,8 @@ import 'app_palette.dart';
 class AppColors {
   AppColors._();
 
-  static PaletteColors _c = AppPalette.aurora.colors;
-  static AppPalette _palette = AppPalette.aurora;
+  static PaletteColors _c = AppPalette.ledger.colors;
+  static AppPalette _palette = AppPalette.ledger;
 
   static AppPalette get palette => _palette;
   static void use(AppPalette p) {
@@ -56,6 +56,11 @@ class AppColors {
   // Second accent — the AI
   static Color get gold => _c.accent2;
   static Color get goldSoft => _c.accent2Soft;
+
+  /// The one data hue: the screen's main data element only (today, the current period,
+  /// the selected series). Everything else is ink or grey.
+  static Color get data => _c.blue;
+  static Color get dataSoft => _c.blueSoft;
 
   // Meaning
   static Color get amber => _c.amber;

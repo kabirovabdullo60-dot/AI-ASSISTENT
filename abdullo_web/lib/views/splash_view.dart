@@ -116,21 +116,12 @@ class SplashView extends StatelessWidget {
   }
 }
 
-/// The logo with a soft halo in the palette's accent.
+/// The logo (no halo: nothing glows).
 class _GlowingMark extends StatelessWidget {
   const _GlowingMark();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(color: AppColors.teal.withValues(alpha: 0.55), blurRadius: 44, spreadRadius: 2),
-          BoxShadow(color: AppColors.gold.withValues(alpha: 0.25), blurRadius: 80, spreadRadius: 6),
-        ],
-      ),
-      child: const BrandMark(size: 76),
-    );
+    return const BrandMark(size: 76);
   }
 }

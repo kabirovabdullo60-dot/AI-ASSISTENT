@@ -1,97 +1,71 @@
 import 'package:flutter/material.dart';
 
-/// The three looks the owner can switch between (Settings → Theme, or the palette button
-/// in the top bar). Every color role of the web lives here; widgets read them through
+/// The two looks the owner can switch between (Settings → Theme, or the palette button
+/// in the top bar): light ledger and dark graphite. Every color role of the web lives here; widgets read them through
 /// [AppColors].
 enum AppPalette {
-  /// Dark navy lit by violet → cyan aurora light. The default.
-  aurora(
+  /// Achromatic ledger on a stone ground (a shop's floor, not a template's #f8f8f8). The chrome
+  /// holds no colour: ink for money and counts, near-black for the one primary action, and one
+  /// blue only on the screen's main data (today, the current period). The default.
+  ledger(
+    PaletteColors(
+      dark: false,
+      background: Color(0xFFF4F3F1),
+      card: Color(0xFFFFFFFF),
+      surfaceSoft: Color(0xFFEEEEEE),
+      border: Color(0xFFE6E6E6),
+      ink: Color(0xFF0A0A0A),
+      muted: Color(0xFF6B6B6B),
+      accent: Color(0xFF141414),
+      accentText: Color(0xFF0A0A0A),
+      accentSoft: Color(0xFFEEEEEE),
+      accent2: Color(0xFF1D5FBF),
+      accent2Soft: Color(0xFFE8EEF8),
+      navy: Color(0xFF141414),
+      navyLight: Color(0xFF2A2A2A),
+      amber: Color(0xFF92400E),
+      amberSoft: Color(0xFFFFFBEB),
+      green: Color(0xFF247B50),
+      greenSoft: Color(0xFFDCFAE5),
+      red: Color(0xFFC4242A),
+      redSoft: Color(0xFFFFEDEA),
+      blue: Color(0xFF1D5FBF),
+      blueSoft: Color(0xFFE8EEF8),
+      purple: Color(0xFF1D5FBF),
+      purpleSoft: Color(0xFFE8EEF8),
+      barGray: Color(0xFFD4D4D4),
+    ),
+  ),
+
+  /// The same ledger in true neutral dark (no navy, no slate): elevation by lightness alone,
+  /// white text, a grey-filled primary, the blue lifted for contrast on data only.
+  graphite(
     PaletteColors(
       dark: true,
-      background: Color(0xFF0A0E1A),
-      card: Color(0xFF121829),
-      surfaceSoft: Color(0xFF182036),
-      border: Color(0xFF232B42),
-      ink: Color(0xFFE6E9F2),
-      muted: Color(0xFF9AA3B8),
-      accent: Color(0xFF7152F7),
-      accentText: Color(0xFFA48BFF),
-      accentSoft: Color(0xFF231E48),
-      accent2: Color(0xFF22D3EE),
-      accent2Soft: Color(0xFF0E3340),
-      navy: Color(0xFF1E2742),
-      navyLight: Color(0xFF2A3557),
-      amber: Color(0xFFFBBF24),
-      amberSoft: Color(0xFF3A2E12),
-      green: Color(0xFF34D399),
-      greenSoft: Color(0xFF0F3328),
-      red: Color(0xFFF87171),
-      redSoft: Color(0xFF3B1A1E),
-      blue: Color(0xFF60A5FA),
-      blueSoft: Color(0xFF172A47),
-      purple: Color(0xFFC084FC),
-      purpleSoft: Color(0xFF2E1C46),
-      barGray: Color(0xFF3A4560),
-    ),
-  ),
-
-  /// shadcn-style zinc neutrals with an indigo accent.
-  zinc(
-    PaletteColors(
-      dark: false,
-      background: Color(0xFFFAFAFA),
-      card: Color(0xFFFFFFFF),
-      surfaceSoft: Color(0xFFF4F4F5),
-      border: Color(0xFFE4E4E7),
-      ink: Color(0xFF09090B),
-      muted: Color(0xFF71717A),
-      accent: Color(0xFF4F46E5),
-      accentSoft: Color(0xFFEEF2FF),
-      accent2: Color(0xFFA855F7),
-      accent2Soft: Color(0xFFF5F3FF),
-      navy: Color(0xFF18181B),
-      navyLight: Color(0xFF27272A),
-      amber: Color(0xFFB45309),
-      amberSoft: Color(0xFFFEF3C7),
-      green: Color(0xFF15803D),
-      greenSoft: Color(0xFFDCFCE7),
-      red: Color(0xFFDC2626),
-      redSoft: Color(0xFFFEE2E2),
-      blue: Color(0xFF1D4ED8),
-      blueSoft: Color(0xFFDBEAFE),
-      purple: Color(0xFF7C3AED),
-      purpleSoft: Color(0xFFEDE9FE),
-      barGray: Color(0xFFD4D4D8),
-    ),
-  ),
-
-  /// Warm white, deep emerald and champagne gold — private-bank calm.
-  emerald(
-    PaletteColors(
-      dark: false,
-      background: Color(0xFFFAFAF7),
-      card: Color(0xFFFFFFFF),
-      surfaceSoft: Color(0xFFF3F4EF),
-      border: Color(0xFFE5E7DF),
-      ink: Color(0xFF111827),
-      muted: Color(0xFF6B7280),
-      accent: Color(0xFF065F46),
-      accentSoft: Color(0xFFE6F2EC),
-      accent2: Color(0xFFC9A227),
-      accent2Soft: Color(0xFFF8F1DB),
-      navy: Color(0xFF0B2F25),
-      navyLight: Color(0xFF134236),
-      amber: Color(0xFFA84F07),
-      amberSoft: Color(0xFFFDF0DC),
-      green: Color(0xFF15803D),
-      greenSoft: Color(0xFFE3F4E8),
-      red: Color(0xFFB91C1C),
-      redSoft: Color(0xFFFDECEC),
-      blue: Color(0xFF1D4ED8),
-      blueSoft: Color(0xFFE6EDFB),
-      purple: Color(0xFF6D28D9),
-      purpleSoft: Color(0xFFF0EAFB),
-      barGray: Color(0xFFCBD0C4),
+      background: Color(0xFF000000),
+      card: Color(0xFF111111),
+      surfaceSoft: Color(0xFF222222),
+      border: Color(0xFF2E2E2E),
+      ink: Color(0xFFFFFFFF),
+      muted: Color(0xFFB4B4B4),
+      accent: Color(0xFF333333),
+      accentText: Color(0xFFFFFFFF),
+      accentSoft: Color(0xFF222222),
+      accent2: Color(0xFF6EA6F2),
+      accent2Soft: Color(0xFF16233A),
+      navy: Color(0xFF222222),
+      navyLight: Color(0xFF2E2E2E),
+      amber: Color(0xFFF2B451),
+      amberSoft: Color(0xFF2A2112),
+      green: Color(0xFF3FC07A),
+      greenSoft: Color(0xFF172A1D),
+      red: Color(0xFFE5566F),
+      redSoft: Color(0xFF2C1A20),
+      blue: Color(0xFF6EA6F2),
+      blueSoft: Color(0xFF16233A),
+      purple: Color(0xFF6EA6F2),
+      purpleSoft: Color(0xFF16233A),
+      barGray: Color(0xFF3A3A3A),
     ),
   );
 
@@ -99,7 +73,8 @@ enum AppPalette {
 
   final PaletteColors colors;
 
-  static AppPalette fromName(String? name) => values.firstWhere((p) => p.name == name, orElse: () => AppPalette.aurora);
+  /// Older saved names (aurora, zinc, emerald) fall back to the ledger.
+  static AppPalette fromName(String? name) => values.firstWhere((p) => p.name == name, orElse: () => AppPalette.ledger);
 }
 
 class PaletteColors {

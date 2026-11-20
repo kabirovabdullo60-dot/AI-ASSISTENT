@@ -93,10 +93,7 @@ class ReportsView extends StatelessWidget {
                       Text(ranked[i].storeName, style: const TextStyle(fontWeight: FontWeight.w600)),
                       Text('${ranked[i].salesCount}'),
                       Text(cur.format(ranked[i].totalAmount)),
-                      Text(
-                        '${ranked[i].sharePercent.toStringAsFixed(1)}%',
-                        style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
-                      ),
+                      Text('${ranked[i].sharePercent.toStringAsFixed(1)}%', style: TextStyle(color: AppColors.muted)),
                       Text(
                         ranked[i].changePercent == null ? '—' : formatPercent(ranked[i].changePercent!),
                         style: TextStyle(color: (ranked[i].changePercent ?? 0) >= 0 ? AppColors.green : AppColors.red),
@@ -140,11 +137,11 @@ class ReportsView extends StatelessWidget {
                       Text(formatMonthYear(DateTime(pay.year, m.month))),
                       Text('${m.employees}'),
                       Text(cur.format(m.due)),
-                      Text(cur.format(m.paid), style: TextStyle(color: AppColors.green)),
+                      Text(cur.format(m.paid)),
                       Text(
                         cur.format(m.remaining),
                         style: TextStyle(
-                          color: m.remaining > 0 ? AppColors.red : AppColors.muted,
+                          color: m.remaining > 0 ? AppColors.ink : AppColors.muted,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

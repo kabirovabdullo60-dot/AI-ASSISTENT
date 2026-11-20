@@ -21,7 +21,7 @@ void main() {
       await tester.enterText(find.byKey(const Key('login-password')), FakeBackend.password);
       await tester.tap(find.byKey(const Key('login-submit')));
       await tester.pumpAndSettle();
-      expect(find.text('Business Overview'), findsOneWidget);
+      expect(find.text('Overview'), findsOneWidget);
       expect((await SharedPreferences.getInstance()).getString('refreshToken'), backend.refreshToken);
     });
   }
@@ -36,7 +36,7 @@ void main() {
     await tester.enterText(find.byKey(const Key('register-business')), 'New Shop');
     await tester.tap(find.byKey(const Key('login-submit')));
     await tester.pumpAndSettle();
-    expect(find.text('Business Overview'), findsOneWidget);
+    expect(find.text('Overview'), findsOneWidget);
     expect(find.text('New Shop'), findsWidgets);
   });
 
@@ -56,7 +56,7 @@ void main() {
     final backend = setUpBackend();
     backend.expireAccessOnce = true;
     await pumpApp(tester, desktopWidth, backend: backend);
-    expect(find.text('Business Overview'), findsOneWidget);
+    expect(find.text('Overview'), findsOneWidget);
     expect(backend.requests.where((r) => r == 'POST /api/auth/refresh'), hasLength(1));
     expect((await SharedPreferences.getInstance()).getString('accessToken'), backend.accessToken);
   });

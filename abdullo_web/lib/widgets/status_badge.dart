@@ -10,26 +10,26 @@ enum BadgeTone {
   neutral,
   dark;
 
+  /// Dark text of the tag's own hue (pale-pair pills). `info` is neutral: blue is kept for data.
   Color get foreground => switch (this) {
     positive => AppColors.green,
     negative => AppColors.red,
     warning => AppColors.amber,
-    info => AppColors.blue,
-    neutral => AppColors.muted,
-    dark => Colors.white,
+    info || neutral => AppColors.isDark ? AppColors.muted : const Color(0xFF3D3D3D),
+    dark => AppColors.isDark ? Colors.black : Colors.white,
   };
 
   Color get background => switch (this) {
     positive => AppColors.greenSoft,
     negative => AppColors.redSoft,
     warning => AppColors.amberSoft,
-    info => AppColors.blueSoft,
-    neutral => AppColors.surfaceSoft,
-    dark => AppColors.navy,
+    info || neutral => AppColors.surfaceSoft,
+    dark => AppColors.isDark ? Colors.white : AppColors.navy,
   };
 }
 
-/// Small pill like "+12.4%", "LIVE AUDIT", "4 Pending".
+/// A status tag inside a row or beside a value: 20px, 12/500, a pale tint with dark text of the
+/// same hue, 4px corners. One status mark per row; never above a heading; never squeezed.
 class StatusBadge extends StatelessWidget {
   const StatusBadge(this.text, {super.key, this.tone = BadgeTone.neutral, this.icon, this.dot = false});
 
@@ -41,8 +41,8 @@ class StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-      decoration: BoxDecoration(color: tone.background, borderRadius: BorderRadius.circular(20)),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(color: tone.background, borderRadius: BorderRadius.circular(4)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -52,15 +52,22 @@ class StatusBadge extends StatelessWidget {
               height: 6,
               decoration: BoxDecoration(color: tone.foreground, shape: BoxShape.circle),
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 5),
           ],
           if (icon != null) ...[Icon(icon, size: 12, color: tone.foreground), const SizedBox(width: 3)],
           Flexible(
             child: Text(
               text,
               maxLines: 1,
+              softWrap: false,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: tone.foreground, fontSize: 11, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: tone.foreground,
+                fontSize: 12,
+                height: 16 / 12,
+                fontWeight: FontWeight.w500,
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
             ),
           ),
         ],

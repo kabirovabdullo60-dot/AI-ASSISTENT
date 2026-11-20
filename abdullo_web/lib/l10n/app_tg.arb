@@ -563,5 +563,11 @@
   "actionSaveConfirm": "Захира ва тасдиқ",
   "actionSureTitle": "Боварӣ доред?",
   "actionSureBody": "Ин нест карда мешавад:\n{summary}",
-  "colWorkedDays": "Рӯзҳо дар моҳ"
+  "colWorkedDays": "Рӯзҳо дар моҳ",
+  "vsLastWeek": "нисбат ба ҳафтаи гузашта",
+  "overviewFinding": "Имрӯз {today}, фурӯш: {count} · музди пардохтнашудаи ин моҳ: {unpaid}",
+  "overviewTitle": "Шарҳ",
+  "storesActiveShort": "Мағозаҳои фаъол",
+  "staffActiveShort": "Кормандони фаъол",
+  "navAssistantShort": "AI"
 }

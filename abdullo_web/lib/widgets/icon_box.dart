@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// Rounded square with an icon, used on cards and activity rows.
+import '../core/theme/app_colors.dart';
+
+/// A plain outline icon where it helps (a row's kind, a card's subject). Never a tinted square:
+/// colour belongs to data, not to decoration. [background] is ignored and kept so callers need
+/// not change; [color] is used only when it is a status colour, otherwise the icon is grey.
 class IconBox extends StatelessWidget {
   const IconBox(this.icon, {super.key, required this.color, required this.background, this.size = 34});
 
@@ -11,11 +15,13 @@ class IconBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final status = color == AppColors.red || color == AppColors.amber || color == AppColors.green;
+    return SizedBox(
       width: size,
       height: size,
-      decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(size * 0.28)),
-      child: Icon(icon, size: size * 0.5, color: color),
+      child: Center(
+        child: Icon(icon, size: (size * 0.52).clamp(14, 20), color: status ? color : AppColors.muted),
+      ),
     );
   }
 }

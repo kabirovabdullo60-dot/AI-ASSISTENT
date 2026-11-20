@@ -168,21 +168,17 @@ class _MobileNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final index = AppSection.mobileBar.indexOf(section);
-    // A floating pill above the page edge instead of a bar glued to the bottom.
+    // A plain bar on the bottom edge with one hairline above it (no floating pill, no shadow).
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+        padding: EdgeInsets.zero,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            border: AppColors.isDark ? Border.all(color: AppColors.border) : null,
-            boxShadow: [
-              BoxShadow(color: AppColors.navy.withValues(alpha: 0.16), blurRadius: 24, offset: const Offset(0, 8)),
-            ],
+            border: Border(top: BorderSide(color: AppColors.border)),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.zero,
             child: NavigationBar(
               height: 66,
               selectedIndex: index < 0 ? _moreIndex : index,
@@ -190,7 +186,11 @@ class _MobileNavBar extends StatelessWidget {
               onDestinationSelected: (i) => i == _moreIndex ? _openMore(context) : onSelect(AppSection.mobileBar[i]),
               destinations: [
                 for (final s in AppSection.mobileBar)
-                  NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: tr.section(s)),
+                  NavigationDestination(
+                    icon: Icon(s.icon),
+                    selectedIcon: Icon(s.selectedIcon),
+                    label: s == AppSection.assistant ? tr.navAssistantShort : tr.section(s),
+                  ),
                 NavigationDestination(icon: Icon(Icons.more_horiz), label: tr.navMore),
               ],
             ),

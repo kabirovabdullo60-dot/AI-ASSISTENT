@@ -14,12 +14,12 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('language-ru')));
     await tester.pumpAndSettle();
-    expect(find.text('Обзор бизнеса'), findsOneWidget);
+    expect(find.text('Обзор'), findsOneWidget);
     await tester.tap(find.byKey(const Key('language-menu')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('language-tg')));
     await tester.pumpAndSettle();
-    expect(find.text('Шарҳи тиҷорат'), findsOneWidget);
+    expect(find.text('Шарҳ'), findsOneWidget);
     expect((await SharedPreferences.getInstance()).getString('language'), 'tg');
   });
 

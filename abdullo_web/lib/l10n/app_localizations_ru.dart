@@ -57,7 +57,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tryAgain => 'Повторить';
 
   @override
-  String get loadError => 'Не удалось загрузить данные. Проверьте подключение и повторите.';
+  String get loadError =>
+      'Не удалось загрузить данные. Проверьте подключение и повторите.';
 
   @override
   String get nothingFound => 'Ничего не найдено';
@@ -175,7 +176,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get liveAudit => 'Live-аудит';
 
   @override
-  String get overviewSubtitle => 'Сводные показатели всех филиалов и денежных потоков в реальном времени';
+  String get overviewSubtitle =>
+      'Сводные показатели всех филиалов и денежных потоков в реальном времени';
 
   @override
   String get recordSale => 'Записать продажу';
@@ -328,7 +330,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get liveFeed => 'Лента';
 
   @override
-  String get activitySubtitle => 'Финансовые проверки, закрытие касс и движение персонала в реальном времени';
+  String get activitySubtitle =>
+      'Финансовые проверки, закрытие касс и движение персонала в реальном времени';
 
   @override
   String get demoFeed => 'Демо-лента';
@@ -382,7 +385,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get actCancelled => 'отменено';
 
   @override
-  String get assistantBusy => 'Слишком много вопросов. Подождите минуту и спросите снова.';
+  String get assistantBusy =>
+      'Слишком много вопросов. Подождите минуту и спросите снова.';
 
   @override
   String connectedTo(String endpoints) {
@@ -564,7 +568,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get storesTitle => 'Управление магазинами';
 
   @override
-  String get storesSubtitle => 'Управляйте филиалами, следите за выручкой и состоянием магазинов по регионам.';
+  String get storesSubtitle =>
+      'Управляйте филиалами, следите за выручкой и состоянием магазинов по регионам.';
 
   @override
   String get exportDirectory => 'Экспорт списка';
@@ -1029,7 +1034,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noPaymentsMonth => 'За этот месяц выплат нет';
 
   @override
-  String get bankNote => 'Все банковские переводы соответствуют стандартам Нацбанка и защищены TLS.';
+  String get bankNote =>
+      'Все банковские переводы соответствуют стандартам Нацбанка и защищены TLS.';
 
   @override
   String ledgerCopied(String month) {
@@ -1133,7 +1139,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get signOut => 'Выйти';
 
   @override
-  String get signOutNote => 'Вход и выход заработают после подключения авторизации на сервере.';
+  String get signOutNote =>
+      'Вход и выход заработают после подключения авторизации на сервере.';
 
   @override
   String get business => 'Бизнес';
@@ -1151,7 +1158,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get demoData => 'Демо-данные';
 
   @override
-  String get demoNote => 'Пока эндпоинты ниже не подключены, сайт показывает демо-данные.';
+  String get demoNote =>
+      'Пока эндпоинты ниже не подключены, сайт показывает демо-данные.';
 
   @override
   String get askAssistant => 'Спросите бизнес-ассистента';
@@ -1201,13 +1209,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get loginTitle => 'С возвращением';
 
   @override
-  String get loginSubtitle => 'Войдите, чтобы управлять магазинами, продажами и зарплатами.';
+  String get loginSubtitle =>
+      'Войдите, чтобы управлять магазинами, продажами и зарплатами.';
 
   @override
   String get registerTitle => 'Создайте аккаунт бизнеса';
 
   @override
-  String get registerSubtitle => 'Один аккаунт = один бизнес. Магазины и сотрудников добавите после регистрации.';
+  String get registerSubtitle =>
+      'Один аккаунт = один бизнес. Магазины и сотрудников добавите после регистрации.';
 
   @override
   String get emailLabel => 'Эл. почта';
@@ -1252,7 +1262,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errAccountDisabled => 'Этот аккаунт отключён.';
 
   @override
-  String get errAccountLocked => 'Слишком много неудачных попыток. Попробуйте позже.';
+  String get errAccountLocked =>
+      'Слишком много неудачных попыток. Попробуйте позже.';
 
   @override
   String get errSessionEnded => 'Сессия завершена. Войдите снова.';
@@ -1275,7 +1286,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errValidationShort => 'Проверьте заполненные поля.';
 
   @override
-  String get errNetwork => 'Нет связи с сервером. Проверьте интернет и повторите.';
+  String get errNetwork =>
+      'Нет связи с сервером. Проверьте интернет и повторите.';
 
   @override
   String get errRateLimited => 'Слишком много запросов. Подождите немного.';
@@ -1287,10 +1299,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errStoreNameTaken => 'Магазин с таким названием уже есть.';
 
   @override
-  String get errStoreHasEmployees => 'В магазине есть активные сотрудники. Сначала переведите или отключите их.';
+  String get errStoreHasEmployees =>
+      'В магазине есть активные сотрудники. Сначала переведите или отключите их.';
 
   @override
-  String get errAlreadyPaid => 'Зарплата за этот месяц уже полностью выплачена.';
+  String get errAlreadyPaid =>
+      'Зарплата за этот месяц уже полностью выплачена.';
 
   @override
   String get errExceedsRemaining => 'Сумма больше остатка за этот месяц.';
@@ -1584,7 +1598,8 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get assistantNote => 'Ответы строятся на ваших реальных цифрах, их считает ИИ на сервере.';
+  String get assistantNote =>
+      'Ответы строятся на ваших реальных цифрах, их считает ИИ на сервере.';
 
   @override
   String get staffInStore => 'Сотрудники';
@@ -1620,7 +1635,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navExpenses => 'Расходы';
 
   @override
-  String get expensesSubtitle => 'Аренда, коммунальные, доставка и другие расходы — и сколько остаётся прибыли';
+  String get expensesSubtitle =>
+      'Аренда, коммунальные, доставка и другие расходы — и сколько остаётся прибыли';
 
   @override
   String get addExpense => 'Добавить расход';
@@ -1659,7 +1675,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deleteExpenseTitle => 'Удалить этот расход?';
 
   @override
-  String get deleteExpenseBody => 'Он больше не будет учитываться в отчёте о прибыли.';
+  String get deleteExpenseBody =>
+      'Он больше не будет учитываться в отчёте о прибыли.';
 
   @override
   String get noExpenses => 'Расходов пока нет';
@@ -1758,7 +1775,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get greetingNoName => 'Здравствуйте';
 
   @override
-  String get errSplitMismatch => 'Наличные и карта вместе должны равняться сумме продажи.';
+  String get errSplitMismatch =>
+      'Наличные и карта вместе должны равняться сумме продажи.';
 
   @override
   String get clearDate => 'Очистить дату';
@@ -1793,10 +1811,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get voiceStopSpeaking => 'Остановить чтение';
 
   @override
-  String get voiceHint => 'Нажмите на микрофон и скажите: «Открой продажи», «Новый чат» или любой вопрос.';
+  String get voiceHint =>
+      'Нажмите на микрофон и скажите: «Открой продажи», «Новый чат» или любой вопрос.';
 
   @override
-  String get voiceDenied => 'Доступ к микрофону запрещён. Разрешите его в адресной строке браузера.';
+  String get voiceDenied =>
+      'Доступ к микрофону запрещён. Разрешите его в адресной строке браузера.';
 
   @override
   String get voiceNoSpeech => 'Ничего не слышно. Попробуйте ещё раз.';
@@ -1805,7 +1825,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get voiceNoMic => 'Микрофон не найден.';
 
   @override
-  String get voiceUnsupported => 'Этот браузер не распознаёт речь. Откройте Chrome или Edge.';
+  String get voiceUnsupported =>
+      'Этот браузер не распознаёт речь. Откройте Chrome или Edge.';
 
   @override
   String get voiceNetwork => 'Для распознавания речи нужен интернет.';
@@ -1817,13 +1838,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get chatHistory => 'История';
 
   @override
-  String get chatHistoryEmpty => 'Сохранённых чатов пока нет. Задайте вопрос — чат сохранится здесь.';
+  String get chatHistoryEmpty =>
+      'Сохранённых чатов пока нет. Задайте вопрос — чат сохранится здесь.';
 
   @override
   String get deleteChat => 'Удалить чат';
 
   @override
-  String get deleteChatConfirm => 'Удалить этот чат? Его нельзя будет восстановить.';
+  String get deleteChatConfirm =>
+      'Удалить этот чат? Его нельзя будет восстановить.';
 
   @override
   String chatMessages(int count) {
@@ -1888,7 +1911,8 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get assistantUnavailable => 'Ассистент сейчас недоступен. Попробуйте позже.';
+  String get assistantUnavailable =>
+      'Ассистент сейчас недоступен. Попробуйте позже.';
 
   @override
   String get actionAskAgain => 'Спросите ассистента ещё раз';
@@ -1918,4 +1942,24 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get colWorkedDays => 'Дней в месяце';
+
+  @override
+  String get vsLastWeek => 'к прошлой неделе';
+
+  @override
+  String overviewFinding(String today, int count, String unpaid) {
+    return 'Сегодня $today, продаж: $count · зарплат к выплате в этом месяце: $unpaid';
+  }
+
+  @override
+  String get overviewTitle => 'Обзор';
+
+  @override
+  String get storesActiveShort => 'Работающие магазины';
+
+  @override
+  String get staffActiveShort => 'Сотрудники в штате';
+
+  @override
+  String get navAssistantShort => 'ИИ';
 }

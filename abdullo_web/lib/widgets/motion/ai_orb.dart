@@ -1,13 +1,9 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
-import '../../core/motion/motion.dart';
 import '../../core/theme/app_colors.dart';
 
-/// The assistant's face: a warm orange → violet → blue orb with a spark.
-/// While [thinking] its colors swirl and a soft glow breathes; at rest it is still
-/// (no endless animation on an idle screen).
+/// The assistant's mark: a flat ink disc with a spark (no gradient, no glow). While [thinking]
+/// the spark pulses gently so a long answer still shows life; at rest nothing moves.
 class AiOrb extends StatefulWidget {
   const AiOrb({super.key, this.size = 32, this.thinking = false});
 
@@ -19,20 +15,24 @@ class AiOrb extends StatefulWidget {
 }
 
 class _AiOrbState extends State<AiOrb> with SingleTickerProviderStateMixin {
-  late final AnimationController _c;
+  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400));
 
   @override
   void initState() {
     super.initState();
-    _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 2400));
-    if (widget.thinking) _c.repeat();
+    if (widget.thinking) _c.repeat(reverse: true);
   }
 
   @override
   void didUpdateWidget(AiOrb old) {
     super.didUpdateWidget(old);
-    if (widget.thinking && !_c.isAnimating) _c.repeat();
-    if (!widget.thinking && _c.isAnimating) _c.animateTo(0, duration: Motion.base, curve: Motion.easeOut);
+    if (widget.thinking && !_c.isAnimating) {
+      _c.repeat(reverse: true);
+    } else if (!widget.thinking && _c.isAnimating) {
+      _c
+        ..stop()
+        ..value = 0;
+    }
   }
 
   @override
@@ -43,46 +43,18 @@ class _AiOrbState extends State<AiOrb> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final reduced = Motion.reduced(context);
     final s = widget.size;
-    return AnimatedBuilder(
-      animation: _c,
-      builder: (context, _) {
-        final t = reduced ? 0.0 : _c.value;
-        final breath = widget.thinking && !reduced ? (math.sin(t * math.pi * 4) + 1) / 2 : 0.0;
-        return Container(
-          width: s,
-          height: s,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: SweepGradient(
-              transform: GradientRotation(t * 2 * math.pi),
-              colors: [AppColors.gold, AppColors.teal, AppColors.navyLight, AppColors.gold],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: 0.20 + 0.25 * breath),
-                blurRadius: s * (0.25 + 0.35 * breath),
-                spreadRadius: s * 0.02 * breath,
-              ),
-            ],
-          ),
-          child: Center(
-            child: Container(
-              width: s * 0.78,
-              height: s * 0.78,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  center: const Alignment(-0.35, -0.4),
-                  colors: [Colors.white.withValues(alpha: 0.35), Colors.white.withValues(alpha: 0)],
-                ),
-              ),
-              child: Icon(Icons.auto_awesome, size: s * 0.46, color: Colors.white),
-            ),
-          ),
-        );
-      },
+    return Container(
+      width: s,
+      height: s,
+      decoration: BoxDecoration(
+        color: AppColors.isDark ? AppColors.surfaceSoft : AppColors.ink,
+        shape: BoxShape.circle,
+      ),
+      child: FadeTransition(
+        opacity: Tween(begin: 1.0, end: 0.45).animate(_c),
+        child: Icon(Icons.auto_awesome, size: s * 0.5, color: Colors.white),
+      ),
     );
   }
 }
