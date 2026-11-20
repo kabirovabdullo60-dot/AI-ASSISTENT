@@ -15,8 +15,6 @@ import '../viewmodels/history_view_model.dart';
 import '../core/storage/debt_storage.dart';
 import '../core/storage/personal_finance_storage.dart';
 import '../models/money_transaction_kind.dart';
-import '../services/market_service.dart';
-import '../viewmodels/currencies_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/debts_view_model.dart';
 import '../viewmodels/session_view_model.dart';
@@ -31,12 +29,12 @@ import '../widgets/bottom_nav_item.dart';
 import '../widgets/quick_action_cell.dart';
 import 'history_view.dart';
 import 'chat_view.dart';
-import 'currencies_view.dart';
 import 'debts_view.dart';
 import 'employee_form_view.dart';
 import 'expense_form_view.dart';
 import 'home_view.dart';
 import 'money_transaction_form_view.dart';
+import 'money_transactions_view.dart';
 import 'more_view.dart';
 import 'notifications_view.dart';
 import 'payroll_view.dart';
@@ -48,7 +46,7 @@ import 'store_form_view.dart';
 import 'stores_view.dart';
 
 /// The app after login: a personal accountant first. Bottom bar:
-/// Главная · Валюты · [+] · Долги · Ещё. Home is "Мои финансы"; the
+/// Главная · Операции · [+] · Долги · Ещё. Home is "Мои финансы"; the
 /// business (stores, sales, employees, salaries) shows up — on home, in
 /// "+" and in "Ещё" — once there is a store.
 class ShellView extends StatefulWidget {
@@ -60,9 +58,6 @@ class ShellView extends StatefulWidget {
 
 class _ShellViewState extends State<ShellView> {
   int _index = 0;
-
-  /// The tabs, in the order of the bottom bar.
-  static const _currenciesTab = 1;
 
   late final _dashboard = DashboardViewModel(
     context.read<ReportsService>(),
@@ -88,12 +83,6 @@ class _ShellViewState extends State<ShellView> {
     context.read<DebtStorage>(),
     context.read<SessionViewModel>().user?.id,
   )..load();
-
-  /// The "Валюты" tab, loaded the first time it is opened.
-  CurrenciesViewModel? _currenciesVm;
-  CurrenciesViewModel get _currencies =>
-      _currenciesVm ??= CurrenciesViewModel(context.read<MarketService>())
-        ..load();
 
   /// Created the first time the history is opened.
   HistoryViewModel? _historyVm;
@@ -135,7 +124,6 @@ class _ShellViewState extends State<ShellView> {
     _salesVm?.dispose();
     _payrollVm?.dispose();
     _historyVm?.dispose();
-    _currenciesVm?.dispose();
     _debts.dispose();
     _notifications.dispose();
     super.dispose();
@@ -327,13 +315,6 @@ class _ShellViewState extends State<ShellView> {
           p.primaryLight,
           () => _open(const EmployeeFormView()),
         ),
-        (
-          Icons.history_rounded,
-          l10n.activityHistory,
-          p.warning,
-          p.warningLight,
-          _openHistory,
-        ),
       ],
       // A store starts the business part.
       (
@@ -402,9 +383,9 @@ class _ShellViewState extends State<ShellView> {
         l10n.navHome,
       ),
       (
-        Icons.currency_exchange_rounded,
-        Icons.currency_exchange_rounded,
-        l10n.navCurrencies,
+        Icons.receipt_long_outlined,
+        Icons.receipt_long_rounded,
+        l10n.navOperations,
       ),
       (
         Icons.account_balance_wallet_outlined,
@@ -447,18 +428,18 @@ class _ShellViewState extends State<ShellView> {
               onOpenNotifications: _openNotifications,
             ),
           ),
-          // Built (and loaded) only once the tab is opened.
-          if (_index == _currenciesTab || _currenciesVm != null)
-            ChangeNotifierProvider.value(
-              value: _currencies,
-              child: const CurrenciesView(),
-            )
-          else
-            const SizedBox.shrink(),
+          ChangeNotifierProvider.value(
+            value: _personal,
+            child: const MoneyTransactionsView(),
+          ),
           ChangeNotifierProvider.value(value: _debts, child: const DebtsView()),
           ChangeNotifierProvider.value(
             value: _personal,
-            child: MoreView(onChanged: _refreshAll, hasBusiness: _hasBusiness),
+            child: MoreView(
+              onChanged: _refreshAll,
+              onOpenHistory: _openHistory,
+              hasBusiness: _hasBusiness,
+            ),
           ),
         ],
       ),

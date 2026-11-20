@@ -634,5 +634,10 @@
   "morePersonal": "Пули ман",
   "moreOperationsHint": "Ҳамаи даромад, хароҷот ва интиқолҳо",
   "assistantSuggestSpending": "Ман бештар ба чӣ харҷ мекунам?",
-  "assistantSuggestMonth": "Дар ин моҳ чӣ қадар харҷ кардам?"
+  "assistantSuggestMonth": "Дар ин моҳ чӣ қадар харҷ кардам?",
+  "moreReportsAllHint": "Фоида, ҳисоботҳо дар Excel, таърихи тағйирот",
+  "moreCurrenciesHint": "Қурбҳо, табдилдиҳанда, крипто",
+  "reportsProfitHint": "Муқоисаи мағозаҳо, маоши сол",
+  "reportsHistoryHint": "Ҳамаи тағйирот: фурӯш, хароҷот, маош",
+  "navOperations": "Амалиётҳо"
 }

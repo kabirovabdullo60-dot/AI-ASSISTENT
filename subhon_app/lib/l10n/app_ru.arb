@@ -634,5 +634,10 @@
   "morePersonal": "Мои деньги",
   "moreOperationsHint": "Все доходы, расходы и переводы",
   "assistantSuggestSpending": "На что я трачу больше всего?",
-  "assistantSuggestMonth": "Сколько я потратил в этом месяце?"
+  "assistantSuggestMonth": "Сколько я потратил в этом месяце?",
+  "moreReportsAllHint": "Прибыль, выписки в Excel, история изменений",
+  "moreCurrenciesHint": "Курсы, конвертер, крипта",
+  "reportsProfitHint": "Сравнение магазинов, зарплаты за год",
+  "reportsHistoryHint": "Все изменения: продажи, расходы, зарплаты",
+  "navOperations": "Операции"
 }

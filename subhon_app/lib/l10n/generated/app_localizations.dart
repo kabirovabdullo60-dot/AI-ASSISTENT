@@ -3909,6 +3909,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'How much did I spend this month?'**
   String get assistantSuggestMonth;
+
+  /// No description provided for @moreReportsAllHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Profit, statements in Excel, history of changes'**
+  String get moreReportsAllHint;
+
+  /// No description provided for @moreCurrenciesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Rates, converter, crypto'**
+  String get moreCurrenciesHint;
+
+  /// No description provided for @reportsProfitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Stores compared, salaries for the year'**
+  String get reportsProfitHint;
+
+  /// No description provided for @reportsHistoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Every change: sales, expenses, salaries'**
+  String get reportsHistoryHint;
+
+  /// No description provided for @navOperations.
+  ///
+  /// In en, this message translates to:
+  /// **'Operations'**
+  String get navOperations;
 }
 
 class _AppLocalizationsDelegate

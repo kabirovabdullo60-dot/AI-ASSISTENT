@@ -110,3 +110,10 @@ Future<void> openBusiness(WidgetTester tester) async {
   await tester.tap(open);
   await tester.pumpAndSettle();
 }
+
+/// "Ещё" → "Отчёты" (the business reports) → [item].
+Future<void> openReport(WidgetTester tester, String item) async {
+  await tapText(tester, 'Ещё');
+  await tapText(tester, 'Отчёты');
+  await tapText(tester, item);
+}

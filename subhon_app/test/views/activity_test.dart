@@ -139,7 +139,7 @@ void main() {
     expect(find.textContaining('+1\u00a0250,50 TJS'), findsOneWidget);
   });
 
-  testWidgets('"+" → "История" opens the history; "Валюты" is an empty tab', (
+  testWidgets('Ещё → Отчёты → История opens the history; "Операции" is a tab', (
     tester,
   ) async {
     final backend = FakeBackend()
@@ -152,15 +152,15 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tester.tap(find.byTooltip('Добавить'));
-    await tester.pumpAndSettle();
-    await tapText(tester, 'История');
+    await openReport(tester, 'История');
     expect(find.widgetWithText(AppBar, 'История'), findsOneWidget);
     expect(find.text('Продажа'), findsOneWidget);
 
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
-    await tapText(tester, 'Валюты');
-    expect(find.widgetWithText(AppBar, 'Валюты'), findsOneWidget);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    await tapText(tester, 'Операции');
+    expect(find.widgetWithText(AppBar, 'Операции'), findsOneWidget);
   });
 }

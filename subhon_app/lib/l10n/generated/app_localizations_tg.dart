@@ -2115,4 +2115,20 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get assistantSuggestMonth => 'Дар ин моҳ чӣ қадар харҷ кардам?';
+
+  @override
+  String get moreReportsAllHint =>
+      'Фоида, ҳисоботҳо дар Excel, таърихи тағйирот';
+
+  @override
+  String get moreCurrenciesHint => 'Қурбҳо, табдилдиҳанда, крипто';
+
+  @override
+  String get reportsProfitHint => 'Муқоисаи мағозаҳо, маоши сол';
+
+  @override
+  String get reportsHistoryHint => 'Ҳамаи тағйирот: фурӯш, хароҷот, маош';
+
+  @override
+  String get navOperations => 'Амалиётҳо';
 }

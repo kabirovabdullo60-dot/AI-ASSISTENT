@@ -2123,4 +2123,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantSuggestMonth => 'How much did I spend this month?';
+
+  @override
+  String get moreReportsAllHint =>
+      'Profit, statements in Excel, history of changes';
+
+  @override
+  String get moreCurrenciesHint => 'Rates, converter, crypto';
+
+  @override
+  String get reportsProfitHint => 'Stores compared, salaries for the year';
+
+  @override
+  String get reportsHistoryHint => 'Every change: sales, expenses, salaries';
+
+  @override
+  String get navOperations => 'Operations';
 }

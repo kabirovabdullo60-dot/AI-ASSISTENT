@@ -2130,4 +2130,20 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get assistantSuggestMonth => 'Сколько я потратил в этом месяце?';
+
+  @override
+  String get moreReportsAllHint =>
+      'Прибыль, выписки в Excel, история изменений';
+
+  @override
+  String get moreCurrenciesHint => 'Курсы, конвертер, крипта';
+
+  @override
+  String get reportsProfitHint => 'Сравнение магазинов, зарплаты за год';
+
+  @override
+  String get reportsHistoryHint => 'Все изменения: продажи, расходы, зарплаты';
+
+  @override
+  String get navOperations => 'Операции';
 }

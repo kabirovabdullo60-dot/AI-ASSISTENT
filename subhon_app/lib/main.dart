@@ -9,6 +9,7 @@ import 'core/network/api_client.dart';
 import 'core/storage/app_lock_storage.dart';
 import 'core/storage/chat_history_storage.dart';
 import 'core/storage/debt_storage.dart';
+import 'core/storage/intro_storage.dart';
 import 'core/storage/personal_finance_storage.dart';
 import 'core/storage/locale_storage.dart';
 import 'core/storage/secure_app_lock_storage.dart';
@@ -53,7 +54,8 @@ import 'widgets/intro_overlay.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
-  runApp(const MobileApp());
+  final intro = await const IntroStorage().firstLaunch();
+  runApp(MobileApp(showIntro: intro));
 }
 
 /// The app root: services (one [ApiClient] for all), the session and the
@@ -73,6 +75,7 @@ class MobileApp extends StatefulWidget {
     this.market,
     this.debts,
     this.personal,
+    this.showIntro = false,
     super.key,
   });
 
@@ -106,6 +109,9 @@ class MobileApp extends StatefulWidget {
 
   /// The personal accountant's data; tests pass one in memory.
   final PersonalFinanceStorage? personal;
+
+  /// The launch intro plays only the first time the app is opened.
+  final bool showIntro;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -207,10 +213,9 @@ class _MobileAppState extends State<MobileApp> {
             final language = Localizations.localeOf(context).languageCode;
             _api.language = () => language;
             return AppLockGate(
-              child: IntroOverlay(
-                title: context.l10n.introTitle,
-                child: child!,
-              ),
+              child: widget.showIntro
+                  ? IntroOverlay(title: context.l10n.introTitle, child: child!)
+                  : child!,
             );
           },
           home: const SessionGateView(),

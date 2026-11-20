@@ -1091,5 +1091,10 @@
   "morePersonal": "My money",
   "moreOperationsHint": "Every income, expense and transfer",
   "assistantSuggestSpending": "What do I spend the most on?",
-  "assistantSuggestMonth": "How much did I spend this month?"
+  "assistantSuggestMonth": "How much did I spend this month?",
+  "moreReportsAllHint": "Profit, statements in Excel, history of changes",
+  "moreCurrenciesHint": "Rates, converter, crypto",
+  "reportsProfitHint": "Stores compared, salaries for the year",
+  "reportsHistoryHint": "Every change: sales, expenses, salaries",
+  "navOperations": "Operations"
 }

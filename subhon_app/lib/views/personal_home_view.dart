@@ -82,11 +82,6 @@ class _PersonalHomeViewState extends State<PersonalHomeView> {
       appBar: AppBar(
         title: Text(l10n.navHome),
         actions: [
-          IconButton(
-            tooltip: l10n.pfOperations,
-            onPressed: () => _push(const MoneyTransactionsView()),
-            icon: const Icon(Icons.history_rounded),
-          ),
           if (widget.hasBusiness)
             NotificationBell(
               unread: notifications.unreadCount,

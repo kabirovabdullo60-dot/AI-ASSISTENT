@@ -30,8 +30,7 @@ void main() {
       _backend(),
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tapText(tester, 'Ещё');
-    await tapText(tester, 'Отчёты');
+    await openReport(tester, 'Прибыль');
     expect(find.text('Прибыль'), findsWidgets);
     expect(find.textContaining('82 028'), findsOneWidget);
     expect(find.textContaining('Маржа'), findsOneWidget);

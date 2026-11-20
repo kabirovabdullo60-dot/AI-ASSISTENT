@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
-import 'accounting_rain.dart';
 
 /// The header of the auth page: soft rings of light around [child] (the
-/// jelly mascot) and the rain of accountant's things. Purple for sign-up
+/// jelly mascot). Purple for sign-up
 /// or, with [light], soft lavender for sign-in; switching blends smoothly.
 class AuthHero extends StatelessWidget {
   const AuthHero({required this.child, this.light = false, super.key});
@@ -78,7 +77,6 @@ class AuthHero extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          const AccountingRain(),
           SafeArea(
             bottom: false,
             child: Align(alignment: const Alignment(0, 0.1), child: child),

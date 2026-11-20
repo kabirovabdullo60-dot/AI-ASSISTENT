@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../core/theme/app_dimensions.dart';
 import '../l10n/l10n.dart';
+import '../services/market_service.dart';
+import '../viewmodels/currencies_view_model.dart';
 import '../viewmodels/personal_finance_view_model.dart';
 import '../viewmodels/session_view_model.dart';
 import '../widgets/app_button.dart';
@@ -10,21 +12,29 @@ import '../widgets/app_feedback.dart';
 import '../widgets/section_header.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/settings_row.dart';
+import 'business_reports_view.dart';
 import 'chat_view.dart';
+import 'currencies_view.dart';
 import 'employees_view.dart';
 import 'expenses_view.dart';
 import 'money_accounts_view.dart';
 import 'money_transactions_view.dart';
 import 'profile_view.dart';
 import 'recurring_payments_view.dart';
-import 'reports_view.dart';
-import 'statements_view.dart';
 import 'store_form_view.dart';
 import 'stores_view.dart';
 
 /// "Ещё": stores, employees, reports, profile and settings, sign out.
 class MoreView extends StatelessWidget {
-  const MoreView({required this.onChanged, this.hasBusiness = true, super.key});
+  const MoreView({
+    required this.onChanged,
+    required this.onOpenHistory,
+    this.hasBusiness = true,
+    super.key,
+  });
+
+  /// The business's history of changes (its view model lives in the shell).
+  final VoidCallback onOpenHistory;
 
   /// Data may have changed in a section: the tabs reload.
   final VoidCallback onChanged;
@@ -99,6 +109,20 @@ class MoreView extends StatelessWidget {
                     _openPersonal(context, const RecurringPaymentsView()),
               ),
               SettingsRow(
+                icon: Icons.currency_exchange_rounded,
+                title: l10n.navCurrencies,
+                hint: l10n.moreCurrenciesHint,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => ChangeNotifierProvider(
+                      create: (c) =>
+                          CurrenciesViewModel(c.read<MarketService>())..load(),
+                      child: const CurrenciesView(),
+                    ),
+                  ),
+                ),
+              ),
+              SettingsRow(
                 icon: Icons.auto_awesome_outlined,
                 title: l10n.assistantTitle,
                 hint: l10n.moreAssistantHint,
@@ -152,16 +176,13 @@ class MoreView extends StatelessWidget {
                   onTap: () => _open(context, const ExpensesView()),
                 ),
                 SettingsRow(
-                  icon: Icons.description_outlined,
-                  title: l10n.stmtTitle,
-                  hint: l10n.moreStatementsHint,
-                  onTap: () => _open(context, const StatementsView()),
-                ),
-                SettingsRow(
                   icon: Icons.insights_outlined,
                   title: l10n.navReports,
-                  hint: l10n.moreReportsHint,
-                  onTap: () => _open(context, const ReportsView()),
+                  hint: l10n.moreReportsAllHint,
+                  onTap: () => _open(
+                    context,
+                    BusinessReportsView(onOpenHistory: onOpenHistory),
+                  ),
                 ),
               ],
             ),

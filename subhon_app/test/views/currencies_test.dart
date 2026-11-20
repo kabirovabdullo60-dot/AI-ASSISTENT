@@ -81,6 +81,7 @@ void main() {
       market: _market(),
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
+    await tapText(tester, 'Ещё');
     await tapText(tester, 'Валюты');
 
     expect(find.text('Конвертер'), findsOneWidget);

@@ -131,8 +131,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tapText(tester, 'Ещё');
-    await tapText(tester, 'Отчёты');
+    await openReport(tester, 'Прибыль');
     expect(find.text('Не удалось загрузить'), findsOneWidget);
     online = true;
     await tapText(tester, 'Повторить');
