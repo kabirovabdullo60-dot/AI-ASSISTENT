@@ -2334,4 +2334,42 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get opsTotalExpense => 'Расходы, TJS';
+
+  @override
+  String get bkTitle => 'Резервная копия';
+
+  @override
+  String get bkHint => 'Сохранить в файл и восстановить';
+
+  @override
+  String get bkAbout =>
+      'Личные финансы и долги хранятся только на этом телефоне. Время от времени сохраняйте копию в файл (в «Файлы», iCloud или «Избранное» Telegram), чтобы не потерять их вместе с телефоном.';
+
+  @override
+  String get bkSave => 'Сохранить копию в файл';
+
+  @override
+  String get bkRestore => 'Восстановить из файла';
+
+  @override
+  String get bkBadFile => 'Этот файл — не резервная копия этого приложения.';
+
+  @override
+  String get bkConfirmTitle => 'Восстановить копию?';
+
+  @override
+  String bkConfirmMessage(
+    String date,
+    int accounts,
+    int operations,
+    int debts,
+  ) {
+    return 'От $date: счетов $accounts, операций $operations, долгов $debts. То, что сейчас на телефоне, будет заменено.';
+  }
+
+  @override
+  String get bkRestoreAction => 'Восстановить';
+
+  @override
+  String get bkRestored => 'Восстановлено';
 }

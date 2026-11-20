@@ -12,6 +12,7 @@ import '../widgets/app_feedback.dart';
 import '../widgets/section_header.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/settings_row.dart';
+import 'backup_view.dart';
 import 'business_reports_view.dart';
 import 'chat_view.dart';
 import 'currencies_view.dart';
@@ -30,12 +31,16 @@ class MoreView extends StatelessWidget {
   const MoreView({
     required this.onChanged,
     required this.onOpenHistory,
+    this.onRestored,
     this.hasBusiness = true,
     super.key,
   });
 
   /// The business's history of changes (its view model lives in the shell).
   final VoidCallback onOpenHistory;
+
+  /// A backup was restored: the personal screens and debts reload.
+  final VoidCallback? onRestored;
 
   /// Data may have changed in a section: the tabs reload.
   final VoidCallback onChanged;
@@ -114,6 +119,17 @@ class MoreView extends StatelessWidget {
                 title: l10n.goalTitle,
                 hint: l10n.goalHint,
                 onTap: () => _openPersonal(context, const SavingsGoalsView()),
+              ),
+              SettingsRow(
+                icon: Icons.cloud_upload_outlined,
+                title: l10n.bkTitle,
+                hint: l10n.bkHint,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        BackupView(onRestored: onRestored ?? onChanged),
+                  ),
+                ),
               ),
               SettingsRow(
                 icon: Icons.currency_exchange_rounded,

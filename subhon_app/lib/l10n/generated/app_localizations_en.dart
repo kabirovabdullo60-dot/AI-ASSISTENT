@@ -2327,4 +2327,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get opsTotalExpense => 'Expenses, TJS';
+
+  @override
+  String get bkTitle => 'Backup';
+
+  @override
+  String get bkHint => 'Save to a file and restore';
+
+  @override
+  String get bkAbout =>
+      'Personal finances and debts are kept only on this phone. Save a backup file now and then (to Files, iCloud or Telegram “Saved”) so they are not lost with the phone.';
+
+  @override
+  String get bkSave => 'Save a backup file';
+
+  @override
+  String get bkRestore => 'Restore from a file';
+
+  @override
+  String get bkBadFile => 'This file is not a backup of this app.';
+
+  @override
+  String get bkConfirmTitle => 'Restore the backup?';
+
+  @override
+  String bkConfirmMessage(
+    String date,
+    int accounts,
+    int operations,
+    int debts,
+  ) {
+    return 'From $date: $accounts accounts, $operations operations, $debts debts. What is on the phone now is replaced.';
+  }
+
+  @override
+  String get bkRestoreAction => 'Restore';
+
+  @override
+  String get bkRestored => 'Restored';
 }

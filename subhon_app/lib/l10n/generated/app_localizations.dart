@@ -4269,6 +4269,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expenses, TJS'**
   String get opsTotalExpense;
+
+  /// No description provided for @bkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get bkTitle;
+
+  /// No description provided for @bkHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to a file and restore'**
+  String get bkHint;
+
+  /// No description provided for @bkAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal finances and debts are kept only on this phone. Save a backup file now and then (to Files, iCloud or Telegram “Saved”) so they are not lost with the phone.'**
+  String get bkAbout;
+
+  /// No description provided for @bkSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a backup file'**
+  String get bkSave;
+
+  /// No description provided for @bkRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from a file'**
+  String get bkRestore;
+
+  /// No description provided for @bkBadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is not a backup of this app.'**
+  String get bkBadFile;
+
+  /// No description provided for @bkConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore the backup?'**
+  String get bkConfirmTitle;
+
+  /// No description provided for @bkConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'From {date}: {accounts} accounts, {operations} operations, {debts} debts. What is on the phone now is replaced.'**
+  String bkConfirmMessage(String date, int accounts, int operations, int debts);
+
+  /// No description provided for @bkRestoreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get bkRestoreAction;
+
+  /// No description provided for @bkRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored'**
+  String get bkRestored;
 }
 
 class _AppLocalizationsDelegate

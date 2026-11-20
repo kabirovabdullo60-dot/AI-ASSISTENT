@@ -10,7 +10,9 @@ import 'core/storage/app_lock_storage.dart';
 import 'core/storage/chat_history_storage.dart';
 import 'core/storage/debt_storage.dart';
 import 'core/storage/intro_storage.dart';
+import 'services/device_file_pick_service.dart';
 import 'services/device_reminder_service.dart';
+import 'services/file_pick_service.dart';
 import 'services/reminder_service.dart';
 import 'core/storage/personal_finance_storage.dart';
 import 'core/storage/locale_storage.dart';
@@ -79,6 +81,7 @@ class MobileApp extends StatefulWidget {
     this.personal,
     this.showIntro = false,
     this.reminders,
+    this.filePick,
     super.key,
   });
 
@@ -118,6 +121,9 @@ class MobileApp extends StatefulWidget {
 
   /// Payment and debt reminders on the phone; tests pass a fake.
   final ReminderService? reminders;
+
+  /// Picking a backup file; tests pass a fake.
+  final FilePickService? filePick;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -165,6 +171,9 @@ class _MobileAppState extends State<MobileApp> {
         create: (_) => widget.fileShare ?? DeviceFileShareService(),
       ),
       Provider(create: (_) => widget.market ?? MarketService()),
+      Provider<FilePickService>(
+        create: (_) => widget.filePick ?? const DeviceFilePickService(),
+      ),
       Provider<ReminderService>(
         create: (_) => widget.reminders ?? DeviceReminderService(),
       ),

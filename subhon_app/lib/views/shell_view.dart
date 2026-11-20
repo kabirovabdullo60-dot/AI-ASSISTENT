@@ -501,6 +501,10 @@ class _ShellViewState extends State<ShellView> {
             child: MoreView(
               onChanged: _refreshAll,
               onOpenHistory: _openHistory,
+              onRestored: () {
+                _personal.load();
+                _debts.load();
+              },
               hasBusiness: _hasBusiness,
             ),
           ),

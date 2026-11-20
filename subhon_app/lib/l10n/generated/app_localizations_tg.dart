@@ -2319,4 +2319,42 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get opsTotalExpense => 'Хароҷот, TJS';
+
+  @override
+  String get bkTitle => 'Нусхаи эҳтиётӣ';
+
+  @override
+  String get bkHint => 'Дар файл нигоҳ доштан ва барқарор кардан';
+
+  @override
+  String get bkAbout =>
+      'Молияи шахсӣ ва қарзҳо танҳо дар ҳамин телефон нигоҳ дошта мешаванд. Гоҳ-гоҳ нусхаро дар файл нигоҳ доред.';
+
+  @override
+  String get bkSave => 'Нусхаро дар файл нигоҳ доштан';
+
+  @override
+  String get bkRestore => 'Аз файл барқарор кардан';
+
+  @override
+  String get bkBadFile => 'Ин файл нусхаи эҳтиётии ин барнома нест.';
+
+  @override
+  String get bkConfirmTitle => 'Нусхаро барқарор кунем?';
+
+  @override
+  String bkConfirmMessage(
+    String date,
+    int accounts,
+    int operations,
+    int debts,
+  ) {
+    return 'Аз $date: ҳисоб $accounts, амалиёт $operations, қарз $debts. Он чи ҳоло дар телефон аст, иваз мешавад.';
+  }
+
+  @override
+  String get bkRestoreAction => 'Барқарор кардан';
+
+  @override
+  String get bkRestored => 'Барқарор шуд';
 }

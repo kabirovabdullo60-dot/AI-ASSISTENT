@@ -1238,5 +1238,31 @@
   "opsColType": "Type",
   "opsColTo": "To account",
   "opsTotalIncome": "Income, TJS",
-  "opsTotalExpense": "Expenses, TJS"
+  "opsTotalExpense": "Expenses, TJS",
+  "bkTitle": "Backup",
+  "bkHint": "Save to a file and restore",
+  "bkAbout": "Personal finances and debts are kept only on this phone. Save a backup file now and then (to Files, iCloud or Telegram “Saved”) so they are not lost with the phone.",
+  "bkSave": "Save a backup file",
+  "bkRestore": "Restore from a file",
+  "bkBadFile": "This file is not a backup of this app.",
+  "bkConfirmTitle": "Restore the backup?",
+  "bkConfirmMessage": "From {date}: {accounts} accounts, {operations} operations, {debts} debts. What is on the phone now is replaced.",
+  "@bkConfirmMessage": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "accounts": {
+        "type": "int"
+      },
+      "operations": {
+        "type": "int"
+      },
+      "debts": {
+        "type": "int"
+      }
+    }
+  },
+  "bkRestoreAction": "Restore",
+  "bkRestored": "Restored"
 }
