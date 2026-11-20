@@ -562,5 +562,6 @@
   "actionEditTitle": "Исправьте перед подтверждением",
   "actionSaveConfirm": "Сохранить и подтвердить",
   "actionSureTitle": "Вы уверены?",
-  "actionSureBody": "Будет удалено:\n{summary}"
+  "actionSureBody": "Будет удалено:\n{summary}",
+  "colWorkedDays": "Дней в месяце"
 }

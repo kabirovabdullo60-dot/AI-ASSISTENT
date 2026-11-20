@@ -582,10 +582,6 @@ class _ShareCard extends StatelessWidget {
                 ],
               ),
             ),
-          Text(
-            tr.registersSynced(vm.activeCount),
-            style: TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
-          ),
         ],
       ),
     );

@@ -147,6 +147,7 @@ extension EnumLabels on AppLocalizations {
     'SALE_SPLIT_MISMATCH' => errSplitMismatch,
     'INTERNAL_ERROR' => errServer,
     'ACTION_NOT_FOUND' => errActionNotFound,
+    'CONVERSATION_NOT_FOUND' => errNotFound,
     'ACTION_EXPIRED' => actionExpired,
     'ACTION_ALREADY_HANDLED' => errActionHandled,
     _ => errUnknown(code),
@@ -155,6 +156,8 @@ extension EnumLabels on AppLocalizations {
 
 /// Shows a translated error (or success) message at the bottom of the screen.
 void showResult(BuildContext context, String? errorCode, {required String success}) {
+  // A second click while the first request still runs: nothing to report.
+  if (errorCode == 'BUSY') return;
   final tr = context.l10n;
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()

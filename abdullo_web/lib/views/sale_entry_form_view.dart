@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/format.dart';
@@ -200,20 +199,6 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             label: Text(
               widget.sale == null ? tr.saveSaleRecord : tr.saveChanges,
               style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text.rich(
-            TextSpan(
-              style: TextStyle(fontSize: 11.5, color: AppColors.muted),
-              children: [
-                WidgetSpan(child: Icon(Icons.sync, size: 13, color: AppColors.green)),
-                TextSpan(text: tr.syncsTo),
-                TextSpan(
-                  text: ApiConstants.sales,
-                  style: TextStyle(color: AppColors.ink),
-                ),
-              ],
             ),
           ),
         ],

@@ -1294,5 +1294,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "colWorkedDays": "Days this month"
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
@@ -694,11 +693,6 @@ class _ActivityCard extends StatelessWidget {
             children: [
               if (items.isEmpty) Padding(padding: const EdgeInsets.symmetric(vertical: 20), child: Text(tr.noActivity)),
               for (final a in items) _ActivityRow(activity: a, currency: currency, compact: compact),
-              const Divider(height: 24),
-              Text(
-                tr.connectedTo(ApiConstants.mainEndpoints.join(', ')),
-                style: TextStyle(fontSize: 11, color: AppColors.muted),
-              ),
             ],
           );
         },

@@ -562,5 +562,6 @@
   "actionEditTitle": "Пеш аз тасдиқ ислоҳ кунед",
   "actionSaveConfirm": "Захира ва тасдиқ",
   "actionSureTitle": "Боварӣ доред?",
-  "actionSureBody": "Ин нест карда мешавад:\n{summary}"
+  "actionSureBody": "Ин нест карда мешавад:\n{summary}",
+  "colWorkedDays": "Рӯзҳо дар моҳ"
 }

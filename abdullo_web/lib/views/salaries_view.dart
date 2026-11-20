@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../core/l10n/l10n.dart';
-import '../core/constants/api_constants.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -61,11 +60,7 @@ class SalariesView extends StatelessWidget {
         final page = vm.pageItems(rows);
         final month = '${formatMonth(vm.month)} ${vm.month.year}';
         return PageBody(
-          eyebrow: [
-            tr.payrollEyebrow,
-            tr.fiscalYear('${vm.month.year}'),
-            tr.ledger(ApiConstants.payroll.toUpperCase()),
-          ],
+          eyebrow: [tr.payrollEyebrow, tr.fiscalYear('${vm.month.year}')],
           title: tr.payrollTitle,
           subtitle: tr.payrollSubtitle,
           actions: [
@@ -139,7 +134,7 @@ class SalariesView extends StatelessWidget {
                       columns: [
                         tr.colEmployee,
                         tr.colAssignedStore,
-                        tr.colTenure,
+                        tr.colWorkedDays, // `workedDays` = days employed in this month
                         tr.colMonthlySalary,
                         tr.colDisbursed,
                         tr.colRemaining,
@@ -362,7 +357,6 @@ class _BudgetCard extends StatelessWidget {
     final rows = vm.budgetByStore;
     final max = rows.isEmpty ? 1.0 : rows.first.total;
     final colors = [AppColors.navy, AppColors.orange, Color(0xFF4B5675), Color(0xFFB8C0D6)];
-    final now = DateTime.now();
     return SectionCard(
       title: tr.budgetTitle,
       badge: StatusBadge(
@@ -402,18 +396,6 @@ class _BudgetCard extends StatelessWidget {
                 ],
               ),
             ),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(
-                child: Text(tr.erpSynced, style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
-              ),
-              Text(
-                '${formatDay(now)}, ${formatTime(now)}',
-                style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
         ],
       ),
     );
@@ -498,18 +480,6 @@ class _DisbursementsCard extends StatelessWidget {
                 ],
               ),
             ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(10)),
-            child: Row(
-              children: [
-                Icon(Icons.shield_outlined, color: AppColors.orange),
-                SizedBox(width: 10),
-                Expanded(child: Text(tr.bankNote, style: TextStyle(fontSize: 12.5))),
-              ],
-            ),
-          ),
         ],
       ),
     );
