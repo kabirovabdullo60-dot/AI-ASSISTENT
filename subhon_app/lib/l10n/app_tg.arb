@@ -660,5 +660,22 @@
   "pfCurrencyLocked": "Ҳисоб амалиёт дорад — асъорро иваз кардан мумкин нест.",
   "pfReceived": "Ба ҳисоб омад",
   "pfInTjsNote": "Ҳисобҳои асъорӣ бо қурби имрӯза ба сомонӣ ҳисоб шудаанд.",
-  "pfRatesMissing": "Қурбҳо ҳанӯз бор нашуданд."
+  "pfRatesMissing": "Қурбҳо ҳанӯз бор нашуданд.",
+  "goalTitle": "Ҳадафҳои пасандоз",
+  "goalHint": "Мошин, хона, сафар…",
+  "goalNew": "Ҳадафи нав",
+  "goalName": "Барои чӣ ҷамъ мекунем",
+  "goalNameHint": "Барои мошин",
+  "goalTarget": "Чӣ қадар лозим",
+  "goalDeadline": "То кай",
+  "goalNoDeadline": "Бе мӯҳлат",
+  "goalTopUp": "Пур кардан",
+  "goalSaved": "{saved} аз {target}",
+  "goalReached": "Ба ҳадаф расидед!",
+  "goalLeft": "Монд {amount} · то {date}",
+  "goalLeftNoDate": "Монд {amount}",
+  "goalPerMonth": "≈ {amount} дар як моҳ",
+  "goalEmpty": "Ҳоло ҳадаф нест. Пули ҳар ҳадаф дар ҳисоби алоҳида меистад.",
+  "goalDeleteTitle": "Ҳадафро нест кунем?",
+  "goalDeleteMessage": "Ҳисоб ва пули он мемонад."
 }

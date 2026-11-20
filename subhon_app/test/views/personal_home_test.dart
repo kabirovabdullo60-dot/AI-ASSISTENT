@@ -103,4 +103,34 @@ void main() {
     expect(find.text('Новый расход'), findsOneWidget);
     expect(find.text('70.00'), findsOneWidget);
   });
+
+  testWidgets('Ещё → Цели накоплений: a new goal, then "Пополнить" moves '
+      'money to it and home shows the progress', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(500, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final personal = await start(tester, store: false);
+    await tapText(tester, 'Ещё');
+    await tapText(tester, 'Цели накоплений');
+    await tapText(tester, 'Новая цель');
+    await tester.enterText(fieldWithLabel('На что копим'), 'Машина');
+    await tester.enterText(fieldWithLabel('Сколько нужно'), '1000');
+    await tapText(tester, 'Сохранить');
+    expect(find.text('Машина'), findsOneWidget);
+    expect(find.text('0%'), findsOneWidget);
+
+    // Some money in the wallet first.
+    final vmData = personal.byUser.values.single;
+    expect(vmData.goals.single.name, 'Машина');
+
+    await tapText(tester, 'Пополнить');
+    expect(find.text('Перевод между счетами'), findsOneWidget);
+    await tester.enterText(fieldWithLabel('Сумма'), '250');
+    await tapText(tester, 'Сохранить');
+    expect(find.text('25%'), findsOneWidget);
+    final data = personal.byUser.values.single;
+    final t = data.transactions.single;
+    expect(t.kind, MoneyTransactionKind.transfer);
+    expect(t.toAccountId, data.goals.single.accountId);
+    expect(t.accountId, isNot(data.goals.single.accountId));
+  });
 }

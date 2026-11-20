@@ -2206,4 +2206,64 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get pfRatesMissing => 'Қурбҳо ҳанӯз бор нашуданд.';
+
+  @override
+  String get goalTitle => 'Ҳадафҳои пасандоз';
+
+  @override
+  String get goalHint => 'Мошин, хона, сафар…';
+
+  @override
+  String get goalNew => 'Ҳадафи нав';
+
+  @override
+  String get goalName => 'Барои чӣ ҷамъ мекунем';
+
+  @override
+  String get goalNameHint => 'Барои мошин';
+
+  @override
+  String get goalTarget => 'Чӣ қадар лозим';
+
+  @override
+  String get goalDeadline => 'То кай';
+
+  @override
+  String get goalNoDeadline => 'Бе мӯҳлат';
+
+  @override
+  String get goalTopUp => 'Пур кардан';
+
+  @override
+  String goalSaved(String saved, String target) {
+    return '$saved аз $target';
+  }
+
+  @override
+  String get goalReached => 'Ба ҳадаф расидед!';
+
+  @override
+  String goalLeft(String amount, String date) {
+    return 'Монд $amount · то $date';
+  }
+
+  @override
+  String goalLeftNoDate(String amount) {
+    return 'Монд $amount';
+  }
+
+  @override
+  String goalPerMonth(String amount) {
+    return '≈ $amount дар як моҳ';
+  }
+
+  @override
+  String get goalEmpty =>
+      'Ҳоло ҳадаф нест. Пули ҳар ҳадаф дар ҳисоби алоҳида меистад.';
+
+  @override
+  String get goalDeleteTitle => 'Ҳадафро нест кунем?';
+
+  @override
+  String get goalDeleteMessage => 'Ҳисоб ва пули он мемонад.';
 }

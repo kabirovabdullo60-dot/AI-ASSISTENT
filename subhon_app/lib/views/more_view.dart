@@ -21,6 +21,7 @@ import 'money_accounts_view.dart';
 import 'money_transactions_view.dart';
 import 'profile_view.dart';
 import 'recurring_payments_view.dart';
+import 'savings_goals_view.dart';
 import 'store_form_view.dart';
 import 'stores_view.dart';
 
@@ -107,6 +108,12 @@ class MoreView extends StatelessWidget {
                 hint: l10n.pfRecurringHint,
                 onTap: () =>
                     _openPersonal(context, const RecurringPaymentsView()),
+              ),
+              SettingsRow(
+                icon: Icons.savings_outlined,
+                title: l10n.goalTitle,
+                hint: l10n.goalHint,
+                onTap: () => _openPersonal(context, const SavingsGoalsView()),
               ),
               SettingsRow(
                 icon: Icons.currency_exchange_rounded,

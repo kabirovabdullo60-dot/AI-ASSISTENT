@@ -15,11 +15,13 @@ import '../widgets/period_switcher.dart';
 import '../widgets/section_header.dart';
 import '../widgets/share_bar_row.dart';
 import '../widgets/summary_card.dart';
+import 'goal_tile.dart';
 import 'money_accounts_view.dart';
 import 'money_transactions_view.dart';
 import 'quick_entry_view.dart';
 import 'recurring_payment_tile.dart';
 import 'recurring_payments_view.dart';
+import 'savings_goals_view.dart';
 
 /// Home of the personal accountant: my money on all accounts with this
 /// month's income and expenses, the accounts (sideways), coming regular
@@ -263,6 +265,18 @@ class _PersonalHomeViewState extends State<PersonalHomeView> {
                     },
                   ),
                 ),
+                if (vm.goals.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.xl),
+                  SectionHeader(
+                    title: l10n.goalTitle,
+                    actionLabel: l10n.homeShowAllStores,
+                    onAction: () => _push(const SavingsGoalsView()),
+                  ),
+                  for (final g in vm.goals.take(2)) ...[
+                    GoalTile(goal: g),
+                    const SizedBox(height: AppSpacing.sm),
+                  ],
+                ],
                 if (upcoming.isNotEmpty) ...[
                   const SizedBox(height: AppSpacing.xl),
                   SectionHeader(

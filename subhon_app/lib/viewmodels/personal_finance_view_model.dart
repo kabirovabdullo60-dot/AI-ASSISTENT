@@ -9,6 +9,7 @@ import '../models/money_transaction_kind.dart';
 import '../models/money_transaction_model.dart';
 import '../models/personal_finance_model.dart';
 import '../models/recurring_payment_model.dart';
+import '../models/savings_goal_model.dart';
 
 /// The personal accountant: accounts and their balances, income and
 /// expenses (by month and category), transfers, and regular payments.
@@ -187,10 +188,12 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     List<MoneyAccountModel>? accounts,
     List<MoneyTransactionModel>? transactions,
     List<RecurringPaymentModel>? recurring,
+    List<SavingsGoalModel>? goals,
   }) => PersonalFinanceModel(
     accounts: accounts ?? _data.accounts,
     transactions: transactions ?? _data.transactions,
     recurring: recurring ?? _data.recurring,
+    goals: goals ?? _data.goals,
   );
 
   // Accounts.
@@ -264,6 +267,10 @@ class PersonalFinanceViewModel extends ChangeNotifier {
               )
             else
               r,
+        ],
+        goals: [
+          for (final g in _data.goals)
+            if (g.accountId != id) g,
         ],
       ),
     );
@@ -452,12 +459,75 @@ class PersonalFinanceViewModel extends ChangeNotifier {
       if (top.isNotEmpty)
         'Expenses by category: '
             '${[for (final e in top.take(6)) '${e.key.name} ${m(e.value)}'].join(', ')}.',
+      if (_data.goals.isNotEmpty)
+        'Savings goals: '
+            '${[for (final g in _data.goals) '${g.name} ${m(goalSaved(g))} of ${m(g.target)} ${currencyOf(g.accountId)}'].join(', ')}.',
       if (coming.isNotEmpty)
         'Regular payments due: '
             '${[for (final r in coming.take(5)) '${r.name} ${m(r.amount)} on ${d(r.nextDate)}'].join(', ')}.',
       '[Question]',
     ].join('\n');
   }
+
+  // Savings goals.
+
+  List<SavingsGoalModel> get goals => _data.goals;
+
+  /// Saved so far: the balance of the goal's account.
+  double goalSaved(SavingsGoalModel g) => balance(g.accountId);
+
+  /// 0…1.
+  double goalProgress(SavingsGoalModel g) =>
+      g.target <= 0 ? 0 : (goalSaved(g) / g.target).clamp(0, 1).toDouble();
+
+  /// A new goal gets its own savings account (named after it, in
+  /// [currency]) unless [accountId] is given.
+  Future<void> saveGoal({
+    String? id,
+    required String name,
+    required double target,
+    String? accountId,
+    String currency = 'TJS',
+    DateTime? deadline,
+  }) async {
+    var account = accountId;
+    if (account == null) {
+      final created = await addAccount(
+        name: name,
+        kind: MoneyAccountKind.savings,
+        currency: currency,
+      );
+      account = created.id;
+    }
+    final old = _data.goals.where((g) => g.id == id).firstOrNull;
+    final goal = SavingsGoalModel(
+      id: id ?? _id(),
+      name: name.trim(),
+      target: target,
+      accountId: account,
+      createdAt: old?.createdAt ?? _clock(),
+      deadline: deadline,
+    );
+    await _save(
+      _with(
+        goals: [
+          for (final g in _data.goals)
+            if (g.id != goal.id) g,
+          goal,
+        ],
+      ),
+    );
+  }
+
+  /// The goal goes; its account and money stay.
+  Future<void> deleteGoal(String id) => _save(
+    _with(
+      goals: [
+        for (final g in _data.goals)
+          if (g.id != id) g,
+      ],
+    ),
+  );
 
   static String? _opt(String? text) =>
       text == null || text.trim().isEmpty ? null : text.trim();

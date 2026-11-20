@@ -25,6 +25,7 @@ class MoneyTransactionFormView extends StatefulWidget {
     this.kind = MoneyTransactionKind.expense,
     this.initial,
     this.draft,
+    this.toAccountId,
     super.key,
   });
 
@@ -33,6 +34,9 @@ class MoneyTransactionFormView extends StatefulWidget {
 
   /// Filled from a quick phrase ("такси 50"), to be checked and saved.
   final QuickEntryModel? draft;
+
+  /// A transfer straight to this account (topping up a savings goal).
+  final String? toAccountId;
 
   @override
   State<MoneyTransactionFormView> createState() =>
@@ -55,7 +59,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
   late MoneyCategory? _category =
       widget.initial?.category ?? widget.draft?.category;
   late String? _account = widget.initial?.accountId ?? widget.draft?.accountId;
-  late String? _toAccount = widget.initial?.toAccountId;
+  late String? _toAccount = widget.initial?.toAccountId ?? widget.toAccountId;
   late DateTime? _date = widget.initial?.date;
   bool _categoryMissing = false;
 
@@ -73,6 +77,13 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
     _note.dispose();
     super.dispose();
   }
+
+  /// The chosen account, or the first one that isn't the transfer's
+  /// destination.
+  String? _fromAccount(PersonalFinanceViewModel vm) =>
+      _account ??
+      vm.accounts.where((a) => a.id != _toAccount).firstOrNull?.id ??
+      vm.accounts.firstOrNull?.id;
 
   Future<void> _pickAccount(
     PersonalFinanceViewModel vm, {
@@ -102,7 +113,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
     final needsCategory = _kind != MoneyTransactionKind.transfer;
     setState(() => _categoryMissing = needsCategory && _category == null);
     if (!valid || _categoryMissing) return;
-    final account = _account ?? vm.accounts.firstOrNull?.id;
+    final account = _fromAccount(vm);
     if (account == null) return;
     if (_kind == MoneyTransactionKind.transfer &&
         (_toAccount == null || _toAccount == account)) {
@@ -174,7 +185,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
     final p = context.palette;
     final theme = Theme.of(context);
     final vm = context.watch<PersonalFinanceViewModel>();
-    final account = vm.account(_account ?? vm.accounts.firstOrNull?.id);
+    final account = vm.account(_fromAccount(vm));
     final toAccount = vm.account(_toAccount);
     final transfer = _kind == MoneyTransactionKind.transfer;
     final currency = account?.currency ?? 'TJS';

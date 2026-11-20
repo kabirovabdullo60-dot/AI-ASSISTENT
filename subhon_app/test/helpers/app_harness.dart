@@ -90,6 +90,17 @@ Future<void> pumpApp(
 }
 
 Future<void> tapText(WidgetTester tester, String text) async {
+  // Lazy lists build only what is on screen: scroll down until it is.
+  if (find.text(text).evaluate().isEmpty) {
+    final lists = find.byWidgetPredicate(
+      (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+    );
+    await tester.scrollUntilVisible(
+      find.text(text),
+      200,
+      scrollable: lists.last,
+    );
+  }
   final finder = find.text(text).last;
   await tester.ensureVisible(finder);
   await tester.pumpAndSettle();

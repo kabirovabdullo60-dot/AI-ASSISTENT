@@ -660,5 +660,22 @@
   "pfCurrencyLocked": "По счёту есть операции — валюту не изменить.",
   "pfReceived": "Пришло на счёт",
   "pfInTjsNote": "Валютные счета посчитаны в сомони по сегодняшнему курсу.",
-  "pfRatesMissing": "Курсы ещё не загрузились — валютные счета посчитаны без пересчёта."
+  "pfRatesMissing": "Курсы ещё не загрузились — валютные счета посчитаны без пересчёта.",
+  "goalTitle": "Цели накоплений",
+  "goalHint": "Машина, квартира, поездка…",
+  "goalNew": "Новая цель",
+  "goalName": "На что копим",
+  "goalNameHint": "На машину",
+  "goalTarget": "Сколько нужно",
+  "goalDeadline": "К какому сроку",
+  "goalNoDeadline": "Без срока",
+  "goalTopUp": "Пополнить",
+  "goalSaved": "{saved} из {target}",
+  "goalReached": "Цель достигнута!",
+  "goalLeft": "Осталось {amount} · до {date}",
+  "goalLeftNoDate": "Осталось {amount}",
+  "goalPerMonth": "≈ {amount} в месяц",
+  "goalEmpty": "Целей пока нет. Деньги каждой цели лежат на своём счёте-копилке.",
+  "goalDeleteTitle": "Удалить цель?",
+  "goalDeleteMessage": "Счёт и деньги на нём останутся."
 }

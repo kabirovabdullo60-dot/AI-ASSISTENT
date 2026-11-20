@@ -1157,5 +1157,56 @@
   "pfCurrencyLocked": "The account has operations: its currency stays.",
   "pfReceived": "Arrived on the account",
   "pfInTjsNote": "Other currencies are counted in somoni at today's rate.",
-  "pfRatesMissing": "No exchange rates yet: other currencies are counted as is."
+  "pfRatesMissing": "No exchange rates yet: other currencies are counted as is.",
+  "goalTitle": "Savings goals",
+  "goalHint": "A car, a flat, a trip…",
+  "goalNew": "New goal",
+  "goalName": "What for",
+  "goalNameHint": "A car",
+  "goalTarget": "How much is needed",
+  "goalDeadline": "By when",
+  "goalNoDeadline": "No date",
+  "goalTopUp": "Top up",
+  "goalSaved": "{saved} of {target}",
+  "@goalSaved": {
+    "placeholders": {
+      "saved": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "goalReached": "Reached!",
+  "goalLeft": "{amount} left · by {date}",
+  "@goalLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "goalLeftNoDate": "{amount} left",
+  "@goalLeftNoDate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "goalPerMonth": "≈ {amount} a month",
+  "@goalPerMonth": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "goalEmpty": "No goals yet. Each goal keeps its money on its own savings account.",
+  "goalDeleteTitle": "Delete the goal?",
+  "goalDeleteMessage": "Its account and the money on it stay."
 }

@@ -2221,4 +2221,64 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get pfRatesMissing =>
       'Курсы ещё не загрузились — валютные счета посчитаны без пересчёта.';
+
+  @override
+  String get goalTitle => 'Цели накоплений';
+
+  @override
+  String get goalHint => 'Машина, квартира, поездка…';
+
+  @override
+  String get goalNew => 'Новая цель';
+
+  @override
+  String get goalName => 'На что копим';
+
+  @override
+  String get goalNameHint => 'На машину';
+
+  @override
+  String get goalTarget => 'Сколько нужно';
+
+  @override
+  String get goalDeadline => 'К какому сроку';
+
+  @override
+  String get goalNoDeadline => 'Без срока';
+
+  @override
+  String get goalTopUp => 'Пополнить';
+
+  @override
+  String goalSaved(String saved, String target) {
+    return '$saved из $target';
+  }
+
+  @override
+  String get goalReached => 'Цель достигнута!';
+
+  @override
+  String goalLeft(String amount, String date) {
+    return 'Осталось $amount · до $date';
+  }
+
+  @override
+  String goalLeftNoDate(String amount) {
+    return 'Осталось $amount';
+  }
+
+  @override
+  String goalPerMonth(String amount) {
+    return '≈ $amount в месяц';
+  }
+
+  @override
+  String get goalEmpty =>
+      'Целей пока нет. Деньги каждой цели лежат на своём счёте-копилке.';
+
+  @override
+  String get goalDeleteTitle => 'Удалить цель?';
+
+  @override
+  String get goalDeleteMessage => 'Счёт и деньги на нём останутся.';
 }

@@ -2214,4 +2214,64 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pfRatesMissing =>
       'No exchange rates yet: other currencies are counted as is.';
+
+  @override
+  String get goalTitle => 'Savings goals';
+
+  @override
+  String get goalHint => 'A car, a flat, a trip…';
+
+  @override
+  String get goalNew => 'New goal';
+
+  @override
+  String get goalName => 'What for';
+
+  @override
+  String get goalNameHint => 'A car';
+
+  @override
+  String get goalTarget => 'How much is needed';
+
+  @override
+  String get goalDeadline => 'By when';
+
+  @override
+  String get goalNoDeadline => 'No date';
+
+  @override
+  String get goalTopUp => 'Top up';
+
+  @override
+  String goalSaved(String saved, String target) {
+    return '$saved of $target';
+  }
+
+  @override
+  String get goalReached => 'Reached!';
+
+  @override
+  String goalLeft(String amount, String date) {
+    return '$amount left · by $date';
+  }
+
+  @override
+  String goalLeftNoDate(String amount) {
+    return '$amount left';
+  }
+
+  @override
+  String goalPerMonth(String amount) {
+    return '≈ $amount a month';
+  }
+
+  @override
+  String get goalEmpty =>
+      'No goals yet. Each goal keeps its money on its own savings account.';
+
+  @override
+  String get goalDeleteTitle => 'Delete the goal?';
+
+  @override
+  String get goalDeleteMessage => 'Its account and the money on it stay.';
 }

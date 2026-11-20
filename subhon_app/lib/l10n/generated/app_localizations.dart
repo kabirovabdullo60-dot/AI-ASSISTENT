@@ -4065,6 +4065,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No exchange rates yet: other currencies are counted as is.'**
   String get pfRatesMissing;
+
+  /// No description provided for @goalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings goals'**
+  String get goalTitle;
+
+  /// No description provided for @goalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A car, a flat, a trip…'**
+  String get goalHint;
+
+  /// No description provided for @goalNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New goal'**
+  String get goalNew;
+
+  /// No description provided for @goalName.
+  ///
+  /// In en, this message translates to:
+  /// **'What for'**
+  String get goalName;
+
+  /// No description provided for @goalNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A car'**
+  String get goalNameHint;
+
+  /// No description provided for @goalTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'How much is needed'**
+  String get goalTarget;
+
+  /// No description provided for @goalDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'By when'**
+  String get goalDeadline;
+
+  /// No description provided for @goalNoDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'No date'**
+  String get goalNoDeadline;
+
+  /// No description provided for @goalTopUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up'**
+  String get goalTopUp;
+
+  /// No description provided for @goalSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'{saved} of {target}'**
+  String goalSaved(String saved, String target);
+
+  /// No description provided for @goalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Reached!'**
+  String get goalReached;
+
+  /// No description provided for @goalLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} left · by {date}'**
+  String goalLeft(String amount, String date);
+
+  /// No description provided for @goalLeftNoDate.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} left'**
+  String goalLeftNoDate(String amount);
+
+  /// No description provided for @goalPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {amount} a month'**
+  String goalPerMonth(String amount);
+
+  /// No description provided for @goalEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No goals yet. Each goal keeps its money on its own savings account.'**
+  String get goalEmpty;
+
+  /// No description provided for @goalDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the goal?'**
+  String get goalDeleteTitle;
+
+  /// No description provided for @goalDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Its account and the money on it stay.'**
+  String get goalDeleteMessage;
 }
 
 class _AppLocalizationsDelegate

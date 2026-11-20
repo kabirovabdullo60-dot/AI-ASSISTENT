@@ -215,4 +215,40 @@ void main() {
     );
     expect(vm.account(usd.id)!.currency, 'USD');
   });
+
+  test('a savings goal gets its own account; progress is its balance; '
+      'deleting the goal keeps the money', () async {
+    final vm = PersonalFinanceViewModel(
+      MemoryPersonalFinanceStorage(),
+      'u1',
+      clock: () => DateTime(2026, 11, 20, 12),
+    );
+    await vm.load();
+    final cash = await vm.addAccount(
+      name: 'Наличные',
+      kind: MoneyAccountKind.cash,
+      openingBalance: 5000,
+    );
+    await vm.saveGoal(name: 'Машина', target: 40000);
+    final goal = vm.goals.single;
+    final account = vm.account(goal.accountId)!;
+    expect(account.name, 'Машина');
+    expect(account.kind, MoneyAccountKind.savings);
+    expect(vm.goalProgress(goal), 0);
+
+    await vm.addTransaction(
+      kind: MoneyTransactionKind.transfer,
+      amount: 10000 / 2,
+      accountId: cash.id,
+      toAccountId: goal.accountId,
+    );
+    expect(vm.goalSaved(goal), 5000);
+    expect(vm.goalProgress(goal), 0.125);
+    expect(vm.totalBalance, 5000); // a transfer, not an expense
+    expect(vm.summary(), contains('Машина 5000.00 of 40000.00 TJS'));
+
+    await vm.deleteGoal(goal.id);
+    expect(vm.goals, isEmpty);
+    expect(vm.balance(account.id), 5000);
+  });
 }
