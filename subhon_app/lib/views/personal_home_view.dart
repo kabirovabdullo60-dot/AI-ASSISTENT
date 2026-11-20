@@ -17,6 +17,7 @@ import '../widgets/share_bar_row.dart';
 import '../widgets/summary_card.dart';
 import 'money_accounts_view.dart';
 import 'money_transactions_view.dart';
+import 'quick_entry_view.dart';
 import 'recurring_payment_tile.dart';
 import 'recurring_payments_view.dart';
 
@@ -107,6 +108,44 @@ class _PersonalHomeViewState extends State<PersonalHomeView> {
                     (l10n.phMonthIncome, context.money(vm.monthIncome)),
                     (l10n.phMonthExpense, context.money(monthExpense)),
                   ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                Material(
+                  color: p.surface,
+                  shape: StadiumBorder(side: BorderSide(color: p.border)),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () => _push(const QuickEntryView()),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.lg,
+                        AppSpacing.xs,
+                        AppSpacing.xs,
+                        AppSpacing.xs,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit_note_rounded, color: p.primary),
+                          const SizedBox(width: AppSpacing.sm),
+                          Expanded(
+                            child: Text(
+                              l10n.qeButton,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: p.textSecondary,
+                              ),
+                            ),
+                          ),
+                          IconButton.filled(
+                            tooltip: l10n.qeSpeak,
+                            onPressed: () => _push(
+                              const QuickEntryView(listenAtStart: true),
+                            ),
+                            icon: const Icon(Icons.mic_rounded),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 SectionHeader(

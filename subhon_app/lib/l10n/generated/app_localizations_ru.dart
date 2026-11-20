@@ -2146,4 +2146,39 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get navOperations => 'Операции';
+
+  @override
+  String get qeTitle => 'Быстрая запись';
+
+  @override
+  String get qeHint => 'Такси 50, обед 35 картой…';
+
+  @override
+  String get qeHelp =>
+      'Скажите или напишите, на что и сколько: «такси 50», «получил зарплату 3000 на карту».';
+
+  @override
+  String get qeSpeak => 'Сказать';
+
+  @override
+  String get qeListening => 'Слушаю…';
+
+  @override
+  String get qeNoAmount =>
+      'Не нашёл сумму — добавьте число, например «такси 50».';
+
+  @override
+  String get qeWrite => 'Записать';
+
+  @override
+  String get qeEdit => 'Изменить';
+
+  @override
+  String get qeNoCategory => 'Категория: выберите в «Изменить»';
+
+  @override
+  String get qeMicFailed => 'Микрофон не включился — напишите текстом.';
+
+  @override
+  String get qeButton => 'Скажите или напишите: «такси 50»';
 }

@@ -1096,5 +1096,16 @@
   "moreCurrenciesHint": "Rates, converter, crypto",
   "reportsProfitHint": "Stores compared, salaries for the year",
   "reportsHistoryHint": "Every change: sales, expenses, salaries",
-  "navOperations": "Operations"
+  "navOperations": "Operations",
+  "qeTitle": "Quick entry",
+  "qeHint": "Taxi 50, lunch 35 by card…",
+  "qeHelp": "Say or type what and how much: “taxi 50”, “got salary 3000 on card”.",
+  "qeSpeak": "Speak",
+  "qeListening": "Listening…",
+  "qeNoAmount": "No amount heard: add a number, e.g. “taxi 50”.",
+  "qeWrite": "Write it down",
+  "qeEdit": "Change",
+  "qeNoCategory": "Category: choose in “Change”",
+  "qeMicFailed": "The microphone did not start: type instead.",
+  "qeButton": "Say or type: “taxi 50”"
 }

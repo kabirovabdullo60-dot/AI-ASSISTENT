@@ -9,6 +9,7 @@ import '../l10n/validators.dart';
 import '../models/money_category.dart';
 import '../models/money_transaction_kind.dart';
 import '../models/money_transaction_model.dart';
+import '../models/quick_entry_model.dart';
 import '../viewmodels/personal_finance_view_model.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_feedback.dart';
@@ -23,11 +24,15 @@ class MoneyTransactionFormView extends StatefulWidget {
   const MoneyTransactionFormView({
     this.kind = MoneyTransactionKind.expense,
     this.initial,
+    this.draft,
     super.key,
   });
 
   final MoneyTransactionKind kind;
   final MoneyTransactionModel? initial;
+
+  /// Filled from a quick phrase ("такси 50"), to be checked and saved.
+  final QuickEntryModel? draft;
 
   @override
   State<MoneyTransactionFormView> createState() =>
@@ -37,12 +42,16 @@ class MoneyTransactionFormView extends StatefulWidget {
 class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
   final _form = GlobalKey<FormState>();
   late final _amount = TextEditingController(
-    text: widget.initial?.amount.toStringAsFixed(2),
+    text: (widget.initial?.amount ?? widget.draft?.amount)?.toStringAsFixed(2),
   );
-  late final _note = TextEditingController(text: widget.initial?.note);
-  late MoneyTransactionKind _kind = widget.initial?.kind ?? widget.kind;
-  late MoneyCategory? _category = widget.initial?.category;
-  late String? _account = widget.initial?.accountId;
+  late final _note = TextEditingController(
+    text: widget.initial?.note ?? widget.draft?.note,
+  );
+  late MoneyTransactionKind _kind =
+      widget.initial?.kind ?? widget.draft?.kind ?? widget.kind;
+  late MoneyCategory? _category =
+      widget.initial?.category ?? widget.draft?.category;
+  late String? _account = widget.initial?.accountId ?? widget.draft?.accountId;
   late String? _toAccount = widget.initial?.toAccountId;
   late DateTime? _date = widget.initial?.date;
   bool _categoryMissing = false;

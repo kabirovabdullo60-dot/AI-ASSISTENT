@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:subhon_app/models/money_category.dart';
 import 'package:subhon_app/models/money_transaction_kind.dart';
 
 import '../helpers/app_harness.dart';
 import '../helpers/fake_backend.dart';
+import '../helpers/fake_voice_service.dart';
 import '../helpers/memory_personal_finance_storage.dart';
 import '../helpers/memory_token_storage.dart';
 
@@ -63,5 +65,42 @@ void main() {
     await openBusiness(tester);
     expect(find.widgetWithText(AppBar, 'Мой бизнес'), findsOneWidget);
     expect(find.text('Продажи за сегодня'), findsOneWidget);
+  });
+
+  testWidgets('quick entry: said "такси 50 картой" is written as a transport '
+      'expense; an unknown word opens the form to choose', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(500, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final voice = FakeVoiceService();
+    final backend = FakeBackend()
+      ..json('GET', '/api/auth/me', ApiJson.profile());
+    stubHome(backend);
+    final personal = MemoryPersonalFinanceStorage();
+    await pumpApp(
+      tester,
+      backend,
+      tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
+      personal: personal,
+      voice: voice,
+    );
+    await tester.tap(find.byTooltip('Сказать'));
+    await tester.pumpAndSettle();
+    expect(voice.isListening, isTrue);
+    voice.say('такси 50');
+    await tester.pumpAndSettle();
+    expect(find.text('Транспорт'), findsOneWidget);
+    await tapText(tester, 'Записать');
+    final t = personal.byUser.values.single.transactions.single;
+    expect(t.amount, 50);
+    expect(t.category, MoneyCategory.transport);
+    expect(t.note, 'Такси');
+
+    await tapText(tester, 'Скажите или напишите: «такси 50»');
+    await tester.enterText(find.byType(TextField), 'что-то 70');
+    await tester.pumpAndSettle();
+    expect(find.text('Категория: выберите в «Изменить»'), findsOneWidget);
+    await tapText(tester, 'Изменить');
+    expect(find.text('Новый расход'), findsOneWidget);
+    expect(find.text('70.00'), findsOneWidget);
   });
 }

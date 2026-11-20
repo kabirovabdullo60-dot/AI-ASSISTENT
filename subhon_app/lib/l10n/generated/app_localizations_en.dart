@@ -2139,4 +2139,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navOperations => 'Operations';
+
+  @override
+  String get qeTitle => 'Quick entry';
+
+  @override
+  String get qeHint => 'Taxi 50, lunch 35 by card…';
+
+  @override
+  String get qeHelp =>
+      'Say or type what and how much: “taxi 50”, “got salary 3000 on card”.';
+
+  @override
+  String get qeSpeak => 'Speak';
+
+  @override
+  String get qeListening => 'Listening…';
+
+  @override
+  String get qeNoAmount => 'No amount heard: add a number, e.g. “taxi 50”.';
+
+  @override
+  String get qeWrite => 'Write it down';
+
+  @override
+  String get qeEdit => 'Change';
+
+  @override
+  String get qeNoCategory => 'Category: choose in “Change”';
+
+  @override
+  String get qeMicFailed => 'The microphone did not start: type instead.';
+
+  @override
+  String get qeButton => 'Say or type: “taxi 50”';
 }

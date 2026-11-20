@@ -2131,4 +2131,39 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get navOperations => 'Амалиётҳо';
+
+  @override
+  String get qeTitle => 'Сабти зуд';
+
+  @override
+  String get qeHint => 'Такси 50, хӯроки нисфирӯзӣ 35 бо корт…';
+
+  @override
+  String get qeHelp =>
+      'Бигӯед ё нависед, ба чӣ ва чӣ қадар: «такси 50», «маош 3000 ба корт».';
+
+  @override
+  String get qeSpeak => 'Гуфтан';
+
+  @override
+  String get qeListening => 'Гӯш мекунам…';
+
+  @override
+  String get qeNoAmount =>
+      'Маблағ ёфт нашуд — рақам илова кунед, масалан «такси 50».';
+
+  @override
+  String get qeWrite => 'Сабт кардан';
+
+  @override
+  String get qeEdit => 'Тағйир додан';
+
+  @override
+  String get qeNoCategory => 'Категория: дар «Тағйир додан» интихоб кунед';
+
+  @override
+  String get qeMicFailed => 'Микрофон кор накард — бо матн нависед.';
+
+  @override
+  String get qeButton => 'Бигӯед ё нависед: «такси 50»';
 }

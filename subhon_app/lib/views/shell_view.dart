@@ -39,6 +39,7 @@ import 'more_view.dart';
 import 'notifications_view.dart';
 import 'payroll_view.dart';
 import 'personal_home_view.dart';
+import 'quick_entry_view.dart';
 import 'recurring_payments_view.dart';
 import 'sale_form_view.dart';
 import 'sales_view.dart';
@@ -247,6 +248,13 @@ class _ShellViewState extends State<ShellView> {
     final p = context.palette;
     final business = _hasBusiness;
     final actions = [
+      (
+        Icons.mic_rounded,
+        l10n.qeTitle,
+        p.primary,
+        p.primaryLight,
+        () => _openPersonal(const QuickEntryView()),
+      ),
       (
         Icons.north_east_rounded,
         l10n.pfExpense,

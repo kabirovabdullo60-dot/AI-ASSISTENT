@@ -3939,6 +3939,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Operations'**
   String get navOperations;
+
+  /// No description provided for @qeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick entry'**
+  String get qeTitle;
+
+  /// No description provided for @qeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Taxi 50, lunch 35 by card…'**
+  String get qeHint;
+
+  /// No description provided for @qeHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Say or type what and how much: “taxi 50”, “got salary 3000 on card”.'**
+  String get qeHelp;
+
+  /// No description provided for @qeSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak'**
+  String get qeSpeak;
+
+  /// No description provided for @qeListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening…'**
+  String get qeListening;
+
+  /// No description provided for @qeNoAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'No amount heard: add a number, e.g. “taxi 50”.'**
+  String get qeNoAmount;
+
+  /// No description provided for @qeWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Write it down'**
+  String get qeWrite;
+
+  /// No description provided for @qeEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get qeEdit;
+
+  /// No description provided for @qeNoCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category: choose in “Change”'**
+  String get qeNoCategory;
+
+  /// No description provided for @qeMicFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The microphone did not start: type instead.'**
+  String get qeMicFailed;
+
+  /// No description provided for @qeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Say or type: “taxi 50”'**
+  String get qeButton;
 }
 
 class _AppLocalizationsDelegate
