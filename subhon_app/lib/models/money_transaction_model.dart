@@ -15,6 +15,7 @@ class MoneyTransactionModel {
     this.toAccountId,
     this.note,
     this.recurringId,
+    this.toAmount,
   });
 
   factory MoneyTransactionModel.fromJson(Map<String, dynamic> json) =>
@@ -31,6 +32,7 @@ class MoneyTransactionModel {
         toAccountId: json['toAccountId'] as String?,
         note: json['note'] as String?,
         recurringId: json['recurringId'] as String?,
+        toAmount: (json['toAmount'] as num?)?.toDouble(),
       );
 
   final String id;
@@ -45,6 +47,13 @@ class MoneyTransactionModel {
 
   /// A transfer: the account it went to.
   final String? toAccountId;
+
+  /// A transfer between currencies: what arrived (in the other account's
+  /// currency); `null` when it is [amount].
+  final double? toAmount;
+
+  /// What a transfer added to [toAccountId].
+  double get received => toAmount ?? amount;
 
   /// Income / expense only.
   final MoneyCategory? category;
@@ -72,5 +81,6 @@ class MoneyTransactionModel {
     'toAccountId': ?toAccountId,
     'note': ?note,
     'recurringId': ?recurringId,
+    'toAmount': ?toAmount,
   };
 }

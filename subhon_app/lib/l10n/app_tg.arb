@@ -655,5 +655,10 @@
   "remPaymentTomorrow": "Пагоҳ пардохт: {name}, {amount}",
   "remPaymentToday": "Имрӯз пардохт: {name}, {amount}.",
   "remDebtTomorrow": "Пагоҳ мӯҳлати қарз: {name}, {amount}",
-  "remDebtToday": "Имрӯз мӯҳлати қарз: {name}, {amount}"
+  "remDebtToday": "Имрӯз мӯҳлати қарз: {name}, {amount}",
+  "pfCurrency": "Асъор",
+  "pfCurrencyLocked": "Ҳисоб амалиёт дорад — асъорро иваз кардан мумкин нест.",
+  "pfReceived": "Ба ҳисоб омад",
+  "pfInTjsNote": "Ҳисобҳои асъорӣ бо қурби имрӯза ба сомонӣ ҳисоб шудаанд.",
+  "pfRatesMissing": "Қурбҳо ҳанӯз бор нашуданд."
 }

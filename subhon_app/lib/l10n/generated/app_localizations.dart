@@ -4035,6 +4035,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today the debt is due: {name}, {amount}'**
   String remDebtToday(String name, String amount);
+
+  /// No description provided for @pfCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get pfCurrency;
+
+  /// No description provided for @pfCurrencyLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The account has operations: its currency stays.'**
+  String get pfCurrencyLocked;
+
+  /// No description provided for @pfReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrived on the account'**
+  String get pfReceived;
+
+  /// No description provided for @pfInTjsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Other currencies are counted in somoni at today\'s rate.'**
+  String get pfInTjsNote;
+
+  /// No description provided for @pfRatesMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'No exchange rates yet: other currencies are counted as is.'**
+  String get pfRatesMissing;
 }
 
 class _AppLocalizationsDelegate

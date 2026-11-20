@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/core/storage/secure_personal_finance_storage.dart';
+import 'package:subhon_app/models/fiat_rates_model.dart';
 import 'package:subhon_app/models/money_account_kind.dart';
 import 'package:subhon_app/models/money_category.dart';
 import 'package:subhon_app/models/money_transaction_kind.dart';
@@ -153,4 +154,65 @@ void main() {
       expect(note, contains('Интернет 200.00 on 2026-11-25'));
     },
   );
+
+  test('accounts in other currencies: balances in their currency, totals '
+      'in somoni at the rate, transfers between currencies', () async {
+    final vm = PersonalFinanceViewModel(
+      MemoryPersonalFinanceStorage(),
+      'u1',
+      clock: () => DateTime(2026, 11, 20, 12),
+    );
+    await vm.load();
+    final cash = await vm.addAccount(
+      name: 'Наличные',
+      kind: MoneyAccountKind.cash,
+      openingBalance: 1000,
+    );
+    final usd = await vm.addAccount(
+      name: 'Доллары',
+      kind: MoneyAccountKind.cash,
+      openingBalance: 100,
+      currency: 'USD',
+    );
+    expect(vm.ratesMissing, isTrue);
+    vm.setRates(
+      FiatRatesModel(
+        perUsd: const {'USD': 1, 'TJS': 10, 'RUB': 80},
+        updatedAt: DateTime(2026, 11, 20),
+      ),
+    );
+    expect(vm.ratesMissing, isFalse);
+    expect(vm.totalBalance, 2000); // 1000 + 100 × 10
+
+    // 50 USD sold for 520 TJS.
+    await vm.addTransaction(
+      kind: MoneyTransactionKind.transfer,
+      amount: 50,
+      accountId: usd.id,
+      toAccountId: cash.id,
+      toAmount: 520,
+    );
+    expect(vm.balance(usd.id), 50);
+    expect(vm.balance(cash.id), 1520);
+    expect(vm.totalBalance, 2020);
+
+    await vm.addTransaction(
+      kind: MoneyTransactionKind.expense,
+      amount: 5,
+      accountId: usd.id,
+      category: MoneyCategory.cafe,
+    );
+    expect(vm.monthExpense, 50); // 5 USD in somoni
+    expect(vm.summary(), contains('Доллары 45.00 USD'));
+
+    // The currency stays once the account has operations.
+    await vm.updateAccount(
+      usd.id,
+      name: 'Доллары',
+      kind: MoneyAccountKind.cash,
+      openingBalance: 100,
+      currency: 'RUB',
+    );
+    expect(vm.account(usd.id)!.currency, 'USD');
+  });
 }

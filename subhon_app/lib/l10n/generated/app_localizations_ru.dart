@@ -2204,4 +2204,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String remDebtToday(String name, String amount) {
     return 'Сегодня срок долга: $name, $amount';
   }
+
+  @override
+  String get pfCurrency => 'Валюта';
+
+  @override
+  String get pfCurrencyLocked => 'По счёту есть операции — валюту не изменить.';
+
+  @override
+  String get pfReceived => 'Пришло на счёт';
+
+  @override
+  String get pfInTjsNote =>
+      'Валютные счета посчитаны в сомони по сегодняшнему курсу.';
+
+  @override
+  String get pfRatesMissing =>
+      'Курсы ещё не загрузились — валютные счета посчитаны без пересчёта.';
 }

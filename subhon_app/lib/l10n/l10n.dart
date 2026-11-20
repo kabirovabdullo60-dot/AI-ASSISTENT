@@ -12,8 +12,8 @@ extension L10nContext on BuildContext {
   String get _language => l10n.localeName;
 
   /// `1 250,50 TJS`.
-  String money(double amount, {bool signed = false}) =>
-      formatMoney(amount, _language, signed: signed);
+  String money(double amount, {bool signed = false, String currency = 'TJS'}) =>
+      formatMoney(amount, _language, signed: signed, currency: currency);
 
   /// A rate or converted amount: 2 decimals from 100, 4 from 1, up to 8
   /// below 1 (`0,00012345`), trailing zeros dropped.

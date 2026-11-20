@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../core/storage/personal_finance_storage.dart';
+import '../models/fiat_rates_model.dart';
 import '../models/money_account_kind.dart';
 import '../models/money_account_model.dart';
 import '../models/money_category.dart';
@@ -56,6 +57,33 @@ class PersonalFinanceViewModel extends ChangeNotifier {
   MoneyAccountModel? account(String? id) =>
       _data.accounts.where((a) => a.id == id).firstOrNull;
 
+  // Currencies.
+
+  FiatRatesModel? _rates;
+
+  /// World exchange rates, for accounts kept in other currencies.
+  void setRates(FiatRatesModel rates) {
+    _rates = rates;
+    notifyListeners();
+  }
+
+  /// Some account is not in somoni.
+  bool get hasForeign => _data.accounts.any((a) => a.currency != 'TJS');
+
+  /// Totals in somoni can't count the other currencies yet.
+  bool get ratesMissing => hasForeign && _rates == null;
+
+  String currencyOf(String? accountId) => account(accountId)?.currency ?? 'TJS';
+
+  /// [amount] of [currency] in somoni (as is while the rates are unknown).
+  double inTjs(double amount, String currency) => currency == 'TJS'
+      ? amount
+      : _rates?.convert(amount, currency, 'TJS') ?? amount;
+
+  /// [amount] of [from] in [to], when the rates are known.
+  double? convert(double amount, String from, String to) =>
+      from == to ? amount : _rates?.convert(amount, from, to);
+
   /// Opening balance + income − expenses ± transfers.
   double balance(String accountId) {
     var sum = account(accountId)?.openingBalance ?? 0;
@@ -68,14 +96,19 @@ class PersonalFinanceViewModel extends ChangeNotifier {
       }
       if (t.kind == MoneyTransactionKind.transfer &&
           t.toAccountId == accountId) {
-        sum += t.amount;
+        sum += t.received;
       }
     }
     return sum;
   }
 
+  /// An operation's amount in somoni.
+  double _tjs(MoneyTransactionModel t) =>
+      inTjs(t.amount, currencyOf(t.accountId));
+
+  /// All accounts, in somoni.
   double get totalBalance =>
-      _data.accounts.fold(0, (s, a) => s + balance(a.id));
+      _data.accounts.fold(0, (s, a) => s + inTjs(balance(a.id), a.currency));
 
   bool _inMonth(DateTime d) => d.year == _month.year && d.month == _month.month;
 
@@ -86,7 +119,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
 
   double _monthSum(MoneyTransactionKind kind) => monthTransactions
       .where((t) => t.kind == kind)
-      .fold(0, (s, t) => s + t.amount);
+      .fold(0, (s, t) => s + _tjs(t));
 
   double get monthIncome => _monthSum(MoneyTransactionKind.income);
   double get monthExpense => _monthSum(MoneyTransactionKind.expense);
@@ -96,7 +129,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     final sums = <MoneyCategory, double>{};
     for (final t in monthTransactions) {
       if (t.kind == MoneyTransactionKind.expense && t.category != null) {
-        sums[t.category!] = (sums[t.category!] ?? 0) + t.amount;
+        sums[t.category!] = (sums[t.category!] ?? 0) + _tjs(t);
       }
     }
     return [for (final e in sums.entries) (e.key, e.value)]
@@ -166,6 +199,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     required String name,
     required MoneyAccountKind kind,
     double openingBalance = 0,
+    String currency = 'TJS',
   }) async {
     final account = MoneyAccountModel(
       id: _id(),
@@ -173,6 +207,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
       kind: kind,
       openingBalance: openingBalance,
       createdAt: _clock(),
+      currency: currency,
     );
     await _save(_with(accounts: [..._data.accounts, account]));
     return account;
@@ -183,6 +218,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     required String name,
     required MoneyAccountKind kind,
     required double openingBalance,
+    String? currency,
   }) => _save(
     _with(
       accounts: [
@@ -192,6 +228,8 @@ class PersonalFinanceViewModel extends ChangeNotifier {
               name: name.trim(),
               kind: kind,
               openingBalance: openingBalance,
+              // Not once it has operations: they are in the old currency.
+              currency: isUsed(id) ? null : currency,
             )
           else
             a,
@@ -243,6 +281,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     String? toAccountId,
     String? note,
     String? recurringId,
+    double? toAmount,
   }) async {
     final t = MoneyTransactionModel(
       id: _id(),
@@ -255,6 +294,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
       toAccountId: kind == MoneyTransactionKind.transfer ? toAccountId : null,
       note: _opt(note),
       recurringId: recurringId,
+      toAmount: kind == MoneyTransactionKind.transfer ? toAmount : null,
     );
     await _save(_with(transactions: [..._data.transactions, t]));
     return t;
@@ -268,6 +308,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     MoneyCategory? category,
     String? toAccountId,
     String? note,
+    double? toAmount,
   }) => _save(
     _with(
       transactions: [
@@ -288,6 +329,9 @@ class PersonalFinanceViewModel extends ChangeNotifier {
                   : null,
               note: _opt(note),
               recurringId: t.recurringId,
+              toAmount: t.kind == MoneyTransactionKind.transfer
+                  ? toAmount
+                  : null,
             )
           else
             t,
@@ -389,11 +433,11 @@ class PersonalFinanceViewModel extends ChangeNotifier {
         if (t.date.year == now.year && t.date.month == now.month) t,
     ];
     double sum(MoneyTransactionKind k) =>
-        month.where((t) => t.kind == k).fold(0, (s, t) => s + t.amount);
+        month.where((t) => t.kind == k).fold(0, (s, t) => s + _tjs(t));
     final cats = <MoneyCategory, double>{};
     for (final t in month) {
       if (t.kind == MoneyTransactionKind.expense && t.category != null) {
-        cats[t.category!] = (cats[t.category!] ?? 0) + t.amount;
+        cats[t.category!] = (cats[t.category!] ?? 0) + _tjs(t);
       }
     }
     final top = cats.entries.toList()
@@ -402,7 +446,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     return [
       '[My personal finances, kept in the app on my phone; TJS; today ${d(now)}]',
       'Total balance: ${m(totalBalance)}. Accounts: '
-          '${[for (final a in _data.accounts) '${a.name} ${m(balance(a.id))}'].join(', ')}.',
+          '${[for (final a in _data.accounts) '${a.name} ${m(balance(a.id))} ${a.currency}'].join(', ')}.',
       'This month: income ${m(sum(MoneyTransactionKind.income))}, '
           'expenses ${m(sum(MoneyTransactionKind.expense))}.',
       if (top.isNotEmpty)

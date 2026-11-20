@@ -2189,4 +2189,21 @@ class AppLocalizationsTg extends AppLocalizations {
   String remDebtToday(String name, String amount) {
     return 'Имрӯз мӯҳлати қарз: $name, $amount';
   }
+
+  @override
+  String get pfCurrency => 'Асъор';
+
+  @override
+  String get pfCurrencyLocked =>
+      'Ҳисоб амалиёт дорад — асъорро иваз кардан мумкин нест.';
+
+  @override
+  String get pfReceived => 'Ба ҳисоб омад';
+
+  @override
+  String get pfInTjsNote =>
+      'Ҳисобҳои асъорӣ бо қурби имрӯза ба сомонӣ ҳисоб шудаанд.';
+
+  @override
+  String get pfRatesMissing => 'Қурбҳо ҳанӯз бор нашуданд.';
 }

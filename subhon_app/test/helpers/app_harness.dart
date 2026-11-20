@@ -1,3 +1,5 @@
+import 'package:http/testing.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/core/storage/app_lock_storage.dart';
@@ -73,7 +75,12 @@ Future<void> pumpApp(
       fileShare: fileShare,
       biometric: biometric,
       appLock: appLock,
-      market: market,
+      // Never the real internet in tests.
+      market:
+          market ??
+          MarketService(
+            client: MockClient((_) async => http.Response('offline', 503)),
+          ),
       debts: debts,
       personal: personal ?? MemoryPersonalFinanceStorage(),
       reminders: reminders ?? FakeReminderService(),

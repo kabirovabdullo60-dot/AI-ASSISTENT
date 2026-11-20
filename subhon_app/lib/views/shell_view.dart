@@ -24,6 +24,7 @@ import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../viewmodels/personal_finance_view_model.dart';
 import '../viewmodels/reminder_planner.dart';
+import '../services/market_service.dart';
 import '../services/reminder_service.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../widgets/add_nav_button.dart';
@@ -121,7 +122,23 @@ class _ShellViewState extends State<ShellView> {
 
   /// Regular payments or debts changed: plan the phone's reminders again
   /// (once things settle).
+  bool _ratesLoading = false;
+
+  /// An account in another currency: today's rates for the totals.
+  Future<void> _loadRates() async {
+    if (_ratesLoading || !_personal.ratesMissing) return;
+    _ratesLoading = true;
+    try {
+      _personal.setRates(await context.read<MarketService>().fiatRates());
+    } on Object {
+      // Shown as "курсы ещё не загрузились"; tried again on the next change.
+    } finally {
+      _ratesLoading = false;
+    }
+  }
+
   void _remindersChanged() {
+    _loadRates();
     _reminderTimer?.cancel();
     _reminderTimer = Timer(const Duration(seconds: 1), _syncReminders);
   }

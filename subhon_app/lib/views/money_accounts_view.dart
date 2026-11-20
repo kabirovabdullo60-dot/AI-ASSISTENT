@@ -61,6 +61,11 @@ class MoneyAccountsView extends StatelessWidget {
             context.money(vm.totalBalance),
             style: theme.textTheme.headlineMedium,
           ),
+          if (vm.hasForeign)
+            Text(
+              vm.ratesMissing ? l10n.pfRatesMissing : l10n.pfInTjsNote,
+              style: theme.textTheme.bodySmall,
+            ),
           const SizedBox(height: AppSpacing.lg),
           for (final a in vm.accounts) ...[
             Material(
@@ -91,9 +96,22 @@ class MoneyAccountsView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Text(
-                        context.money(vm.balance(a.id)),
-                        style: theme.textTheme.titleSmall,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            context.money(
+                              vm.balance(a.id),
+                              currency: a.currency,
+                            ),
+                            style: theme.textTheme.titleSmall,
+                          ),
+                          if (a.currency != 'TJS' && !vm.ratesMissing)
+                            Text(
+                              '≈ ${context.money(vm.inTjs(vm.balance(a.id), a.currency))}',
+                              style: theme.textTheme.bodySmall,
+                            ),
+                        ],
                       ),
                     ],
                   ),
@@ -124,6 +142,7 @@ class _AccountSheetState extends State<_AccountSheet> {
     text: widget.initial?.openingBalance.toStringAsFixed(2) ?? '0',
   );
   late MoneyAccountKind _kind = widget.initial?.kind ?? MoneyAccountKind.card;
+  late String _currency = widget.initial?.currency ?? 'TJS';
 
   @override
   void dispose() {
@@ -145,6 +164,7 @@ class _AccountSheetState extends State<_AccountSheet> {
         name: _name.text,
         kind: _kind,
         openingBalance: balance,
+        currency: _currency,
       );
     } else {
       await vm.updateAccount(
@@ -152,6 +172,7 @@ class _AccountSheetState extends State<_AccountSheet> {
         name: _name.text,
         kind: _kind,
         openingBalance: balance,
+        currency: _currency,
       );
     }
     feedback.showSuccess(saved);
@@ -233,10 +254,49 @@ class _AccountSheetState extends State<_AccountSheet> {
               ],
             ),
             const SizedBox(height: AppSpacing.md),
+            Text(
+              l10n.pfCurrency,
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Builder(
+              builder: (context) {
+                final locked =
+                    widget.initial != null &&
+                    context.read<PersonalFinanceViewModel>().isUsed(
+                      widget.initial!.id,
+                    );
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Wrap(
+                      spacing: AppSpacing.sm,
+                      children: [
+                        for (final c in MoneyAccountModel.currencies)
+                          ChoiceChip(
+                            label: Text(c),
+                            selected: _currency == c,
+                            showCheckmark: false,
+                            onSelected: locked
+                                ? null
+                                : (_) => setState(() => _currency = c),
+                          ),
+                      ],
+                    ),
+                    if (locked)
+                      Text(
+                        l10n.pfCurrencyLocked,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                  ],
+                );
+              },
+            ),
+            const SizedBox(height: AppSpacing.md),
             AppTextField(
               controller: _balance,
               label: l10n.pfOpeningBalance,
-              suffix: const Text('TJS'),
+              suffix: Text(_currency),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
                 signed: true,

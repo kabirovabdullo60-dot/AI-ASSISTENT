@@ -655,5 +655,10 @@
   "remPaymentTomorrow": "Завтра платёж: {name}, {amount}",
   "remPaymentToday": "Сегодня платёж: {name}, {amount}. Отметьте «Оплатить» в приложении.",
   "remDebtTomorrow": "Завтра срок долга: {name}, {amount}",
-  "remDebtToday": "Сегодня срок долга: {name}, {amount}"
+  "remDebtToday": "Сегодня срок долга: {name}, {amount}",
+  "pfCurrency": "Валюта",
+  "pfCurrencyLocked": "По счёту есть операции — валюту не изменить.",
+  "pfReceived": "Пришло на счёт",
+  "pfInTjsNote": "Валютные счета посчитаны в сомони по сегодняшнему курсу.",
+  "pfRatesMissing": "Курсы ещё не загрузились — валютные счета посчитаны без пересчёта."
 }

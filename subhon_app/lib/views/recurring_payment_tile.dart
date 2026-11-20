@@ -73,7 +73,10 @@ class RecurringPaymentTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    context.money(payment.amount),
+                    context.money(
+                      payment.amount,
+                      currency: vm.currencyOf(payment.accountId),
+                    ),
                     style: theme.textTheme.titleSmall,
                   ),
                   TextButton(

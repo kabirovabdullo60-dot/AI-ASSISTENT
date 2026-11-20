@@ -1152,5 +1152,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "pfCurrency": "Currency",
+  "pfCurrencyLocked": "The account has operations: its currency stays.",
+  "pfReceived": "Arrived on the account",
+  "pfInTjsNote": "Other currencies are counted in somoni at today's rate.",
+  "pfRatesMissing": "No exchange rates yet: other currencies are counted as is."
 }

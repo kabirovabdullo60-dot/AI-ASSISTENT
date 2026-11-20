@@ -2196,4 +2196,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String remDebtToday(String name, String amount) {
     return 'Today the debt is due: $name, $amount';
   }
+
+  @override
+  String get pfCurrency => 'Currency';
+
+  @override
+  String get pfCurrencyLocked =>
+      'The account has operations: its currency stays.';
+
+  @override
+  String get pfReceived => 'Arrived on the account';
+
+  @override
+  String get pfInTjsNote =>
+      'Other currencies are counted in somoni at today\'s rate.';
+
+  @override
+  String get pfRatesMissing =>
+      'No exchange rates yet: other currencies are counted as is.';
 }

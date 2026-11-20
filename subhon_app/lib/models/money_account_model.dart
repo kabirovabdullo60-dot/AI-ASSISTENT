@@ -8,7 +8,11 @@ class MoneyAccountModel {
     required this.kind,
     required this.openingBalance,
     required this.createdAt,
+    this.currency = 'TJS',
   });
+
+  /// The currencies an account can be kept in.
+  static const currencies = ['TJS', 'USD', 'RUB', 'EUR'];
 
   factory MoneyAccountModel.fromJson(Map<String, dynamic> json) =>
       MoneyAccountModel(
@@ -17,6 +21,7 @@ class MoneyAccountModel {
         kind: MoneyAccountKind.fromName(json['kind'] as String),
         openingBalance: (json['openingBalance'] as num).toDouble(),
         createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
+        currency: json['currency'] as String? ?? 'TJS',
       );
 
   final String id;
@@ -27,16 +32,21 @@ class MoneyAccountModel {
   final double openingBalance;
   final DateTime createdAt;
 
+  /// Its balance and operations are in this currency (`TJS`, `USD`…).
+  final String currency;
+
   MoneyAccountModel copyWith({
     String? name,
     MoneyAccountKind? kind,
     double? openingBalance,
+    String? currency,
   }) => MoneyAccountModel(
     id: id,
     name: name ?? this.name,
     kind: kind ?? this.kind,
     openingBalance: openingBalance ?? this.openingBalance,
     createdAt: createdAt,
+    currency: currency ?? this.currency,
   );
 
   Map<String, dynamic> toJson() => {
@@ -45,5 +55,6 @@ class MoneyAccountModel {
     'kind': kind.name,
     'openingBalance': openingBalance,
     'createdAt': createdAt.toUtc().toIso8601String(),
+    'currency': currency,
   };
 }

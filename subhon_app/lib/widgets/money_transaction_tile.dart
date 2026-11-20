@@ -94,8 +94,15 @@ class MoneyTransactionTile extends StatelessWidget {
               ),
               Text(
                 t.kind == MoneyTransactionKind.transfer
-                    ? context.money(t.amount)
-                    : context.money(t.signed, signed: true),
+                    ? context.money(
+                        t.amount,
+                        currency: account?.currency ?? 'TJS',
+                      )
+                    : context.money(
+                        t.signed,
+                        signed: true,
+                        currency: account?.currency ?? 'TJS',
+                      ),
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: switch (t.kind) {
                     MoneyTransactionKind.income => p.success,

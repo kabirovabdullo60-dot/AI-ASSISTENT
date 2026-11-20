@@ -44,6 +44,9 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
   late final _amount = TextEditingController(
     text: (widget.initial?.amount ?? widget.draft?.amount)?.toStringAsFixed(2),
   );
+  late final _received = TextEditingController(
+    text: widget.initial?.toAmount?.toStringAsFixed(2),
+  );
   late final _note = TextEditingController(
     text: widget.initial?.note ?? widget.draft?.note,
   );
@@ -57,8 +60,16 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
   bool _categoryMissing = false;
 
   @override
+  void initState() {
+    super.initState();
+    // The suggested amount for a transfer between currencies follows it.
+    _amount.addListener(() => setState(() {}));
+  }
+
+  @override
   void dispose() {
     _amount.dispose();
+    _received.dispose();
     _note.dispose();
     super.dispose();
   }
@@ -74,7 +85,11 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
       selected: to ? _toAccount : _account,
       options: [
         for (final a in vm.accounts)
-          (a.id, '${a.name} · ${context.money(vm.balance(a.id))}'),
+          (
+            a.id,
+            '${a.name} · '
+                '${context.money(vm.balance(a.id), currency: a.currency)}',
+          ),
       ],
     );
     if (picked == null) return;
@@ -97,6 +112,17 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
     final navigator = Navigator.of(context);
     final feedback = AppSnackbar.of(context);
     final amount = Validators.parseAmount(_amount.text)!;
+    final crossCurrency =
+        _kind == MoneyTransactionKind.transfer &&
+        vm.currencyOf(account) != vm.currencyOf(_toAccount);
+    final received = crossCurrency
+        ? Validators.parseAmount(_received.text) ??
+              vm.convert(
+                amount,
+                vm.currencyOf(account),
+                vm.currencyOf(_toAccount),
+              )
+        : null;
     final initial = widget.initial;
     if (initial == null) {
       await vm.addTransaction(
@@ -107,6 +133,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
         category: _category,
         toAccountId: _toAccount,
         note: _note.text,
+        toAmount: received,
       );
     } else {
       await vm.updateTransaction(
@@ -117,6 +144,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
         category: _category,
         toAccountId: _toAccount,
         note: _note.text,
+        toAmount: received,
       );
     }
     feedback.showSuccess(l10n.pfSaved);
@@ -149,6 +177,16 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
     final account = vm.account(_account ?? vm.accounts.firstOrNull?.id);
     final toAccount = vm.account(_toAccount);
     final transfer = _kind == MoneyTransactionKind.transfer;
+    final currency = account?.currency ?? 'TJS';
+    final crossCurrency =
+        transfer && toAccount != null && toAccount.currency != currency;
+    final suggested = crossCurrency
+        ? vm.convert(
+            Validators.parseAmount(_amount.text) ?? 0,
+            currency,
+            toAccount.currency,
+          )
+        : null;
     final color = switch (_kind) {
       MoneyTransactionKind.income => p.success,
       MoneyTransactionKind.expense => p.error,
@@ -214,7 +252,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
               controller: _amount,
               label: l10n.fieldAmount,
               hint: '0',
-              suffix: const Text('TJS'),
+              suffix: Text(currency),
               autofocus: widget.initial == null,
               style: theme.textTheme.headlineSmall?.copyWith(color: color),
               keyboardType: const TextInputType.numberWithOptions(
@@ -267,7 +305,8 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
               label: transfer ? l10n.pfFromAccount : l10n.pfAccount,
               value: account == null
                   ? null
-                  : '${account.name} · ${context.money(vm.balance(account.id))}',
+                  : '${account.name} · '
+                        '${context.money(vm.balance(account.id), currency: currency)}',
               leading: Icon(
                 account == null
                     ? Icons.account_balance_wallet_outlined
@@ -282,11 +321,32 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
                 value: toAccount == null
                     ? null
                     : '${toAccount.name} · '
-                          '${context.money(vm.balance(toAccount.id))}',
+                          '${context.money(vm.balance(toAccount.id), currency: toAccount.currency)}',
                 placeholder: l10n.pfToAccount,
                 leading: const Icon(Icons.call_received_rounded),
                 onTap: () => _pickAccount(vm, to: true),
               ),
+              if (crossCurrency) ...[
+                gap,
+                AppTextField(
+                  controller: _received,
+                  label: l10n.pfReceived,
+                  hint: suggested == null || suggested == 0
+                      ? '0'
+                      : suggested.toStringAsFixed(2),
+                  suffix: Text(toAccount.currency),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  // Empty: today's rate is used.
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) &&
+                          suggested != null &&
+                          suggested > 0
+                      ? null
+                      : Validators.amount(v, l10n),
+                ),
+              ],
             ],
             gap,
             AppPickerField(

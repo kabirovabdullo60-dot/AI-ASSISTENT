@@ -214,6 +214,7 @@ class _QuickEntryViewState extends State<QuickEntryView> {
                           context.money(
                             income ? entry.amount! : -entry.amount!,
                             signed: true,
+                            currency: account?.currency ?? 'TJS',
                           ),
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: income ? p.success : p.textPrimary,

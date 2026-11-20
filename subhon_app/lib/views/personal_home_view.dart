@@ -109,6 +109,16 @@ class _PersonalHomeViewState extends State<PersonalHomeView> {
                     (l10n.phMonthExpense, context.money(monthExpense)),
                   ],
                 ),
+                if (vm.hasForeign)
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppSpacing.xs),
+                    child: Text(
+                      vm.ratesMissing ? l10n.pfRatesMissing : l10n.pfInTjsNote,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: p.textSecondary,
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: AppSpacing.md),
                 Material(
                   color: p.surface,
@@ -237,7 +247,10 @@ class _PersonalHomeViewState extends State<PersonalHomeView> {
                                     fit: BoxFit.scaleDown,
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      context.money(vm.balance(a.id)),
+                                      context.money(
+                                        vm.balance(a.id),
+                                        currency: a.currency,
+                                      ),
                                       style: theme.textTheme.titleMedium,
                                     ),
                                   ),
