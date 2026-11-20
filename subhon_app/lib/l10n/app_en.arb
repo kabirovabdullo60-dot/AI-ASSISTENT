@@ -1264,5 +1264,13 @@
     }
   },
   "bkRestoreAction": "Restore",
-  "bkRestored": "Restored"
+  "bkRestored": "Restored",
+  "actionFromStore": "Took from the shop",
+  "fromStoreNote": "From the shop",
+  "pfCatDebtOut": "Lent",
+  "pfCatDebtPay": "Debt repayment",
+  "pfCatDebtIn": "Borrowed",
+  "pfCatDebtBack": "Debt returned",
+  "debtAccount": "Write to account",
+  "debtNoAccount": "Don't write"
 }

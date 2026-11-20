@@ -16,7 +16,9 @@ import '../services/store_service.dart';
 import '../viewmodels/history_view_model.dart';
 import '../core/storage/debt_storage.dart';
 import '../core/storage/personal_finance_storage.dart';
+import '../models/money_category.dart';
 import '../models/money_transaction_kind.dart';
+import '../models/quick_entry_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/debts_view_model.dart';
 import '../viewmodels/session_view_model.dart';
@@ -344,6 +346,21 @@ class _ShellViewState extends State<ShellView> {
       ),
       if (business) ...[
         (
+          Icons.move_down_rounded,
+          l10n.actionFromStore,
+          p.success,
+          p.successLight,
+          () => _openPersonal(
+            MoneyTransactionFormView(
+              draft: QuickEntryModel(
+                kind: MoneyTransactionKind.income,
+                category: MoneyCategory.business,
+                note: l10n.fromStoreNote,
+              ),
+            ),
+          ),
+        ),
+        (
           Icons.point_of_sale_rounded,
           l10n.actionNewSale,
           p.success,
@@ -495,7 +512,13 @@ class _ShellViewState extends State<ShellView> {
             value: _personal,
             child: const MoneyTransactionsView(),
           ),
-          ChangeNotifierProvider.value(value: _debts, child: const DebtsView()),
+          ChangeNotifierProvider.value(
+            value: _personal,
+            child: ChangeNotifierProvider.value(
+              value: _debts,
+              child: const DebtsView(),
+            ),
+          ),
           ChangeNotifierProvider.value(
             value: _personal,
             child: MoreView(

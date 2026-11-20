@@ -12,6 +12,8 @@ import '../widgets/app_button.dart';
 import '../widgets/app_feedback.dart';
 import '../widgets/app_picker_field.dart';
 import '../widgets/app_text_field.dart';
+import '../widgets/debt_account_picker.dart';
+import 'personal_lookup.dart';
 
 /// Add or edit a debt (who, how much, phone, repay by, note) or a credit /
 /// installment plan (bank or shop, type, total, monthly payment, end).
@@ -39,6 +41,12 @@ class _DebtFormViewState extends State<DebtFormView> {
   late DebtKind _kind = widget.initial?.kind ?? widget.kind;
   late DateTime? _due = widget.initial?.dueDate;
   bool _saving = false;
+
+  /// A new debt: the personal account its money goes from / to (the first
+  /// one by default); `null`: not written.
+  late String? _account = widget.initial == null
+      ? personalOrNull(context)?.accounts.firstOrNull?.id
+      : null;
 
   @override
   void dispose() {
@@ -69,6 +77,7 @@ class _DebtFormViewState extends State<DebtFormView> {
     final monthly = _kind.isLoan ? Validators.parseAmount(_monthly.text) : null;
     final initial = widget.initial;
     if (initial == null) {
+      final personal = personalOrNull(context);
       await vm.add(
         kind: _kind,
         name: _name.text,
@@ -78,6 +87,16 @@ class _DebtFormViewState extends State<DebtFormView> {
         monthlyPayment: monthly,
         note: _note.text,
       );
+      final account = _account;
+      if (personal != null && account != null) {
+        await personal.recordDebt(
+          kind: _kind,
+          repayment: false,
+          amount: amount,
+          accountId: account,
+          name: _name.text.trim(),
+        );
+      }
     } else {
       await vm.update(
         initial.id,
@@ -204,6 +223,15 @@ class _DebtFormViewState extends State<DebtFormView> {
               maxLines: 3,
               maxLength: 500,
             ),
+            if (widget.initial == null &&
+                (personalOrNull(context)?.accounts.isNotEmpty ?? false)) ...[
+              gap,
+              DebtAccountPicker(
+                accounts: personalOrNull(context)!.accounts,
+                value: _account,
+                onChanged: (v) => setState(() => _account = v),
+              ),
+            ],
             const SizedBox(height: AppSpacing.xl),
             AppButton(
               label: l10n.commonSave,

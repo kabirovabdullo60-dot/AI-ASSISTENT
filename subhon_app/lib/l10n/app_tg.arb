@@ -704,5 +704,13 @@
   "bkConfirmTitle": "Нусхаро барқарор кунем?",
   "bkConfirmMessage": "Аз {date}: ҳисоб {accounts}, амалиёт {operations}, қарз {debts}. Он чи ҳоло дар телефон аст, иваз мешавад.",
   "bkRestoreAction": "Барқарор кардан",
-  "bkRestored": "Барқарор шуд"
+  "bkRestored": "Барқарор шуд",
+  "actionFromStore": "Аз мағоза гирифтам",
+  "fromStoreNote": "Аз кассаи мағоза",
+  "pfCatDebtOut": "Қарз додам",
+  "pfCatDebtPay": "Пардохти қарз",
+  "pfCatDebtIn": "Қарз гирифтам",
+  "pfCatDebtBack": "Қарзро баргардонданд",
+  "debtAccount": "Ба ҳисоб сабт кардан",
+  "debtNoAccount": "Сабт накардан"
 }

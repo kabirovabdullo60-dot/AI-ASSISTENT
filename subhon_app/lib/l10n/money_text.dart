@@ -17,12 +17,16 @@ String moneyCategoryText(AppLocalizations l10n, MoneyCategory c) => switch (c) {
   MoneyCategory.fun => l10n.pfCatFun,
   MoneyCategory.gifts => l10n.pfCatGifts,
   MoneyCategory.family => l10n.pfCatFamily,
+  MoneyCategory.debtOut => l10n.pfCatDebtOut,
+  MoneyCategory.debtPay => l10n.pfCatDebtPay,
   MoneyCategory.otherExpense => l10n.pfCatOtherExpense,
   MoneyCategory.salary => l10n.pfCatSalary,
   MoneyCategory.business => l10n.pfCatBusiness,
   MoneyCategory.sideJob => l10n.pfCatSideJob,
   MoneyCategory.giftIn => l10n.pfCatGiftIn,
   MoneyCategory.refund => l10n.pfCatRefund,
+  MoneyCategory.debtIn => l10n.pfCatDebtIn,
+  MoneyCategory.debtBack => l10n.pfCatDebtBack,
   MoneyCategory.otherIncome => l10n.pfCatOtherIncome,
 };
 
@@ -39,12 +43,16 @@ IconData moneyCategoryIcon(MoneyCategory c) => switch (c) {
   MoneyCategory.fun => Icons.celebration_outlined,
   MoneyCategory.gifts => Icons.card_giftcard_outlined,
   MoneyCategory.family => Icons.family_restroom_outlined,
+  MoneyCategory.debtOut => Icons.call_made_rounded,
+  MoneyCategory.debtPay => Icons.credit_score_outlined,
   MoneyCategory.otherExpense => Icons.more_horiz_rounded,
   MoneyCategory.salary => Icons.work_outline_rounded,
   MoneyCategory.business => Icons.storefront_outlined,
   MoneyCategory.sideJob => Icons.handyman_outlined,
   MoneyCategory.giftIn => Icons.redeem_outlined,
   MoneyCategory.refund => Icons.undo_rounded,
+  MoneyCategory.debtIn => Icons.call_received_rounded,
+  MoneyCategory.debtBack => Icons.assignment_return_outlined,
   MoneyCategory.otherIncome => Icons.add_card_outlined,
 };
 

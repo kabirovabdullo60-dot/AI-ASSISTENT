@@ -2372,4 +2372,28 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get bkRestored => 'Восстановлено';
+
+  @override
+  String get actionFromStore => 'Взял из магазина';
+
+  @override
+  String get fromStoreNote => 'Из кассы магазина';
+
+  @override
+  String get pfCatDebtOut => 'Дал в долг';
+
+  @override
+  String get pfCatDebtPay => 'Погашение долга';
+
+  @override
+  String get pfCatDebtIn => 'Взял в долг';
+
+  @override
+  String get pfCatDebtBack => 'Вернули долг';
+
+  @override
+  String get debtAccount => 'Записать в счёт';
+
+  @override
+  String get debtNoAccount => 'Не записывать';
 }

@@ -13,6 +13,8 @@ enum MoneyCategory {
   fun(income: false),
   gifts(income: false),
   family(income: false),
+  debtOut(income: false),
+  debtPay(income: false),
   otherExpense(income: false),
   // Income.
   salary(income: true),
@@ -20,6 +22,8 @@ enum MoneyCategory {
   sideJob(income: true),
   giftIn(income: true),
   refund(income: true),
+  debtIn(income: true),
+  debtBack(income: true),
   otherIncome(income: true);
 
   const MoneyCategory({required this.income});

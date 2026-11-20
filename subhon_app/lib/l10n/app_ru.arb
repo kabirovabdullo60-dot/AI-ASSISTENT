@@ -704,5 +704,13 @@
   "bkConfirmTitle": "Восстановить копию?",
   "bkConfirmMessage": "От {date}: счетов {accounts}, операций {operations}, долгов {debts}. То, что сейчас на телефоне, будет заменено.",
   "bkRestoreAction": "Восстановить",
-  "bkRestored": "Восстановлено"
+  "bkRestored": "Восстановлено",
+  "actionFromStore": "Взял из магазина",
+  "fromStoreNote": "Из кассы магазина",
+  "pfCatDebtOut": "Дал в долг",
+  "pfCatDebtPay": "Погашение долга",
+  "pfCatDebtIn": "Взял в долг",
+  "pfCatDebtBack": "Вернули долг",
+  "debtAccount": "Записать в счёт",
+  "debtNoAccount": "Не записывать"
 }

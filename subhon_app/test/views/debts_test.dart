@@ -3,11 +3,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/core/storage/secure_debt_storage.dart';
 import 'package:subhon_app/models/debt_kind.dart';
+import 'package:subhon_app/models/money_transaction_kind.dart';
+import 'package:subhon_app/models/money_category.dart';
 import 'package:subhon_app/viewmodels/debts_view_model.dart';
 
 import '../helpers/app_harness.dart';
 import '../helpers/fake_backend.dart';
 import '../helpers/memory_debt_storage.dart';
+import '../helpers/memory_personal_finance_storage.dart';
 import '../helpers/memory_token_storage.dart';
 
 const _user = '11111111-1111-1111-1111-111111111111';
@@ -127,5 +130,45 @@ void main() {
     await tapText(tester, 'Продажи');
     expect(find.widgetWithText(AppBar, 'Продажи'), findsOneWidget);
     expect(find.byType(BackButton), findsOneWidget);
+  });
+
+  testWidgets('a debt written to an account: lending takes the money from '
+      '"Наличные", a repayment brings it back', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 2400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final personal = MemoryPersonalFinanceStorage();
+    final backend = FakeBackend()
+      ..json('GET', '/api/auth/me', ApiJson.profile());
+    stubHome(backend);
+    await pumpApp(
+      tester,
+      backend,
+      debts: MemoryDebtStorage(),
+      personal: personal,
+      tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
+    );
+    await tapText(tester, 'Долги');
+    await tapText(tester, 'Добавить долг');
+    expect(find.text('Записать в счёт'), findsOneWidget);
+    await tester.enterText(fieldWithLabel('Кто'), 'Алишер');
+    await tester.enterText(fieldWithLabel('Сумма'), '500');
+    await tapText(tester, 'Сохранить');
+
+    var data = personal.byUser.values.single;
+    final lent = data.transactions.single;
+    expect(lent.kind, MoneyTransactionKind.expense);
+    expect(lent.category, MoneyCategory.debtOut);
+    expect(lent.amount, 500);
+    expect(lent.note, 'Алишер');
+
+    await tapText(tester, 'Алишер');
+    await tapText(tester, 'Записать погашение');
+    await tester.enterText(find.byType(EditableText).first, '200');
+    await tapText(tester, 'Сохранить');
+    data = personal.byUser.values.single;
+    final back = data.transactions.last;
+    expect(back.kind, MoneyTransactionKind.income);
+    expect(back.category, MoneyCategory.debtBack);
+    expect(back.amount, 200);
   });
 }

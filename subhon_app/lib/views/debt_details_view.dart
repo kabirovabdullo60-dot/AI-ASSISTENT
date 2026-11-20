@@ -7,12 +7,15 @@ import '../l10n/l10n.dart';
 import '../l10n/validators.dart';
 import '../models/debt_kind.dart';
 import '../viewmodels/debts_view_model.dart';
+import '../models/money_account_model.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_feedback.dart';
 import '../widgets/app_text_field.dart';
+import '../widgets/debt_account_picker.dart';
 import '../widgets/record_tile.dart';
 import 'debts_view.dart';
+import 'personal_lookup.dart';
 
 /// One debt or credit: what is left, the progress, its details, the
 /// repayments; record a repayment, mark it repaid, edit or delete.
@@ -24,13 +27,29 @@ class DebtDetailsView extends StatelessWidget {
   Future<void> _repay(BuildContext context, DebtsViewModel vm) async {
     final l10n = context.l10n;
     final feedback = AppSnackbar.of(context);
-    final amount = await showAppBottomSheet<double>(
+    final personal = personalOrNull(context);
+    final debt = vm.byId(debtId)!;
+    final result = await showAppBottomSheet<(double, String?)>(
       context,
       title: l10n.debtRepay,
-      builder: (_) => _RepaySheet(left: vm.byId(debtId)!.remaining),
+      builder: (_) => _RepaySheet(
+        left: debt.remaining,
+        accounts: personal?.accounts ?? const [],
+      ),
     );
-    if (amount == null) return;
+    if (result == null) return;
+    final (amount, account) = result;
+    final part = amount > debt.remaining ? debt.remaining : amount;
     await vm.repay(debtId, amount);
+    if (personal != null && account != null) {
+      await personal.recordDebt(
+        kind: debt.kind,
+        repayment: true,
+        amount: part,
+        accountId: account,
+        name: debt.name,
+      );
+    }
     feedback.showSuccess(l10n.debtRepaid);
   }
 
@@ -156,7 +175,8 @@ class DebtDetailsView extends StatelessWidget {
               label: l10n.debtRepayAll,
               icon: Icons.check_circle_outline_rounded,
               variant: AppButtonVariant.secondary,
-              onPressed: () => vm.close(debtId),
+              // The whole rest, through the same sheet (and its account).
+              onPressed: () => _repay(context, vm),
             ),
           ],
           const SizedBox(height: AppSpacing.xl),
@@ -195,9 +215,10 @@ class DebtDetailsView extends StatelessWidget {
 
 /// How much was repaid (at most what is left); pops the amount.
 class _RepaySheet extends StatefulWidget {
-  const _RepaySheet({required this.left});
+  const _RepaySheet({required this.left, required this.accounts});
 
   final double left;
+  final List<MoneyAccountModel> accounts;
 
   @override
   State<_RepaySheet> createState() => _RepaySheetState();
@@ -208,6 +229,7 @@ class _RepaySheetState extends State<_RepaySheet> {
   late final _amount = TextEditingController(
     text: widget.left.toStringAsFixed(2),
   );
+  late String? _account = widget.accounts.firstOrNull?.id;
 
   @override
   void dispose() {
@@ -246,12 +268,22 @@ class _RepaySheetState extends State<_RepaySheet> {
               ),
               validator: (v) => Validators.amount(v, l10n),
             ),
+            if (widget.accounts.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.md),
+              DebtAccountPicker(
+                accounts: widget.accounts,
+                value: _account,
+                onChanged: (v) => setState(() => _account = v),
+              ),
+            ],
             const SizedBox(height: AppSpacing.lg),
             AppButton(
               label: l10n.commonSave,
               onPressed: () {
                 if (!(_form.currentState?.validate() ?? false)) return;
-                Navigator.of(context).pop(Validators.parseAmount(_amount.text));
+                Navigator.of(
+                  context,
+                ).pop((Validators.parseAmount(_amount.text)!, _account));
               },
             ),
           ],

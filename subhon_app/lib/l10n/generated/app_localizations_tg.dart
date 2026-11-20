@@ -2357,4 +2357,28 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get bkRestored => 'Барқарор шуд';
+
+  @override
+  String get actionFromStore => 'Аз мағоза гирифтам';
+
+  @override
+  String get fromStoreNote => 'Аз кассаи мағоза';
+
+  @override
+  String get pfCatDebtOut => 'Қарз додам';
+
+  @override
+  String get pfCatDebtPay => 'Пардохти қарз';
+
+  @override
+  String get pfCatDebtIn => 'Қарз гирифтам';
+
+  @override
+  String get pfCatDebtBack => 'Қарзро баргардонданд';
+
+  @override
+  String get debtAccount => 'Ба ҳисоб сабт кардан';
+
+  @override
+  String get debtNoAccount => 'Сабт накардан';
 }

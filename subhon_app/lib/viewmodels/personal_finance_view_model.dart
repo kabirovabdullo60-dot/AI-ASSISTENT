@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../core/storage/personal_finance_storage.dart';
+import '../models/debt_kind.dart';
 import '../models/fiat_rates_model.dart';
 import '../models/money_account_kind.dart';
 import '../models/money_account_model.dart';
@@ -570,6 +571,33 @@ class PersonalFinanceViewModel extends ChangeNotifier {
             '${[for (final r in coming.take(5)) '${r.name} ${m(r.amount)} on ${d(r.nextDate)}'].join(', ')}.',
       '[Question]',
     ].join('\n');
+  }
+
+  // Debts.
+
+  /// Money of a debt on [accountId]: lending or repaying takes it from the
+  /// account, borrowing or being repaid brings it in.
+  Future<void> recordDebt({
+    required DebtKind kind,
+    required bool repayment,
+    required double amount,
+    required String accountId,
+    required String name,
+  }) {
+    final mine = kind == DebtKind.owedToMe;
+    final (txKind, category) = switch ((mine, repayment)) {
+      (true, false) => (MoneyTransactionKind.expense, MoneyCategory.debtOut),
+      (true, true) => (MoneyTransactionKind.income, MoneyCategory.debtBack),
+      (false, false) => (MoneyTransactionKind.income, MoneyCategory.debtIn),
+      (false, true) => (MoneyTransactionKind.expense, MoneyCategory.debtPay),
+    };
+    return addTransaction(
+      kind: txKind,
+      amount: amount,
+      accountId: accountId,
+      category: category,
+      note: name,
+    );
   }
 
   // Savings goals.

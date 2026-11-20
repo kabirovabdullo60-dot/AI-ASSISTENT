@@ -2365,4 +2365,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bkRestored => 'Restored';
+
+  @override
+  String get actionFromStore => 'Took from the shop';
+
+  @override
+  String get fromStoreNote => 'From the shop';
+
+  @override
+  String get pfCatDebtOut => 'Lent';
+
+  @override
+  String get pfCatDebtPay => 'Debt repayment';
+
+  @override
+  String get pfCatDebtIn => 'Borrowed';
+
+  @override
+  String get pfCatDebtBack => 'Debt returned';
+
+  @override
+  String get debtAccount => 'Write to account';
+
+  @override
+  String get debtNoAccount => 'Don\'t write';
 }

@@ -10,6 +10,7 @@ import '../viewmodels/debts_view_model.dart';
 import '../widgets/app_button.dart';
 import 'debt_details_view.dart';
 import 'debt_form_view.dart';
+import 'personal_lookup.dart';
 
 /// The "Долги" tab: an overview (owed to me, debts to people, credits),
 /// the "Мне должны | Я должен" switch with its list (or an empty state
@@ -23,20 +24,27 @@ class DebtsView extends StatelessWidget {
     DebtModel? debt,
   }) => Navigator.of(context).push(
     MaterialPageRoute<void>(
-      builder: (_) => ChangeNotifierProvider.value(
-        value: context.read<DebtsViewModel>(),
-        child: DebtFormView(kind: kind, initial: debt),
-      ),
+      builder: (_) =>
+          _withVms(context, DebtFormView(kind: kind, initial: debt)),
     ),
   );
+
+  /// The debts and (inside the shell) the personal accountant.
+  static Widget _withVms(BuildContext context, Widget child) {
+    final debts = ChangeNotifierProvider.value(
+      value: context.read<DebtsViewModel>(),
+      child: child,
+    );
+    final personal = personalOrNull(context);
+    return personal == null
+        ? debts
+        : ChangeNotifierProvider.value(value: personal, child: debts);
+  }
 
   static Future<void> openDetails(BuildContext context, DebtModel debt) =>
       Navigator.of(context).push(
         MaterialPageRoute<void>(
-          builder: (_) => ChangeNotifierProvider.value(
-            value: context.read<DebtsViewModel>(),
-            child: DebtDetailsView(debtId: debt.id),
-          ),
+          builder: (_) => _withVms(context, DebtDetailsView(debtId: debt.id)),
         ),
       );
 

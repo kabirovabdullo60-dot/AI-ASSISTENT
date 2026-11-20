@@ -4329,6 +4329,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Restored'**
   String get bkRestored;
+
+  /// No description provided for @actionFromStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Took from the shop'**
+  String get actionFromStore;
+
+  /// No description provided for @fromStoreNote.
+  ///
+  /// In en, this message translates to:
+  /// **'From the shop'**
+  String get fromStoreNote;
+
+  /// No description provided for @pfCatDebtOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Lent'**
+  String get pfCatDebtOut;
+
+  /// No description provided for @pfCatDebtPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt repayment'**
+  String get pfCatDebtPay;
+
+  /// No description provided for @pfCatDebtIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrowed'**
+  String get pfCatDebtIn;
+
+  /// No description provided for @pfCatDebtBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt returned'**
+  String get pfCatDebtBack;
+
+  /// No description provided for @debtAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Write to account'**
+  String get debtAccount;
+
+  /// No description provided for @debtNoAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t write'**
+  String get debtNoAccount;
 }
 
 class _AppLocalizationsDelegate
