@@ -72,6 +72,16 @@ class AuthViewModel extends ChangeNotifier {
         _user = await _profile.update(fullName: fullName, email: email, phone: phone, businessName: businessName),
   );
 
+  /// Reloads the signed-in user (e.g. after the AI assistant changed the profile).
+  Future<void> refreshProfile() async {
+    try {
+      _user = await _profile.fetch();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('AuthViewModel.refreshProfile: $e');
+    }
+  }
+
   Future<String?> changePassword(String current, String next) =>
       _run(() => _profile.changePassword(currentPassword: current, newPassword: next));
 

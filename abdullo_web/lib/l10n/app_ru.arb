@@ -552,5 +552,15 @@
   "actionDetails": "Подробнее",
   "assistantSlow": "Работаю… это может занять до 30 секунд.",
   "errActionNotFound": "Это действие больше не существует.",
-  "errActionHandled": "Это действие уже обработано."
+  "errActionHandled": "Это действие уже обработано.",
+  "assistantBusyWait": "Слишком много вопросов. Спросите снова через {seconds} с.",
+  "assistantUnavailable": "Ассистент сейчас недоступен. Попробуйте позже.",
+  "actionAskAgain": "Спросите ассистента ещё раз",
+  "actionCancelledAsk": "Отменено — спросите ассистента ещё раз",
+  "actionEdit": "Изменить",
+  "actionRetry": "Подтвердить снова",
+  "actionEditTitle": "Исправьте перед подтверждением",
+  "actionSaveConfirm": "Сохранить и подтвердить",
+  "actionSureTitle": "Вы уверены?",
+  "actionSureBody": "Будет удалено:\n{summary}"
 }

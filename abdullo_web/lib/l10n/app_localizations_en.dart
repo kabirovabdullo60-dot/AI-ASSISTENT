@@ -1916,4 +1916,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errActionHandled => 'This action was already handled.';
+
+  @override
+  String assistantBusyWait(int seconds) {
+    return 'Too many questions. Ask again in $seconds s.';
+  }
+
+  @override
+  String get assistantUnavailable =>
+      'The assistant is not available right now. Try again later.';
+
+  @override
+  String get actionAskAgain => 'Ask the assistant again';
+
+  @override
+  String get actionCancelledAsk => 'Cancelled — ask the assistant again';
+
+  @override
+  String get actionEdit => 'Edit';
+
+  @override
+  String get actionRetry => 'Confirm again';
+
+  @override
+  String get actionEditTitle => 'Correct before confirming';
+
+  @override
+  String get actionSaveConfirm => 'Save and confirm';
+
+  @override
+  String get actionSureTitle => 'Are you sure?';
+
+  @override
+  String actionSureBody(String summary) {
+    return 'This will be deleted:\n$summary';
+  }
 }

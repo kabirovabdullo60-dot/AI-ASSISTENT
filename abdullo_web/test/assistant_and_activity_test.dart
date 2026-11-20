@@ -73,6 +73,6 @@ void main() {
     final backend = setUpBackend()..assistantRateLimited = true;
     await pumpApp(tester, desktopWidth, backend: backend);
     await _ask(tester, 'How are my sales?');
-    expect(find.text('Too many questions. Wait a minute and ask again.'), findsOneWidget);
+    expect(find.text('Too many questions. Ask again in 42 s.'), findsOneWidget); // meta.retryAfter
   });
 }

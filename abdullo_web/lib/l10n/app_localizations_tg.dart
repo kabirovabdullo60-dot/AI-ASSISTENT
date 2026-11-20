@@ -1883,4 +1883,39 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get errActionHandled => 'Ин амал аллакай иҷро ё бекор шудааст.';
+
+  @override
+  String assistantBusyWait(int seconds) {
+    return 'Саволҳо зиёд шуданд. Баъди $seconds сония боз пурсед.';
+  }
+
+  @override
+  String get assistantUnavailable =>
+      'Ёрдамчӣ ҳоло дастрас нест. Баъдтар кӯшиш кунед.';
+
+  @override
+  String get actionAskAgain => 'Аз ёрдамчӣ боз пурсед';
+
+  @override
+  String get actionCancelledAsk => 'Бекор шуд — аз ёрдамчӣ боз пурсед';
+
+  @override
+  String get actionEdit => 'Тағйир додан';
+
+  @override
+  String get actionRetry => 'Боз тасдиқ';
+
+  @override
+  String get actionEditTitle => 'Пеш аз тасдиқ ислоҳ кунед';
+
+  @override
+  String get actionSaveConfirm => 'Захира ва тасдиқ';
+
+  @override
+  String get actionSureTitle => 'Боварӣ доред?';
+
+  @override
+  String actionSureBody(String summary) {
+    return 'Ин нест карда мешавад:\n$summary';
+  }
 }

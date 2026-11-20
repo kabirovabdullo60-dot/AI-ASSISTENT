@@ -1270,5 +1270,29 @@
         "type": "String"
       }
     }
+  },
+  "assistantBusyWait": "Too many questions. Ask again in {seconds} s.",
+  "assistantUnavailable": "The assistant is not available right now. Try again later.",
+  "actionAskAgain": "Ask the assistant again",
+  "actionCancelledAsk": "Cancelled — ask the assistant again",
+  "actionEdit": "Edit",
+  "actionRetry": "Confirm again",
+  "actionEditTitle": "Correct before confirming",
+  "actionSaveConfirm": "Save and confirm",
+  "actionSureTitle": "Are you sure?",
+  "actionSureBody": "This will be deleted:\n{summary}",
+  "@assistantBusyWait": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@actionSureBody": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
   }
 }

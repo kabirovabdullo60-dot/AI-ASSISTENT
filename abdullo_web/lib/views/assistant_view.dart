@@ -123,10 +123,14 @@ class _AssistantViewState extends State<AssistantView> {
                               Icon(Icons.error_outline, size: 18, color: AppColors.red),
                               const SizedBox(width: 8),
                               Expanded(
-                                child: Text(
-                                  vm.rateLimited ? tr.assistantBusy : tr.assistantError,
-                                  style: TextStyle(color: AppColors.red, fontSize: 13),
-                                ),
+                                child: Text(switch (vm.error) {
+                                  'RATE_LIMITED' when vm.retryAfter != null => tr.assistantBusyWait(vm.retryAfter!),
+                                  'RATE_LIMITED' => tr.assistantBusy,
+                                  'ASSISTANT_UNAVAILABLE' => tr.assistantUnavailable,
+                                  'NETWORK_ERROR' => tr.assistantError,
+                                  final code? => tr.error(code),
+                                  null => '',
+                                }, style: TextStyle(color: AppColors.red, fontSize: 13)),
                               ),
                             ],
                           ),
@@ -249,10 +253,12 @@ class _AssistantViewState extends State<AssistantView> {
     conversations: vm.conversations,
     currentId: vm.currentId,
     enabled: !vm.isSending,
-    onOpen: (id) {
-      vm.open(id);
-      _freshFrom = null;
+    onOpen: (id) async {
       onPicked?.call();
+      _freshFrom = 1 << 30; // nothing loaded animates…
+      await vm.open(id);
+      // Loaded messages appear at once; only new ones animate in.
+      if (mounted) setState(() => _freshFrom = null);
     },
     onDelete: (id) => _confirmDelete(vm, id),
     onNewChat: () {
@@ -715,7 +721,7 @@ class _MessageWithActions extends StatelessWidget {
                 action: a,
                 busy: vm.isActionBusy(a.id),
                 requestError: vm.actionError(a.id),
-                onConfirm: () => vm.confirmAction(a.id),
+                onConfirm: (params) => vm.confirmAction(a.id, params: params),
                 onCancel: () => vm.cancelAction(a.id),
                 onOpen: context.read<HomeViewModel>().select,
               ),

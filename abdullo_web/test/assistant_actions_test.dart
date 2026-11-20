@@ -107,11 +107,16 @@ void main() {
       await _ask(tester, 'Do these');
 
       await _tapVisible(tester, find.byKey(Key('action-cancel-${cancel['id']}')));
-      expect(find.text('Cancelled'), findsOneWidget);
+      expect(find.text('Cancelled — ask the assistant again'), findsOneWidget);
 
       final del = find.byKey(Key('action-confirm-${delete['id']}'));
       expect(find.descendant(of: del, matching: find.text('Delete')), findsOneWidget);
       await _tapVisible(tester, del);
+      // Deletes ask once more.
+      expect(find.text('Are you sure?'), findsOneWidget);
+      expect(backend.stores.firstWhere((s) => s['id'] == 's3')['deletedAt'], isNull);
+      await tester.tap(find.byKey(const Key('action-sure')));
+      await tester.pumpAndSettle();
       expect(backend.stores.firstWhere((s) => s['id'] == 's3')['deletedAt'], isNotNull);
 
       // Past expiresAt: no buttons, "ask again".
@@ -120,6 +125,15 @@ void main() {
 
       await _tapVisible(tester, find.byKey(Key('action-confirm-${taken['id']}')));
       expect(find.text('A store with this name already exists.'), findsOneWidget);
+
+      // FAILED → Edit the name and confirm again: only the changed field is sent.
+      await _tapVisible(tester, find.byKey(Key('action-edit-${taken['id']}')));
+      await tester.enterText(find.byKey(const Key('action-field-name')), 'Central Plaza 2');
+      await tester.tap(find.byKey(const Key('action-edit-save')));
+      await tester.pumpAndSettle();
+      expect(backend.lastConfirmParams, {'name': 'Central Plaza 2'});
+      expect(backend.stores.where((s) => s['name'] == 'Central Plaza 2'), hasLength(1));
+      expect(find.byKey(Key('action-open-${taken['id']}')), findsOneWidget);
     });
 
     testWidgets('a slow answer shows the "up to 30 seconds" note at $w', (tester) async {
@@ -138,8 +152,36 @@ void main() {
       await tester.pump(const Duration(seconds: 6));
       await tester.pumpAndSettle();
       expect(find.text('Done thinking.'), findsOneWidget);
+      // The history list refreshes behind the answer (another slow request).
+      await tester.pump(const Duration(seconds: 13));
+      await tester.pumpAndSettle();
     });
   }
+
+  testWidgets('a reopened chat shows each action with its current status', (tester) async {
+    final backend = setUpBackend()..assistantReply = 'Press Confirm.';
+    await pumpApp(tester, desktopWidth, backend: backend);
+    await openSection(tester, AppSection.assistant);
+    final add = backend.proposeAction('CREATE_STORE', {'name': 'Pamir Mall'}, summary: 'Add store «Pamir Mall»');
+    final skip = backend.proposeAction('CREATE_EXPENSE', {'amount': '9.00'}, summary: 'Add expense 9 TJS');
+    backend.nextActions = [add, skip];
+    await _ask(tester, 'Add Pamir Mall and an expense');
+    await _tapVisible(tester, find.byKey(Key('action-confirm-${add['id']}')));
+    await _tapVisible(tester, find.byKey(Key('action-cancel-${skip['id']}')));
+
+    // Start a new chat, then reopen this one from the history: cards come from messages[].actions.
+    await tester.tap(find.byKey(const Key('chat-new')));
+    await tester.pumpAndSettle();
+    expect(find.text('Add store «Pamir Mall»'), findsNothing);
+    await tester.tap(
+      find.descendant(of: find.byKey(const Key('history-panel')), matching: find.text('Add Pamir Mall and an expense')),
+    );
+    await tester.pumpAndSettle();
+    expect(backend.requests.where((r) => r.startsWith('GET /api/assistant/conversations/')), isNotEmpty);
+    expect(find.text('Add store «Pamir Mall»'), findsOneWidget);
+    expect(find.text('Done'), findsOneWidget);
+    expect(find.text('Cancelled — ask the assistant again'), findsOneWidget);
+  });
 
   testWidgets('a confirm that is already handled elsewhere shows the real status', (tester) async {
     final backend = setUpBackend()..assistantReply = 'Ok.';
@@ -151,6 +193,6 @@ void main() {
     a['status'] = 'CANCELLED'; // cancelled on the phone meanwhile
     await _tapVisible(tester, find.byKey(Key('action-confirm-${a['id']}')));
     expect(backend.requests, contains('GET /api/assistant/actions/${a['id']}'));
-    expect(find.text('Cancelled'), findsOneWidget);
+    expect(find.text('Cancelled — ask the assistant again'), findsOneWidget);
   });
 }

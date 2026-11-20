@@ -207,7 +207,7 @@ class _SignedInState extends State<_SignedIn> {
         ChangeNotifierProvider(
           create: (c) => AssistantViewModel(
             AssistantService(api, reports),
-            history: ChatHistoryService(userId: context.read<AuthViewModel>().user?.id ?? 'me'),
+            history: ChatHistoryService(api, userId: context.read<AuthViewModel>().user?.id ?? 'me'),
             // A confirmed AI action changed data → reload the pages that show it.
             onDataChanged: (action) {
               final reload = <Future<void> Function()>[
@@ -224,6 +224,7 @@ class _SignedInState extends State<_SignedIn> {
                   ],
                   'PAYROLL' => [c.read<PayrollViewModel>().load, c.read<EmployeesViewModel>().load],
                   'EXPENSE' => [c.read<ExpensesViewModel>().load],
+                  'PROFILE' => [c.read<AuthViewModel>().refreshProfile],
                   _ => <Future<void> Function()>[],
                 },
               ];

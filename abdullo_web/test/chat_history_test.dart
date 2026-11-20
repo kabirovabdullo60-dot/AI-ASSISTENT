@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:abdullo_web/core/navigation/app_section.dart';
 import 'package:abdullo_web/main.dart';
 import 'package:abdullo_web/models/chat_message_model.dart';
@@ -7,6 +9,7 @@ import 'package:abdullo_web/widgets/app_sidebar.dart';
 import 'package:abdullo_web/widgets/chat_history_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'helpers.dart';
 
@@ -155,6 +158,51 @@ void main() {
   testWidgets('tablet has no menu toggle (always compact)', (tester) async {
     await pumpApp(tester, tabletWidth);
     expect(find.byKey(const Key('sidebar-toggle')), findsNothing);
+  });
+
+  testWidgets('chats kept in the browser are uploaded once, then removed from it', (tester) async {
+    final backend = setUpBackend()..assistantReply = 'Answer.';
+    final old = ConversationModel(
+      id: 'c-1',
+      title: 'Old browser chat',
+      createdAt: DateTime(2026, 11, 18, 9),
+      updatedAt: DateTime(2026, 11, 18, 10),
+      messages: [
+        ChatMessageModel(role: ChatRole.user, text: 'Old browser chat', time: DateTime(2026, 11, 18, 9)),
+        ChatMessageModel(role: ChatRole.assistant, text: 'Old answer', time: DateTime(2026, 11, 18, 10)),
+      ],
+    );
+    SharedPreferences.setMockInitialValues({
+      'accessToken': 'access-start',
+      'refreshToken': 'refresh-start',
+      'chatHistory.u-1': jsonEncode([old.toJson()]),
+    });
+    await pumpApp(tester, desktopWidth, backend: backend);
+    await openSection(tester, AppSection.assistant);
+    expect(backend.requests.where((r) => r == 'POST /api/assistant/conversations'), hasLength(1));
+    expect(backend.conversations.values.single['title'], 'Old browser chat');
+    expect((await SharedPreferences.getInstance()).getString('chatHistory.u-1'), isNull);
+    expect(_inHistory('Old browser chat'), findsOneWidget);
+
+    // Reloading the page does not upload it again.
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpWidget(WebApp(httpClient: backend.client, splashDuration: Duration.zero));
+    await tester.pumpAndSettle();
+    await openSection(tester, AppSection.assistant);
+    expect(backend.requests.where((r) => r == 'POST /api/assistant/conversations'), hasLength(1));
+  });
+
+  testWidgets('the chat continues on the server with conversationId', (tester) async {
+    final backend = setUpBackend()..assistantReply = 'Answer.';
+    await pumpApp(tester, desktopWidth, backend: backend);
+    await openSection(tester, AppSection.assistant);
+    await _ask(tester, 'First question');
+    expect(backend.lastChatRequest!.containsKey('conversationId'), isFalse);
+    final id = backend.conversations.keys.single;
+    await _ask(tester, 'Second question');
+    expect(backend.lastChatRequest!['conversationId'], id);
+    expect(backend.conversations, hasLength(1));
+    expect(backend.conversations[id]!['messages'], hasLength(4));
   });
 
   testWidgets('empty history shows a hint', (tester) async {

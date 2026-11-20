@@ -1,7 +1,7 @@
 import 'chat_message_model.dart';
 
 /// One saved chat with the AI assistant.
-/// Same shape as the planned `ConversationOut` of `/api/assistant/conversations` (see the prompt for Mehroj).
+/// `ConversationSummaryOut` / `ConversationOut` of `/api/assistant/conversations`.
 class ConversationModel {
   const ConversationModel({
     required this.id,
@@ -9,6 +9,8 @@ class ConversationModel {
     required this.createdAt,
     required this.updatedAt,
     required this.messages,
+    this._messageCount,
+    this.lastMessage = '',
   });
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) => ConversationModel(
@@ -20,6 +22,8 @@ class ConversationModel {
       for (final m in (json['messages'] as List? ?? const []))
         if (m is Map<String, dynamic>) ChatMessageModel.fromJson(m),
     ],
+    messageCount: (json['messageCount'] as num?)?.toInt(),
+    lastMessage: json['lastMessage'] as String? ?? '',
   );
 
   /// Most chats a browser keeps; the oldest ones drop off.
@@ -35,9 +39,16 @@ class ConversationModel {
   final String title;
   final DateTime createdAt;
   final DateTime updatedAt;
+
+  /// Empty in list items (`ConversationSummaryOut`); filled by GET /api/assistant/conversations/{id}.
   final List<ChatMessageModel> messages;
 
-  int get messageCount => messages.length;
+  final int? _messageCount;
+
+  /// First 120 characters of the newest message.
+  final String lastMessage;
+
+  int get messageCount => _messageCount ?? messages.length;
 
   static String titleFrom(String question) {
     final t = question.trim().replaceAll(RegExp(r'\s+'), ' ');

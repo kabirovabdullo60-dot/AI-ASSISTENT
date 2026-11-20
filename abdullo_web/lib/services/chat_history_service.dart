@@ -3,53 +3,91 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../core/constants/api_constants.dart';
+import '../core/network/api_client.dart';
+import '../core/utils/json.dart';
 import '../models/conversation_model.dart';
 
-/// Saved AI chats of one user, kept in this browser (localStorage).
-///
-/// The backend has no history endpoints yet. When Mehroj adds `/api/assistant/conversations`,
-/// only this service changes: same methods, calls through `ApiClient` instead of storage.
+/// Saved AI chats of the signed-in user, on the server (`/api/assistant/conversations`),
+/// so they show on every device. Chats are saved by POST /api/assistant/chat itself.
 class ChatHistoryService {
-  ChatHistoryService({required String userId}) : _key = 'chatHistory.$userId';
+  ChatHistoryService(this._api, {required String userId}) : _localKey = 'chatHistory.$userId';
 
-  final String _key;
+  final ApiClient _api;
 
-  /// Newest (last updated) first.
-  Future<List<ConversationModel>> list() async {
+  /// Where older web versions kept chats in the browser (uploaded once by [importLocal]).
+  final String _localKey;
+
+  /// Newest (last updated) first, without messages. Throws `ApiException`.
+  Future<List<ConversationModel>> list({int limit = 50}) async {
+    final json = asJsonMap(await _api.get(ApiConstants.assistantConversations, query: {'page': 1, 'limit': limit}));
+    return [
+      for (final item in (json['items'] as List? ?? const []))
+        if (item is Map<String, dynamic>) ConversationModel.fromJson(item),
+    ];
+  }
+
+  /// One chat with all its messages (actions with their current status).
+  Future<ConversationModel> get(String id) async =>
+      ConversationModel.fromJson(asJsonMap(await _api.get('${ApiConstants.assistantConversations}/$id')));
+
+  Future<void> delete(String id) => _api.delete('${ApiConstants.assistantConversations}/$id');
+
+  Future<void> rename(String id, String title) =>
+      _api.patch('${ApiConstants.assistantConversations}/$id', {'title': title});
+
+  /// Uploads chats an older version kept in this browser (no AI call), then removes each one
+  /// from the browser so it is never uploaded twice. Returns how many were uploaded.
+  Future<int> importLocal() async {
+    final SharedPreferences prefs;
     try {
-      final raw = (await SharedPreferences.getInstance()).getString(_key);
-      if (raw == null) return [];
-      return [
+      prefs = await SharedPreferences.getInstance();
+    } catch (_) {
+      return 0;
+    }
+    final raw = prefs.getString(_localKey);
+    if (raw == null) return 0;
+    List<ConversationModel> pending;
+    try {
+      pending = [
         for (final item in jsonDecode(raw) as List)
           if (item is Map<String, dynamic>) ConversationModel.fromJson(item),
-      ]..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+      ];
     } catch (e) {
-      debugPrint('ChatHistoryService.list: $e');
-      return [];
+      debugPrint('ChatHistoryService.importLocal: unreadable, dropped: $e');
+      await prefs.remove(_localKey);
+      return 0;
     }
-  }
-
-  /// Adds or replaces [conversation]; returns the new list (newest first).
-  Future<List<ConversationModel>> save(ConversationModel conversation) async {
-    final all = (await list()).where((c) => c.id != conversation.id).toList()..insert(0, conversation);
-    final trimmed = all.take(ConversationModel.maxConversations).toList();
-    await _write(trimmed);
-    return trimmed;
-  }
-
-  /// Removes one chat; returns the new list.
-  Future<List<ConversationModel>> delete(String id) async {
-    final rest = (await list()).where((c) => c.id != id).toList();
-    await _write(rest);
-    return rest;
-  }
-
-  Future<void> _write(List<ConversationModel> list) async {
-    try {
-      await (await SharedPreferences.getInstance()).setString(_key, jsonEncode([for (final c in list) c.toJson()]));
-    } catch (e) {
-      // Storage full or blocked (private mode): the chat still works, it just isn't remembered.
-      debugPrint('ChatHistoryService._write: $e');
+    var uploaded = 0;
+    // Oldest first, so the server's "last updated" order matches what the user saw.
+    pending.sort((a, b) => a.updatedAt.compareTo(b.updatedAt));
+    for (final c in List.of(pending)) {
+      final messages = [
+        for (final m in c.messages)
+          if (m.text.trim().isNotEmpty)
+            {
+              'role': m.role.name,
+              'text': m.text.length > 2000 ? m.text.substring(0, 2000) : m.text,
+              'time': m.time.toUtc().toIso8601String(),
+            },
+      ];
+      if (messages.isNotEmpty) {
+        await _api.post(ApiConstants.assistantConversations, {
+          if (c.title.trim().isNotEmpty) 'title': ConversationModel.titleFrom(c.title),
+          'messages': messages.length > ConversationModel.maxMessages
+              ? messages.sublist(messages.length - ConversationModel.maxMessages)
+              : messages,
+        });
+        uploaded++;
+      }
+      // Remove each chat as soon as it is on the server: a failure later keeps only the rest.
+      pending.remove(c);
+      if (pending.isEmpty) {
+        await prefs.remove(_localKey);
+      } else {
+        await prefs.setString(_localKey, jsonEncode([for (final p in pending) p.toJson()]));
+      }
     }
+    return uploaded;
   }
 }

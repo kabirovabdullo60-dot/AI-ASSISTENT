@@ -3417,6 +3417,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This action was already handled.'**
   String get errActionHandled;
+
+  /// No description provided for @assistantBusyWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many questions. Ask again in {seconds} s.'**
+  String assistantBusyWait(int seconds);
+
+  /// No description provided for @assistantUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The assistant is not available right now. Try again later.'**
+  String get assistantUnavailable;
+
+  /// No description provided for @actionAskAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the assistant again'**
+  String get actionAskAgain;
+
+  /// No description provided for @actionCancelledAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled — ask the assistant again'**
+  String get actionCancelledAsk;
+
+  /// No description provided for @actionEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get actionEdit;
+
+  /// No description provided for @actionRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm again'**
+  String get actionRetry;
+
+  /// No description provided for @actionEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct before confirming'**
+  String get actionEditTitle;
+
+  /// No description provided for @actionSaveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and confirm'**
+  String get actionSaveConfirm;
+
+  /// No description provided for @actionSureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get actionSureTitle;
+
+  /// No description provided for @actionSureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will be deleted:\n{summary}'**
+  String actionSureBody(String summary);
 }
 
 class _AppLocalizationsDelegate

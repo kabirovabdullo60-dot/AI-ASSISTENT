@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import '../core/network/api_exception.dart';
@@ -8,7 +10,7 @@ import '../services/assistant_service.dart';
 import '../services/chat_history_service.dart';
 
 class AssistantViewModel extends ChangeNotifier {
-  /// [history] saves every chat so it can be opened again from the history list.
+  /// [history] = saved chats on the server (the chat endpoint saves them itself).
   /// [onDataChanged] runs after a confirmed action changed data, so the pages reload.
   AssistantViewModel(this._service, {this._history, this.onDataChanged}) {
     loadHistory();
@@ -29,12 +31,16 @@ class AssistantViewModel extends ChangeNotifier {
 
   List<ConversationModel> _conversations = [];
   String? _currentId;
+  String? _openingId;
 
-  /// Saved chats, newest first.
+  /// Saved chats, newest first (without their messages).
   List<ConversationModel> get conversations => List.unmodifiable(_conversations);
 
   /// Id of the open saved chat; null for a new chat not yet answered.
   String? get currentId => _currentId;
+
+  /// A saved chat is being loaded.
+  String? get openingId => _openingId;
 
   final List<ChatMessageModel> _messages = [];
   bool _isSending = false;
@@ -49,6 +55,10 @@ class AssistantViewModel extends ChangeNotifier {
   bool get rateLimited => _rateLimited;
   bool _rateLimited = false;
 
+  /// With [rateLimited]: seconds to wait (`Retry-After`), when the server said.
+  int? get retryAfter => _retryAfter;
+  int? _retryAfter;
+
   /// [language] = 'en' / 'ru' / 'tg' — the assistant answers in it.
   Future<void> send(String text, {String language = 'en'}) async {
     final question = text.trim();
@@ -58,17 +68,28 @@ class AssistantViewModel extends ChangeNotifier {
     _isSending = true;
     _error = null;
     _rateLimited = false;
+    _retryAfter = null;
     _notify();
     try {
-      final reply = await _service.sendMessage(List.of(_messages), language: language);
-      _messages.add(reply);
-      await _saveCurrent();
+      ({ChatMessageModel reply, String? conversationId}) answer;
+      try {
+        answer = await _service.sendMessage(List.of(_messages), language: language, conversationId: _currentId);
+      } on ApiException catch (e) {
+        // The open chat was deleted elsewhere → continue as a new chat.
+        if (e.code != 'CONVERSATION_NOT_FOUND') rethrow;
+        answer = await _service.sendMessage(List.of(_messages), language: language);
+      }
+      _messages.add(answer.reply);
+      _currentId = answer.conversationId ?? _currentId;
+      // The answer shows now; the history list (new title / order) refreshes behind it.
+      unawaited(loadHistory());
     } on ApiException catch (e) {
       _rateLimited = e.code == 'RATE_LIMITED';
-      _error = 'The assistant did not answer. Please try again.';
+      _retryAfter = e.retryAfter;
+      _error = e.code;
       debugPrint('AssistantViewModel.send: $e');
     } catch (e) {
-      _error = 'The assistant did not answer. Please try again.';
+      _error = 'NETWORK_ERROR';
       debugPrint('AssistantViewModel.send: $e');
     } finally {
       _isSending = false;
@@ -76,7 +97,9 @@ class AssistantViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> confirmAction(String id) => _runAction(id, () => _service.confirmAction(id));
+  /// Runs a proposed (or failed) action. [params] = only the fields the user corrected.
+  Future<void> confirmAction(String id, {Map<String, dynamic>? params}) =>
+      _runAction(id, () => _service.confirmAction(id, params: params));
 
   Future<void> cancelAction(String id) => _runAction(id, () => _service.cancelAction(id));
 
@@ -108,7 +131,6 @@ class AssistantViewModel extends ChangeNotifier {
       _actionErrors[id] = 'NETWORK_ERROR';
     } finally {
       _busyActions.remove(id);
-      await _saveCurrent();
       _notify();
     }
   }
@@ -138,58 +160,79 @@ class AssistantViewModel extends ChangeNotifier {
     _currentId = null;
     _error = null;
     _rateLimited = false;
+    _retryAfter = null;
     _notify();
   }
 
+  bool _imported = false;
+
+  /// Reloads the chat list. The first time it also uploads chats an older version kept
+  /// in this browser.
   Future<void> loadHistory() async {
     final history = _history;
     if (history == null) return;
-    _conversations = await history.list();
-    _notify();
+    try {
+      if (!_imported) {
+        _imported = true;
+        await history.importLocal();
+      }
+      _conversations = await history.list();
+      _notify();
+    } catch (e) {
+      // Offline: keep the list we have; the chat itself still works.
+      debugPrint('AssistantViewModel.loadHistory: $e');
+    }
   }
 
-  /// Opens a saved chat; the next question continues it.
-  void open(String id) {
-    if (_isSending || id == _currentId) return;
-    final c = _conversations.where((c) => c.id == id).firstOrNull;
-    if (c == null) return;
-    _messages
-      ..clear()
-      ..addAll(c.messages);
-    _currentId = c.id;
-    _error = null;
-    _rateLimited = false;
+  /// Opens a saved chat (its actions show their current status); the next question continues it.
+  Future<void> open(String id) async {
+    final history = _history;
+    if (history == null || _isSending || id == _currentId || _openingId != null) return;
+    _openingId = id;
     _notify();
+    try {
+      final c = await history.get(id);
+      _messages
+        ..clear()
+        ..addAll(c.messages);
+      _currentId = c.id;
+      _error = null;
+      _rateLimited = false;
+    } on ApiException catch (e) {
+      debugPrint('AssistantViewModel.open: $e');
+      if (e.code == 'CONVERSATION_NOT_FOUND') {
+        _conversations = _conversations.where((c) => c.id != id).toList();
+      } else {
+        _error = e.code;
+      }
+    } catch (e) {
+      debugPrint('AssistantViewModel.open: $e');
+      _error = 'NETWORK_ERROR';
+    } finally {
+      _openingId = null;
+      _notify();
+    }
   }
 
   Future<void> delete(String id) async {
     final history = _history;
     if (history == null) return;
+    try {
+      await history.delete(id);
+    } on ApiException catch (e) {
+      if (e.code != 'CONVERSATION_NOT_FOUND') {
+        _error = e.code;
+        _notify();
+        return;
+      }
+    } catch (_) {
+      _error = 'NETWORK_ERROR';
+      _notify();
+      return;
+    }
     if (id == _currentId) clear();
-    _conversations = await history.delete(id);
+    _conversations = _conversations.where((c) => c.id != id).toList();
     _notify();
-  }
-
-  /// Saves the open chat after an answer: a new chat gets its first question as the title.
-  Future<void> _saveCurrent() async {
-    final history = _history;
-    if (history == null || _messages.isEmpty) return;
-    final now = DateTime.now();
-    final kept = _messages.length > ConversationModel.maxMessages
-        ? _messages.sublist(_messages.length - ConversationModel.maxMessages)
-        : List.of(_messages);
-    final existing = _conversations.where((c) => c.id == _currentId).firstOrNull;
-    final conversation =
-        existing?.copyWith(updatedAt: now, messages: kept) ??
-        ConversationModel(
-          id: 'c-${now.microsecondsSinceEpoch}',
-          title: ConversationModel.titleFrom(_messages.firstWhere((m) => m.isUser).text),
-          createdAt: now,
-          updatedAt: now,
-          messages: kept,
-        );
-    _currentId = conversation.id;
-    _conversations = await history.save(conversation);
   }
 
   void _notify() {

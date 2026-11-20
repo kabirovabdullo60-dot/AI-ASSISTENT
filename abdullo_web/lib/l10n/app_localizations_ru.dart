@@ -1904,4 +1904,39 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get errActionHandled => 'Это действие уже обработано.';
+
+  @override
+  String assistantBusyWait(int seconds) {
+    return 'Слишком много вопросов. Спросите снова через $seconds с.';
+  }
+
+  @override
+  String get assistantUnavailable =>
+      'Ассистент сейчас недоступен. Попробуйте позже.';
+
+  @override
+  String get actionAskAgain => 'Спросите ассистента ещё раз';
+
+  @override
+  String get actionCancelledAsk => 'Отменено — спросите ассистента ещё раз';
+
+  @override
+  String get actionEdit => 'Изменить';
+
+  @override
+  String get actionRetry => 'Подтвердить снова';
+
+  @override
+  String get actionEditTitle => 'Исправьте перед подтверждением';
+
+  @override
+  String get actionSaveConfirm => 'Сохранить и подтвердить';
+
+  @override
+  String get actionSureTitle => 'Вы уверены?';
+
+  @override
+  String actionSureBody(String summary) {
+    return 'Будет удалено:\n$summary';
+  }
 }

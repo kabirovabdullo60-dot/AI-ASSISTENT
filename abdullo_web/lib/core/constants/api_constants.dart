@@ -67,6 +67,7 @@ class ApiConstants {
   static const String notificationsReadAll = '/api/notifications/read-all';
   static const String assistantChat = '/api/assistant/chat';
   static const String assistantActions = '/api/assistant/actions';
+  static const String assistantConversations = '/api/assistant/conversations';
   static const String exchangeRates = '/api/settings/exchange-rates';
 
   // health (no auth)
@@ -103,6 +104,7 @@ class ApiConstants {
     ('GET', exchangeRates, 'Exchange rates'),
     ('POST', assistantChat, 'AI assistant'),
     ('GET/POST', '$assistantActions/{id} · /confirm · /cancel', 'AI assistant actions'),
+    ('GET/POST/PATCH/DELETE', assistantConversations, 'AI chat history'),
     ('GET', healthReady, 'Server health'),
   ];
 

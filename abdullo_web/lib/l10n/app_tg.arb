@@ -552,5 +552,15 @@
   "actionDetails": "Тафсилот",
   "assistantSlow": "Кор карда истодаам… ин то 30 сония вақт мегирад.",
   "errActionNotFound": "Ин амал дигар вуҷуд надорад.",
-  "errActionHandled": "Ин амал аллакай иҷро ё бекор шудааст."
+  "errActionHandled": "Ин амал аллакай иҷро ё бекор шудааст.",
+  "assistantBusyWait": "Саволҳо зиёд шуданд. Баъди {seconds} сония боз пурсед.",
+  "assistantUnavailable": "Ёрдамчӣ ҳоло дастрас нест. Баъдтар кӯшиш кунед.",
+  "actionAskAgain": "Аз ёрдамчӣ боз пурсед",
+  "actionCancelledAsk": "Бекор шуд — аз ёрдамчӣ боз пурсед",
+  "actionEdit": "Тағйир додан",
+  "actionRetry": "Боз тасдиқ",
+  "actionEditTitle": "Пеш аз тасдиқ ислоҳ кунед",
+  "actionSaveConfirm": "Захира ва тасдиқ",
+  "actionSureTitle": "Боварӣ доред?",
+  "actionSureBody": "Ин нест карда мешавад:\n{summary}"
 }
