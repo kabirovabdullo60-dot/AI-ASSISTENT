@@ -16,6 +16,8 @@ Map<String, Object?> _reply(String text) => {
   'role': 'assistant',
   'text': text,
   'time': '2026-11-18T09:00:05Z',
+  'conversationId': '33333333-3333-3333-3333-333333333333',
+  'actions': <Object>[],
 };
 
 Future<FakeBackend> _openChat(WidgetTester tester) async {
@@ -118,6 +120,9 @@ void main() {
       expect(vm.error?.meta['retryAfter'], 12);
       expect(vm.messages.last, isA<ChatMessageModel>());
       expect(vm.canRetry, isTrue);
+      expect(vm.waitSeconds, inInclusiveRange(11, 12));
+      expect(vm.canSend, isFalse);
+      vm.dispose();
     },
   );
 }

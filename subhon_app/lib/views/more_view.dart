@@ -155,6 +155,7 @@ class MoreView extends StatelessWidget {
                     personalContext: context
                         .read<PersonalFinanceViewModel>()
                         .summary,
+                    onDataChanged: onChanged,
                   ),
                 ),
               ),

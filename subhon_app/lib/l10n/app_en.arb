@@ -1275,5 +1275,56 @@
   "debtNoAccount": "Don't write",
   "sessionOfflineTitle": "No connection to the server",
   "sessionOfflineMessage": "You are still signed in. Check the internet and try again.",
-  "sessionTooOld": "For safety, please sign in again (once a week)."
+  "sessionTooOld": "For safety, please sign in again (once a week).",
+  "errActionNotFound": "This proposal was not found.",
+  "errConversationNotFound": "This chat was deleted.",
+  "errActionAlreadyHandled": "This proposal has already been confirmed or cancelled.",
+  "errActionExpired": "This proposal has expired. Ask the assistant again.",
+  "actConfirm": "Confirm",
+  "actConfirmAgain": "Confirm again",
+  "actCancel": "Cancel",
+  "actDone": "Done",
+  "actCancelled": "Cancelled · ask the assistant again",
+  "actExpired": "Expired · ask the assistant again",
+  "actFailed": "Not done: {reason}",
+  "@actFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "actSureTitle": "Are you sure?",
+  "actSureMessage": "{summary} This can't be undone from the chat.",
+  "@actSureMessage": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRename": "Rename",
+  "chatRenameTitle": "Chat name",
+  "chatDelete": "Delete",
+  "chatDeleteTitle": "Delete the chat?",
+  "chatDeleteMessage": "It disappears on every device.",
+  "chatHistoryServerEmpty": "Your chats with the assistant will be saved here, on every device you sign in on.",
+  "chatMessages": "{count} messages",
+  "@chatMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatMore": "Show more",
+  "chatWaitSeconds": "Too many questions. Next one in {seconds} s.",
+  "@chatWaitSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "chatOptions": "Chat options"
 }

@@ -11,6 +11,7 @@ import 'package:subhon_app/services/file_pick_service.dart';
 import 'package:subhon_app/services/reminder_service.dart';
 
 import 'fake_file_pick_service.dart';
+import 'memory_chat_history_storage.dart';
 import 'fake_reminder_service.dart';
 import 'memory_personal_finance_storage.dart';
 import 'package:subhon_app/core/storage/statement_history_storage.dart';
@@ -73,7 +74,7 @@ Future<void> pumpApp(
       localeStorage: MemoryLocaleStorage(),
       locale: locale,
       voice: voice,
-      chatHistory: chatHistory,
+      chatHistory: chatHistory ?? MemoryChatHistoryStorage(),
       statementHistory: statementHistory,
       fileShare: fileShare,
       biometric: biometric,

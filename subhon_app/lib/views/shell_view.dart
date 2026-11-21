@@ -487,7 +487,10 @@ class _ShellViewState extends State<ShellView> {
         tooltip: l10n.assistantTitle,
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => ChatView(personalContext: _personal.summary),
+            builder: (_) => ChatView(
+              personalContext: _personal.summary,
+              onDataChanged: _refreshAll,
+            ),
           ),
         ),
       ),

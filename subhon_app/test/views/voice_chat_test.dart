@@ -18,6 +18,7 @@ Future<FakeBackend> _openVoice(
       'role': 'assistant',
       'text': 'У вас 7 сотрудников, работают 6.',
       'time': '2026-11-19T09:00:00Z',
+      'conversationId': '33333333-3333-3333-3333-333333333333',
     });
   stubHome(backend);
   await pumpApp(

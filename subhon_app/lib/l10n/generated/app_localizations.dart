@@ -4395,6 +4395,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For safety, please sign in again (once a week).'**
   String get sessionTooOld;
+
+  /// No description provided for @errActionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This proposal was not found.'**
+  String get errActionNotFound;
+
+  /// No description provided for @errConversationNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This chat was deleted.'**
+  String get errConversationNotFound;
+
+  /// No description provided for @errActionAlreadyHandled.
+  ///
+  /// In en, this message translates to:
+  /// **'This proposal has already been confirmed or cancelled.'**
+  String get errActionAlreadyHandled;
+
+  /// No description provided for @errActionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This proposal has expired. Ask the assistant again.'**
+  String get errActionExpired;
+
+  /// No description provided for @actConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get actConfirm;
+
+  /// No description provided for @actConfirmAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm again'**
+  String get actConfirmAgain;
+
+  /// No description provided for @actCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get actCancel;
+
+  /// No description provided for @actDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get actDone;
+
+  /// No description provided for @actCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled · ask the assistant again'**
+  String get actCancelled;
+
+  /// No description provided for @actExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired · ask the assistant again'**
+  String get actExpired;
+
+  /// No description provided for @actFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not done: {reason}'**
+  String actFailed(String reason);
+
+  /// No description provided for @actSureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get actSureTitle;
+
+  /// No description provided for @actSureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{summary} This can\'t be undone from the chat.'**
+  String actSureMessage(String summary);
+
+  /// No description provided for @chatRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get chatRename;
+
+  /// No description provided for @chatRenameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat name'**
+  String get chatRenameTitle;
+
+  /// No description provided for @chatDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get chatDelete;
+
+  /// No description provided for @chatDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the chat?'**
+  String get chatDeleteTitle;
+
+  /// No description provided for @chatDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'It disappears on every device.'**
+  String get chatDeleteMessage;
+
+  /// No description provided for @chatHistoryServerEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your chats with the assistant will be saved here, on every device you sign in on.'**
+  String get chatHistoryServerEmpty;
+
+  /// No description provided for @chatMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} messages'**
+  String chatMessages(int count);
+
+  /// No description provided for @chatMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Show more'**
+  String get chatMore;
+
+  /// No description provided for @chatWaitSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many questions. Next one in {seconds} s.'**
+  String chatWaitSeconds(int seconds);
+
+  /// No description provided for @chatOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat options'**
+  String get chatOptions;
 }
 
 class _AppLocalizationsDelegate

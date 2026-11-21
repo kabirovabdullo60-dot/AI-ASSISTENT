@@ -1,20 +1,53 @@
-/// `ChatMessage` / `ChatReplyOut` from the API contract (API.md / Swagger):
-/// one message of the conversation with the AI assistant.
+import 'assistant_action_model.dart';
+
+/// `ChatMessage` / `ChatReplyOut` / `ConversationMessageOut` (API.md): one
+/// message of the conversation with the AI assistant.
 class ChatMessageModel {
   const ChatMessageModel({
     required this.fromUser,
     required this.text,
     this.time,
     this.prompt,
+    this.actions = const [],
   });
 
-  factory ChatMessageModel.fromJson(Map<String, dynamic> json) =>
+  factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
+    final fromUser = json['role'] == 'user';
+    final text = json['text'] as String;
+    return ChatMessageModel(
+      fromUser: fromUser,
+      text: fromUser ? withoutNote(text) : text,
+      time: json['time'] == null
+          ? null
+          : DateTime.parse(json['time'] as String).toLocal(),
+      actions: [
+        for (final a in json['actions'] as List<dynamic>? ?? const [])
+          AssistantActionModel.fromJson(a as Map<String, dynamic>),
+      ],
+    );
+  }
+
+  /// The note of personal finances that goes before a question ends with
+  /// this line; a saved question is shown without it.
+  static const noteEnd = '[Question]\n';
+
+  static String withoutNote(String text) {
+    final at = text.indexOf(noteEnd);
+    return text.startsWith('[') && at >= 0
+        ? text.substring(at + noteEnd.length)
+        : text;
+  }
+
+  /// Changes the assistant proposed in this answer, with their status.
+  final List<AssistantActionModel> actions;
+
+  ChatMessageModel withActions(List<AssistantActionModel> actions) =>
       ChatMessageModel(
-        fromUser: json['role'] == 'user',
-        text: json['text'] as String,
-        time: json['time'] == null
-            ? null
-            : DateTime.parse(json['time'] as String).toLocal(),
+        fromUser: fromUser,
+        text: text,
+        time: time,
+        prompt: prompt,
+        actions: actions,
       );
 
   /// `role: user` (the person) or `assistant` (an answer).

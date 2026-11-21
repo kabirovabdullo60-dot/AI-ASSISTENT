@@ -2399,4 +2399,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sessionTooOld => 'For safety, please sign in again (once a week).';
+
+  @override
+  String get errActionNotFound => 'This proposal was not found.';
+
+  @override
+  String get errConversationNotFound => 'This chat was deleted.';
+
+  @override
+  String get errActionAlreadyHandled =>
+      'This proposal has already been confirmed or cancelled.';
+
+  @override
+  String get errActionExpired =>
+      'This proposal has expired. Ask the assistant again.';
+
+  @override
+  String get actConfirm => 'Confirm';
+
+  @override
+  String get actConfirmAgain => 'Confirm again';
+
+  @override
+  String get actCancel => 'Cancel';
+
+  @override
+  String get actDone => 'Done';
+
+  @override
+  String get actCancelled => 'Cancelled · ask the assistant again';
+
+  @override
+  String get actExpired => 'Expired · ask the assistant again';
+
+  @override
+  String actFailed(String reason) {
+    return 'Not done: $reason';
+  }
+
+  @override
+  String get actSureTitle => 'Are you sure?';
+
+  @override
+  String actSureMessage(String summary) {
+    return '$summary This can\'t be undone from the chat.';
+  }
+
+  @override
+  String get chatRename => 'Rename';
+
+  @override
+  String get chatRenameTitle => 'Chat name';
+
+  @override
+  String get chatDelete => 'Delete';
+
+  @override
+  String get chatDeleteTitle => 'Delete the chat?';
+
+  @override
+  String get chatDeleteMessage => 'It disappears on every device.';
+
+  @override
+  String get chatHistoryServerEmpty =>
+      'Your chats with the assistant will be saved here, on every device you sign in on.';
+
+  @override
+  String chatMessages(int count) {
+    return '$count messages';
+  }
+
+  @override
+  String get chatMore => 'Show more';
+
+  @override
+  String chatWaitSeconds(int seconds) {
+    return 'Too many questions. Next one in $seconds s.';
+  }
+
+  @override
+  String get chatOptions => 'Chat options';
 }

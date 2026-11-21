@@ -2406,4 +2406,84 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sessionTooOld => 'Для безопасности войдите снова (раз в неделю).';
+
+  @override
+  String get errActionNotFound => 'Это предложение не найдено.';
+
+  @override
+  String get errConversationNotFound => 'Этот чат удалён.';
+
+  @override
+  String get errActionAlreadyHandled =>
+      'Это предложение уже подтверждено или отменено.';
+
+  @override
+  String get errActionExpired =>
+      'Предложение устарело. Спросите ассистента ещё раз.';
+
+  @override
+  String get actConfirm => 'Подтвердить';
+
+  @override
+  String get actConfirmAgain => 'Подтвердить снова';
+
+  @override
+  String get actCancel => 'Отмена';
+
+  @override
+  String get actDone => 'Готово';
+
+  @override
+  String get actCancelled => 'Отменено · спросите ассистента снова';
+
+  @override
+  String get actExpired => 'Устарело · спросите ассистента снова';
+
+  @override
+  String actFailed(String reason) {
+    return 'Не выполнено: $reason';
+  }
+
+  @override
+  String get actSureTitle => 'Вы уверены?';
+
+  @override
+  String actSureMessage(String summary) {
+    return '$summary Отменить это из чата не получится.';
+  }
+
+  @override
+  String get chatRename => 'Переименовать';
+
+  @override
+  String get chatRenameTitle => 'Название чата';
+
+  @override
+  String get chatDelete => 'Удалить';
+
+  @override
+  String get chatDeleteTitle => 'Удалить чат?';
+
+  @override
+  String get chatDeleteMessage => 'Он исчезнет на всех устройствах.';
+
+  @override
+  String get chatHistoryServerEmpty =>
+      'Здесь будут ваши чаты с ассистентом — на всех устройствах, где вы вошли.';
+
+  @override
+  String chatMessages(int count) {
+    return 'Сообщений: $count';
+  }
+
+  @override
+  String get chatMore => 'Показать ещё';
+
+  @override
+  String chatWaitSeconds(int seconds) {
+    return 'Слишком много вопросов. Следующий — через $seconds с.';
+  }
+
+  @override
+  String get chatOptions => 'Действия с чатом';
 }

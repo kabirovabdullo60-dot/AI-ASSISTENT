@@ -2391,4 +2391,84 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get sessionTooOld => 'Барои бехатарӣ боз ворид шавед (ҳафтае як бор).';
+
+  @override
+  String get errActionNotFound => 'Ин пешниҳод ёфт нашуд.';
+
+  @override
+  String get errConversationNotFound => 'Ин чат нест карда шудааст.';
+
+  @override
+  String get errActionAlreadyHandled =>
+      'Ин пешниҳод аллакай тасдиқ ё бекор шудааст.';
+
+  @override
+  String get errActionExpired =>
+      'Мӯҳлати пешниҳод гузашт. Аз ёрдамчӣ боз пурсед.';
+
+  @override
+  String get actConfirm => 'Тасдиқ';
+
+  @override
+  String get actConfirmAgain => 'Боз тасдиқ';
+
+  @override
+  String get actCancel => 'Бекор';
+
+  @override
+  String get actDone => 'Иҷро шуд';
+
+  @override
+  String get actCancelled => 'Бекор шуд · аз ёрдамчӣ боз пурсед';
+
+  @override
+  String get actExpired => 'Мӯҳлат гузашт · аз ёрдамчӣ боз пурсед';
+
+  @override
+  String actFailed(String reason) {
+    return 'Иҷро нашуд: $reason';
+  }
+
+  @override
+  String get actSureTitle => 'Шумо боварӣ доред?';
+
+  @override
+  String actSureMessage(String summary) {
+    return '$summary Аз чат бекор кардан мумкин нест.';
+  }
+
+  @override
+  String get chatRename => 'Иваз кардани ном';
+
+  @override
+  String get chatRenameTitle => 'Номи чат';
+
+  @override
+  String get chatDelete => 'Нест кардан';
+
+  @override
+  String get chatDeleteTitle => 'Чатро нест кунем?';
+
+  @override
+  String get chatDeleteMessage => 'Дар ҳамаи дастгоҳҳо нест мешавад.';
+
+  @override
+  String get chatHistoryServerEmpty =>
+      'Чатҳои шумо бо ёрдамчӣ дар ин ҷо — дар ҳамаи дастгоҳҳо.';
+
+  @override
+  String chatMessages(int count) {
+    return 'Паёмҳо: $count';
+  }
+
+  @override
+  String get chatMore => 'Боз нишон додан';
+
+  @override
+  String chatWaitSeconds(int seconds) {
+    return 'Саволҳо зиёданд. Навбатӣ — пас аз $seconds с.';
+  }
+
+  @override
+  String get chatOptions => 'Амалҳо бо чат';
 }

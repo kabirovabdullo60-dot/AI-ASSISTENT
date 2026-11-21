@@ -1,39 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/network/api_client.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../l10n/error_text.dart';
-import '../core/storage/chat_history_storage.dart';
 import '../l10n/l10n.dart';
-import '../models/chat_conversation_model.dart';
+import '../models/assistant_action_model.dart';
+import '../models/assistant_action_status.dart';
+import '../models/chat_message_model.dart';
 import '../services/assistant_service.dart';
 import '../services/voice_service.dart';
 import '../viewmodels/chat_view_model.dart';
 import '../viewmodels/session_view_model.dart';
+import '../widgets/app_feedback.dart';
 import '../widgets/app_inline_message.dart';
+import '../widgets/assistant_action_card.dart';
+import '../widgets/assistant_action_labels.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/jelly_blob.dart';
 import 'chat_history_view.dart';
 import 'voice_chat_view.dart';
 
-/// The AI assistant (`POST /api/assistant/chat`): ask about the business
-/// and get answers built from its real figures, in the app's language.
-/// The jelly mascot greets you and thinks while the answer is coming.
+/// The AI assistant: ask about your money and the business and get answers
+/// built from the real figures, in the language you write in. It can
+/// propose changes ("add a store…") that run only after Confirm. Chats are
+/// saved and show up on every device. The jelly mascot thinks while the
+/// answer is coming.
 class ChatView extends StatelessWidget {
-  const ChatView({this.personalContext, super.key});
+  const ChatView({this.personalContext, this.onDataChanged, super.key});
 
   /// My personal finances as a note for the assistant.
   final String? Function()? personalContext;
+
+  /// A confirmed change: the other screens reload.
+  final VoidCallback? onDataChanged;
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
     create: (context) => ChatViewModel(
       context.read<AssistantService>(),
       voice: context.read<VoiceService>(),
-      history: context.read<ChatHistoryStorage>(),
       userId: context.read<SessionViewModel>().user?.id,
       personalContext: personalContext,
+      onDataChanged: onDataChanged,
     ),
     child: const _Chat(),
   );
@@ -61,15 +71,73 @@ class _ChatState extends State<_Chat> {
 
   Future<void> _openHistory() async {
     final vm = context.read<ChatViewModel>();
-    final userId = vm.userId;
-    if (userId == null) return;
-    final chat = await Navigator.of(context).push<ChatConversationModel>(
+    final id = await Navigator.of(context).push<String>(
       MaterialPageRoute(
-        builder: (_) =>
-            ChatHistoryView(userId: userId, currentId: vm.conversationId),
+        builder: (_) => ChatHistoryView(
+          userId: vm.userId,
+          currentId: vm.conversationId,
+          onDeleted: vm.forget,
+        ),
       ),
     );
-    if (chat != null) await vm.open(chat);
+    if (id != null) await vm.open(id);
+  }
+
+  Future<void> _confirm(AssistantActionModel action) async {
+    final vm = context.read<ChatViewModel>();
+    if (action.danger) {
+      final l10n = context.l10n;
+      final sure = await showAppConfirmDialog(
+        context,
+        title: l10n.actSureTitle,
+        message: l10n.actSureMessage(action.summary),
+        confirmLabel: l10n.actConfirm,
+        destructive: true,
+      );
+      if (!sure) return;
+    }
+    await vm.confirmAction(action.id);
+  }
+
+  /// One assistant message with its proposed changes under it.
+  Widget _message(ChatViewModel vm, ChatMessageModel m) {
+    final bubble = ChatBubble(text: m.text, fromUser: m.fromUser);
+    if (m.actions.isEmpty) return bubble;
+    final l10n = context.l10n;
+    final labels = AssistantActionLabels(
+      confirm: l10n.actConfirm,
+      confirmAgain: l10n.actConfirmAgain,
+      cancel: l10n.actCancel,
+      done: l10n.actDone,
+      cancelled: l10n.actCancelled,
+      expired: l10n.actExpired,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        bubble,
+        for (final a in m.actions)
+          AssistantActionCard(
+            summary: a.summary,
+            status: a.status,
+            danger: a.danger,
+            busy: vm.isActionBusy(a.id),
+            labels: labels,
+            problem: vm.actionError(a.id) != null
+                ? errorText(l10n, vm.actionError(a.id)!)
+                : a.status == AssistantActionStatus.failed
+                ? l10n.actFailed(
+                    errorText(
+                      l10n,
+                      ApiException(422, a.errorCode ?? 'VALIDATION_ERROR'),
+                    ),
+                  )
+                : null,
+            onConfirm: () => _confirm(a),
+            onCancel: () => vm.cancelAction(a.id),
+          ),
+      ],
+    );
   }
 
   void _openVoice() {
@@ -103,12 +171,12 @@ class _ChatState extends State<_Chat> {
           if (messages.isNotEmpty)
             IconButton(
               tooltip: l10n.chatNew,
-              onPressed: vm.isSending ? null : vm.newChat,
+              onPressed: vm.isSending || vm.isOpening ? null : vm.newChat,
               icon: const Icon(Icons.edit_square),
             ),
           IconButton(
             tooltip: l10n.chatHistory,
-            onPressed: vm.userId == null ? null : _openHistory,
+            onPressed: vm.isSending ? null : _openHistory,
             icon: const Icon(Icons.history_rounded),
           ),
         ],
@@ -118,11 +186,10 @@ class _ChatState extends State<_Chat> {
         child: Column(
           children: [
             Expanded(
-              child: messages.isEmpty
-                  ? _Welcome(
-                      lookAt: _lookAt,
-                      onAsk: vm.isSending ? null : _send,
-                    )
+              child: vm.isOpening
+                  ? const Center(child: CircularProgressIndicator())
+                  : messages.isEmpty
+                  ? _Welcome(lookAt: _lookAt, onAsk: vm.canSend ? _send : null)
                   : ListView.builder(
                       reverse: true,
                       padding: const EdgeInsets.fromLTRB(
@@ -140,11 +207,24 @@ class _ChatState extends State<_Chat> {
                             messages[messages.length -
                                 1 -
                                 (i - (vm.isSending ? 1 : 0))];
-                        return ChatBubble(text: m.text, fromUser: m.fromUser);
+                        return _message(vm, m);
                       },
                     ),
             ),
-            if (vm.error != null)
+            if (vm.waitSeconds > 0)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screen,
+                  0,
+                  AppSpacing.screen,
+                  AppSpacing.sm,
+                ),
+                child: AppInlineMessage(
+                  type: InlineMessageType.warning,
+                  message: l10n.chatWaitSeconds(vm.waitSeconds),
+                ),
+              )
+            else if (vm.error != null)
               Padding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screen,
@@ -162,7 +242,7 @@ class _ChatState extends State<_Chat> {
                     ),
                     if (vm.canRetry)
                       TextButton(
-                        onPressed: () => vm.retry(_language),
+                        onPressed: vm.canSend ? vm.retry : null,
                         child: Text(l10n.commonRetry),
                       ),
                   ],
@@ -200,12 +280,12 @@ class _ChatState extends State<_Chat> {
                     ),
                     IconButton(
                       tooltip: l10n.voiceOpen,
-                      onPressed: vm.isSending ? null : _openVoice,
+                      onPressed: vm.canSend ? _openVoice : null,
                       icon: const Icon(Icons.mic_none_rounded),
                     ),
                     IconButton.filled(
                       tooltip: l10n.assistantSend,
-                      onPressed: vm.isSending ? null : _send,
+                      onPressed: vm.canSend ? _send : null,
                       icon: const Icon(Icons.arrow_upward_rounded),
                     ),
                   ],
