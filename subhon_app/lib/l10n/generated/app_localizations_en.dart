@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'OFAR';
+  String get appTitle => 'AI accountant';
 
   @override
   String get introTitle => 'AI accountant';
@@ -1594,10 +1594,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lockReasonEnable => 'Confirm to turn on the lock';
 
   @override
-  String get lockReasonOpen => 'Open OFAR';
+  String get lockReasonOpen => 'Open AI accountant';
 
   @override
-  String get lockTitle => 'OFAR is locked';
+  String get lockTitle => 'AI accountant is locked';
 
   @override
   String get lockMessage => 'Confirm it is you to see your business.';
@@ -1661,7 +1661,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fxSources =>
-      'Rates: open.er-api.com (daily), crypto: CoinGecko (live).';
+      'Exchange rates are updated once a day, crypto prices live (public sources).';
 
   @override
   String get fxCryptoUnavailable => 'Crypto prices are unavailable right now.';
@@ -1742,8 +1742,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get debtsClosed => 'Repaid';
 
   @override
-  String get debtsLocalNote =>
-      'Kept only on this phone: the server has no debts yet.';
+  String get debtsLocalNote => 'Kept only on this phone.';
 
   @override
   String debtLeft(String amount) {

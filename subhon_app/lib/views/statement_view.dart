@@ -209,10 +209,14 @@ class _Statement extends StatelessWidget {
                                   : context.money(amount),
                               style: theme.textTheme.titleSmall?.copyWith(
                                 color: switch (kind) {
-                                  StatementTotalKind.remaining ||
-                                  StatementTotalKind.expenses => p.error,
+                                  StatementTotalKind.remaining =>
+                                    amount > 0 ? p.error : null,
                                   StatementTotalKind.profit =>
-                                    amount >= 0 ? p.success : p.error,
+                                    amount > 0
+                                        ? p.success
+                                        : amount < 0
+                                        ? p.error
+                                        : null,
                                   _ => null,
                                 },
                               ),
@@ -333,10 +337,10 @@ class _Line extends StatelessWidget {
                   kind != StatementKind.salaryDebt,
             ),
             style: theme.textTheme.titleSmall?.copyWith(
-              color: kind == StatementKind.salaryDebt
+              // Only money still owed is a signal; the rest are plain
+              // figures.
+              color: kind == StatementKind.salaryDebt && row.amount > 0
                   ? p.error
-                  : row.amount > 0
-                  ? p.success
                   : p.textPrimary,
             ),
           ),

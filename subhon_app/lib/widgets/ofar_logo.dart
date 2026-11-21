@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
+import '../l10n/generated/app_localizations.dart';
 import 'ofar_logo_painter.dart';
 
-/// OFAR brand mark: a purple tile with a white "O" ring and an accent spark
+/// The app's brand mark: a purple tile with a white "O" ring and an accent spark
 /// (the AI assistant). Drawn in code — crisp at any size, no asset needed.
 /// The same drawing makes the app icon and the splash image
 /// (`tool/generate_brand_assets.dart`).
@@ -19,7 +20,10 @@ class OfarLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'OFAR',
+    label: Localizations.of<AppLocalizations>(
+      context,
+      AppLocalizations,
+    )?.appTitle,
     image: true,
     child: CustomPaint(
       size: Size.square(size),

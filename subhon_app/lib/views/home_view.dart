@@ -182,7 +182,7 @@ class _Body extends StatelessWidget {
         FigureCard(
           label: l10n.homeMonthProfit,
           value: context.money(d.monthProfit, signed: true),
-          valueColor: d.monthProfit >= 0 ? p.success : p.error,
+          valueColor: _signColor(p, d.monthProfit),
           caption: l10n.homeProfitCaption(
             context.money(d.monthExpenses),
             d.monthMarginPercent == null
@@ -206,7 +206,6 @@ class _Body extends StatelessWidget {
               child: FigureCard(
                 label: l10n.payrollPaidAmount,
                 value: context.money(d.paidSalaryThisMonth),
-                valueColor: p.success,
               ),
             ),
           ],
@@ -318,7 +317,6 @@ class _PeriodFigures extends StatelessWidget {
           child: FigureCard(
             label: l10n.homePeriodSales,
             value: context.money(report.totalAmount),
-            valueColor: p.success,
             caption: change == null
                 ? l10n.homeNoComparison
                 : l10n.homeChange(
@@ -438,3 +436,10 @@ class _StoresStrip extends StatelessWidget {
     );
   }
 }
+
+/// Green only for a gain, red only for a loss; zero stays plain.
+Color? _signColor(AppPalette p, double value) => value > 0
+    ? p.success
+    : value < 0
+    ? p.error
+    : null;

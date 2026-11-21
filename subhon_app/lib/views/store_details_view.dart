@@ -236,7 +236,6 @@ class _StoreDetailsState extends State<_StoreDetails> {
                   FigureCard(
                     label: l10n.salesTotal,
                     value: context.money(sales?.totalAmount ?? 0),
-                    valueColor: p.success,
                     caption: l10n.salesCount(sales?.total ?? 0),
                   ),
                   const SizedBox(height: AppSpacing.xl),
@@ -262,8 +261,7 @@ class _StoreDetailsState extends State<_StoreDetails> {
                               iconBackground: p.successLight,
                               title: context.formatDate(sale.saleDate),
                               subtitle: sale.description,
-                              value: context.money(sale.amount, signed: true),
-                              valueColor: p.success,
+                              value: context.money(sale.amount),
                             ),
                         ],
                       ),

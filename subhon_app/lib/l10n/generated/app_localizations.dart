@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'OFAR'**
+  /// **'AI accountant'**
   String get appTitle;
 
   /// No description provided for @introTitle.
@@ -2929,13 +2929,13 @@ abstract class AppLocalizations {
   /// No description provided for @lockReasonOpen.
   ///
   /// In en, this message translates to:
-  /// **'Open OFAR'**
+  /// **'Open AI accountant'**
   String get lockReasonOpen;
 
   /// No description provided for @lockTitle.
   ///
   /// In en, this message translates to:
-  /// **'OFAR is locked'**
+  /// **'AI accountant is locked'**
   String get lockTitle;
 
   /// No description provided for @lockMessage.
@@ -3055,7 +3055,7 @@ abstract class AppLocalizations {
   /// No description provided for @fxSources.
   ///
   /// In en, this message translates to:
-  /// **'Rates: open.er-api.com (daily), crypto: CoinGecko (live).'**
+  /// **'Exchange rates are updated once a day, crypto prices live (public sources).'**
   String get fxSources;
 
   /// No description provided for @fxCryptoUnavailable.
@@ -3181,7 +3181,7 @@ abstract class AppLocalizations {
   /// No description provided for @debtsLocalNote.
   ///
   /// In en, this message translates to:
-  /// **'Kept only on this phone: the server has no debts yet.'**
+  /// **'Kept only on this phone.'**
   String get debtsLocalNote;
 
   /// No description provided for @debtLeft.

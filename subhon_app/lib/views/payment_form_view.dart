@@ -158,7 +158,7 @@ class _PaymentFormState extends State<_PaymentForm> {
                   child: FigureCard(
                     label: l10n.payrollRemaining,
                     value: context.money(row.remainingAmount),
-                    valueColor: row.remainingAmount > 0 ? p.error : p.success,
+                    valueColor: row.remainingAmount > 0 ? p.error : null,
                     caption: l10n.payrollPaidSoFar(
                       context.money(row.paidAmount),
                     ),

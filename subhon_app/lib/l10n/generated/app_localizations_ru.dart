@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appTitle => 'OFAR';
+  String get appTitle => 'ИИ-бухгалтер';
 
   @override
   String get introTitle => 'ИИ-бухгалтер';
@@ -1603,10 +1603,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Подтвердите, чтобы включить вход по биометрии';
 
   @override
-  String get lockReasonOpen => 'Откройте OFAR';
+  String get lockReasonOpen => 'Откройте ИИ-бухгалтер';
 
   @override
-  String get lockTitle => 'OFAR заблокирован';
+  String get lockTitle => 'ИИ-бухгалтер заблокирован';
 
   @override
   String get lockMessage =>
@@ -1672,7 +1672,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get fxSources =>
-      'Курсы: open.er-api.com (раз в сутки), крипто: CoinGecko (в реальном времени).';
+      'Курсы валют обновляются раз в сутки, криптовалюты — в реальном времени (открытые источники).';
 
   @override
   String get fxCryptoUnavailable => 'Курсы криптовалют сейчас недоступны.';
@@ -1749,8 +1749,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get debtsClosed => 'Погашенные';
 
   @override
-  String get debtsLocalNote =>
-      'Хранится только на этом телефоне: на сервере долгов пока нет.';
+  String get debtsLocalNote => 'Хранится только на этом телефоне.';
 
   @override
   String debtLeft(String amount) {

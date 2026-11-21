@@ -9,7 +9,7 @@ class AppLocalizationsTg extends AppLocalizations {
   AppLocalizationsTg([String locale = 'tg']) : super(locale);
 
   @override
-  String get appTitle => 'OFAR';
+  String get appTitle => 'ИИ-муҳосиб';
 
   @override
   String get introTitle => 'ИИ-муҳосиб';
@@ -1595,10 +1595,10 @@ class AppLocalizationsTg extends AppLocalizations {
   String get lockReasonEnable => 'Барои фаъол кардан тасдиқ кунед';
 
   @override
-  String get lockReasonOpen => 'OFAR-ро кушоед';
+  String get lockReasonOpen => 'ИИ-муҳосибро кушоед';
 
   @override
-  String get lockTitle => 'OFAR баста аст';
+  String get lockTitle => 'ИИ-муҳосиб баста аст';
 
   @override
   String get lockMessage => 'Тасдиқ кунед, ки шумоед, то тиҷорати худро бинед.';
@@ -1662,7 +1662,7 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get fxSources =>
-      'Қурбҳо: open.er-api.com (рӯзе як бор), крипто: CoinGecko (воқеӣ).';
+      'Қурби асъорҳо рӯзе як бор, криптоасъорҳо дар вақти воқеӣ навсозӣ мешаванд (манбаъҳои кушода).';
 
   @override
   String get fxCryptoUnavailable => 'Қурби криптоасъорҳо ҳоло дастрас нест.';
@@ -1733,8 +1733,7 @@ class AppLocalizationsTg extends AppLocalizations {
   String get debtsClosed => 'Пардохтшуда';
 
   @override
-  String get debtsLocalNote =>
-      'Танҳо дар ҳамин телефон: дар сервер ҳоло қарзҳо нест.';
+  String get debtsLocalNote => 'Танҳо дар ҳамин телефон нигоҳ дошта мешавад.';
 
   @override
   String debtLeft(String amount) {

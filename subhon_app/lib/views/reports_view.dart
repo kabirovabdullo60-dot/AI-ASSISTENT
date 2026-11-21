@@ -91,7 +91,6 @@ class _Reports extends StatelessWidget {
                     context.formatShortDate(stores.period.endDate),
                   ),
                   value: context.money(stores.totalAmount),
-                  valueColor: p.success,
                   caption: l10n.salesCount(stores.salesCount),
                 ),
                 const SizedBox(height: AppSpacing.md),
@@ -128,9 +127,11 @@ class _Reports extends StatelessWidget {
                                 ),
                                 style: Theme.of(context).textTheme.labelSmall
                                     ?.copyWith(
-                                      color: s.changePercent! >= 0
+                                      color: s.changePercent! > 0
                                           ? p.success
-                                          : p.error,
+                                          : s.changePercent! < 0
+                                          ? p.error
+                                          : null,
                                     ),
                               ),
                             ),
@@ -195,7 +196,6 @@ class _Reports extends StatelessWidget {
                         child: FigureCard(
                           label: l10n.payrollPaidAmount,
                           value: context.money(payroll.totalPaid),
-                          valueColor: p.success,
                         ),
                       ),
                     ],
@@ -282,7 +282,6 @@ class _ProfitSection extends StatelessWidget {
     final l10n = context.l10n;
     final p = context.palette;
     final profit = vm.profit!;
-    final positive = profit.grossProfit >= 0;
     final expensesTotal = profit.expensesTotal;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -290,7 +289,11 @@ class _ProfitSection extends StatelessWidget {
         FigureCard(
           label: l10n.reportProfit,
           value: context.money(profit.grossProfit, signed: true),
-          valueColor: positive ? p.success : p.error,
+          valueColor: profit.grossProfit > 0
+              ? p.success
+              : profit.grossProfit < 0
+              ? p.error
+              : null,
           caption: profit.marginPercent == null
               ? l10n.profitNoSales
               : l10n.profitMargin(context.percent(profit.marginPercent!)),
@@ -306,7 +309,6 @@ class _ProfitSection extends StatelessWidget {
                 iconBackground: p.successLight,
                 title: l10n.profitSales,
                 value: context.money(profit.salesTotal),
-                valueColor: p.success,
               ),
               RecordTile(
                 icon: Icons.receipt_long_outlined,
@@ -383,7 +385,11 @@ class _ProfitSection extends StatelessWidget {
                       context.money(s.salaryDue),
                     ),
                     value: context.money(s.profit, signed: true),
-                    valueColor: s.profit >= 0 ? p.success : p.error,
+                    valueColor: s.profit > 0
+                        ? p.success
+                        : s.profit < 0
+                        ? p.error
+                        : null,
                   ),
               ],
             ),

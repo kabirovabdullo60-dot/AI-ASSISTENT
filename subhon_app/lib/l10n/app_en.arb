@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "OFAR",
+  "appTitle": "AI accountant",
   "introTitle": "AI accountant",
   "commonLoading": "Loading…",
   "commonEmptyTitle": "Nothing here yet",
@@ -845,8 +845,8 @@
   "lockHint": "Ask for it when the app opens",
   "lockUnavailable": "No Face ID or fingerprint set up on this phone",
   "lockReasonEnable": "Confirm to turn on the lock",
-  "lockReasonOpen": "Open OFAR",
-  "lockTitle": "OFAR is locked",
+  "lockReasonOpen": "Open AI accountant",
+  "lockTitle": "AI accountant is locked",
   "lockMessage": "Confirm it is you to see your business.",
   "lockUnlock": "Unlock",
   "lockOn": "Biometric sign-in is on",
@@ -873,7 +873,7 @@
   "fxAll": "All",
   "fxAllCrypto": "Cryptocurrencies",
   "fxSearchCoin": "Coin name or ticker",
-  "fxSources": "Rates: open.er-api.com (daily), crypto: CoinGecko (live).",
+  "fxSources": "Exchange rates are updated once a day, crypto prices live (public sources).",
   "fxCryptoUnavailable": "Crypto prices are unavailable right now.",
   "fxLive": "Live · {time}",
   "@fxLive": {
@@ -915,7 +915,7 @@
   "debtsAddLoan": "Add a credit",
   "debtsNoLoans": "No active credits or installments",
   "debtsClosed": "Repaid",
-  "debtsLocalNote": "Kept only on this phone: the server has no debts yet.",
+  "debtsLocalNote": "Kept only on this phone.",
   "debtLeft": "{amount} left",
   "@debtLeft": {
     "placeholders": {

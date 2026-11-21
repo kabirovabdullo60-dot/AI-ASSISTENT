@@ -161,7 +161,6 @@ class _SalesList extends StatelessWidget {
         FigureCard(
           label: l10n.salesTotal,
           value: context.money(vm.totalAmount ?? 0),
-          valueColor: p.success,
           caption: l10n.salesCount(vm.total),
         ),
         const SizedBox(height: AppSpacing.md),
@@ -189,8 +188,7 @@ class _SalesList extends StatelessWidget {
                         paymentMethodText(l10n, sale.paymentMethod),
                       if (sale.description != null) sale.description!,
                     ].join(' · '),
-                    value: context.money(sale.amount, signed: true),
-                    valueColor: p.success,
+                    value: context.money(sale.amount),
                     onTap: () => onOpen(sale),
                   ),
               ],

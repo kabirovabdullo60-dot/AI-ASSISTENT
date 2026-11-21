@@ -82,7 +82,7 @@ void main() {
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
     expect(find.byType(LockView), findsOneWidget);
-    expect(find.text('OFAR заблокирован'), findsOneWidget);
+    expect(find.text('ИИ-бухгалтер заблокирован'), findsOneWidget);
     expect(face.prompts, 1); // asked at once
 
     face.answer = true;
