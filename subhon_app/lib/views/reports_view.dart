@@ -3,18 +3,21 @@ import 'package:provider/provider.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
+import '../l10n/expense_category_text.dart';
 import '../l10n/l10n.dart';
 import '../services/reports_service.dart';
 import '../viewmodels/reports_view_model.dart';
 import '../widgets/app_card.dart';
 import '../widgets/async_state_view.dart';
+import '../widgets/expense_category_icon.dart';
 import '../widgets/figure_card.dart';
 import '../widgets/period_switcher.dart';
 import '../widgets/record_tile.dart';
 import '../widgets/section_header.dart';
 import '../widgets/share_bar_row.dart';
 
-/// Reports: stores compared this month
+/// Reports: profit of a month (`/api/reports/profit`), stores compared
+/// this month
 /// (`/api/reports/store-comparison`), payroll of a year
 /// (`/api/reports/payroll`) and employees (`/api/reports/employees`).
 class ReportsView extends StatelessWidget {
@@ -59,6 +62,28 @@ class _Reports extends StatelessWidget {
                 AppSpacing.xxxl,
               ),
               children: [
+                SectionHeader(title: l10n.reportProfit),
+                PeriodSwitcher(
+                  label: context.monthYear(
+                    vm.profitMonth.month,
+                    vm.profitMonth.year,
+                  ),
+                  previousTooltip: l10n.periodPrevious,
+                  nextTooltip: l10n.periodNext,
+                  onPrevious: () => vm.shiftProfitMonth(-1),
+                  onNext: vm.canShowNextProfitMonth
+                      ? () => vm.shiftProfitMonth(1)
+                      : null,
+                ),
+                const SizedBox(height: AppSpacing.md),
+                if (vm.profit == null)
+                  const Padding(
+                    padding: EdgeInsets.all(AppSpacing.xl),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else
+                  _ProfitSection(vm: vm),
+                const SizedBox(height: AppSpacing.xl),
                 SectionHeader(title: l10n.reportStores),
                 FigureCard(
                   label: l10n.reportStoresPeriod(
@@ -66,7 +91,6 @@ class _Reports extends StatelessWidget {
                     context.formatShortDate(stores.period.endDate),
                   ),
                   value: context.money(stores.totalAmount),
-                  valueColor: p.success,
                   caption: l10n.salesCount(stores.salesCount),
                 ),
                 const SizedBox(height: AppSpacing.md),
@@ -103,9 +127,11 @@ class _Reports extends StatelessWidget {
                                 ),
                                 style: Theme.of(context).textTheme.labelSmall
                                     ?.copyWith(
-                                      color: s.changePercent! >= 0
+                                      color: s.changePercent! > 0
                                           ? p.success
-                                          : p.error,
+                                          : s.changePercent! < 0
+                                          ? p.error
+                                          : null,
                                     ),
                               ),
                             ),
@@ -113,6 +139,33 @@ class _Reports extends StatelessWidget {
                       ],
                     ),
                   ),
+                // Regions only help when the stores are in more than one.
+                if (stores.regions.length > 1) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    l10n.reportByRegion,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppCard(
+                    child: Column(
+                      children: [
+                        for (final (i, r) in stores.regions.indexed) ...[
+                          if (i > 0) const SizedBox(height: AppSpacing.md),
+                          ShareBarRow(
+                            icon: Icons.map_outlined,
+                            label:
+                                '${r.region ?? l10n.reportNoRegion} · '
+                                '${l10n.reportRegionStores(r.storesCount)}',
+                            value: context.money(r.totalAmount),
+                            share: r.sharePercent / 100,
+                            shareText: context.percent(r.sharePercent),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: AppSpacing.xl),
                 SectionHeader(title: l10n.reportPayroll),
                 PeriodSwitcher(
@@ -143,7 +196,6 @@ class _Reports extends StatelessWidget {
                         child: FigureCard(
                           label: l10n.payrollPaidAmount,
                           value: context.money(payroll.totalPaid),
-                          valueColor: p.success,
                         ),
                       ),
                     ],
@@ -214,6 +266,136 @@ class _Reports extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+/// Profit of the chosen month: the result with its margin, how it is made
+/// (sales − expenses − salaries), expenses by category and profit by store.
+class _ProfitSection extends StatelessWidget {
+  const _ProfitSection({required this.vm});
+
+  final ReportsViewModel vm;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final p = context.palette;
+    final profit = vm.profit!;
+    final expensesTotal = profit.expensesTotal;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        FigureCard(
+          label: l10n.reportProfit,
+          value: context.money(profit.grossProfit, signed: true),
+          valueColor: profit.grossProfit > 0
+              ? p.success
+              : profit.grossProfit < 0
+              ? p.error
+              : null,
+          caption: profit.marginPercent == null
+              ? l10n.profitNoSales
+              : l10n.profitMargin(context.percent(profit.marginPercent!)),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        AppCard(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          child: Column(
+            children: [
+              RecordTile(
+                icon: Icons.point_of_sale_rounded,
+                iconColor: p.success,
+                iconBackground: p.successLight,
+                title: l10n.profitSales,
+                value: context.money(profit.salesTotal),
+              ),
+              RecordTile(
+                icon: Icons.receipt_long_outlined,
+                iconColor: p.error,
+                iconBackground: p.errorLight,
+                title: l10n.profitExpenses,
+                value: context.money(-profit.expensesTotal, signed: true),
+                valueColor: p.error,
+              ),
+              RecordTile(
+                icon: Icons.payments_outlined,
+                iconColor: p.warning,
+                iconBackground: p.warningLight,
+                title: l10n.profitSalaryDue,
+                value: context.money(-profit.salaryDue, signed: true),
+                valueColor: p.error,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Text(
+          l10n.profitByCategory,
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        AppCard(
+          child: profit.byCategory.isEmpty
+              ? Text(
+                  l10n.profitNoExpenses,
+                  style: Theme.of(context).textTheme.bodySmall,
+                )
+              : Column(
+                  children: [
+                    for (final (i, c) in profit.byCategory.indexed) ...[
+                      if (i > 0) const SizedBox(height: AppSpacing.md),
+                      ShareBarRow(
+                        icon: expenseCategoryIcon(c.category),
+                        label: expenseCategoryText(l10n, c.category),
+                        value: context.money(c.total),
+                        share: expensesTotal == 0 ? 0 : c.total / expensesTotal,
+                        shareText: context.percent(
+                          expensesTotal == 0
+                              ? 0
+                              : c.total / expensesTotal * 100,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+        ),
+        if (profit.byStore.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            l10n.profitByStore,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          AppCard(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            child: Column(
+              children: [
+                for (final s in profit.byStore)
+                  RecordTile(
+                    icon: s.storeId == null
+                        ? Icons.business_outlined
+                        : Icons.storefront_outlined,
+                    iconColor: p.primary,
+                    iconBackground: p.primaryLight,
+                    title: s.storeName ?? l10n.expenseWholeBusiness,
+                    subtitle: l10n.profitStoreLine(
+                      context.money(s.salesTotal),
+                      context.money(s.expensesTotal),
+                      context.money(s.salaryDue),
+                    ),
+                    value: context.money(s.profit, signed: true),
+                    valueColor: s.profit > 0
+                        ? p.success
+                        : s.profit < 0
+                        ? p.error
+                        : null,
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

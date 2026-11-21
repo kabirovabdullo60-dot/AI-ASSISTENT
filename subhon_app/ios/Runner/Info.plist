@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Subhon App</string>
+	<string>ИИ-бухгалтер</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,6 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Чтобы открывать OFAR по Face ID.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Чтобы задавать вопросы ИИ-ассистенту голосом.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Чтобы превращать ваш голос в текст вопроса для ИИ-ассистента.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Доступ к фото нужен, чтобы выбрать фото профиля.</string>
 	<key>UIApplicationSceneManifest</key>

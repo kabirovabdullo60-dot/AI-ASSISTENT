@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../l10n/l10n.dart';
+import '../l10n/payment_method_text.dart';
 import '../models/sale_model.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../widgets/app_card.dart';
@@ -160,7 +161,6 @@ class _SalesList extends StatelessWidget {
         FigureCard(
           label: l10n.salesTotal,
           value: context.money(vm.totalAmount ?? 0),
-          valueColor: p.success,
           caption: l10n.salesCount(vm.total),
         ),
         const SizedBox(height: AppSpacing.md),
@@ -184,10 +184,11 @@ class _SalesList extends StatelessWidget {
                     title: sale.storeName,
                     subtitle: [
                       context.formatDate(sale.saleDate),
+                      if (sale.paymentMethod != null)
+                        paymentMethodText(l10n, sale.paymentMethod),
                       if (sale.description != null) sale.description!,
                     ].join(' · '),
-                    value: context.money(sale.amount, signed: true),
-                    valueColor: p.success,
+                    value: context.money(sale.amount),
                     onTap: () => onOpen(sale),
                   ),
               ],

@@ -4,11 +4,14 @@ import 'package:provider/provider.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
+import '../l10n/biometric_text.dart';
 import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../l10n/validators.dart';
+import '../models/biometric_kind.dart';
 import '../models/profile_model.dart';
 import '../services/profile_service.dart';
+import '../viewmodels/app_lock_view_model.dart';
 import '../viewmodels/locale_view_model.dart';
 import '../viewmodels/profile_view_model.dart';
 import '../viewmodels/session_view_model.dart';
@@ -209,6 +212,13 @@ class _Profile extends StatelessWidget {
                       },
                       onTap: () => _language(context),
                     ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                SectionHeader(title: l10n.securityTitle),
+                SettingsCard(
+                  children: [
+                    const _BiometricRow(),
                     SettingsRow(
                       icon: Icons.password_rounded,
                       title: l10n.passwordTitle,
@@ -321,6 +331,45 @@ class _EditSheetState extends State<_EditSheet> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// "Вход по Face ID" with a switch: turning it on asks for Face ID first.
+/// Disabled with a hint when the phone has no Face ID / fingerprint.
+class _BiometricRow extends StatelessWidget {
+  const _BiometricRow();
+
+  Future<void> _toggle(BuildContext context, bool value) async {
+    final l10n = context.l10n;
+    final feedback = AppSnackbar.of(context);
+    final ok = await context.read<AppLockViewModel>().setEnabled(
+      value: value,
+      reason: l10n.lockReasonEnable,
+    );
+    if (!ok) {
+      feedback.showError(l10n.lockNotConfirmed);
+    } else {
+      feedback.showSuccess(value ? l10n.lockOn : l10n.lockOff);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final lock = context.watch<AppLockViewModel>();
+    return SettingsRow(
+      icon: lock.kind == BiometricKind.fingerprint
+          ? Icons.fingerprint_rounded
+          : Icons.face_retouching_natural,
+      title: biometricTitle(l10n, lock.kind),
+      hint: lock.available ? l10n.lockHint : l10n.lockUnavailable,
+      trailing: Switch.adaptive(
+        value: lock.enabled,
+        onChanged: !lock.available || lock.isAuthenticating
+            ? null
+            : (value) => _toggle(context, value),
       ),
     );
   }

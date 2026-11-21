@@ -4,31 +4,82 @@ import 'package:provider/provider.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_dimensions.dart';
 import '../l10n/l10n.dart';
+import '../l10n/payment_method_text.dart';
 import '../models/sales_report_model.dart';
+import '../models/notification_link.dart';
+import '../models/payment_method.dart';
+import '../models/store_model.dart';
+import '../models/store_status.dart';
 import '../viewmodels/dashboard_view_model.dart';
+import '../viewmodels/notifications_view_model.dart';
 import '../viewmodels/sales_period.dart';
+import '../widgets/activity_tile.dart';
 import '../widgets/app_card.dart';
 import '../widgets/async_state_view.dart';
 import '../widgets/figure_card.dart';
+import '../widgets/notification_bell.dart';
 import '../widgets/period_chips.dart';
 import '../widgets/section_header.dart';
 import '../widgets/share_bar_row.dart';
-import '../widgets/stat_tile.dart';
 import '../widgets/summary_card.dart';
+import '../widgets/store_strip_card.dart';
+import 'activity_view.dart';
+import 'notifications_view.dart';
+import 'store_details_view.dart';
+import 'store_form_view.dart';
+import 'stores_view.dart';
 
 /// Home (OFAR layout): month sales card, today, period figures with the
-/// change, salaries of the month, stores and employees, top stores.
+/// change, this month's profit and the sales targets, salaries of the
+/// month, stores and employees, top stores.
 class HomeView extends StatelessWidget {
-  const HomeView({required this.onOpenSales, super.key});
+  const HomeView({
+    required this.onOpenSales,
+    required this.onOpenLink,
+    required this.onOpenHistory,
+    this.title,
+    super.key,
+  });
 
   final VoidCallback onOpenSales;
+
+  /// A notification was tapped: open its screen.
+  final ValueChanged<NotificationLink> onOpenLink;
+
+  /// Opens the history (the icon next to the bell).
+  final VoidCallback onOpenHistory;
+
+  /// The app bar title ("Мой бизнес" when opened from the personal home).
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final vm = context.watch<DashboardViewModel>();
+    final notifications = context.watch<NotificationsViewModel>();
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navHome)),
+      appBar: AppBar(
+        title: Text(title ?? l10n.navHome),
+        actions: [
+          IconButton(
+            tooltip: l10n.activityHistory,
+            onPressed: onOpenHistory,
+            icon: const Icon(Icons.history_rounded),
+          ),
+          NotificationBell(
+            unread: notifications.unreadCount,
+            tooltip: l10n.notificationsTooltip,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => ChangeNotifierProvider.value(
+                  value: notifications,
+                  child: NotificationsView(onOpenLink: onOpenLink),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: vm.load,
         child: AsyncStateView(
@@ -66,21 +117,14 @@ class _Body extends StatelessWidget {
       ),
       children: [
         SummaryCard(
-          title: l10n.homeMonthSales,
-          value: context.money(d.monthSales),
+          title: l10n.homeTodaySales,
+          value: context.money(d.todaySales),
           parts: [
-            (l10n.homeToday, context.money(d.todaySales)),
             (l10n.homeWeek, context.money(d.weekSales)),
+            (l10n.homeMonth, context.money(d.monthSales)),
           ],
         ),
         gap,
-        StatTile(
-          icon: Icons.point_of_sale_rounded,
-          label: l10n.homeRevenueToday,
-          value: context.money(d.todaySales),
-          caption: l10n.salesCount(d.todaySalesCount),
-          onTap: onOpenSales,
-        ),
         const SizedBox(height: AppSpacing.xl),
         PeriodChips<SalesPeriod>(
           values: SalesPeriod.values,
@@ -99,6 +143,53 @@ class _Body extends StatelessWidget {
             duration: const Duration(milliseconds: 150),
             child: _PeriodFigures(report: report, period: vm.period),
           ),
+        if (vm.periodReport?.byPaymentMethod.where((m) => m.totalAmount > 0)
+            case final methods? when methods.isNotEmpty) ...[
+          gap,
+          Text(
+            l10n.homeByPayment,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          AppCard(
+            child: Column(
+              children: [
+                for (final (i, m) in methods.indexed) ...[
+                  if (i > 0) const SizedBox(height: AppSpacing.md),
+                  ShareBarRow(
+                    icon: switch (m.paymentMethod) {
+                      PaymentMethod.cash => Icons.payments_outlined,
+                      PaymentMethod.card => Icons.credit_card_rounded,
+                      PaymentMethod.qr => Icons.qr_code_2_rounded,
+                      PaymentMethod.mixed => Icons.call_split_rounded,
+                      null => Icons.help_outline_rounded,
+                    },
+                    label: paymentMethodText(l10n, m.paymentMethod),
+                    value: context.money(m.totalAmount),
+                    share: m.sharePercent / 100,
+                    shareText: context.percent(m.sharePercent),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+        // The stores come after the period's sales.
+        const SizedBox(height: AppSpacing.md),
+        if (vm.stores case final stores?) _StoresStrip(vm: vm, stores: stores),
+        const SizedBox(height: AppSpacing.xl),
+        SectionHeader(title: l10n.homeProfit),
+        FigureCard(
+          label: l10n.homeMonthProfit,
+          value: context.money(d.monthProfit, signed: true),
+          valueColor: _signColor(p, d.monthProfit),
+          caption: l10n.homeProfitCaption(
+            context.money(d.monthExpenses),
+            d.monthMarginPercent == null
+                ? l10n.profitNoSales
+                : l10n.profitMargin(context.percent(d.monthMarginPercent!)),
+          ),
+        ),
         const SizedBox(height: AppSpacing.xl),
         SectionHeader(title: l10n.homeSalaries),
         Row(
@@ -115,7 +206,6 @@ class _Body extends StatelessWidget {
               child: FigureCard(
                 label: l10n.payrollPaidAmount,
                 value: context.money(d.paidSalaryThisMonth),
-                valueColor: p.success,
               ),
             ),
           ],
@@ -181,6 +271,22 @@ class _Body extends StatelessWidget {
               ],
             ),
           ),
+        if (vm.recentActivity case final recent? when recent.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.xl),
+          SectionHeader(
+            title: l10n.activityTitle,
+            actionLabel: l10n.homeShowAll,
+            onAction: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const ActivityView()),
+            ),
+          ),
+          AppCard(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            child: Column(
+              children: [for (final a in recent) ActivityTile(activity: a)],
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -211,7 +317,6 @@ class _PeriodFigures extends StatelessWidget {
           child: FigureCard(
             label: l10n.homePeriodSales,
             value: context.money(report.totalAmount),
-            valueColor: p.success,
             caption: change == null
                 ? l10n.homeNoComparison
                 : l10n.homeChange(
@@ -237,3 +342,107 @@ class _PeriodFigures extends StatelessWidget {
     );
   }
 }
+
+/// "Магазины · N": every store as a card in a row that scrolls sideways,
+/// with its sales this month; tap one to open it, the last card adds a new
+/// store. The title opens the list of stores.
+class _StoresStrip extends StatelessWidget {
+  const _StoresStrip({required this.vm, required this.stores});
+
+  final DashboardViewModel vm;
+  final List<StoreModel> stores;
+
+  Future<void> _open(BuildContext context, Widget screen) async {
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => screen));
+    await vm.load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final p = context.palette;
+    final monthSales = {
+      for (final s in [...?vm.topStores?.stores]) s.storeId: s.totalAmount,
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: AppSpacing.md),
+        SectionHeader(
+          title: l10n.homeStores(stores.length),
+          actionLabel: l10n.homeShowAllStores,
+          onAction: () => _open(context, const StoresView()),
+        ),
+        SizedBox(
+          height: 128,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            // Full width: the cards scroll from edge to edge.
+            clipBehavior: Clip.none,
+            itemCount: stores.length + 1,
+            separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
+            itemBuilder: (context, i) {
+              if (i == stores.length) {
+                // A round "+" to add a store, centred in the strip.
+                return SizedBox(
+                  width: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Tooltip(
+                        message: l10n.homeAddStore,
+                        child: Material(
+                          color: p.primary,
+                          shape: const CircleBorder(),
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () => _open(context, const StoreFormView()),
+                            child: SizedBox.square(
+                              dimension: 46,
+                              child: Icon(
+                                Icons.add_rounded,
+                                color: p.onPrimary,
+                                size: 24,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        l10n.homeAddStore,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelMedium?.copyWith(color: p.primary),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              final store = stores[i];
+              return StoreStripCard(
+                name: store.name,
+                place: store.city ?? store.address,
+                active: store.status == StoreStatus.active,
+                salesLabel: l10n.homeStoreMonth,
+                salesText: context.money(monthSales[store.id] ?? 0),
+                onTap: () =>
+                    _open(context, StoreDetailsView(storeId: store.id)),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Green only for a gain, red only for a loss; zero stays plain.
+Color? _signColor(AppPalette p, double value) => value > 0
+    ? p.success
+    : value < 0
+    ? p.error
+    : null;

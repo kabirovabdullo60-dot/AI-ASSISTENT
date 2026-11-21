@@ -101,7 +101,6 @@ class _EmployeePayroll extends StatelessWidget {
                     child: FigureCard(
                       label: l10n.payrollPaidAmount,
                       value: context.money(data.totalPaid),
-                      valueColor: p.success,
                     ),
                   ),
                 ],

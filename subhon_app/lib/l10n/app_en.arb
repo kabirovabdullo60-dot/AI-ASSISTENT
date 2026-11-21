@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
-  "appTitle": "OFAR",
+  "appTitle": "AI accountant",
+  "introTitle": "AI accountant",
   "commonLoading": "Loading…",
   "commonEmptyTitle": "Nothing here yet",
   "commonErrorTitle": "Could not load",
@@ -32,7 +33,11 @@
   "authLoginTitle": "Sign in",
   "authLoginSubtitle": "Sign in to keep working with your business finances",
   "authRegisterTitle": "Create an account",
-  "authRegisterSubtitle": "Your account and your business — in a couple of minutes",
+  "authRegisterTab": "Sign up",
+  "authRegisterSubtitle": "AI accountant for tracking income and expenses",
+  "fieldWorkEmail": "Work e-mail",
+  "authPasswordMinHint": "At least 8 characters",
+  "validationPasswordMin": "At least 8 characters",
   "authNoAccount": "No account?",
   "authHaveAccount": "Already have an account?",
   "authCreateAccount": "Create account",
@@ -171,7 +176,7 @@
   "employeeSaved": "Employee saved",
   "employeeDeleted": "Employee deleted. Their salary history stays.",
   "employeeDeleteTitle": "Delete the employee?",
-  "employeeDeleteMessage": "The salary history is kept.",
+  "employeeDeleteMessage": "Nothing more will be owed to them: unpaid salary stops counting. Payments made stay in the history. If the person left the job, set the status to “Inactive” instead — they stay owed up to the last day.",
   "payrollPaid": "Paid",
   "payrollPartial": "Partly paid",
   "payrollUnpaid": "Not paid",
@@ -234,7 +239,7 @@
       }
     }
   },
-  "payrollWorkedDays": "{count, plural, one{{count} day worked} other{{count} days worked}}",
+  "payrollWorkedDays": "{count, plural, one{Worked {count} day this month} other{Worked {count} days this month}}",
   "@payrollWorkedDays": {
     "placeholders": {
       "count": {
@@ -242,7 +247,7 @@
       }
     }
   },
-  "payrollMonthsWorked": "{count, plural, one{{count} month} other{{count} months}}",
+  "payrollMonthsWorked": "{count, plural, one{Tenure: {count} month} other{Tenure: {count} months}}",
   "@payrollMonthsWorked": {
     "placeholders": {
       "count": {
@@ -348,5 +353,982 @@
   "errConflict": "This conflicts with the current data. Refresh and try again.",
   "errRateLimited": "Too many requests. Wait a little and try again.",
   "errServer": "The server is not responding properly. Try again later.",
-  "errUnknown": "Something went wrong. Try again."
+  "errUnknown": "Something went wrong. Try again.",
+  "navExpenses": "Expenses",
+  "moreExpensesHint": "Rent, utilities, delivery and more",
+  "actionNewExpense": "Expense",
+  "fieldCategory": "Category",
+  "expenseCategoryRent": "Rent",
+  "expenseCategoryUtilities": "Utilities",
+  "expenseCategoryDelivery": "Delivery",
+  "expenseCategorySupplies": "Supplies",
+  "expenseCategoryMarketing": "Marketing",
+  "expenseCategoryTaxes": "Taxes",
+  "expenseCategoryOther": "Other",
+  "expensesAllCategories": "All categories",
+  "expenseWholeBusiness": "Whole business",
+  "expensesTotal": "Total expenses",
+  "expensesCount": "{count, plural, =0{No expenses} one{{count} expense} other{{count} expenses}}",
+  "@expensesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "expensesNothingFound": "No expenses for this filter.",
+  "expensesEmptyTitle": "No expenses yet",
+  "expensesEmptyMessage": "Record rent, utilities and other costs to see your real profit.",
+  "expenseNewTitle": "New expense",
+  "expenseEditTitle": "Expense",
+  "expenseSaved": "Expense added",
+  "expenseUpdated": "Expense updated",
+  "expenseDeleted": "Expense deleted",
+  "expenseDeleteTitle": "Delete the expense?",
+  "expenseDeleteMessage": "It will no longer count in expenses and profit.",
+  "errExpenseNotFound": "This expense no longer exists.",
+  "errExpenseDateFuture": "The expense date can't be in the future.",
+  "reportProfit": "Profit",
+  "profitSales": "Sales",
+  "profitExpenses": "Expenses",
+  "profitSalaryDue": "Salaries due",
+  "profitMargin": "Margin {percent}",
+  "@profitMargin": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "profitNoSales": "No sales in this period",
+  "profitByCategory": "Expenses by category",
+  "profitByStore": "Profit by store",
+  "profitNoExpenses": "No expenses in this period.",
+  "profitStoreLine": "Sales {sales} · expenses {expenses} · salaries {salary}",
+  "@profitStoreLine": {
+    "placeholders": {
+      "sales": {
+        "type": "String"
+      },
+      "expenses": {
+        "type": "String"
+      },
+      "salary": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTargetsProfit": "Targets & profit",
+  "homeMonthProfit": "Profit this month",
+  "homeProfitCaption": "Expenses {expenses} · {margin}",
+  "@homeProfitCaption": {
+    "placeholders": {
+      "expenses": {
+        "type": "String"
+      },
+      "margin": {
+        "type": "String"
+      }
+    }
+  },
+  "targetWeek": "Weekly target",
+  "targetMonth": "Monthly target",
+  "targetNotSet": "Set a target",
+  "targetDone": "{percent} reached",
+  "@targetDone": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "targetSheetTitleWeek": "Sales target for a week",
+  "targetSheetTitleMonth": "Sales target for a month",
+  "targetSheetHint": "For the whole business. You can change it any time.",
+  "targetSaved": "Target saved",
+  "activityTitle": "Recent activity",
+  "activityLogTitle": "Operations log",
+  "activityEmpty": "No changes yet.",
+  "activityStoreCreated": "Store “{name}” added",
+  "@activityStoreCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityStoreUpdated": "Store “{name}” edited",
+  "@activityStoreUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityStoreDeleted": "Store “{name}” deleted",
+  "@activityStoreDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityStoreStatus": "Store “{name}”: {status}",
+  "@activityStoreStatus": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySaleCreated": "Sale in “{name}”",
+  "@activitySaleCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySaleUpdated": "Sale in “{name}” edited",
+  "@activitySaleUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySaleDeleted": "Sale in “{name}” deleted",
+  "@activitySaleDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityEmployeeCreated": "Employee {name} added",
+  "@activityEmployeeCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityEmployeeUpdated": "Employee {name} edited",
+  "@activityEmployeeUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityEmployeeDeleted": "Employee {name} deleted",
+  "@activityEmployeeDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityEmployeeStatus": "{name}: {status}",
+  "@activityEmployeeStatus": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPayrollPaid": "Salary paid: {name}",
+  "@activityPayrollPaid": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPayrollCancelled": "Salary payment cancelled: {name}",
+  "@activityPayrollCancelled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityProfileUpdated": "Profile updated",
+  "activityOther": "{name}: changed",
+  "@activityOther": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBy": "{actor} · {time}",
+  "@activityBy": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationsTitle": "Notifications",
+  "notificationsTooltip": "Notifications",
+  "notificationsEmpty": "All good: nothing needs attention.",
+  "notificationsNew": "New",
+  "notifSalaryOverdueTitle": "Overdue salaries",
+  "notifSalaryOverdueBody": "{count} unpaid employee-months from earlier months · {amount}",
+  "@notifSalaryOverdueBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUnpaidTitle": "Salaries to pay this month",
+  "notifUnpaidBody": "{count, plural, one{1 employee still to pay} other{{count} employees still to pay}} · {amount}",
+  "@notifUnpaidBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notifNoSalesTitle": "No sales today",
+  "notifNoSalesBody": "“{store}” has no sales recorded today.",
+  "@notifNoSalesBody": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOther": "Something needs attention",
+  "assistantTitle": "AI assistant",
+  "moreAssistantHint": "Ask about your sales, stores and salaries",
+  "assistantIntro": "Ask me about your money or your business — I answer from your real figures.",
+  "assistantHint": "Your question…",
+  "assistantSend": "Send",
+  "assistantThinking": "Thinking…",
+  "assistantSuggestToday": "How are my sales today?",
+  "assistantSuggestBestStore": "Which store sells best?",
+  "assistantSuggestSalary": "How much salary is still unpaid?",
+  "errAssistantUnavailable": "The assistant is not available right now. Try again later.",
+  "errAssistantRateLimited": "Too many questions. Wait {seconds} s and try again.",
+  "@errAssistantRateLimited": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "fieldPaymentMethod": "Payment method",
+  "paymentNotSet": "Not specified",
+  "paymentCash": "Cash",
+  "paymentCard": "Card",
+  "paymentQr": "QR",
+  "paymentMixed": "Cash + card",
+  "fieldCashAmount": "Of it in cash",
+  "fieldCardAmount": "Of it by card",
+  "fieldReceiptNumber": "Receipt number",
+  "validationSplit": "Cash and card must add up to the amount",
+  "errSaleSplit": "Cash and card must add up to the amount.",
+  "homeByPayment": "By payment method",
+  "fieldCity": "City",
+  "fieldRegion": "Region",
+  "fieldRegionHint": "Dushanbe, Sughd, Khatlon, GBAO, RRS",
+  "fieldStoreType": "Format",
+  "fieldStoreTypeHint": "Supermarket, kiosk…",
+  "fieldCounters": "Checkout counters",
+  "fieldOpeningHours": "Opening hours",
+  "fieldOpeningHoursHint": "09:00–21:00",
+  "fieldStatusNote": "Status reason",
+  "fieldStatusNoteHint": "E.g. renovation",
+  "validationCounters": "A whole number from 0 to 999",
+  "storeMoreDetails": "More details",
+  "fieldSalaryMethod": "Paid by",
+  "salaryMethodBank": "Bank transfer",
+  "salaryMethodCash": "Cash",
+  "payrollAllTimeRemaining": "Unpaid salaries, all months",
+  "payrollAllTimeCaption": "Due {due} · paid {paid}",
+  "@payrollAllTimeCaption": {
+    "placeholders": {
+      "due": {
+        "type": "String"
+      },
+      "paid": {
+        "type": "String"
+      }
+    }
+  },
+  "reportByRegion": "By region",
+  "reportNoRegion": "No region",
+  "reportRegionStores": "{count, plural, one{1 store} other{{count} stores}}",
+  "@reportRegionStores": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTodaySales": "Sales today",
+  "homeMonth": "This month",
+  "storeTargets": "Store targets",
+  "targetSheetHintStore": "For this store only. You can change it any time.",
+  "activityHistory": "History",
+  "voiceTitle": "Voice chat",
+  "voiceOpen": "Talk by voice",
+  "voiceListening": "Listening…",
+  "voiceSpeaking": "Answering…",
+  "voiceTapToTalk": "Tap the microphone and speak",
+  "voiceHint": "Ask anything: “employees”, “sales today”, “how much salary is left?”",
+  "voiceMic": "Speak",
+  "voiceEnd": "End",
+  "voiceUnavailable": "Speech recognition is not available. Allow the microphone and speech recognition in Settings.",
+  "voiceMicFailed": "The microphone didn't start. Try again; if it keeps happening, check the microphone permission in Settings.",
+  "chatHistory": "Chat history",
+  "chatNew": "New chat",
+  "chatHistoryEmpty": "Your conversations with the assistant will be kept here.",
+  "chatDeleteAll": "Delete all",
+  "chatDeleteAllTitle": "Delete all chats?",
+  "chatDeleteAllMessage": "The history is kept only on this phone; it can't be restored.",
+  "chatDeleted": "Chat deleted",
+  "chatCurrent": "Open now",
+  "homeStores": "Stores · {count}",
+  "@homeStores": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeStoreMonth": "This month",
+  "homeAddStore": "Add a store",
+  "homeProfit": "Profit",
+  "homeShowAllStores": "All",
+  "historyExpensesFor": "Expenses in {month}",
+  "@historyExpensesFor": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "historyOfSales": "{percent} of sales",
+  "@historyOfSales": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "historyStatement": "Statement",
+  "historyShowAmount": "Show the amount",
+  "historyHideAmount": "Hide the amount",
+  "historySearch": "Search",
+  "historySearchHint": "Store, employee or note",
+  "historyAll": "All",
+  "historyYesterday": "Yesterday",
+  "historyWeek": "Week",
+  "historyNothing": "No operations for this period.",
+  "opSale": "Sale",
+  "opSaleEdited": "Sale edited",
+  "opSaleDeleted": "Sale deleted",
+  "opSalary": "Salary paid",
+  "opSalaryCancelled": "Payment cancelled",
+  "opStoreNew": "New store",
+  "opStoreEdited": "Store edited",
+  "opStoreDeleted": "Store deleted",
+  "opEmployeeNew": "New employee",
+  "opEmployeeEdited": "Employee edited",
+  "opEmployeeDeleted": "Employee deleted",
+  "opStatus": "Status: {status}",
+  "@opStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "opProfile": "Profile updated",
+  "opOther": "Change",
+  "stmtTitle": "Statements and certificates",
+  "stmtAvailable": "Available",
+  "stmtMine": "My statements",
+  "stmtCertificates": "Certificates",
+  "stmtStatements": "Statements",
+  "stmtForPeriod": "All operations for a period",
+  "stmtSales": "Sales",
+  "stmtStore": "By store",
+  "stmtStoreHint": "Sales of one store for a period",
+  "stmtCash": "Cash",
+  "stmtCashHint": "Only cash, mixed payments split",
+  "stmtCard": "Card and QR",
+  "stmtCardHint": "Only non-cash payments",
+  "stmtExpenses": "Expenses",
+  "stmtSalaries": "Salary payments",
+  "stmtOperations": "All operations",
+  "stmtOperationsHint": "Every change in the business",
+  "stmtSalaryDebt": "Unpaid salaries",
+  "stmtSalaryDebtHint": "Employees not fully paid, as of today",
+  "stmtProfit": "Profit",
+  "stmtProfitHint": "Sales − expenses − salaries for a period",
+  "stmtStores": "Stores summary",
+  "stmtStoresHint": "Stores ranked by sales",
+  "stmtMineEmpty": "Statements you open are kept here.",
+  "stmtPeriodLastMonth": "Last month",
+  "stmtPeriodCustom": "Choose dates",
+  "stmtChooseStore": "Choose a store",
+  "stmtAsOf": "As of {date}",
+  "@stmtAsOf": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "stmtEmpty": "Nothing for this period.",
+  "stmtTruncated": "Too many lines: only the newest are shown. Choose a shorter period.",
+  "stmtExcel": "Download Excel",
+  "stmtShared": "Excel file is ready",
+  "stmtTotal": "Total",
+  "stmtCount": "Operations",
+  "stmtCashTotal": "Cash",
+  "stmtCardTotal": "Card",
+  "stmtQrTotal": "QR",
+  "stmtNoMethod": "Method not set",
+  "stmtSalesTotal": "Sales",
+  "stmtExpensesTotal": "Expenses",
+  "stmtSalariesTotal": "Salaries",
+  "stmtProfitTotal": "Profit",
+  "stmtDue": "Due",
+  "stmtPaid": "Paid",
+  "stmtRemaining": "Owed",
+  "colDate": "Date",
+  "colStore": "Store",
+  "colMethod": "Payment method",
+  "colCash": "Cash",
+  "colCard": "Card / QR",
+  "colAmount": "Amount, TJS",
+  "colReceipt": "Receipt",
+  "colDescription": "Description",
+  "colCategory": "Category",
+  "colEmployee": "Employee",
+  "colForMonth": "For month",
+  "colNote": "Note",
+  "colWhat": "What",
+  "colWho": "Store / employee",
+  "colUser": "By",
+  "colUnpaidMonths": "Unpaid months",
+  "colItem": "Item",
+  "colPlace": "Place",
+  "colShare": "Share, %",
+  "colSalesCount": "Sales",
+  "moreStatementsHint": "Excel statements: sales, cash, card, expenses…",
+  "securityTitle": "Security",
+  "lockFaceId": "Sign in with Face ID",
+  "lockFingerprint": "Sign in with fingerprint",
+  "lockBiometric": "Sign in with biometrics",
+  "lockHint": "Ask for it when the app opens",
+  "lockUnavailable": "No Face ID or fingerprint set up on this phone",
+  "lockReasonEnable": "Confirm to turn on the lock",
+  "lockReasonOpen": "Open AI accountant",
+  "lockTitle": "AI accountant is locked",
+  "lockMessage": "Confirm it is you to see your business.",
+  "lockUnlock": "Unlock",
+  "lockOn": "Biometric sign-in is on",
+  "lockOff": "Biometric sign-in is off",
+  "lockNotConfirmed": "Not confirmed — the lock stays off",
+  "navCurrencies": "Currencies",
+  "currenciesSoon": "Coming soon.",
+  "fxUpdated": "Updated: {time}",
+  "@fxUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "fxRefresh": "Refresh",
+  "fxConverter": "Converter",
+  "fxAmount": "AMOUNT",
+  "fxSwap": "Swap",
+  "fxFrom": "From",
+  "fxTo": "To",
+  "fxCrypto": "Crypto",
+  "fxCryptoNote": "Rates only — you can't buy, sell or exchange here",
+  "fxAll": "All",
+  "fxAllCrypto": "Cryptocurrencies",
+  "fxSearchCoin": "Coin name or ticker",
+  "fxSources": "Exchange rates are updated once a day, crypto prices live (public sources).",
+  "fxCryptoUnavailable": "Crypto prices are unavailable right now.",
+  "fxLive": "Live · {time}",
+  "@fxLive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "navDebts": "Debts",
+  "debtsTitle": "Debts and credits",
+  "debtsOverview": "Overview",
+  "debtsOwedToMe": "Owed to me",
+  "debtsIOwe": "I owe",
+  "debtsToPeople": "Debts to people",
+  "debtsLoans": "Credits and installments",
+  "debtsPeople": "{count, plural, one{1 person} other{{count} people}}",
+  "@debtsPeople": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "debtsCount": "{count, plural, one{1 debt} other{{count} debts}}",
+  "@debtsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "debtsEmptyOwedTitle": "People owe you money",
+  "debtsEmptyOwedMessage": "Add someone who owes you",
+  "debtsEmptyIOweTitle": "You owe money",
+  "debtsEmptyIOweMessage": "Add someone you owe",
+  "debtsAdd": "Add a debt",
+  "debtsActiveLoans": "Active credits",
+  "debtsAddLoan": "Add a credit",
+  "debtsNoLoans": "No active credits or installments",
+  "debtsClosed": "Repaid",
+  "debtsLocalNote": "Kept only on this phone.",
+  "debtLeft": "{amount} left",
+  "@debtLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "debtDue": "Due {date}",
+  "@debtDue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "debtOverdue": "Overdue since {date}",
+  "@debtOverdue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "debtNewOwed": "Owed to me",
+  "debtNewIOwe": "I owe",
+  "debtNewLoan": "New credit",
+  "debtEditTitle": "Edit",
+  "debtWho": "Who",
+  "debtWhoHint": "Name",
+  "debtBank": "Bank or shop",
+  "debtLoanType": "Type",
+  "debtCredit": "Credit",
+  "debtInstallment": "Installment",
+  "debtAmountTotal": "Total to repay",
+  "debtMonthly": "Monthly payment",
+  "debtDueDate": "Repay by",
+  "debtNoDueDate": "No date",
+  "debtSaved": "Saved",
+  "debtRepay": "Record a repayment",
+  "debtRepayAll": "Repaid in full",
+  "debtRepaid": "Repayment recorded",
+  "debtPayments": "Repayments",
+  "debtNoPayments": "No repayments yet.",
+  "debtPaidOf": "Repaid {paid} of {total}",
+  "@debtPaidOf": {
+    "placeholders": {
+      "paid": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "debtDeleteTitle": "Delete it?",
+  "debtDeleteMessage": "It and its repayments will be removed from this phone.",
+  "debtDeleted": "Deleted",
+  "debtClosedBadge": "Repaid",
+  "actionSalesList": "Sales",
+  "pfExpense": "Expense",
+  "pfIncome": "Income",
+  "pfTransfer": "Transfer",
+  "pfNewExpense": "New expense",
+  "pfNewIncome": "New income",
+  "pfNewTransfer": "Transfer between accounts",
+  "pfEditOperation": "Operation",
+  "pfAccount": "Account",
+  "pfFromAccount": "From account",
+  "pfToAccount": "To account",
+  "pfSameAccount": "Choose another account",
+  "pfSaved": "Saved",
+  "pfDeleted": "Deleted",
+  "pfDeleteTitle": "Delete the operation?",
+  "pfDeleteMessage": "The account balance changes back.",
+  "pfOperations": "Operations",
+  "pfNoOperations": "No operations yet. Tap “+” to write down an expense or income.",
+  "pfAccounts": "Accounts",
+  "pfAccountsHint": "Cash, cards and their balances",
+  "pfNewAccount": "New account",
+  "pfAccountName": "Name",
+  "pfAccountNameHint": "Alif card, cash…",
+  "pfAccountKind": "Type",
+  "pfOpeningBalance": "Balance now",
+  "pfAccountUsed": "The account has operations: delete them first.",
+  "pfAccountDeleteTitle": "Delete the account?",
+  "pfKindCash": "Cash",
+  "pfKindCard": "Card",
+  "pfKindBank": "Bank account",
+  "pfKindSavings": "Savings",
+  "pfKindOther": "Other",
+  "pfTotalBalance": "My money",
+  "pfRecurring": "Regular payments",
+  "pfRecurringHint": "Rent, internet, subscriptions",
+  "pfNewRecurring": "New regular payment",
+  "pfRecurringName": "What for",
+  "pfRecurringNameHint": "Internet, rent…",
+  "pfNextDate": "Next payment",
+  "pfEvery": "How often",
+  "pfEveryMonth": "Every month",
+  "pfEveryQuarter": "Every 3 months",
+  "pfEveryYear": "Every year",
+  "pfAnyAccount": "Choose when paying",
+  "pfPay": "Paid",
+  "pfPaid": "Paid: written as an expense",
+  "pfNoRecurring": "No regular payments yet.",
+  "pfDue": "{date}",
+  "@pfDue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pfDueToday": "Today",
+  "pfOverdue": "Overdue · {date}",
+  "@pfOverdue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pfUpcoming": "Coming payments",
+  "pfMonthIncome": "Income",
+  "pfMonthExpense": "Expenses",
+  "pfByCategory": "Expenses by category",
+  "pfNoExpensesMonth": "No expenses this month.",
+  "pfRecent": "Latest operations",
+  "pfMyFinances": "My finances",
+  "pfLocalNote": "Personal finances are kept only on this phone.",
+  "pfCatFood": "Groceries",
+  "pfCatCafe": "Cafés",
+  "pfCatTransport": "Transport",
+  "pfCatHome": "Home and rent",
+  "pfCatUtilities": "Utilities",
+  "pfCatPhone": "Phone and internet",
+  "pfCatHealth": "Health",
+  "pfCatClothes": "Clothes",
+  "pfCatEducation": "Education",
+  "pfCatFun": "Fun",
+  "pfCatGifts": "Gifts",
+  "pfCatFamily": "Family",
+  "pfCatOtherExpense": "Other",
+  "pfCatSalary": "Salary",
+  "pfCatBusiness": "Business",
+  "pfCatSideJob": "Side job",
+  "pfCatGiftIn": "Gift",
+  "pfCatRefund": "Refund",
+  "pfCatOtherIncome": "Other income",
+  "phMonthIncome": "Income this month",
+  "phMonthExpense": "Expenses this month",
+  "phMyBusiness": "My business",
+  "phBusinessToday": "Sales today {amount} · profit this month {profit}",
+  "@phBusinessToday": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "profit": {
+        "type": "String"
+      }
+    }
+  },
+  "phStartBusinessTitle": "Have a shop?",
+  "phStartBusinessMessage": "Add it: sales, employees, salaries and its expenses will appear.",
+  "phAddStore": "Add a store",
+  "phAddAccount": "Add an account",
+  "phOpen": "Open",
+  "actionStoreExpense": "Store expense",
+  "quickPersonal": "Personal",
+  "quickBusiness": "Business",
+  "morePersonal": "My money",
+  "moreOperationsHint": "Every income, expense and transfer",
+  "assistantSuggestSpending": "What do I spend the most on?",
+  "assistantSuggestMonth": "How much did I spend this month?",
+  "moreReportsAllHint": "Profit, statements in Excel, history of changes",
+  "moreCurrenciesHint": "Rates, converter, crypto",
+  "reportsProfitHint": "Stores compared, salaries for the year",
+  "reportsHistoryHint": "Every change: sales, expenses, salaries",
+  "navOperations": "Operations",
+  "qeTitle": "Quick entry",
+  "qeHint": "Taxi 50, lunch 35 by card…",
+  "qeHelp": "Say or type what and how much: “taxi 50”, “got salary 3000 on card”.",
+  "qeSpeak": "Speak",
+  "qeListening": "Listening…",
+  "qeNoAmount": "No amount heard: add a number, e.g. “taxi 50”.",
+  "qeWrite": "Write it down",
+  "qeEdit": "Change",
+  "qeNoCategory": "Category: choose in “Change”",
+  "qeMicFailed": "The microphone did not start: type instead.",
+  "qeButton": "Say or type: “taxi 50”",
+  "remTitle": "AI accountant",
+  "remPaymentTomorrow": "Tomorrow: {name}, {amount}",
+  "@remPaymentTomorrow": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remPaymentToday": "Today: {name}, {amount}. Tap “Paid” in the app.",
+  "@remPaymentToday": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remDebtTomorrow": "Tomorrow the debt is due: {name}, {amount}",
+  "@remDebtTomorrow": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remDebtToday": "Today the debt is due: {name}, {amount}",
+  "@remDebtToday": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "pfCurrency": "Currency",
+  "pfCurrencyLocked": "The account has operations: its currency stays.",
+  "pfReceived": "Arrived on the account",
+  "pfInTjsNote": "Other currencies are counted in somoni at today's rate.",
+  "pfRatesMissing": "No exchange rates yet: other currencies are counted as is.",
+  "goalTitle": "Savings goals",
+  "goalHint": "A car, a flat, a trip…",
+  "goalNew": "New goal",
+  "goalName": "What for",
+  "goalNameHint": "A car",
+  "goalTarget": "How much is needed",
+  "goalDeadline": "By when",
+  "goalNoDeadline": "No date",
+  "goalTopUp": "Top up",
+  "goalSaved": "{saved} of {target}",
+  "@goalSaved": {
+    "placeholders": {
+      "saved": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "goalReached": "Reached!",
+  "goalLeft": "{amount} left · by {date}",
+  "@goalLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "goalLeftNoDate": "{amount} left",
+  "@goalLeftNoDate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "goalPerMonth": "≈ {amount} a month",
+  "@goalPerMonth": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "goalEmpty": "No goals yet. Each goal keeps its money on its own savings account.",
+  "goalDeleteTitle": "Delete the goal?",
+  "goalDeleteMessage": "Its account and the money on it stay.",
+  "opsSearch": "Search: note, category, account",
+  "opsClear": "Clear",
+  "opsAll": "All",
+  "opsExpenses": "Expenses",
+  "opsIncome": "Income",
+  "opsTransfers": "Transfers",
+  "opsAllAccounts": "All accounts",
+  "opsAllCategories": "All categories",
+  "opsReset": "Reset filters",
+  "opsFound": "Found: {count} · income {income} · expenses {expense}",
+  "@opsFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "income": {
+        "type": "String"
+      },
+      "expense": {
+        "type": "String"
+      }
+    }
+  },
+  "opsNothing": "Nothing found.",
+  "opsExcel": "Excel",
+  "opsExcelTitle": "My operations",
+  "opsColType": "Type",
+  "opsColTo": "To account",
+  "opsTotalIncome": "Income, TJS",
+  "opsTotalExpense": "Expenses, TJS",
+  "bkTitle": "Backup",
+  "bkHint": "Save to a file and restore",
+  "bkAbout": "Personal finances and debts are kept only on this phone. Save a backup file now and then (to Files, iCloud or Telegram “Saved”) so they are not lost with the phone.",
+  "bkSave": "Save a backup file",
+  "bkRestore": "Restore from a file",
+  "bkBadFile": "This file is not a backup of this app.",
+  "bkConfirmTitle": "Restore the backup?",
+  "bkConfirmMessage": "From {date}: {accounts} accounts, {operations} operations, {debts} debts. What is on the phone now is replaced.",
+  "@bkConfirmMessage": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "accounts": {
+        "type": "int"
+      },
+      "operations": {
+        "type": "int"
+      },
+      "debts": {
+        "type": "int"
+      }
+    }
+  },
+  "bkRestoreAction": "Restore",
+  "bkRestored": "Restored",
+  "actionFromStore": "Took from the shop",
+  "fromStoreNote": "From the shop",
+  "pfCatDebtOut": "Lent",
+  "pfCatDebtPay": "Debt repayment",
+  "pfCatDebtIn": "Borrowed",
+  "pfCatDebtBack": "Debt returned",
+  "debtAccount": "Write to account",
+  "debtNoAccount": "Don't write",
+  "sessionOfflineTitle": "No connection to the server",
+  "sessionOfflineMessage": "You are still signed in. Check the internet and try again.",
+  "sessionTooOld": "For safety, please sign in again (once a week).",
+  "errActionNotFound": "This proposal was not found.",
+  "errConversationNotFound": "This chat was deleted.",
+  "errActionAlreadyHandled": "This proposal has already been confirmed or cancelled.",
+  "errActionExpired": "This proposal has expired. Ask the assistant again.",
+  "actConfirm": "Confirm",
+  "actConfirmAgain": "Confirm again",
+  "actCancel": "Cancel",
+  "actDone": "Done",
+  "actCancelled": "Cancelled · ask the assistant again",
+  "actExpired": "Expired · ask the assistant again",
+  "actFailed": "Not done: {reason}",
+  "@actFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "actSureTitle": "Are you sure?",
+  "actSureMessage": "{summary} This can't be undone from the chat.",
+  "@actSureMessage": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "chatRename": "Rename",
+  "chatRenameTitle": "Chat name",
+  "chatDelete": "Delete",
+  "chatDeleteTitle": "Delete the chat?",
+  "chatDeleteMessage": "It disappears on every device.",
+  "chatHistoryServerEmpty": "Your chats with the assistant will be saved here, on every device you sign in on.",
+  "chatMessages": "{count} messages",
+  "@chatMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatMore": "Show more",
+  "chatWaitSeconds": "Too many questions. Next one in {seconds} s.",
+  "@chatWaitSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "chatOptions": "Chat options",
+  "pfOtherExpenseWhat": "What did you spend on?",
+  "pfOtherExpenseHint": "Phone repair, a haircut…",
+  "pfOtherIncomeWhat": "What is this income?",
+  "pfOtherIncomeHint": "Sold a bike, won a prize…"
 }

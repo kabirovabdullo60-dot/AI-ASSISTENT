@@ -18,8 +18,13 @@ export 'api_exception.dart';
 /// * On `401 AUTH_TOKEN_EXPIRED` refreshes the tokens **once**, saves
 ///   **both** new tokens and retries the call. Calls that fail at the same
 ///   time share one refresh request (a refresh token works only once).
-/// * Any other 401 on a protected call — or a failed refresh — clears the
-///   tokens and calls [onSessionExpired] (the app shows the login screen).
+/// * Before refreshing, the saved tokens are read again: when they changed
+///   meanwhile, they are used instead (an old refresh token must never be
+///   sent twice — the server would end the whole session).
+/// * Any other 401 on a protected call, or a refresh the server refuses
+///   (401 / 403), clears the tokens and calls [onSessionExpired]. A network
+///   error or a 5xx during the refresh keeps them: the person stays signed
+///   in and can try again.
 /// * Errors become [ApiException] with the backend `error.code`; network
 ///   failures become `NETWORK_ERROR`.
 class ApiClient {
@@ -57,8 +62,13 @@ class ApiClient {
     bool auth = true,
   }) => _send('GET', path, query: query, auth: auth);
 
-  Future<dynamic> post(String path, {Object? body, bool auth = true}) =>
-      _send('POST', path, body: body, auth: auth);
+  /// [timeout] replaces the usual one for slow calls (the AI assistant).
+  Future<dynamic> post(
+    String path, {
+    Object? body,
+    bool auth = true,
+    Duration? timeout,
+  }) => _send('POST', path, body: body, auth: auth, timeout: timeout);
 
   Future<dynamic> put(String path, {Object? body}) =>
       _send('PUT', path, body: body);
@@ -88,6 +98,7 @@ class ApiClient {
     Object? body,
     bool auth = true,
     ({String field, Uint8List bytes, String filename})? file,
+    Duration? timeout,
   }) async {
     final uri = Uri.parse('$_baseUrl$path').replace(
       queryParameters: {
@@ -96,19 +107,23 @@ class ApiClient {
       }.nullIfEmpty,
     );
     var token = auth ? await tokens.readAccessToken() : null;
-    var response = await _request(method, uri, token, body, file);
+    final refreshBefore = auth ? await tokens.readRefreshToken() : null;
+    var response = await _request(method, uri, token, body, file, timeout);
     if (auth && response.statusCode == 401) {
       final code = _errorCode(response);
       if (code == _expired) {
         final current = await tokens.readAccessToken();
-        if (current != null && current != token) {
-          // Another call has refreshed meanwhile: just use the new token.
+        final currentRefresh = await tokens.readRefreshToken();
+        if ((current != null && current != token) ||
+            (currentRefresh != null && currentRefresh != refreshBefore)) {
+          // Refreshed meanwhile (another call, another screen): use the new
+          // tokens — calling /refresh with the old one would end the session.
           token = current;
         } else {
           await _refreshOnce();
           token = await tokens.readAccessToken();
         }
-        response = await _request(method, uri, token, body, file);
+        response = await _request(method, uri, token, body, file, timeout);
       }
       if (response.statusCode == 401) {
         await _endSession();
@@ -122,8 +137,9 @@ class ApiClient {
     Uri uri,
     String? token,
     Object? body,
-    ({String field, Uint8List bytes, String filename})? file,
-  ) async {
+    ({String field, Uint8List bytes, String filename})? file, [
+    Duration? timeout,
+  ]) async {
     final headers = {
       'Accept': 'application/json',
       'Accept-Language': language(),
@@ -150,7 +166,7 @@ class ApiClient {
       request.headers.addAll(headers);
       final streamed = await _client
           .send(request)
-          .timeout(ApiConstants.timeout);
+          .timeout(timeout ?? ApiConstants.timeout);
       return await http.Response.fromStream(streamed);
     } on SocketException catch (e) {
       throw ApiException(0, ApiException.networkError, message: '$e');
@@ -227,6 +243,7 @@ class ApiClient {
           for (final d in error['details'] as List<dynamic>? ?? const [])
             d as Map<String, dynamic>,
         ],
+        meta: error['meta'] as Map<String, dynamic>? ?? const {},
       );
     } on ApiException {
       rethrow;

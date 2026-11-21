@@ -7,6 +7,7 @@ class ApiException implements Exception {
     this.code, {
     this.message = '',
     this.details = const [],
+    this.meta = const {},
   });
 
   /// The server could not be reached (no connection, timeout).
@@ -25,6 +26,10 @@ class ApiException implements Exception {
   /// `422 VALIDATION_ERROR`: one entry per problem (`location`, `field`,
   /// `code`, `message`).
   final List<Map<String, dynamic>> details;
+
+  /// Extra machine-readable data, e.g. `retryAfter` (seconds) on
+  /// `429 RATE_LIMITED`.
+  final Map<String, dynamic> meta;
 
   @override
   String toString() => 'ApiException($statusCode, $code)';

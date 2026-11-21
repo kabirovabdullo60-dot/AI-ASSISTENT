@@ -135,6 +135,27 @@ abstract final class ApiJson {
     'totalAmount': ?totalAmount,
   };
 
+  static Map<String, Object?> expense({
+    String id = '55555555-5555-5555-5555-555555555555',
+    String category = 'RENT',
+    String amount = '3000.00',
+    String? storeId,
+    String? storeName,
+    String? description = 'Аренда за ноябрь',
+  }) => {
+    'id': id,
+    'storeId': storeId,
+    'storeName': storeName,
+    'category': category,
+    'amount': amount,
+    'expenseDate': '2026-11-05',
+    'description': description,
+    'registeredById': '11111111-1111-1111-1111-111111111111',
+    'registeredByName': 'Фарход Назаров',
+    'createdAt': '2026-11-05T06:00:00Z',
+    'updatedAt': '2026-11-05T06:00:00Z',
+  };
+
   static Map<String, Object?> sale({
     String id = '44444444-4444-4444-4444-444444444444',
     String amount = '1250.50',
@@ -193,7 +214,10 @@ abstract final class ApiJson {
     ],
   };
 
-  static Map<String, Object?> dashboard() => {
+  static Map<String, Object?> dashboard({
+    String? weekTarget,
+    String? monthTarget = '150000.00',
+  }) => {
     'currency': 'TJS',
     'today': '2026-11-18',
     'weekStartDate': '2026-11-16',
@@ -220,6 +244,11 @@ abstract final class ApiJson {
       'totalAmount': '80000.00',
       'salesCount': 40,
     },
+    'monthExpenses': '12000.00',
+    'monthProfit': '82028.00',
+    'monthMarginPercent': 73.22,
+    'weekTarget': weekTarget,
+    'monthTarget': monthTarget,
   };
 
   static Map<String, Object?> storeComparison() => {
@@ -309,5 +338,106 @@ abstract final class ApiJson {
     'averageMonthlySalary': '3000.00',
     'byStore': <Object>[],
     'byPosition': <Object>[],
+  };
+
+  static Map<String, Object?> payrollYear() => {
+    'currency': 'TJS',
+    'year': 2026,
+    'totalDue': '18000.00',
+    'totalPaid': '9000.00',
+    'totalRemaining': '9000.00',
+    'months': <Object>[],
+  };
+
+  static Map<String, Object?> profit({
+    String gross = '82028.00',
+    double? margin = 73.22,
+  }) => {
+    'currency': 'TJS',
+    'period': period('2026-11-01', '2026-11-18', 18),
+    'salesTotal': '112028.00',
+    'expensesTotal': '12000.00',
+    'salaryDue': '18000.00',
+    'grossProfit': gross,
+    'marginPercent': margin,
+    'byCategory': [
+      {'category': 'RENT', 'totalAmount': '9000.00'},
+      {'category': 'UTILITIES', 'totalAmount': '3000.00'},
+    ],
+    'byStore': [
+      {
+        'storeId': '33333333-3333-3333-3333-333333333333',
+        'storeName': 'Бахор — Сомони',
+        'salesTotal': '112028.00',
+        'expensesTotal': '3000.00',
+        'salaryDue': '18000.00',
+        'profit': '91028.00',
+      },
+      {
+        'storeId': null,
+        'storeName': null,
+        'salesTotal': '0.00',
+        'expensesTotal': '9000.00',
+        'salaryDue': '0.00',
+        'profit': '-9000.00',
+      },
+    ],
+  };
+
+  static Map<String, Object?> activity({
+    String type = 'SALE',
+    String action = 'CREATED',
+    String entityName = 'Бахор — Сомони',
+    String? amount = '1250.50',
+    String? status,
+  }) => {
+    'id':
+        '77777777-7777-7777-7777-${(type + action).hashCode.abs().toString().padLeft(12, '0').substring(0, 12)}',
+    'type': type,
+    'action': action,
+    'entityId': '44444444-4444-4444-4444-444444444444',
+    'entityName': entityName,
+    'storeId': '33333333-3333-3333-3333-333333333333',
+    'storeName': 'Бахор — Сомони',
+    'employeeId': null,
+    'amount': amount,
+    'note': null,
+    'changedFields': null,
+    'status': status,
+    'period': null,
+    'actorId': '11111111-1111-1111-1111-111111111111',
+    'actorName': 'Фарход Назаров',
+    'createdAt': '2026-11-18T09:05:00Z',
+  };
+
+  static Map<String, Object?> notifications({int unread = 2}) => {
+    'items': [
+      {
+        'id': '88888888-8888-8888-8888-888888888881',
+        'kind': 'SALARY_OVERDUE',
+        'severity': 'WARNING',
+        'count': 2,
+        'amount': '6000.00',
+        'storeId': null,
+        'storeName': null,
+        'link': 'PAYROLL',
+        'read': false,
+        'createdAt': '2026-11-01T00:00:00Z',
+      },
+      {
+        'id': '88888888-8888-8888-8888-888888888882',
+        'kind': 'STORE_NO_SALES_TODAY',
+        'severity': 'INFO',
+        'count': 1,
+        'amount': null,
+        'storeId': '33333333-3333-3333-3333-333333333333',
+        'storeName': 'Бахор — Сомони',
+        'link': 'SALES',
+        'read': unread < 2,
+        'createdAt': '2026-11-18T00:00:00Z',
+      },
+    ],
+    'unreadCount': unread,
+    'lastReadAt': null,
   };
 }

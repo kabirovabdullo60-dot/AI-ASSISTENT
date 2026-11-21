@@ -9,7 +9,10 @@ class AppLocalizationsTg extends AppLocalizations {
   AppLocalizationsTg([String locale = 'tg']) : super(locale);
 
   @override
-  String get appTitle => 'OFAR';
+  String get appTitle => 'ИИ-муҳосиб';
+
+  @override
+  String get introTitle => 'ИИ-муҳосиб';
 
   @override
   String get commonLoading => 'Боркунӣ…';
@@ -103,10 +106,23 @@ class AppLocalizationsTg extends AppLocalizations {
       'Барои идомаи кор бо молияи ширкат ворид шавед';
 
   @override
-  String get authRegisterTitle => 'Бақайдгирӣ';
+  String get authRegisterTitle => 'Аккаунт созед';
 
   @override
-  String get authRegisterSubtitle => 'Аккаунт ва тиҷорати шумо — дар ду дақиқа';
+  String get authRegisterTab => 'Бақайдгирӣ';
+
+  @override
+  String get authRegisterSubtitle =>
+      'ИИ-муҳосиб барои ҳисоби даромад ва хароҷот';
+
+  @override
+  String get fieldWorkEmail => 'E-mail-и корӣ';
+
+  @override
+  String get authPasswordMinHint => 'Ҳадди ақал 8 аломат';
+
+  @override
+  String get validationPasswordMin => 'Ҳадди ақал 8 аломат';
 
   @override
   String get authNoAccount => 'Аккаунт надоред?';
@@ -434,7 +450,7 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get employeeDeleteMessage =>
-      'Таърихи музди меҳнат нигоҳ дошта мешавад.';
+      'Ба ӯ дигар чизе ҳисоб намешавад: маоши пардохтнашуда дигар ҳисоб намешавад. Пардохтҳо дар таърих мемонанд. Агар шахс аз кор рафта бошад, беҳтар ҳолати «Ғайрифаъол»-ро гузоред — он гоҳ қарз то рӯзи рафтан мемонад.';
 
   @override
   String get payrollPaid => 'Пардохт шуд';
@@ -506,7 +522,7 @@ class AppLocalizationsTg extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count рӯзи корӣ',
+      other: 'Дар ин моҳ: $count рӯз',
     );
     return '$_temp0';
   }
@@ -516,7 +532,7 @@ class AppLocalizationsTg extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count моҳ',
+      other: 'Собиқа: $count моҳ',
     );
     return '$_temp0';
   }
@@ -737,4 +753,1733 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get errUnknown => 'Чизе хато рафт. Аз нав кӯшиш кунед.';
+
+  @override
+  String get navExpenses => 'Хароҷот';
+
+  @override
+  String get moreExpensesHint =>
+      'Иҷора, хизматрасониҳои коммуналӣ, расонидан ва ғайра';
+
+  @override
+  String get actionNewExpense => 'Хароҷот';
+
+  @override
+  String get fieldCategory => 'Категория';
+
+  @override
+  String get expenseCategoryRent => 'Иҷора';
+
+  @override
+  String get expenseCategoryUtilities => 'Хизматрасониҳои коммуналӣ';
+
+  @override
+  String get expenseCategoryDelivery => 'Расонидан';
+
+  @override
+  String get expenseCategorySupplies => 'Маводи истеъмолӣ';
+
+  @override
+  String get expenseCategoryMarketing => 'Реклама';
+
+  @override
+  String get expenseCategoryTaxes => 'Андозҳо';
+
+  @override
+  String get expenseCategoryOther => 'Дигар';
+
+  @override
+  String get expensesAllCategories => 'Ҳамаи категорияҳо';
+
+  @override
+  String get expenseWholeBusiness => 'Тамоми тиҷорат';
+
+  @override
+  String get expensesTotal => 'Ҳамагӣ хароҷот';
+
+  @override
+  String expensesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count хароҷот',
+      zero: 'Хароҷот нест',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get expensesNothingFound => 'Аз рӯи ин филтр хароҷот нест.';
+
+  @override
+  String get expensesEmptyTitle => 'Ҳоло хароҷот нест';
+
+  @override
+  String get expensesEmptyMessage =>
+      'Иҷора, коммуналӣ ва дигар хароҷотро сабт кунед, то фоидаи воқеиро бинед.';
+
+  @override
+  String get expenseNewTitle => 'Хароҷоти нав';
+
+  @override
+  String get expenseEditTitle => 'Хароҷот';
+
+  @override
+  String get expenseSaved => 'Хароҷот илова шуд';
+
+  @override
+  String get expenseUpdated => 'Хароҷот тағйир ёфт';
+
+  @override
+  String get expenseDeleted => 'Хароҷот нест карда шуд';
+
+  @override
+  String get expenseDeleteTitle => 'Хароҷотро нест кунем?';
+
+  @override
+  String get expenseDeleteMessage =>
+      'Он дигар дар хароҷот ва фоида ҳисоб карда намешавад.';
+
+  @override
+  String get errExpenseNotFound => 'Ин хароҷот дигар вуҷуд надорад.';
+
+  @override
+  String get errExpenseDateFuture =>
+      'Санаи хароҷот наметавонад дар оянда бошад.';
+
+  @override
+  String get reportProfit => 'Фоида';
+
+  @override
+  String get profitSales => 'Фурӯш';
+
+  @override
+  String get profitExpenses => 'Хароҷот';
+
+  @override
+  String get profitSalaryDue => 'Маоши ҳисобшуда';
+
+  @override
+  String profitMargin(String percent) {
+    return 'Маржа $percent';
+  }
+
+  @override
+  String get profitNoSales => 'Дар ин давра фурӯш нест';
+
+  @override
+  String get profitByCategory => 'Хароҷот аз рӯи категория';
+
+  @override
+  String get profitByStore => 'Фоида аз рӯи мағоза';
+
+  @override
+  String get profitNoExpenses => 'Дар ин давра хароҷот нест.';
+
+  @override
+  String profitStoreLine(String sales, String expenses, String salary) {
+    return 'Фурӯш $sales · хароҷот $expenses · маош $salary';
+  }
+
+  @override
+  String get homeTargetsProfit => 'Ҳадафҳо ва фоида';
+
+  @override
+  String get homeMonthProfit => 'Фоидаи моҳ';
+
+  @override
+  String homeProfitCaption(String expenses, String margin) {
+    return 'Хароҷот $expenses · $margin';
+  }
+
+  @override
+  String get targetWeek => 'Ҳадафи ҳафта';
+
+  @override
+  String get targetMonth => 'Ҳадафи моҳ';
+
+  @override
+  String get targetNotSet => 'Ҳадаф гузоштан';
+
+  @override
+  String targetDone(String percent) {
+    return 'Иҷро шуд $percent';
+  }
+
+  @override
+  String get targetSheetTitleWeek => 'Ҳадафи фурӯш барои ҳафта';
+
+  @override
+  String get targetSheetTitleMonth => 'Ҳадафи фурӯш барои моҳ';
+
+  @override
+  String get targetSheetHint =>
+      'Барои тамоми тиҷорат. Ҳар вақт тағйир додан мумкин.';
+
+  @override
+  String get targetSaved => 'Ҳадаф сабт шуд';
+
+  @override
+  String get activityTitle => 'Амалҳои охирин';
+
+  @override
+  String get activityLogTitle => 'Феҳристи амалиётҳо';
+
+  @override
+  String get activityEmpty => 'Ҳоло тағйирот нест.';
+
+  @override
+  String activityStoreCreated(String name) {
+    return 'Мағозаи «$name» илова шуд';
+  }
+
+  @override
+  String activityStoreUpdated(String name) {
+    return 'Мағозаи «$name» тағйир ёфт';
+  }
+
+  @override
+  String activityStoreDeleted(String name) {
+    return 'Мағозаи «$name» нест карда шуд';
+  }
+
+  @override
+  String activityStoreStatus(String name, String status) {
+    return 'Мағозаи «$name»: $status';
+  }
+
+  @override
+  String activitySaleCreated(String name) {
+    return 'Фурӯш дар «$name»';
+  }
+
+  @override
+  String activitySaleUpdated(String name) {
+    return 'Фурӯш дар «$name» тағйир ёфт';
+  }
+
+  @override
+  String activitySaleDeleted(String name) {
+    return 'Фурӯш дар «$name» нест карда шуд';
+  }
+
+  @override
+  String activityEmployeeCreated(String name) {
+    return 'Корманд $name илова шуд';
+  }
+
+  @override
+  String activityEmployeeUpdated(String name) {
+    return 'Маълумоти $name тағйир ёфт';
+  }
+
+  @override
+  String activityEmployeeDeleted(String name) {
+    return 'Корманд $name нест карда шуд';
+  }
+
+  @override
+  String activityEmployeeStatus(String name, String status) {
+    return '$name: $status';
+  }
+
+  @override
+  String activityPayrollPaid(String name) {
+    return 'Маош пардохт шуд: $name';
+  }
+
+  @override
+  String activityPayrollCancelled(String name) {
+    return 'Пардохт бекор шуд: $name';
+  }
+
+  @override
+  String get activityProfileUpdated => 'Профил тағйир ёфт';
+
+  @override
+  String activityOther(String name) {
+    return '$name: тағйирот';
+  }
+
+  @override
+  String activityBy(String actor, String time) {
+    return '$actor · $time';
+  }
+
+  @override
+  String get notificationsTitle => 'Огоҳиномаҳо';
+
+  @override
+  String get notificationsTooltip => 'Огоҳиномаҳо';
+
+  @override
+  String get notificationsEmpty =>
+      'Ҳама хуб аст: чизе диққатро талаб намекунад.';
+
+  @override
+  String get notificationsNew => 'Нав';
+
+  @override
+  String get notifSalaryOverdueTitle => 'Маоши мӯҳлаташ гузашта';
+
+  @override
+  String notifSalaryOverdueBody(int count, String amount) {
+    return 'Барои моҳҳои гузашта пардохт нашудааст ($count) · $amount';
+  }
+
+  @override
+  String get notifUnpaidTitle => 'Маоши ин моҳ';
+
+  @override
+  String notifUnpaidBody(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ба $count корманд пардохт кардан лозим',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String get notifNoSalesTitle => 'Имрӯз фурӯш нест';
+
+  @override
+  String notifNoSalesBody(String store) {
+    return 'Дар «$store» имрӯз ягон фурӯш сабт нашудааст.';
+  }
+
+  @override
+  String get notifOther => 'Диққат лозим';
+
+  @override
+  String get assistantTitle => 'Ёрдамчии ИИ';
+
+  @override
+  String get moreAssistantHint => 'Дар бораи фурӯш, мағозаҳо ва маош пурсед';
+
+  @override
+  String get assistantIntro =>
+      'Дар бораи пул ё тиҷорати худ пурсед — ман бо рақамҳои воқеии шумо ҷавоб медиҳам.';
+
+  @override
+  String get assistantHint => 'Саволи шумо…';
+
+  @override
+  String get assistantSend => 'Фиристодан';
+
+  @override
+  String get assistantThinking => 'Фикр мекунам…';
+
+  @override
+  String get assistantSuggestToday => 'Фурӯши имрӯз чӣ хел аст?';
+
+  @override
+  String get assistantSuggestBestStore => 'Кадом мағоза беҳтар мефурӯшад?';
+
+  @override
+  String get assistantSuggestSalary => 'Чӣ қадар маош ҳоло пардохт нашудааст?';
+
+  @override
+  String get errAssistantUnavailable =>
+      'Ёрдамчӣ ҳоло дастрас нест. Баъдтар кӯшиш кунед.';
+
+  @override
+  String errAssistantRateLimited(int seconds) {
+    return 'Саволҳо аз ҳад зиёданд. $seconds сония интизор шавед ва боз кӯшиш кунед.';
+  }
+
+  @override
+  String get fieldPaymentMethod => 'Тарзи пардохт';
+
+  @override
+  String get paymentNotSet => 'Нишон дода нашудааст';
+
+  @override
+  String get paymentCash => 'Нақд';
+
+  @override
+  String get paymentCard => 'Корт';
+
+  @override
+  String get paymentQr => 'QR-код';
+
+  @override
+  String get paymentMixed => 'Нақд + корт';
+
+  @override
+  String get fieldCashAmount => 'Аз он нақд';
+
+  @override
+  String get fieldCardAmount => 'Аз он бо корт';
+
+  @override
+  String get fieldReceiptNumber => 'Рақами чек';
+
+  @override
+  String get validationSplit =>
+      'Нақд ва корт якҷоя бояд ба маблағ баробар бошанд';
+
+  @override
+  String get errSaleSplit =>
+      'Нақд ва корт якҷоя бояд ба маблағ баробар бошанд.';
+
+  @override
+  String get homeByPayment => 'Аз рӯи тарзи пардохт';
+
+  @override
+  String get fieldCity => 'Шаҳр';
+
+  @override
+  String get fieldRegion => 'Минтақа';
+
+  @override
+  String get fieldRegionHint => 'Душанбе, Суғд, Хатлон, ВМКБ, НТМ';
+
+  @override
+  String get fieldStoreType => 'Шакл';
+
+  @override
+  String get fieldStoreTypeHint => 'Супермаркет, киоск…';
+
+  @override
+  String get fieldCounters => 'Хазинаҳо';
+
+  @override
+  String get fieldOpeningHours => 'Соатҳои корӣ';
+
+  @override
+  String get fieldOpeningHoursHint => '09:00–21:00';
+
+  @override
+  String get fieldStatusNote => 'Сабаби вазъ';
+
+  @override
+  String get fieldStatusNoteHint => 'Масалан, таъмир';
+
+  @override
+  String get validationCounters => 'Адади бутун аз 0 то 999';
+
+  @override
+  String get storeMoreDetails => 'Тафсилот';
+
+  @override
+  String get fieldSalaryMethod => 'Тарзи пардохт';
+
+  @override
+  String get salaryMethodBank => 'Интиқоли бонкӣ';
+
+  @override
+  String get salaryMethodCash => 'Нақд';
+
+  @override
+  String get payrollAllTimeRemaining => 'Пардохтнашуда барои ҳамаи моҳҳо';
+
+  @override
+  String payrollAllTimeCaption(String due, String paid) {
+    return 'Ҳисобшуда $due · пардохтшуда $paid';
+  }
+
+  @override
+  String get reportByRegion => 'Аз рӯи минтақа';
+
+  @override
+  String get reportNoRegion => 'Бе минтақа';
+
+  @override
+  String reportRegionStores(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count мағоза',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeTodaySales => 'Фурӯши имрӯз';
+
+  @override
+  String get homeMonth => 'Дар як моҳ';
+
+  @override
+  String get storeTargets => 'Ҳадафҳои мағоза';
+
+  @override
+  String get targetSheetHintStore =>
+      'Танҳо барои ҳамин мағоза. Ҳар вақт тағйир додан мумкин.';
+
+  @override
+  String get activityHistory => 'Таърих';
+
+  @override
+  String get voiceTitle => 'Бо овоз';
+
+  @override
+  String get voiceOpen => 'Бо овоз гап задан';
+
+  @override
+  String get voiceListening => 'Гӯш мекунам…';
+
+  @override
+  String get voiceSpeaking => 'Ҷавоб медиҳам…';
+
+  @override
+  String get voiceTapToTalk => 'Ба микрофон пахш кунед ва гап занед';
+
+  @override
+  String get voiceHint =>
+      'Ҳар чӣ хоҳед пурсед: «кормандон», «фурӯши имрӯз», «чӣ қадар маош монд?»';
+
+  @override
+  String get voiceMic => 'Гап задан';
+
+  @override
+  String get voiceEnd => 'Анҷом';
+
+  @override
+  String get voiceUnavailable =>
+      'Шинохти нутқ дастрас нест. Дар Танзимот микрофон ва шинохти нутқро иҷозат диҳед.';
+
+  @override
+  String get voiceMicFailed =>
+      'Микрофон фаъол нашуд. Боз кӯшиш кунед; агар такрор шавад, иҷозати микрофонро дар Танзимот санҷед.';
+
+  @override
+  String get chatHistory => 'Таърихи чатҳо';
+
+  @override
+  String get chatNew => 'Чати нав';
+
+  @override
+  String get chatHistoryEmpty =>
+      'Суҳбатҳои шумо бо ёрдамчӣ дар ин ҷо нигоҳ дошта мешаванд.';
+
+  @override
+  String get chatDeleteAll => 'Ҳамаро нест кардан';
+
+  @override
+  String get chatDeleteAllTitle => 'Ҳамаи чатҳоро нест кунем?';
+
+  @override
+  String get chatDeleteAllMessage =>
+      'Таърих танҳо дар ҳамин телефон нигоҳ дошта мешавад, баргардонидан ғайриимкон аст.';
+
+  @override
+  String get chatDeleted => 'Чат нест карда шуд';
+
+  @override
+  String get chatCurrent => 'Ҳозир кушода';
+
+  @override
+  String homeStores(int count) {
+    return 'Мағозаҳо · $count';
+  }
+
+  @override
+  String get homeStoreMonth => 'Дар як моҳ';
+
+  @override
+  String get homeAddStore => 'Илова кардани мағоза';
+
+  @override
+  String get homeProfit => 'Фоида';
+
+  @override
+  String get homeShowAllStores => 'Ҳама';
+
+  @override
+  String historyExpensesFor(String month) {
+    return 'Хароҷот дар $month';
+  }
+
+  @override
+  String historyOfSales(String percent) {
+    return '$percent аз фурӯш';
+  }
+
+  @override
+  String get historyStatement => 'Хулоса';
+
+  @override
+  String get historyShowAmount => 'Нишон додани маблағ';
+
+  @override
+  String get historyHideAmount => 'Пинҳон кардани маблағ';
+
+  @override
+  String get historySearch => 'Ҷустуҷӯ';
+
+  @override
+  String get historySearchHint => 'Мағоза, корманд ё шарҳ';
+
+  @override
+  String get historyAll => 'Ҳама';
+
+  @override
+  String get historyYesterday => 'Дирӯз';
+
+  @override
+  String get historyWeek => 'Ҳафта';
+
+  @override
+  String get historyNothing => 'Барои ин давра амалиёт нест.';
+
+  @override
+  String get opSale => 'Фурӯш';
+
+  @override
+  String get opSaleEdited => 'Фурӯш тағйир ёфт';
+
+  @override
+  String get opSaleDeleted => 'Фурӯш нест карда шуд';
+
+  @override
+  String get opSalary => 'Пардохти маош';
+
+  @override
+  String get opSalaryCancelled => 'Пардохт бекор шуд';
+
+  @override
+  String get opStoreNew => 'Мағозаи нав';
+
+  @override
+  String get opStoreEdited => 'Мағоза тағйир ёфт';
+
+  @override
+  String get opStoreDeleted => 'Мағоза нест карда шуд';
+
+  @override
+  String get opEmployeeNew => 'Корманди нав';
+
+  @override
+  String get opEmployeeEdited => 'Корманд тағйир ёфт';
+
+  @override
+  String get opEmployeeDeleted => 'Корманд нест карда шуд';
+
+  @override
+  String opStatus(String status) {
+    return 'Вазъ: $status';
+  }
+
+  @override
+  String get opProfile => 'Профил тағйир ёфт';
+
+  @override
+  String get opOther => 'Тағйирот';
+
+  @override
+  String get stmtTitle => 'Хулосаҳо ва маълумотномаҳо';
+
+  @override
+  String get stmtAvailable => 'Дастрас';
+
+  @override
+  String get stmtMine => 'Хулосаҳои ман';
+
+  @override
+  String get stmtCertificates => 'Маълумотномаҳо';
+
+  @override
+  String get stmtStatements => 'Хулосаҳо';
+
+  @override
+  String get stmtForPeriod => 'Ҳамаи амалиётҳо дар давра';
+
+  @override
+  String get stmtSales => 'Аз рӯи фурӯш';
+
+  @override
+  String get stmtStore => 'Аз рӯи мағоза';
+
+  @override
+  String get stmtStoreHint => 'Фурӯши як мағоза дар давра';
+
+  @override
+  String get stmtCash => 'Нақд';
+
+  @override
+  String get stmtCashHint => 'Танҳо нақд, пардохтҳои омехта ҷудо';
+
+  @override
+  String get stmtCard => 'Корт ва QR';
+
+  @override
+  String get stmtCardHint => 'Танҳо пардохтҳои ғайринақдӣ';
+
+  @override
+  String get stmtExpenses => 'Аз рӯи хароҷот';
+
+  @override
+  String get stmtSalaries => 'Аз рӯи пардохти маош';
+
+  @override
+  String get stmtOperations => 'Ҳамаи амалиётҳо';
+
+  @override
+  String get stmtOperationsHint => 'Ҳар тағйирот дар тиҷорат';
+
+  @override
+  String get stmtSalaryDebt => 'Қарзи маош ба кӣ';
+
+  @override
+  String get stmtSalaryDebtHint =>
+      'Кормандони маошашон пурра пардохтнашуда, то имрӯз';
+
+  @override
+  String get stmtProfit => 'Дар бораи фоида';
+
+  @override
+  String get stmtProfitHint => 'Фурӯш − хароҷот − маош дар давра';
+
+  @override
+  String get stmtStores => 'Ҷамъбасти мағозаҳо';
+
+  @override
+  String get stmtStoresHint => 'Мағозаҳо аз рӯи фурӯш';
+
+  @override
+  String get stmtMineEmpty =>
+      'Хулосаҳое, ки кушодед, дар ин ҷо нигоҳ дошта мешаванд.';
+
+  @override
+  String get stmtPeriodLastMonth => 'Моҳи гузашта';
+
+  @override
+  String get stmtPeriodCustom => 'Интихоби санаҳо';
+
+  @override
+  String get stmtChooseStore => 'Мағозаро интихоб кунед';
+
+  @override
+  String stmtAsOf(String date) {
+    return 'То $date';
+  }
+
+  @override
+  String get stmtEmpty => 'Дар ин давра чизе нест.';
+
+  @override
+  String get stmtTruncated =>
+      'Сатрҳо аз ҳад зиёданд: танҳо навтаринҳо. Давраи кӯтоҳтар интихоб кунед.';
+
+  @override
+  String get stmtExcel => 'Боргирии Excel';
+
+  @override
+  String get stmtShared => 'Файли Excel тайёр аст';
+
+  @override
+  String get stmtTotal => 'Ҳамагӣ';
+
+  @override
+  String get stmtCount => 'Амалиётҳо';
+
+  @override
+  String get stmtCashTotal => 'Нақд';
+
+  @override
+  String get stmtCardTotal => 'Корт';
+
+  @override
+  String get stmtQrTotal => 'QR';
+
+  @override
+  String get stmtNoMethod => 'Тарз нишон дода нашудааст';
+
+  @override
+  String get stmtSalesTotal => 'Фурӯш';
+
+  @override
+  String get stmtExpensesTotal => 'Хароҷот';
+
+  @override
+  String get stmtSalariesTotal => 'Маош';
+
+  @override
+  String get stmtProfitTotal => 'Фоида';
+
+  @override
+  String get stmtDue => 'Ҳисобшуда';
+
+  @override
+  String get stmtPaid => 'Пардохтшуда';
+
+  @override
+  String get stmtRemaining => 'Қарз';
+
+  @override
+  String get colDate => 'Сана';
+
+  @override
+  String get colStore => 'Мағоза';
+
+  @override
+  String get colMethod => 'Тарзи пардохт';
+
+  @override
+  String get colCash => 'Нақд';
+
+  @override
+  String get colCard => 'Корт / QR';
+
+  @override
+  String get colAmount => 'Маблағ, TJS';
+
+  @override
+  String get colReceipt => 'Чек';
+
+  @override
+  String get colDescription => 'Тавсиф';
+
+  @override
+  String get colCategory => 'Категория';
+
+  @override
+  String get colEmployee => 'Корманд';
+
+  @override
+  String get colForMonth => 'Барои моҳ';
+
+  @override
+  String get colNote => 'Шарҳ';
+
+  @override
+  String get colWhat => 'Чӣ';
+
+  @override
+  String get colWho => 'Мағоза / корманд';
+
+  @override
+  String get colUser => 'Кӣ ворид кард';
+
+  @override
+  String get colUnpaidMonths => 'Моҳҳои пардохтнашуда';
+
+  @override
+  String get colItem => 'Модда';
+
+  @override
+  String get colPlace => 'Ҷой';
+
+  @override
+  String get colShare => 'Ҳисса, %';
+
+  @override
+  String get colSalesCount => 'Фурӯшҳо';
+
+  @override
+  String get moreStatementsHint =>
+      'Хулосаҳо дар Excel: фурӯш, нақд, корт, хароҷот…';
+
+  @override
+  String get securityTitle => 'Амният';
+
+  @override
+  String get lockFaceId => 'Ворид бо Face ID';
+
+  @override
+  String get lockFingerprint => 'Ворид бо изи ангушт';
+
+  @override
+  String get lockBiometric => 'Ворид бо биометрия';
+
+  @override
+  String get lockHint => 'Ҳангоми ҳар кушодани барнома пурсидан';
+
+  @override
+  String get lockUnavailable =>
+      'Дар ин телефон Face ID ё изи ангушт танзим нашудааст';
+
+  @override
+  String get lockReasonEnable => 'Барои фаъол кардан тасдиқ кунед';
+
+  @override
+  String get lockReasonOpen => 'ИИ-муҳосибро кушоед';
+
+  @override
+  String get lockTitle => 'ИИ-муҳосиб баста аст';
+
+  @override
+  String get lockMessage => 'Тасдиқ кунед, ки шумоед, то тиҷорати худро бинед.';
+
+  @override
+  String get lockUnlock => 'Кушодан';
+
+  @override
+  String get lockOn => 'Ворид бо биометрия фаъол шуд';
+
+  @override
+  String get lockOff => 'Ворид бо биометрия хомӯш шуд';
+
+  @override
+  String get lockNotConfirmed => 'Тасдиқ нашуд — фаъол нашуд';
+
+  @override
+  String get navCurrencies => 'Асъорҳо';
+
+  @override
+  String get currenciesSoon => 'Ба наздикӣ.';
+
+  @override
+  String fxUpdated(String time) {
+    return 'Навсозӣ: $time';
+  }
+
+  @override
+  String get fxRefresh => 'Навсозӣ';
+
+  @override
+  String get fxConverter => 'Табдилдиҳанда';
+
+  @override
+  String get fxAmount => 'МАБЛАҒ';
+
+  @override
+  String get fxSwap => 'Ҷой иваз кардан';
+
+  @override
+  String get fxFrom => 'Аз асъор';
+
+  @override
+  String get fxTo => 'Ба асъор';
+
+  @override
+  String get fxCrypto => 'Крипто';
+
+  @override
+  String get fxCryptoNote =>
+      'Танҳо қурб — дар ин ҷо харидан ё фурӯхтан мумкин нест';
+
+  @override
+  String get fxAll => 'Ҳама';
+
+  @override
+  String get fxAllCrypto => 'Криптоасъорҳо';
+
+  @override
+  String get fxSearchCoin => 'Ном ё тикери танга';
+
+  @override
+  String get fxSources =>
+      'Қурби асъорҳо рӯзе як бор, криптоасъорҳо дар вақти воқеӣ навсозӣ мешаванд (манбаъҳои кушода).';
+
+  @override
+  String get fxCryptoUnavailable => 'Қурби криптоасъорҳо ҳоло дастрас нест.';
+
+  @override
+  String fxLive(String time) {
+    return 'Воқеӣ · $time';
+  }
+
+  @override
+  String get navDebts => 'Қарзҳо';
+
+  @override
+  String get debtsTitle => 'Қарзҳо ва кредитҳо';
+
+  @override
+  String get debtsOverview => 'Шарҳ';
+
+  @override
+  String get debtsOwedToMe => 'Ба ман қарздоранд';
+
+  @override
+  String get debtsIOwe => 'Ман қарздорам';
+
+  @override
+  String get debtsToPeople => 'Қарз ба одамон';
+
+  @override
+  String get debtsLoans => 'Кредитҳо ва насия';
+
+  @override
+  String debtsPeople(int count) {
+    return '$count нафар';
+  }
+
+  @override
+  String debtsCount(int count) {
+    return '$count қарз';
+  }
+
+  @override
+  String get debtsEmptyOwedTitle => 'Ба шумо пул қарздоранд';
+
+  @override
+  String get debtsEmptyOwedMessage =>
+      'Касеро илова кунед, ки ба шумо қарздор аст';
+
+  @override
+  String get debtsEmptyIOweTitle => 'Шумо пул қарздоред';
+
+  @override
+  String get debtsEmptyIOweMessage =>
+      'Касеро илова кунед, ки шумо ба ӯ қарздоред';
+
+  @override
+  String get debtsAdd => 'Илова кардани қарз';
+
+  @override
+  String get debtsActiveLoans => 'Кредитҳои фаъол';
+
+  @override
+  String get debtsAddLoan => 'Илова кардани кредит';
+
+  @override
+  String get debtsNoLoans => 'Кредит ва насияи фаъол нест';
+
+  @override
+  String get debtsClosed => 'Пардохтшуда';
+
+  @override
+  String get debtsLocalNote => 'Танҳо дар ҳамин телефон нигоҳ дошта мешавад.';
+
+  @override
+  String debtLeft(String amount) {
+    return 'Монд $amount';
+  }
+
+  @override
+  String debtDue(String date) {
+    return 'То $date';
+  }
+
+  @override
+  String debtOverdue(String date) {
+    return 'Аз $date гузашта';
+  }
+
+  @override
+  String get debtNewOwed => 'Ба ман қарздоранд';
+
+  @override
+  String get debtNewIOwe => 'Ман қарздорам';
+
+  @override
+  String get debtNewLoan => 'Кредити нав';
+
+  @override
+  String get debtEditTitle => 'Тағйир';
+
+  @override
+  String get debtWho => 'Кӣ';
+
+  @override
+  String get debtWhoHint => 'Ном';
+
+  @override
+  String get debtBank => 'Бонк ё мағоза';
+
+  @override
+  String get debtLoanType => 'Навъ';
+
+  @override
+  String get debtCredit => 'Кредит';
+
+  @override
+  String get debtInstallment => 'Насия';
+
+  @override
+  String get debtAmountTotal => 'Ҳамагӣ баргардонидан';
+
+  @override
+  String get debtMonthly => 'Пардохти моҳона';
+
+  @override
+  String get debtDueDate => 'Баргардонидан то';
+
+  @override
+  String get debtNoDueDate => 'Бе мӯҳлат';
+
+  @override
+  String get debtSaved => 'Сабт шуд';
+
+  @override
+  String get debtRepay => 'Сабти пардохт';
+
+  @override
+  String get debtRepayAll => 'Пурра пардохт шуд';
+
+  @override
+  String get debtRepaid => 'Пардохт сабт шуд';
+
+  @override
+  String get debtPayments => 'Пардохтҳо';
+
+  @override
+  String get debtNoPayments => 'Ҳоло пардохт нест.';
+
+  @override
+  String debtPaidOf(String paid, String total) {
+    return 'Пардохт $paid аз $total';
+  }
+
+  @override
+  String get debtDeleteTitle => 'Нест кунем?';
+
+  @override
+  String get debtDeleteMessage =>
+      'Он ва пардохтҳояш аз ин телефон нест карда мешаванд.';
+
+  @override
+  String get debtDeleted => 'Нест шуд';
+
+  @override
+  String get debtClosedBadge => 'Пардохт шуд';
+
+  @override
+  String get actionSalesList => 'Фурӯш';
+
+  @override
+  String get pfExpense => 'Хароҷот';
+
+  @override
+  String get pfIncome => 'Даромад';
+
+  @override
+  String get pfTransfer => 'Интиқол';
+
+  @override
+  String get pfNewExpense => 'Хароҷоти нав';
+
+  @override
+  String get pfNewIncome => 'Даромади нав';
+
+  @override
+  String get pfNewTransfer => 'Интиқол байни ҳисобҳо';
+
+  @override
+  String get pfEditOperation => 'Амалиёт';
+
+  @override
+  String get pfAccount => 'Ҳисоб';
+
+  @override
+  String get pfFromAccount => 'Аз ҳисоб';
+
+  @override
+  String get pfToAccount => 'Ба ҳисоб';
+
+  @override
+  String get pfSameAccount => 'Ҳисоби дигарро интихоб кунед';
+
+  @override
+  String get pfSaved => 'Сабт шуд';
+
+  @override
+  String get pfDeleted => 'Нест шуд';
+
+  @override
+  String get pfDeleteTitle => 'Амалиётро нест кунем?';
+
+  @override
+  String get pfDeleteMessage => 'Бақияи ҳисоб аз нав ҳисоб мешавад.';
+
+  @override
+  String get pfOperations => 'Амалиётҳо';
+
+  @override
+  String get pfNoOperations => 'Ҳоло амалиёт нест. «+»-ро пахш кунед.';
+
+  @override
+  String get pfAccounts => 'Ҳисобҳо';
+
+  @override
+  String get pfAccountsHint => 'Нақд, кортҳо ва бақия';
+
+  @override
+  String get pfNewAccount => 'Ҳисоби нав';
+
+  @override
+  String get pfAccountName => 'Ном';
+
+  @override
+  String get pfAccountNameHint => 'Корти Алиф, нақд…';
+
+  @override
+  String get pfAccountKind => 'Навъ';
+
+  @override
+  String get pfOpeningBalance => 'Ҳозир дар ҳисоб';
+
+  @override
+  String get pfAccountUsed => 'Ҳисоб амалиёт дорад — аввал онҳоро нест кунед.';
+
+  @override
+  String get pfAccountDeleteTitle => 'Ҳисобро нест кунем?';
+
+  @override
+  String get pfKindCash => 'Нақд';
+
+  @override
+  String get pfKindCard => 'Корт';
+
+  @override
+  String get pfKindBank => 'Ҳисоби бонкӣ';
+
+  @override
+  String get pfKindSavings => 'Пасандоз';
+
+  @override
+  String get pfKindOther => 'Дигар';
+
+  @override
+  String get pfTotalBalance => 'Пули ман';
+
+  @override
+  String get pfRecurring => 'Пардохтҳои доимӣ';
+
+  @override
+  String get pfRecurringHint => 'Иҷора, интернет, обуна';
+
+  @override
+  String get pfNewRecurring => 'Пардохти доимии нав';
+
+  @override
+  String get pfRecurringName => 'Барои чӣ';
+
+  @override
+  String get pfRecurringNameHint => 'Интернет, иҷора…';
+
+  @override
+  String get pfNextDate => 'Пардохти навбатӣ';
+
+  @override
+  String get pfEvery => 'Чӣ қадар зуд';
+
+  @override
+  String get pfEveryMonth => 'Ҳар моҳ';
+
+  @override
+  String get pfEveryQuarter => 'Ҳар 3 моҳ';
+
+  @override
+  String get pfEveryYear => 'Ҳар сол';
+
+  @override
+  String get pfAnyAccount => 'Ҳангоми пардохт интихоб';
+
+  @override
+  String get pfPay => 'Пардохт';
+
+  @override
+  String get pfPaid => 'Пардохт шуд — ба хароҷот сабт шуд';
+
+  @override
+  String get pfNoRecurring => 'Ҳоло пардохти доимӣ нест.';
+
+  @override
+  String pfDue(String date) {
+    return '$date';
+  }
+
+  @override
+  String get pfDueToday => 'Имрӯз';
+
+  @override
+  String pfOverdue(String date) {
+    return 'Гузашта · $date';
+  }
+
+  @override
+  String get pfUpcoming => 'Пардохтҳои наздик';
+
+  @override
+  String get pfMonthIncome => 'Даромад';
+
+  @override
+  String get pfMonthExpense => 'Хароҷот';
+
+  @override
+  String get pfByCategory => 'Хароҷот аз рӯи категория';
+
+  @override
+  String get pfNoExpensesMonth => 'Дар ин моҳ хароҷот нест.';
+
+  @override
+  String get pfRecent => 'Амалиётҳои охирин';
+
+  @override
+  String get pfMyFinances => 'Молияи ман';
+
+  @override
+  String get pfLocalNote =>
+      'Молияи шахсӣ танҳо дар ҳамин телефон нигоҳ дошта мешавад.';
+
+  @override
+  String get pfCatFood => 'Озуқа';
+
+  @override
+  String get pfCatCafe => 'Қаҳвахона';
+
+  @override
+  String get pfCatTransport => 'Нақлиёт';
+
+  @override
+  String get pfCatHome => 'Манзил ва иҷора';
+
+  @override
+  String get pfCatUtilities => 'Коммуналӣ';
+
+  @override
+  String get pfCatPhone => 'Алоқа ва интернет';
+
+  @override
+  String get pfCatHealth => 'Саломатӣ';
+
+  @override
+  String get pfCatClothes => 'Либос';
+
+  @override
+  String get pfCatEducation => 'Таҳсил';
+
+  @override
+  String get pfCatFun => 'Фароғат';
+
+  @override
+  String get pfCatGifts => 'Тӯҳфаҳо';
+
+  @override
+  String get pfCatFamily => 'Оила';
+
+  @override
+  String get pfCatOtherExpense => 'Дигар';
+
+  @override
+  String get pfCatSalary => 'Маош';
+
+  @override
+  String get pfCatBusiness => 'Тиҷорат';
+
+  @override
+  String get pfCatSideJob => 'Кори иловагӣ';
+
+  @override
+  String get pfCatGiftIn => 'Тӯҳфа';
+
+  @override
+  String get pfCatRefund => 'Бозгашт';
+
+  @override
+  String get pfCatOtherIncome => 'Даромади дигар';
+
+  @override
+  String get phMonthIncome => 'Даромади моҳ';
+
+  @override
+  String get phMonthExpense => 'Хароҷоти моҳ';
+
+  @override
+  String get phMyBusiness => 'Тиҷорати ман';
+
+  @override
+  String phBusinessToday(String amount, String profit) {
+    return 'Фурӯши имрӯз $amount · фоидаи моҳ $profit';
+  }
+
+  @override
+  String get phStartBusinessTitle => 'Мағоза доред?';
+
+  @override
+  String get phStartBusinessMessage =>
+      'Илова кунед — фурӯш, кормандон, маош ва хароҷоташ пайдо мешаванд.';
+
+  @override
+  String get phAddStore => 'Илова кардани мағоза';
+
+  @override
+  String get phAddAccount => 'Илова кардани ҳисоб';
+
+  @override
+  String get phOpen => 'Кушодан';
+
+  @override
+  String get actionStoreExpense => 'Хароҷоти мағоза';
+
+  @override
+  String get quickPersonal => 'Шахсӣ';
+
+  @override
+  String get quickBusiness => 'Тиҷорат';
+
+  @override
+  String get morePersonal => 'Пули ман';
+
+  @override
+  String get moreOperationsHint => 'Ҳамаи даромад, хароҷот ва интиқолҳо';
+
+  @override
+  String get assistantSuggestSpending => 'Ман бештар ба чӣ харҷ мекунам?';
+
+  @override
+  String get assistantSuggestMonth => 'Дар ин моҳ чӣ қадар харҷ кардам?';
+
+  @override
+  String get moreReportsAllHint =>
+      'Фоида, ҳисоботҳо дар Excel, таърихи тағйирот';
+
+  @override
+  String get moreCurrenciesHint => 'Қурбҳо, табдилдиҳанда, крипто';
+
+  @override
+  String get reportsProfitHint => 'Муқоисаи мағозаҳо, маоши сол';
+
+  @override
+  String get reportsHistoryHint => 'Ҳамаи тағйирот: фурӯш, хароҷот, маош';
+
+  @override
+  String get navOperations => 'Амалиётҳо';
+
+  @override
+  String get qeTitle => 'Сабти зуд';
+
+  @override
+  String get qeHint => 'Такси 50, хӯроки нисфирӯзӣ 35 бо корт…';
+
+  @override
+  String get qeHelp =>
+      'Бигӯед ё нависед, ба чӣ ва чӣ қадар: «такси 50», «маош 3000 ба корт».';
+
+  @override
+  String get qeSpeak => 'Гуфтан';
+
+  @override
+  String get qeListening => 'Гӯш мекунам…';
+
+  @override
+  String get qeNoAmount =>
+      'Маблағ ёфт нашуд — рақам илова кунед, масалан «такси 50».';
+
+  @override
+  String get qeWrite => 'Сабт кардан';
+
+  @override
+  String get qeEdit => 'Тағйир додан';
+
+  @override
+  String get qeNoCategory => 'Категория: дар «Тағйир додан» интихоб кунед';
+
+  @override
+  String get qeMicFailed => 'Микрофон кор накард — бо матн нависед.';
+
+  @override
+  String get qeButton => 'Бигӯед ё нависед: «такси 50»';
+
+  @override
+  String get remTitle => 'ИИ-муҳосиб';
+
+  @override
+  String remPaymentTomorrow(String name, String amount) {
+    return 'Пагоҳ пардохт: $name, $amount';
+  }
+
+  @override
+  String remPaymentToday(String name, String amount) {
+    return 'Имрӯз пардохт: $name, $amount.';
+  }
+
+  @override
+  String remDebtTomorrow(String name, String amount) {
+    return 'Пагоҳ мӯҳлати қарз: $name, $amount';
+  }
+
+  @override
+  String remDebtToday(String name, String amount) {
+    return 'Имрӯз мӯҳлати қарз: $name, $amount';
+  }
+
+  @override
+  String get pfCurrency => 'Асъор';
+
+  @override
+  String get pfCurrencyLocked =>
+      'Ҳисоб амалиёт дорад — асъорро иваз кардан мумкин нест.';
+
+  @override
+  String get pfReceived => 'Ба ҳисоб омад';
+
+  @override
+  String get pfInTjsNote =>
+      'Ҳисобҳои асъорӣ бо қурби имрӯза ба сомонӣ ҳисоб шудаанд.';
+
+  @override
+  String get pfRatesMissing => 'Қурбҳо ҳанӯз бор нашуданд.';
+
+  @override
+  String get goalTitle => 'Ҳадафҳои пасандоз';
+
+  @override
+  String get goalHint => 'Мошин, хона, сафар…';
+
+  @override
+  String get goalNew => 'Ҳадафи нав';
+
+  @override
+  String get goalName => 'Барои чӣ ҷамъ мекунем';
+
+  @override
+  String get goalNameHint => 'Барои мошин';
+
+  @override
+  String get goalTarget => 'Чӣ қадар лозим';
+
+  @override
+  String get goalDeadline => 'То кай';
+
+  @override
+  String get goalNoDeadline => 'Бе мӯҳлат';
+
+  @override
+  String get goalTopUp => 'Пур кардан';
+
+  @override
+  String goalSaved(String saved, String target) {
+    return '$saved аз $target';
+  }
+
+  @override
+  String get goalReached => 'Ба ҳадаф расидед!';
+
+  @override
+  String goalLeft(String amount, String date) {
+    return 'Монд $amount · то $date';
+  }
+
+  @override
+  String goalLeftNoDate(String amount) {
+    return 'Монд $amount';
+  }
+
+  @override
+  String goalPerMonth(String amount) {
+    return '≈ $amount дар як моҳ';
+  }
+
+  @override
+  String get goalEmpty =>
+      'Ҳоло ҳадаф нест. Пули ҳар ҳадаф дар ҳисоби алоҳида меистад.';
+
+  @override
+  String get goalDeleteTitle => 'Ҳадафро нест кунем?';
+
+  @override
+  String get goalDeleteMessage => 'Ҳисоб ва пули он мемонад.';
+
+  @override
+  String get opsSearch => 'Ҷустуҷӯ: эзоҳ, категория, ҳисоб';
+
+  @override
+  String get opsClear => 'Тоза кардан';
+
+  @override
+  String get opsAll => 'Ҳама';
+
+  @override
+  String get opsExpenses => 'Хароҷот';
+
+  @override
+  String get opsIncome => 'Даромад';
+
+  @override
+  String get opsTransfers => 'Интиқолҳо';
+
+  @override
+  String get opsAllAccounts => 'Ҳамаи ҳисобҳо';
+
+  @override
+  String get opsAllCategories => 'Ҳамаи категорияҳо';
+
+  @override
+  String get opsReset => 'Бекор кардани филтрҳо';
+
+  @override
+  String opsFound(int count, String income, String expense) {
+    return 'Ёфт шуд: $count · даромад $income · хароҷот $expense';
+  }
+
+  @override
+  String get opsNothing => 'Ҳеҷ чиз ёфт нашуд.';
+
+  @override
+  String get opsExcel => 'Ба Excel';
+
+  @override
+  String get opsExcelTitle => 'Амалиётҳои ман';
+
+  @override
+  String get opsColType => 'Навъ';
+
+  @override
+  String get opsColTo => 'Ба ҳисоб';
+
+  @override
+  String get opsTotalIncome => 'Даромад, TJS';
+
+  @override
+  String get opsTotalExpense => 'Хароҷот, TJS';
+
+  @override
+  String get bkTitle => 'Нусхаи эҳтиётӣ';
+
+  @override
+  String get bkHint => 'Дар файл нигоҳ доштан ва барқарор кардан';
+
+  @override
+  String get bkAbout =>
+      'Молияи шахсӣ ва қарзҳо танҳо дар ҳамин телефон нигоҳ дошта мешаванд. Гоҳ-гоҳ нусхаро дар файл нигоҳ доред.';
+
+  @override
+  String get bkSave => 'Нусхаро дар файл нигоҳ доштан';
+
+  @override
+  String get bkRestore => 'Аз файл барқарор кардан';
+
+  @override
+  String get bkBadFile => 'Ин файл нусхаи эҳтиётии ин барнома нест.';
+
+  @override
+  String get bkConfirmTitle => 'Нусхаро барқарор кунем?';
+
+  @override
+  String bkConfirmMessage(
+    String date,
+    int accounts,
+    int operations,
+    int debts,
+  ) {
+    return 'Аз $date: ҳисоб $accounts, амалиёт $operations, қарз $debts. Он чи ҳоло дар телефон аст, иваз мешавад.';
+  }
+
+  @override
+  String get bkRestoreAction => 'Барқарор кардан';
+
+  @override
+  String get bkRestored => 'Барқарор шуд';
+
+  @override
+  String get actionFromStore => 'Аз мағоза гирифтам';
+
+  @override
+  String get fromStoreNote => 'Аз кассаи мағоза';
+
+  @override
+  String get pfCatDebtOut => 'Қарз додам';
+
+  @override
+  String get pfCatDebtPay => 'Пардохти қарз';
+
+  @override
+  String get pfCatDebtIn => 'Қарз гирифтам';
+
+  @override
+  String get pfCatDebtBack => 'Қарзро баргардонданд';
+
+  @override
+  String get debtAccount => 'Ба ҳисоб сабт кардан';
+
+  @override
+  String get debtNoAccount => 'Сабт накардан';
+
+  @override
+  String get sessionOfflineTitle => 'Пайваст бо сервер нест';
+
+  @override
+  String get sessionOfflineMessage =>
+      'Шумо ҳоло ҳам дар ҳисоб ҳастед. Интернетро санҷед ва боз кӯшиш кунед.';
+
+  @override
+  String get sessionTooOld => 'Барои бехатарӣ боз ворид шавед (ҳафтае як бор).';
+
+  @override
+  String get errActionNotFound => 'Ин пешниҳод ёфт нашуд.';
+
+  @override
+  String get errConversationNotFound => 'Ин чат нест карда шудааст.';
+
+  @override
+  String get errActionAlreadyHandled =>
+      'Ин пешниҳод аллакай тасдиқ ё бекор шудааст.';
+
+  @override
+  String get errActionExpired =>
+      'Мӯҳлати пешниҳод гузашт. Аз ёрдамчӣ боз пурсед.';
+
+  @override
+  String get actConfirm => 'Тасдиқ';
+
+  @override
+  String get actConfirmAgain => 'Боз тасдиқ';
+
+  @override
+  String get actCancel => 'Бекор';
+
+  @override
+  String get actDone => 'Иҷро шуд';
+
+  @override
+  String get actCancelled => 'Бекор шуд · аз ёрдамчӣ боз пурсед';
+
+  @override
+  String get actExpired => 'Мӯҳлат гузашт · аз ёрдамчӣ боз пурсед';
+
+  @override
+  String actFailed(String reason) {
+    return 'Иҷро нашуд: $reason';
+  }
+
+  @override
+  String get actSureTitle => 'Шумо боварӣ доред?';
+
+  @override
+  String actSureMessage(String summary) {
+    return '$summary Аз чат бекор кардан мумкин нест.';
+  }
+
+  @override
+  String get chatRename => 'Иваз кардани ном';
+
+  @override
+  String get chatRenameTitle => 'Номи чат';
+
+  @override
+  String get chatDelete => 'Нест кардан';
+
+  @override
+  String get chatDeleteTitle => 'Чатро нест кунем?';
+
+  @override
+  String get chatDeleteMessage => 'Дар ҳамаи дастгоҳҳо нест мешавад.';
+
+  @override
+  String get chatHistoryServerEmpty =>
+      'Чатҳои шумо бо ёрдамчӣ дар ин ҷо — дар ҳамаи дастгоҳҳо.';
+
+  @override
+  String chatMessages(int count) {
+    return 'Паёмҳо: $count';
+  }
+
+  @override
+  String get chatMore => 'Боз нишон додан';
+
+  @override
+  String chatWaitSeconds(int seconds) {
+    return 'Саволҳо зиёданд. Навбатӣ — пас аз $seconds с.';
+  }
+
+  @override
+  String get chatOptions => 'Амалҳо бо чат';
+
+  @override
+  String get pfOtherExpenseWhat => 'Ба чӣ харҷ кардед?';
+
+  @override
+  String get pfOtherExpenseHint => 'Таъмири телефон, мӯйсаргирӣ…';
+
+  @override
+  String get pfOtherIncomeWhat => 'Ин чӣ даромад аст?';
+
+  @override
+  String get pfOtherIncomeHint => 'Велосипедро фурӯхтам, бурд…';
 }

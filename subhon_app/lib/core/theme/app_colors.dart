@@ -11,8 +11,10 @@ abstract final class AppColors {
   static const textPrimary = Color(0xFF252039);
   // ≥ 4.5:1 (WCAG AA) on every light background, incl. primaryLight.
   static const textSecondary = Color(0xFF686479);
-  static const success = Color(0xFF20A46B);
-  static const error = Color(0xFFE34D59);
+  // Darker than the brand green/red so text on white and on the light
+  // tints reaches WCAG AA (4.5:1).
+  static const success = Color(0xFF15794B);
+  static const error = Color(0xFFC42F3C);
   static const warning = Color(0xFFE6A23C);
   static const border = Color(0xFFECEAF3);
 }
@@ -110,26 +112,27 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color warningText;
 
   @override
-  AppPalette copyWith({Color? primary, Color? textPrimary}) => AppPalette(
-    primary: primary ?? this.primary,
-    secondary: secondary,
-    primaryLight: primaryLight,
-    background: background,
-    surface: surface,
-    surfaceMuted: surfaceMuted,
-    textPrimary: textPrimary ?? this.textPrimary,
-    textSecondary: textSecondary,
-    border: border,
-    success: success,
-    successLight: successLight,
-    error: error,
-    errorLight: errorLight,
-    warning: warning,
-    warningLight: warningLight,
-    shadow: shadow,
-    onPrimary: onPrimary,
-    warningText: warningText,
-  );
+  AppPalette copyWith({Color? primary, Color? textPrimary, Color? onPrimary}) =>
+      AppPalette(
+        primary: primary ?? this.primary,
+        secondary: secondary,
+        primaryLight: primaryLight,
+        background: background,
+        surface: surface,
+        surfaceMuted: surfaceMuted,
+        textPrimary: textPrimary ?? this.textPrimary,
+        textSecondary: textSecondary,
+        border: border,
+        success: success,
+        successLight: successLight,
+        error: error,
+        errorLight: errorLight,
+        warning: warning,
+        warningLight: warningLight,
+        shadow: shadow,
+        onPrimary: onPrimary ?? this.onPrimary,
+        warningText: warningText,
+      );
 
   @override
   AppPalette lerp(AppPalette? other, double t) {

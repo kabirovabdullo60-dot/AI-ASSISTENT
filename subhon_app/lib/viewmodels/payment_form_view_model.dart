@@ -1,4 +1,5 @@
 import '../models/payment_create_model.dart';
+import '../models/salary_payment_method.dart';
 import '../services/payroll_service.dart';
 import 'form_view_model.dart';
 
@@ -16,6 +17,7 @@ class PaymentFormViewModel extends FormViewModel {
     required double amount,
     required DateTime paymentDate,
     required String note,
+    SalaryPaymentMethod? method,
   }) => submit(
     () => _payroll.pay(
       PaymentCreateModel(
@@ -25,6 +27,7 @@ class PaymentFormViewModel extends FormViewModel {
         year: year,
         paymentDate: paymentDate,
         note: note.trim().isEmpty ? null : note.trim(),
+        method: method,
       ),
     ),
   );

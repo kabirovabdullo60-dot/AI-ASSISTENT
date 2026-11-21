@@ -2,10 +2,11 @@ import 'package:subhon_app/core/storage/token_storage.dart';
 
 /// In memory (tests).
 class MemoryTokenStorage implements TokenStorage {
-  MemoryTokenStorage({this.accessToken, this.refreshToken});
+  MemoryTokenStorage({this.accessToken, this.refreshToken, this.signedInAt});
 
   String? accessToken;
   String? refreshToken;
+  DateTime? signedInAt;
 
   @override
   Future<String?> readAccessToken() async => accessToken;
@@ -26,5 +27,12 @@ class MemoryTokenStorage implements TokenStorage {
   Future<void> clear() async {
     accessToken = null;
     refreshToken = null;
+    signedInAt = null;
   }
+
+  @override
+  Future<DateTime?> readSignedInAt() async => signedInAt;
+
+  @override
+  Future<void> saveSignedInAt(DateTime time) async => signedInAt = time;
 }

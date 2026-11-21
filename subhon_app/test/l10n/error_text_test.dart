@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subhon_app/core/network/api_exception.dart';
@@ -96,5 +98,34 @@ void main() {
       ru.errServer,
     );
     expect(errorText(ru, StateError('bug')), ru.errUnknown);
+  });
+
+  test('every code in API.md "Error codes" has its own text in en / ru / tg '
+      '(never the backend message)', () {
+    final api = File('../API.md').readAsStringSync();
+    final table = api.substring(api.indexOf('## Error codes'));
+    final codes = {
+      for (final m in RegExp(
+        r'^\| \d{3} \| `([A-Z_]+)`',
+        multiLine: true,
+      ).allMatches(table))
+        m.group(1)!,
+    };
+    expect(codes, contains('ACTION_ALREADY_HANDLED'));
+    expect(codes.length, greaterThan(30));
+    for (final l10n in languages) {
+      for (final code in codes) {
+        final text = errorText(
+          l10n,
+          ApiException(400, code, message: 'BACKEND MESSAGE'),
+        );
+        expect(
+          text,
+          isNot(l10n.errUnknown),
+          reason: '$code (${l10n.localeName})',
+        );
+        expect(text, isNot(contains('BACKEND')), reason: code);
+      }
+    }
   });
 }

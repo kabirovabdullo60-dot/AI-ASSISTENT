@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:subhon_app/views/login_view.dart';
+import 'package:subhon_app/views/auth_view.dart';
 import 'package:subhon_app/views/shell_view.dart';
 import 'package:subhon_app/widgets/app_button.dart';
 
@@ -38,7 +38,7 @@ void main() {
     await _signIn(tester, 'wrong');
     expect(find.text('Неверный e-mail или пароль.'), findsOneWidget);
     expect(find.text('Email or password is incorrect.'), findsNothing);
-    expect(find.byType(LoginView), findsOneWidget);
+    expect(find.byType(AuthView), findsOneWidget);
   });
 
   testWidgets('the same error in English', (tester) async {
@@ -66,7 +66,8 @@ void main() {
     await pumpApp(tester, backend, tokens: tokens);
     await _signIn(tester, 'Ofar2026');
     expect(find.byType(ShellView), findsOneWidget);
-    expect(find.text('Продажи за месяц'), findsOneWidget);
+    await openBusiness(tester);
+    expect(find.text('Продажи за сегодня'), findsOneWidget);
     expect(find.text('112\u00a0028 TJS'), findsOneWidget);
     expect(find.text('6\u00a0940,50 TJS'), findsWidgets);
     expect(tokens.accessToken, 'access-1');
@@ -103,11 +104,11 @@ void main() {
     stubHome(backend);
     backend.on(
       'GET',
-      '/api/payroll/monthly',
+      '/api/reports/dashboard',
       (_) => FakeBackend.error(401, 'AUTH_SESSION_REVOKED', 'Revoked.'),
     );
     await pumpApp(tester, backend, tokens: tokens);
-    expect(find.byType(LoginView), findsOneWidget);
+    expect(find.byType(AuthView), findsOneWidget);
     expect(tokens.refreshToken, isNull);
   });
 
@@ -118,23 +119,30 @@ void main() {
     final backend = FakeBackend()
       ..json('GET', '/api/auth/me', ApiJson.profile());
     stubHome(backend);
-    backend.on('GET', '/api/reports/dashboard', (_) {
-      if (!online) throw http.ClientException('offline');
-      return FakeBackend.respond(ApiJson.dashboard());
-    });
+    backend
+      ..json('GET', '/api/reports/profit', ApiJson.profit())
+      ..json('GET', '/api/reports/payroll', ApiJson.payrollYear())
+      ..on('GET', '/api/reports/employees', (_) {
+        if (!online) throw http.ClientException('offline');
+        return FakeBackend.respond(ApiJson.employeesReport());
+      });
     await pumpApp(
       tester,
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
+    await openReport(tester, 'Прибыль');
     expect(find.text('Не удалось загрузить'), findsOneWidget);
     online = true;
     await tapText(tester, 'Повторить');
-    expect(find.text('Продажи за месяц'), findsOneWidget);
+    expect(find.text('Прибыль'), findsWidgets);
   });
 
   testWidgets('salary payment: open the month, pay the remaining amount; the '
       'month reloads', (tester) async {
+    // A tall screen: the whole payment form is built.
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     final backend = FakeBackend()
       ..json('GET', '/api/auth/me', ApiJson.profile());
     stubHome(backend);
@@ -155,7 +163,7 @@ void main() {
       backend,
       tokens: MemoryTokenStorage(accessToken: 'a', refreshToken: 'r'),
     );
-    await tapText(tester, 'Зарплаты');
+    await openPayroll(tester);
     expect(find.text('Частично'), findsWidgets);
     await tapText(tester, 'Шерзод Рахимов');
     expect(find.text('Выплата зарплаты'), findsOneWidget);

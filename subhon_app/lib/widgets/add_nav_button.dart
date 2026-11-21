@@ -23,32 +23,31 @@ class AddNavButton extends StatelessWidget {
         button: true,
         label: tooltip,
         excludeSemantics: true,
-        child: Material(
-          color: p.primary,
-          shape: const CircleBorder(),
-          child: InkWell(
-            customBorder: const CircleBorder(),
-            onTap: () {
-              HapticFeedback.lightImpact();
-              onPressed();
-            },
-            child: Ink(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: p.primary.withValues(alpha: 0.35),
-                    blurRadius: 16,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+        // The round shadow sits outside the button: drawn inside it, the
+        // blur was clipped to a square around the circle.
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: p.primary.withValues(alpha: 0.35),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
               ),
-              child: Icon(
-                Icons.add_rounded,
-                color: context.palette.onPrimary,
-                size: 28,
+            ],
+          ),
+          child: Material(
+            color: p.primary,
+            shape: const CircleBorder(),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () {
+                HapticFeedback.lightImpact();
+                onPressed();
+              },
+              child: SizedBox.square(
+                dimension: 52,
+                child: Icon(Icons.add_rounded, color: p.onPrimary, size: 28),
               ),
             ),
           ),

@@ -27,6 +27,11 @@ class DashboardModel {
     required this.remainingSalaryThisMonth,
     required this.remainingSalaryTotal,
     this.topStore,
+    this.monthExpenses = 0,
+    this.monthProfit = 0,
+    this.monthMarginPercent,
+    this.weekTarget,
+    this.monthTarget,
   });
 
   factory DashboardModel.fromJson(Map<String, dynamic> json) => DashboardModel(
@@ -55,6 +60,15 @@ class DashboardModel {
     topStore: json['topStore'] == null
         ? null
         : TopStoreModel.fromJson(json['topStore'] as Map<String, dynamic>),
+    monthExpenses: parseMoney((json['monthExpenses'] ?? '0.00') as String),
+    monthProfit: parseMoney((json['monthProfit'] ?? '0.00') as String),
+    monthMarginPercent: (json['monthMarginPercent'] as num?)?.toDouble(),
+    weekTarget: json['weekTarget'] == null
+        ? null
+        : parseMoney(json['weekTarget'] as String),
+    monthTarget: json['monthTarget'] == null
+        ? null
+        : parseMoney(json['monthTarget'] as String),
   );
 
   final String currency;
@@ -78,4 +92,17 @@ class DashboardModel {
   final double remainingSalaryThisMonth;
   final double remainingSalaryTotal;
   final TopStoreModel? topStore;
+
+  /// Expenses this month.
+  final double monthExpenses;
+
+  /// This month's sales − expenses − salary due (may be negative).
+  final double monthProfit;
+
+  /// `null` without sales.
+  final double? monthMarginPercent;
+
+  /// Business-wide sales targets; `null` when not set.
+  final double? weekTarget;
+  final double? monthTarget;
 }

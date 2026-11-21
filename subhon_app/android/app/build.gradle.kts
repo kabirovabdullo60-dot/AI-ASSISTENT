@@ -6,12 +6,14 @@ plugins {
 
 android {
     namespace = "com.aiasistent.subhon_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37 // flutter_local_notifications and androidx.core need 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // Needed by flutter_local_notifications (payment reminders).
+        isCoreLibraryDesugaringEnabled = true
     }
 
     defaultConfig {
@@ -42,4 +44,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

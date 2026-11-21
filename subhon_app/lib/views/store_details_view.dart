@@ -8,19 +8,26 @@ import '../l10n/error_text.dart';
 import '../l10n/l10n.dart';
 import '../models/employee_status.dart';
 import '../models/store_status.dart';
+import '../models/target_period.dart';
+import '../services/activity_service.dart';
 import '../services/employee_service.dart';
+import '../services/reports_service.dart';
 import '../services/sales_service.dart';
 import '../services/store_service.dart';
+import '../services/target_service.dart';
 import '../viewmodels/store_details_view_model.dart';
 import '../widgets/active_status_badge.dart';
+import '../widgets/activity_tile.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_feedback.dart';
 import '../widgets/async_state_view.dart';
 import '../widgets/figure_card.dart';
 import '../widgets/record_tile.dart';
+import '../widgets/sales_target_card.dart';
 import '../widgets/section_header.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/settings_row.dart';
+import 'activity_view.dart';
 import 'store_form_view.dart';
 
 /// A store: its details, latest sales (`GET /api/sales/store/{id}`) and
@@ -37,6 +44,9 @@ class StoreDetailsView extends StatelessWidget {
       context.read<StoreService>(),
       context.read<SalesService>(),
       context.read<EmployeeService>(),
+      context.read<ActivityService>(),
+      context.read<TargetService>(),
+      context.read<ReportsService>(),
       storeId,
     )..load(),
     child: const _StoreDetails(),
@@ -140,17 +150,47 @@ class _StoreDetailsState extends State<_StoreDetails> {
                           active: store.status == StoreStatus.active,
                         ),
                       ),
+                      if (store.phone != null)
+                        SettingsRow(
+                          icon: Icons.phone_outlined,
+                          title: l10n.fieldPhone,
+                          value: store.phone,
+                        ),
+                      if (store.statusNote != null)
+                        SettingsRow(
+                          icon: Icons.info_outline_rounded,
+                          title: l10n.fieldStatusNote,
+                          value: store.statusNote,
+                        ),
                       if (store.address != null)
                         SettingsRow(
                           icon: Icons.place_outlined,
                           title: l10n.fieldAddress,
                           value: store.address,
                         ),
-                      if (store.phone != null)
+                      if (store.city != null || store.region != null)
                         SettingsRow(
-                          icon: Icons.phone_outlined,
-                          title: l10n.fieldPhone,
-                          value: store.phone,
+                          icon: Icons.location_city_outlined,
+                          title: l10n.fieldCity,
+                          value: [?store.city, ?store.region].join(', '),
+                        ),
+                      if (store.type != null)
+                        SettingsRow(
+                          icon: Icons.category_outlined,
+                          title: l10n.fieldStoreType,
+                          value: store.type,
+                        ),
+                      if (store.counters != null)
+                        SettingsRow(
+                          icon: Icons.point_of_sale_outlined,
+                          title: l10n.fieldCounters,
+                          value: '${store.counters}',
+                        ),
+                      if (store.openingHours != null)
+                        SettingsRow(
+                          icon: Icons.schedule_rounded,
+                          title: l10n.fieldOpeningHours,
+                          value: store.openingHours,
                         ),
                       if (store.description != null)
                         SettingsRow(
@@ -160,11 +200,42 @@ class _StoreDetailsState extends State<_StoreDetails> {
                         ),
                     ],
                   ),
+                  if (vm.goals case final goals?) ...[
+                    const SizedBox(height: AppSpacing.xl),
+                    SectionHeader(title: l10n.storeTargets),
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: SalesTargetCard(
+                              period: TargetPeriod.week,
+                              sales: goals.week,
+                              target: goals.weekTarget,
+                              hint: l10n.targetSheetHintStore,
+                              onSave: (amount) =>
+                                  vm.setTarget(TargetPeriod.week, amount),
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: SalesTargetCard(
+                              period: TargetPeriod.month,
+                              sales: goals.month,
+                              target: goals.monthTarget,
+                              hint: l10n.targetSheetHintStore,
+                              onSave: (amount) =>
+                                  vm.setTarget(TargetPeriod.month, amount),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: AppSpacing.md),
                   FigureCard(
                     label: l10n.salesTotal,
                     value: context.money(sales?.totalAmount ?? 0),
-                    valueColor: p.success,
                     caption: l10n.salesCount(sales?.total ?? 0),
                   ),
                   const SizedBox(height: AppSpacing.xl),
@@ -190,8 +261,7 @@ class _StoreDetailsState extends State<_StoreDetails> {
                               iconBackground: p.successLight,
                               title: context.formatDate(sale.saleDate),
                               subtitle: sale.description,
-                              value: context.money(sale.amount, signed: true),
-                              valueColor: p.success,
+                              value: context.money(sale.amount),
                             ),
                         ],
                       ),
@@ -227,6 +297,33 @@ class _StoreDetailsState extends State<_StoreDetails> {
                         ],
                       ),
                     ),
+                  if (vm.log case final log? when log.items.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.xl),
+                    SectionHeader(
+                      title: l10n.activityLogTitle,
+                      actionLabel: log.hasMore ? l10n.homeShowAll : null,
+                      onAction: log.hasMore
+                          ? () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => ActivityView(
+                                  storeId: vm.storeId,
+                                  title: l10n.activityLogTitle,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    AppCard(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.md,
+                      ),
+                      child: Column(
+                        children: [
+                          for (final a in log.items) ActivityTile(activity: a),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               );
             },

@@ -9,4 +9,9 @@ abstract interface class TokenStorage {
     required String refreshToken,
   });
   Future<void> clear();
+
+  /// When the person last signed in (login or register, not a refresh):
+  /// the app asks for the login again 7 days later.
+  Future<DateTime?> readSignedInAt();
+  Future<void> saveSignedInAt(DateTime time);
 }

@@ -26,6 +26,12 @@ class StoreFormViewModel extends FormViewModel {
     required String phone,
     required String description,
     required StoreStatus status,
+    String city = '',
+    String region = '',
+    String type = '',
+    int? counters,
+    String openingHours = '',
+    String statusNote = '',
   }) => submit(() async {
     String? opt(String v) => v.trim().isEmpty ? null : v.trim();
     final phoneValue = opt(phone) == null ? null : normalizePhone(phone);
@@ -38,6 +44,12 @@ class StoreFormViewModel extends FormViewModel {
           phone: phoneValue,
           description: opt(description),
           status: status,
+          city: opt(city),
+          region: opt(region),
+          type: opt(type),
+          counters: counters,
+          openingHours: opt(openingHours),
+          statusNote: opt(statusNote),
         ),
       );
     } else {
@@ -49,6 +61,12 @@ class StoreFormViewModel extends FormViewModel {
           phone: phoneValue,
           description: opt(description),
           status: status,
+          city: opt(city),
+          region: opt(region),
+          type: opt(type),
+          counters: counters,
+          openingHours: opt(openingHours),
+          statusNote: opt(statusNote),
         ),
         // Emptied optional fields are cleared.
         clear: StoreUpdateModel.clearable,

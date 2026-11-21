@@ -6,17 +6,30 @@ import '../models/profile_model.dart';
 import '../models/register_request_model.dart';
 import '../services/auth_service.dart';
 
-enum SessionStatus { unknown, signedOut, signedIn }
+/// [offline]: a session is saved but the server could not be reached
+/// (network, 5xx) — the person stays signed in and can try again.
+enum SessionStatus { unknown, signedOut, signedIn, offline }
 
 /// Who is signed in. Restores the session at start (`GET /api/auth/me`),
 /// signs in / up / out, and returns to the login screen when the backend
 /// ends the session.
 class SessionViewModel extends ChangeNotifier {
-  SessionViewModel(this._auth, ApiClient api) {
+  SessionViewModel(
+    this._auth,
+    ApiClient api, {
+    this.retryDelay = const Duration(seconds: 1),
+  }) {
     api.onSessionExpired = _expired;
   }
 
   final AuthService _auth;
+
+  /// Between start-up attempts (×1, ×2); tests pass zero.
+  final Duration retryDelay;
+
+  /// The saved session was older than 7 days: the login says why.
+  bool _tooOld = false;
+  bool get sessionTooOld => _tooOld;
 
   SessionStatus _status = SessionStatus.unknown;
   ProfileModel? _user;
@@ -32,25 +45,52 @@ class SessionViewModel extends ChangeNotifier {
   /// Why the last login / register failed.
   Object? get error => _error;
 
-  /// App start: a saved session is checked with the backend.
+  /// App start: a saved session is checked with the backend
+  /// (`GET /api/auth/me`), up to 3 times. A network error or a 5xx never
+  /// signs the person out ([SessionStatus.offline]); only the server ending
+  /// the session does. After 7 days the login is asked for again.
   Future<void> restore() async {
+    if (_status == SessionStatus.offline) _set(SessionStatus.unknown);
     if (!await _auth.hasSession()) {
       _set(SessionStatus.signedOut);
       return;
     }
-    try {
-      _user = await _auth.me();
-      _set(SessionStatus.signedIn);
-    } on ApiException catch (e) {
-      // Offline: the saved session stays; it is checked again next start.
-      if (e.code == ApiException.networkError) {
-        _error = e;
-      }
+    if (await _auth.isSessionTooOld()) {
+      await _auth.logout();
+      _tooOld = true;
       _set(SessionStatus.signedOut);
+      return;
+    }
+    for (var attempt = 1; ; attempt++) {
+      try {
+        _user = await _auth.me();
+        _error = null;
+        _set(SessionStatus.signedIn);
+        return;
+      } on ApiException catch (e) {
+        final temporary =
+            e.code == ApiException.networkError || e.statusCode >= 500;
+        if (!temporary) {
+          // 401: the client has already ended the session.
+          _set(SessionStatus.signedOut);
+          return;
+        }
+        if (attempt == 3) {
+          _error = e;
+          _set(SessionStatus.offline);
+          return;
+        }
+        await Future<void>.delayed(retryDelay * attempt);
+      }
     }
   }
 
-  Future<bool> login(String email, String password) => _submit(
+  Future<bool> login(String email, String password) {
+    _tooOld = false;
+    return _login(email, password);
+  }
+
+  Future<bool> _login(String email, String password) => _submit(
     () =>
         _auth.login(LoginRequestModel(email: email.trim(), password: password)),
   );

@@ -9,28 +9,72 @@ import '../viewmodels/session_view_model.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_inline_message.dart';
 import '../widgets/app_text_field.dart';
-import '../widgets/auth_footer_link.dart';
-import '../widgets/auth_scaffold.dart';
-import 'register_view.dart';
 
-/// `POST /api/auth/login` (email + password).
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+/// The sign-in form of [AuthView]: `POST /api/auth/login` (email +
+/// password).
+///
+/// While the e-mail is typed the mascot looks at the end of the text
+/// ([lookAt]); [onPasswordFocus] tells the page when the password field is
+/// focused, so the mascot closes its eyes.
+class LoginFormView extends StatefulWidget {
+  const LoginFormView({
+    required this.lookAt,
+    required this.onPasswordFocus,
+    super.key,
+  });
+
+  final ValueNotifier<Offset?> lookAt;
+  final ValueChanged<bool> onPasswordFocus;
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<LoginFormView> createState() => _LoginFormViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginFormViewState extends State<LoginFormView> {
   final _form = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _emailKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _email.addListener(_lookAtEmailText);
+    _emailFocus.addListener(_lookAtEmailText);
+    _passwordFocus.addListener(
+      () => widget.onPasswordFocus(_passwordFocus.hasFocus),
+    );
+  }
 
   @override
   void dispose() {
     _email.dispose();
     _password.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     super.dispose();
+  }
+
+  /// While the e-mail is typed, look at the end of the text.
+  void _lookAtEmailText() {
+    if (!_emailFocus.hasFocus) return;
+    final box = _emailKey.currentContext?.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+    final text = TextPainter(
+      text: TextSpan(
+        text: _email.text,
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+    const padding = AppSpacing.lg;
+    final x = (padding + text.width).clamp(padding, box.size.width - padding);
+    // The field is the lower part of the box (the label is above it).
+    widget.lookAt.value = box.localToGlobal(Offset(x, box.size.height - 22));
+    text.dispose();
   }
 
   Future<void> _signIn() async {
@@ -44,19 +88,8 @@ class _LoginViewState extends State<LoginView> {
     final l10n = context.l10n;
     final session = context.watch<SessionViewModel>();
     final busy = session.isSubmitting;
-    return AuthScaffold(
-      title: l10n.authLoginTitle,
-      subtitle: l10n.authLoginSubtitle,
-      footer: AuthFooterLink(
-        question: l10n.authNoAccount,
-        action: l10n.authCreateAccount,
-        onPressed: () {
-          session.clearError();
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute<void>(builder: (_) => const RegisterView()));
-        },
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Form(
           key: _form,
@@ -65,7 +98,10 @@ class _LoginViewState extends State<LoginView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 AppTextField(
+                  key: _emailKey,
                   controller: _email,
+                  focusNode: _emailFocus,
+                  compact: true,
                   label: l10n.fieldEmail,
                   hint: l10n.fieldEmailHint,
                   keyboardType: TextInputType.emailAddress,
@@ -77,6 +113,8 @@ class _LoginViewState extends State<LoginView> {
                 const SizedBox(height: AppSpacing.lg),
                 AppTextField(
                   controller: _password,
+                  focusNode: _passwordFocus,
+                  compact: true,
                   label: l10n.authPasswordLabel,
                   hint: l10n.authPasswordHint,
                   obscureText: true,
@@ -91,6 +129,13 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
+        if (session.sessionTooOld && session.error == null) ...[
+          AppInlineMessage(
+            type: InlineMessageType.info,
+            message: l10n.sessionTooOld,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+        ],
         if (session.error != null) ...[
           AppInlineMessage(
             type: InlineMessageType.error,

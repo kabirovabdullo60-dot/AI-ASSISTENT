@@ -31,8 +31,12 @@ class AppTextField extends StatefulWidget {
     this.focusNode,
     this.textAlign = TextAlign.start,
     this.style,
+    this.compact = false,
     super.key,
   });
+
+  /// A lower field (about 44 pt instead of 56), e.g. on the login screen.
+  final bool compact;
 
   final String? label;
   final String? hint;
@@ -81,6 +85,8 @@ class _AppTextFieldState extends State<AppTextField> {
           _obscured ? Icons.visibility_outlined : Icons.visibility_off_outlined,
         ),
         onPressed: () => setState(() => _obscured = !_obscured),
+        iconSize: widget.compact ? 20 : null,
+        visualDensity: widget.compact ? VisualDensity.compact : null,
       );
     }
 
@@ -114,6 +120,16 @@ class _AppTextFieldState extends State<AppTextField> {
                 : Icon(widget.prefixIcon, size: 20)),
         suffixIcon: suffix,
         counterText: '',
+        isDense: widget.compact ? true : null,
+        contentPadding: widget.compact
+            ? const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: 12,
+              )
+            : null,
+        suffixIconConstraints: widget.compact
+            ? const BoxConstraints(minWidth: 40, minHeight: 40)
+            : null,
       ),
     );
 

@@ -3,6 +3,7 @@ import '../core/utils/local_date.dart';
 import '../models/dashboard_model.dart';
 import '../models/employees_report_model.dart';
 import '../models/payroll_year_model.dart';
+import '../models/profit_model.dart';
 import '../models/sales_report_model.dart';
 import '../models/store_comparison_model.dart';
 
@@ -25,6 +26,33 @@ class ReportsService {
             )
             as Map<String, dynamic>,
       );
+
+  /// The current Monday–Sunday week when no dates are given; any range of
+  /// 1–366 days otherwise.
+  Future<SalesReportModel> weeklySales({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async => SalesReportModel.fromJson(
+    await _api.get(
+          '/api/reports/weekly-sales',
+          query: _range(startDate, endDate),
+        )
+        as Map<String, dynamic>,
+  );
+
+  /// Sales − expenses − salary due; the current month when no dates are
+  /// given.
+  Future<ProfitModel> profit({DateTime? startDate, DateTime? endDate}) async =>
+      ProfitModel.fromJson(
+        await _api.get('/api/reports/profit', query: _range(startDate, endDate))
+            as Map<String, dynamic>,
+      );
+
+  static Map<String, Object?> _range(DateTime? startDate, DateTime? endDate) =>
+      {
+        'startDate': startDate == null ? null : formatLocalDate(startDate),
+        'endDate': endDate == null ? null : formatLocalDate(endDate),
+      };
 
   Future<StoreComparisonModel> storeComparison({
     DateTime? startDate,
