@@ -143,13 +143,21 @@ extension EnumLabels on AppLocalizations {
     'VALIDATION_ERROR' => errValidationShort,
     'NETWORK_ERROR' => errNetwork,
     'RATE_LIMITED' => errRateLimited,
+    'ASSISTANT_UNAVAILABLE' => assistantError,
+    'SALE_SPLIT_MISMATCH' => errSplitMismatch,
     'INTERNAL_ERROR' => errServer,
+    'ACTION_NOT_FOUND' => errActionNotFound,
+    'CONVERSATION_NOT_FOUND' => errNotFound,
+    'ACTION_EXPIRED' => actionExpired,
+    'ACTION_ALREADY_HANDLED' => errActionHandled,
     _ => errUnknown(code),
   };
 }
 
 /// Shows a translated error (or success) message at the bottom of the screen.
 void showResult(BuildContext context, String? errorCode, {required String success}) {
+  // A second click while the first request still runs: nothing to report.
+  if (errorCode == 'BUSY') return;
   final tr = context.l10n;
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()

@@ -25,11 +25,20 @@ class AuthViewModel extends ChangeNotifier {
   bool get isBusy => _busy;
 
   /// On app start: use the saved tokens if they still work.
-  Future<void> restore() async {
-    try {
-      _user = await _auth.restore();
-    } catch (_) {
-      _user = null;
+  /// A brief network or server problem is retried (3 tries) instead of showing the login.
+  Future<void> restore({Duration retryDelay = const Duration(seconds: 1)}) async {
+    for (var attempt = 0; ; attempt++) {
+      try {
+        _user = await _auth.restore();
+        break;
+      } catch (e) {
+        final transient = e is! ApiException || e.code == 'NETWORK_ERROR' || e.statusCode >= 500;
+        if (!transient || attempt >= 2) {
+          _user = null;
+          break;
+        }
+        await Future<void>.delayed(retryDelay * (attempt + 1));
+      }
     }
     _status = _user == null ? AuthStatus.signedOut : AuthStatus.signedIn;
     _notify();
@@ -71,6 +80,16 @@ class AuthViewModel extends ChangeNotifier {
     () async =>
         _user = await _profile.update(fullName: fullName, email: email, phone: phone, businessName: businessName),
   );
+
+  /// Reloads the signed-in user (e.g. after the AI assistant changed the profile).
+  Future<void> refreshProfile() async {
+    try {
+      _user = await _profile.fetch();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('AuthViewModel.refreshProfile: $e');
+    }
+  }
 
   Future<String?> changePassword(String current, String next) =>
       _run(() => _profile.changePassword(currentPassword: current, newPassword: next));

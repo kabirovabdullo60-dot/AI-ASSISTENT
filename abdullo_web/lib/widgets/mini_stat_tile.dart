@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_theme.dart';
 
-/// Small grey tile under the chart (e.g. "Gross Profit Margin 34.8%").
+/// A small figure with its label (e.g. "Expenses 1,200 TJS"): a white card with a 1px edge,
+/// the label in grey over the value in ink with tabular digits. The icon, if any, stays grey.
 class MiniStatTile extends StatelessWidget {
   const MiniStatTile({super.key, required this.label, required this.value, required this.icon, this.iconColor});
 
   final String label;
   final String value;
   final IconData icon;
+
+  /// Kept for callers; the icon is grey (colour belongs to data, not to decoration).
   final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.fromLTRB(16, 12, 14, 12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceSoft,
-        borderRadius: BorderRadius.circular(10),
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -31,19 +34,19 @@ class MiniStatTile extends StatelessWidget {
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall?.copyWith(color: AppColors.muted),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFeatures: AppTheme.numbers),
                 ),
               ],
             ),
           ),
-          Icon(icon, size: 20, color: iconColor ?? AppColors.navy),
+          Icon(icon, size: 16, color: AppColors.muted),
         ],
       ),
     );

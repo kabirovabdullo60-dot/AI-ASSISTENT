@@ -14,9 +14,11 @@ import '../widgets/app_table.dart';
 import '../widgets/async_content.dart';
 import '../widgets/card_grid.dart';
 import '../widgets/mini_stat_tile.dart';
+import '../widgets/motion/shimmer_sweep.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
 import 'expense_form_dialog.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Expenses & profit — /api/expenses (CRUD) + /api/reports/profit.
 class ExpensesView extends StatelessWidget {
@@ -24,7 +26,7 @@ class ExpensesView extends StatelessWidget {
 
   Future<void> _delete(BuildContext context, ExpenseModel e) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.deleteExpenseTitle),
@@ -61,16 +63,18 @@ class ExpensesView extends StatelessWidget {
       builder: (_) {
         final list = vm.filtered(query);
         final p = vm.profit;
-        final profitColor = (p?.grossProfit ?? 0) >= 0 ? AppColors.green : AppColors.red;
+        final profitColor = (p?.grossProfit ?? 0) >= 0 ? AppColors.muted : AppColors.red;
         return PageBody(
           title: tr.navExpenses,
           subtitle: tr.expensesSubtitle,
           actions: [
-            FilledButton.icon(
-              key: const Key('add-expense'),
-              onPressed: () => ExpenseFormDialog.show(context),
-              icon: const Icon(Icons.add, size: 18),
-              label: Text(tr.addExpense),
+            ShimmerSweep(
+              child: FilledButton.icon(
+                key: const Key('add-expense'),
+                onPressed: () => ExpenseFormDialog.show(context),
+                icon: const Icon(Icons.add, size: 18),
+                label: Text(tr.addExpense),
+              ),
             ),
           ],
           children: [
@@ -133,11 +137,8 @@ class ExpensesView extends StatelessWidget {
                       Text(formatDate(e.expenseDate)),
                       Text(tr.expenseCategory(e.category), style: const TextStyle(fontWeight: FontWeight.w600)),
                       Text(e.storeName ?? tr.wholeBusiness),
-                      Text(e.description ?? '—', style: const TextStyle(color: AppColors.muted)),
-                      Text(
-                        '-${cur.format(e.amount)}',
-                        style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.red),
-                      ),
+                      Text(e.description ?? '—', style: TextStyle(color: AppColors.muted)),
+                      Text('-${cur.format(e.amount)}', style: const TextStyle(fontWeight: FontWeight.w600)),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -146,14 +147,14 @@ class ExpensesView extends StatelessWidget {
                             tooltip: tr.edit,
                             visualDensity: VisualDensity.compact,
                             onPressed: () => ExpenseFormDialog.show(context, expense: e),
-                            icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
+                            icon: Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
                           ),
                           IconButton(
                             key: Key('delete-expense-${e.id}'),
                             tooltip: tr.delete,
                             visualDensity: VisualDensity.compact,
                             onPressed: () => _delete(context, e),
-                            icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
+                            icon: Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
                           ),
                         ],
                       ),
@@ -197,7 +198,7 @@ class ExpensesView extends StatelessWidget {
                           cur.format(s.profit),
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: s.profit >= 0 ? AppColors.green : AppColors.red,
+                            color: s.profit >= 0 ? AppColors.ink : AppColors.red,
                           ),
                         ),
                       ],

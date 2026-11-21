@@ -81,7 +81,7 @@ class _Header extends StatelessWidget {
                   foregroundImage: url == null ? null : NetworkImage(url),
                   child: Text(
                     initials(user.fullName),
-                    style: const TextStyle(fontSize: 22, color: AppColors.orange, fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 22, color: AppColors.accentText, fontWeight: FontWeight.w700),
                   ),
                 ),
                 Positioned(
@@ -108,25 +108,33 @@ class _Header extends StatelessWidget {
                     key: const Key('profile-name'),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                   ),
-                  Text(user.email, style: const TextStyle(color: AppColors.muted)),
+                  Text(user.email, style: TextStyle(color: AppColors.muted)),
                   const SizedBox(height: 6),
                   Wrap(
                     spacing: 6,
                     runSpacing: 6,
                     children: [
-                      StatusBadge(user.role, tone: BadgeTone.info),
                       StatusBadge(user.businessName, tone: BadgeTone.warning, icon: Icons.storefront_outlined),
                     ],
                   ),
                 ],
               ),
             ),
-            OutlinedButton.icon(
-              key: const Key('profile-logout'),
-              onPressed: () => context.read<AuthViewModel>().logout(),
-              icon: const Icon(Icons.logout, size: 18),
-              label: Text(tr.signOut),
-            ),
+            // Narrow phones: icon only, so long translations ("Баромадан") never overflow.
+            if (MediaQuery.sizeOf(context).width < 480)
+              IconButton.outlined(
+                key: const Key('profile-logout'),
+                tooltip: tr.signOut,
+                onPressed: () => context.read<AuthViewModel>().logout(),
+                icon: const Icon(Icons.logout, size: 18),
+              )
+            else
+              OutlinedButton.icon(
+                key: const Key('profile-logout'),
+                onPressed: () => context.read<AuthViewModel>().logout(),
+                icon: const Icon(Icons.logout, size: 18),
+                label: Text(tr.signOut),
+              ),
           ],
         ),
       ),

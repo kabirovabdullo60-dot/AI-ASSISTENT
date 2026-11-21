@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/format.dart';
@@ -10,7 +9,6 @@ import '../models/sale_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
-import '../widgets/status_badge.dart';
 
 /// "New Daily Sales Record" → POST /api/sales; with [sale] it edits → PUT /api/sales/{id}.
 /// Used on the Sales page and in the Record Sale / Edit dialogs.
@@ -99,25 +97,16 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
               Expanded(
                 child: Text(
                   widget.sale == null ? tr.newDailySale : tr.editSale,
-                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
-              StatusBadge(tr.posTerminal, tone: BadgeTone.info),
             ],
           ),
           const SizedBox(height: 18),
-          Row(
-            children: [
-              Expanded(child: Text(tr.selectStore, style: label)),
-              Text(
-                tr.activeBranches(stores.activeCount),
-                style: const TextStyle(fontSize: 11.5, color: AppColors.orange, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
+          Text(tr.selectStore, style: label),
           const SizedBox(height: 6),
           if (options.isEmpty)
-            Text(tr.selectStoreFirst, style: const TextStyle(color: AppColors.red))
+            Text(tr.selectStoreFirst, style: TextStyle(color: AppColors.red))
           else
             DropdownButtonFormField<String>(
               key: const Key('sale-store'),
@@ -200,20 +189,6 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
             label: Text(
               widget.sale == null ? tr.saveSaleRecord : tr.saveChanges,
               style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text.rich(
-            TextSpan(
-              style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
-              children: [
-                const WidgetSpan(child: Icon(Icons.sync, size: 13, color: AppColors.green)),
-                TextSpan(text: tr.syncsTo),
-                const TextSpan(
-                  text: ApiConstants.sales,
-                  style: TextStyle(fontFamily: 'monospace', color: AppColors.ink),
-                ),
-              ],
             ),
           ),
         ],

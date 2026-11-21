@@ -8,6 +8,7 @@ import '../models/expense_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/expenses_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Add / edit an expense → POST /api/expenses or PUT /api/expenses/{id}.
 class ExpenseFormDialog extends StatefulWidget {
@@ -15,7 +16,7 @@ class ExpenseFormDialog extends StatefulWidget {
 
   final ExpenseModel? expense;
 
-  static Future<void> show(BuildContext context, {ExpenseModel? expense}) => showDialog<void>(
+  static Future<void> show(BuildContext context, {ExpenseModel? expense}) => showAppDialog<void>(
     context: context,
     builder: (_) => ExpenseFormDialog(expense: expense),
   );

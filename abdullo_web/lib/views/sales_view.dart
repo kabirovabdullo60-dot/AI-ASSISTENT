@@ -7,7 +7,6 @@ import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
 import '../models/sale_model.dart';
-import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/home_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
@@ -25,6 +24,7 @@ import '../widgets/sparkline.dart';
 import '../widgets/status_badge.dart';
 import 'record_sale_dialog.dart';
 import 'sale_entry_form_view.dart';
+import '../core/motion/app_dialog.dart';
 
 /// "Sales & Daily Entries" — /api/sales (+ daily / weekly / monthly reports).
 class SalesView extends StatelessWidget {
@@ -65,14 +65,12 @@ class SalesView extends StatelessWidget {
               );
               final right = _EntriesColumn(vm: vm, currency: cur);
               if (c.maxWidth < 1000) {
-                return Column(
-                  children: [form, const SizedBox(height: 16), const _ClerkCard(), const SizedBox(height: 16), right],
-                );
+                return Column(children: [form, const SizedBox(height: 16), right]);
               }
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 340, child: Column(children: [form, SizedBox(height: 16), _ClerkCard()])),
+                  SizedBox(width: 340, child: form),
                   const SizedBox(width: 16),
                   Expanded(child: right),
                 ],
@@ -106,15 +104,7 @@ class _TotalChip extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 10.5,
-                    letterSpacing: 0.6,
-                    color: AppColors.muted,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 Text.rich(
                   TextSpan(
                     children: [
@@ -124,7 +114,7 @@ class _TotalChip extends StatelessWidget {
                       ),
                       TextSpan(
                         text: ' ${currency.code}',
-                        style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                        style: TextStyle(fontSize: 11, color: AppColors.muted),
                       ),
                     ],
                   ),
@@ -153,7 +143,7 @@ class _SuccessBanner extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
         child: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 13,
               backgroundColor: AppColors.greenSoft,
               child: Icon(Icons.check, size: 16, color: AppColors.green),
@@ -166,7 +156,7 @@ class _SuccessBanner extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: tr.successPrefix,
-                      style: const TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
+                      style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w600),
                     ),
                     TextSpan(text: tr.saleSavedMessage('${formatAmount(sale.amount)} TJS', sale.storeName)),
                   ],
@@ -179,42 +169,6 @@ class _SuccessBanner extends StatelessWidget {
               onPressed: onClose,
               icon: const Icon(Icons.close, size: 18),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ClerkCard extends StatelessWidget {
-  const _ClerkCard();
-
-  @override
-  Widget build(BuildContext context) {
-    final tr = context.l10n;
-    final user = context.watch<AuthViewModel>().user;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            const IconBox(Icons.verified_user_outlined, color: AppColors.navy, background: AppColors.blueSoft),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(tr.sessionClerk, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
-                  Text(
-                    user == null ? '…' : '${user.fullName} · ${user.email}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12.5, color: AppColors.muted),
-                  ),
-                ],
-              ),
-            ),
-            StatusBadge(tr.authorized, tone: BadgeTone.positive),
           ],
         ),
       ),
@@ -256,7 +210,7 @@ class _EntriesColumn extends StatelessWidget {
 
   Future<void> _delete(BuildContext context, SaleModel sale) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.deleteSaleTitle),
@@ -290,7 +244,6 @@ class _EntriesColumn extends StatelessWidget {
     final query = context.select<HomeViewModel, String>((h) => h.query);
     final rows = vm.filtered(query);
     final change = vm.changeVsPrevious();
-    final minutes = DateTime.now().difference(vm.updatedAt).inMinutes;
     final week = vm.last7Days;
     var peak = 0;
     for (var i = 1; i < week.length; i++) {
@@ -356,18 +309,6 @@ class _EntriesColumn extends StatelessWidget {
                           ? _pickRange(context)
                           : vm.setRange(SalesRange.values[i]),
                     ),
-                    Text.rich(
-                      TextSpan(
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                        children: [
-                          const TextSpan(
-                            text: '● ',
-                            style: TextStyle(color: AppColors.orange),
-                          ),
-                          TextSpan(text: minutes < 1 ? tr.updatedJustNow : tr.updatedMinutesAgo(minutes)),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ],
@@ -378,24 +319,20 @@ class _EntriesColumn extends StatelessWidget {
         Container(
           key: const Key('filtered-total'),
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.border),
+          ),
           child: Row(
             children: [
-              const IconBox(Icons.calculate_outlined, color: Colors.white, background: AppColors.navy),
+              IconBox(Icons.calculate_outlined, color: Colors.white, background: AppColors.navy),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      tr.activeFilterVolume,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        letterSpacing: 0.6,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.muted,
-                      ),
-                    ),
+                    Text(tr.activeFilterVolume, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     Text.rich(
                       TextSpan(
                         style: const TextStyle(fontSize: 14),
@@ -407,7 +344,7 @@ class _EntriesColumn extends StatelessWidget {
                           ),
                           TextSpan(
                             text: tr.acrossEntries(vm.entryCount),
-                            style: const TextStyle(color: AppColors.muted),
+                            style: TextStyle(color: AppColors.muted),
                           ),
                         ],
                       ),
@@ -459,7 +396,7 @@ class _EntriesColumn extends StatelessWidget {
                                 ),
                                 Text(
                                   s.createdAt == null ? formatDate(s.saleDate) : formatTime(s.createdAt!.toLocal()),
-                                  style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                  style: TextStyle(fontSize: 11, color: AppColors.muted),
                                 ),
                               ],
                             ),
@@ -475,7 +412,7 @@ class _EntriesColumn extends StatelessWidget {
                               ),
                               TextSpan(
                                 text: ' ${currency.code}',
-                                style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                style: TextStyle(fontSize: 11, color: AppColors.muted),
                               ),
                             ],
                           ),
@@ -486,7 +423,7 @@ class _EntriesColumn extends StatelessWidget {
                             s.description ?? '—',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: AppColors.muted),
+                            style: TextStyle(color: AppColors.muted),
                           ),
                         ),
                         Row(
@@ -497,14 +434,14 @@ class _EntriesColumn extends StatelessWidget {
                               tooltip: tr.edit,
                               visualDensity: VisualDensity.compact,
                               onPressed: () => RecordSaleDialog.show(context, sale: s),
-                              icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
+                              icon: Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
                             ),
                             IconButton(
                               key: Key('delete-sale-${s.id}'),
                               tooltip: tr.delete,
                               visualDensity: VisualDensity.compact,
                               onPressed: () => _delete(context, s),
-                              icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
+                              icon: Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
                             ),
                           ],
                         ),
@@ -533,7 +470,7 @@ class _EntriesColumn extends StatelessWidget {
                   : Text(
                       tr.peakLabel(formatWeekday(week[peak].date), currency.format(week[peak].revenue)),
                       textAlign: TextAlign.right,
-                      style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 12, color: AppColors.muted),
                     ),
               child: Sparkline(values: [for (final p in week) p.revenue]),
             );
@@ -547,11 +484,15 @@ class _EntriesColumn extends StatelessWidget {
                       children: [
                         Text(
                           '${(ratio * 100).toStringAsFixed(0)}%',
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
                         ),
                         Text(
                           tr.storesReportedValue(reported, active),
-                          style: const TextStyle(fontSize: 12, color: AppColors.green, fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted),
                         ),
                       ],
                     ),

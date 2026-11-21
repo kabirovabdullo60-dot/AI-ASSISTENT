@@ -45,7 +45,8 @@ class SectionCard extends StatelessWidget {
                           Text(
                             title,
                             style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.ink,
                             ),
                           ),
@@ -54,12 +55,18 @@ class SectionCard extends StatelessWidget {
                       ),
                       if (subtitle != null) ...[
                         const SizedBox(height: 4),
-                        Text(subtitle!, style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted)),
+                        Text(subtitle!, style: TextStyle(fontSize: 13, color: AppColors.muted, height: 1.4)),
                       ],
                     ],
                   ),
                 ),
-                if (trailing != null) ...[const SizedBox(width: 8), Flexible(child: trailing!)],
+                if (trailing != null) ...[
+                  const SizedBox(width: 8),
+                  // Actions hug the right edge instead of taking half the row.
+                  Flexible(
+                    child: Align(alignment: Alignment.topRight, child: trailing!),
+                  ),
+                ],
               ],
             ),
             const SizedBox(height: 16),

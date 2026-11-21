@@ -1,26 +1,77 @@
 import 'package:flutter/material.dart';
 
-/// Colors from the Figma "Executive Business Dashboard".
+import 'app_palette.dart';
+
+/// Color roles of the current [AppPalette]. Switching the palette ([use]) and rebuilding
+/// the app repaints every page.
+///
+/// Older role names are kept so every page follows the palette:
+/// `orange` / `teal` = the accent, `gold` = the AI's second accent, `navy` = the dark surface.
 class AppColors {
   AppColors._();
 
-  static const navy = Color(0xFF0F1B3D);
-  static const navyLight = Color(0xFF1E2B50);
-  static const ink = Color(0xFF111827);
-  static const muted = Color(0xFF6B7280);
-  static const orange = Color(0xFFF26B3A);
-  static const orangeSoft = Color(0xFFFFEEE6);
-  static const background = Color(0xFFF4F5F7);
-  static const card = Colors.white;
-  static const border = Color(0xFFE6E8EC);
-  static const surfaceSoft = Color(0xFFF7F8FA);
-  static const green = Color(0xFF15803D);
-  static const greenSoft = Color(0xFFE6F6EC);
-  static const red = Color(0xFFDC2626);
-  static const redSoft = Color(0xFFFDECEC);
-  static const blue = Color(0xFF2563EB);
-  static const blueSoft = Color(0xFFEAF1FD);
-  static const purple = Color(0xFF7C3AED);
-  static const purpleSoft = Color(0xFFF1EBFE);
-  static const barGray = Color(0xFF9CA3AF);
+  static PaletteColors _c = AppPalette.ledger.colors;
+  static AppPalette _palette = AppPalette.ledger;
+
+  static AppPalette get palette => _palette;
+  static void use(AppPalette p) {
+    _palette = p;
+    _c = p.colors;
+  }
+
+  static bool get isDark => _c.dark;
+
+  // Surfaces
+  static Color get background => _c.background;
+  static Color get card => _c.card;
+  static Color get surfaceSoft => _c.surfaceSoft;
+  static Color get border => _c.border;
+
+  // Text
+  static Color get ink => _c.ink;
+  static Color get muted => _c.muted;
+
+  // Accent — actions, selection, the brand
+  static Color get orange => _c.accent;
+  static Color get orangeSoft => _c.accentSoft;
+  static Color get teal => _c.accent;
+
+  /// Accent for text, links and icons on the page or on [tealSoft] (≥ 4.5:1 in every look).
+  static Color get accentText => _c.accentText ?? _c.accent;
+  static Color get tealSoft => _c.accentSoft;
+
+  /// Text / icons on the accent (always light: every accent is dark enough).
+  static const onAccent = Colors.white;
+
+  // Dark surface — user chat bubble, tooltips, dark badges, chart bars
+  static Color get navy => _c.navy;
+  static Color get navyLight => _c.navyLight;
+
+  /// Strong mark on the page (chart highlight, sparkline): dark on light themes, light on dark.
+  static Color get strong => _c.dark ? _c.ink : _c.navy;
+
+  /// Background of small dark labels with white text (chart tooltips): dark in every look.
+  static Color get tooltip => _c.dark ? _c.navyLight : _c.navy;
+
+  // Second accent — the AI
+  static Color get gold => _c.accent2;
+  static Color get goldSoft => _c.accent2Soft;
+
+  /// The one data hue: the screen's main data element only (today, the current period,
+  /// the selected series). Everything else is ink or grey.
+  static Color get data => _c.blue;
+  static Color get dataSoft => _c.blueSoft;
+
+  // Meaning
+  static Color get amber => _c.amber;
+  static Color get amberSoft => _c.amberSoft;
+  static Color get green => _c.green;
+  static Color get greenSoft => _c.greenSoft;
+  static Color get red => _c.red;
+  static Color get redSoft => _c.redSoft;
+  static Color get blue => _c.blue;
+  static Color get blueSoft => _c.blueSoft;
+  static Color get purple => _c.purple;
+  static Color get purpleSoft => _c.purpleSoft;
+  static Color get barGray => _c.barGray;
 }

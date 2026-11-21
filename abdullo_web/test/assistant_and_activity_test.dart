@@ -48,10 +48,7 @@ void main() {
 
     testWidgets('dashboard at $w shows GET /api/activity rows', (tester) async {
       final backend = setUpBackend()
-        ..activity.addAll([
-          _row('STORE', 'CREATED', 'Khujand Branch'),
-          _row('EMPLOYEE', 'UPDATED', 'Zarina Saidova'),
-        ]);
+        ..activity.addAll([_row('STORE', 'CREATED', 'Khujand Branch'), _row('EMPLOYEE', 'UPDATED', 'Zarina Saidova')]);
       await pumpApp(tester, width, backend: backend);
       expect(backend.requests, contains('GET /api/activity'));
       await scrollTo(tester, find.text('Recent Business Activity'));
@@ -76,6 +73,6 @@ void main() {
     final backend = setUpBackend()..assistantRateLimited = true;
     await pumpApp(tester, desktopWidth, backend: backend);
     await _ask(tester, 'How are my sales?');
-    expect(find.text('Too many questions. Wait a minute and ask again.'), findsOneWidget);
+    expect(find.text('Too many questions. Ask again in 42 s.'), findsOneWidget); // meta.retryAfter
   });
 }

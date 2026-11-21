@@ -1,6 +1,7 @@
 import 'package:abdullo_web/core/navigation/app_section.dart';
 import 'package:abdullo_web/core/utils/format.dart';
 import 'package:abdullo_web/main.dart';
+import 'package:abdullo_web/services/voice_service.dart';
 import 'package:abdullo_web/widgets/page_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,12 +39,13 @@ Future<FakeBackend> pumpApp(
   bool signedIn = true,
   String? language,
   FakeBackend? backend,
+  VoiceService? voice,
 }) async {
   final api = backend ?? setUpBackend(signedIn: signedIn, language: language);
   tester.view.physicalSize = Size(width, height);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(WebApp(httpClient: api.client));
+  await tester.pumpWidget(WebApp(httpClient: api.client, voice: voice, splashDuration: Duration.zero));
   await tester.pumpAndSettle();
   return api;
 }

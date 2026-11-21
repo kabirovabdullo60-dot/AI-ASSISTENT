@@ -27,7 +27,7 @@ class PillTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(color: AppColors.surfaceSoft, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.circular(10)),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -35,7 +35,7 @@ class PillTabs extends StatelessWidget {
           children: [
             for (var i = 0; i < labels.length; i++)
               Material(
-                color: i == selected ? (dark ? AppColors.navy : AppColors.card) : Colors.transparent,
+                color: i == selected ? (dark ? AppColors.teal : AppColors.card) : Colors.transparent,
                 borderRadius: BorderRadius.circular(6),
                 elevation: i == selected && !dark ? 1 : 0,
                 child: InkWell(

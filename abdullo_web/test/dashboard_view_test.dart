@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+import 'package:abdullo_web/viewmodels/dashboard_view_model.dart';
 import 'package:abdullo_web/core/navigation/app_section.dart';
 import 'package:abdullo_web/widgets/kpi_card.dart';
 import 'package:flutter/gestures.dart';
@@ -10,12 +12,16 @@ void main() {
   for (final width in [mobileWidth, desktopWidth]) {
     testWidgets('dashboard at ${width.toInt()}px shows the backend numbers', (tester) async {
       await pumpApp(tester, width);
-      expect(find.byType(KpiCard), findsNWidgets(6));
-      expect(find.text('1,500'), findsOneWidget); // today: 1000 + 500
-      expect(find.text('4,200'), findsOneWidget); // unpaid salaries this month
-      expect(find.text('2 Active'), findsWidgets); // stores
-      await scrollTo(tester, find.byKey(const Key('revenue-chart')));
+      // The answer first: today's takings with the chart in the same card.
+      expect(find.byKey(const Key('dashboard-hero')), findsOneWidget);
+      expect(find.text('1,500'), findsOneWidget); // today 1000 + 500
+      expect(find.byKey(const Key('revenue-chart')), findsOneWidget);
+      await scrollTo(tester, find.text('4,200')); // unpaid salaries this month
+      expect(find.text('4,200'), findsOneWidget);
+      expect(find.byType(KpiCard), findsWidgets);
+      await scrollTo(tester, find.text('Stores open')); // stores
       await scrollTo(tester, find.text('Central Plaza'));
+      await scrollTo(tester, find.byKey(const Key('dashboard-ai')));
       await scrollTo(tester, find.text('Recent Business Activity'));
     });
   }
@@ -59,5 +65,51 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Store Management'), findsOneWidget);
     await openSection(tester, AppSection.dashboard);
+  });
+
+  testWidgets('dashboard AI card sends its question and opens the assistant', (tester) async {
+    final backend = setUpBackend()..assistantReply = 'Today you sold 1500.00 TJS.';
+    await pumpApp(tester, desktopWidth, backend: backend);
+    await scrollTo(tester, find.byKey(const Key('ai-card-sales')));
+    await tester.tap(find.byKey(const Key('ai-card-sales')));
+    await tester.pumpAndSettle();
+    expect(backend.lastChatRequest!['messages'], [
+      {'role': 'user', 'text': 'How much did I sell today?'},
+    ]);
+    expect(find.text('Today you sold 1500.00 TJS.'), findsOneWidget);
+  });
+
+  testWidgets('a business registered today: the chart starts today, not 24 days back', (tester) async {
+    final backend = setUpBackend();
+    backend.user['createdAt'] = DateTime.now().toUtc().toIso8601String();
+    backend.sales.removeWhere((x) => x['saleDate'] != FakeBackend.day(backend.today));
+    await pumpApp(tester, desktopWidth, backend: backend);
+    final vm = Provider.of<DashboardViewModel>(tester.element(find.byKey(const Key('dashboard-hero'))), listen: false);
+    expect(vm.chartPoints, hasLength(1));
+    final today = DateTime.now();
+    expect(vm.chartPoints.single.date, DateTime(today.year, today.month, today.day));
+  });
+
+  testWidgets('a business registered 5 days ago gets 6 days on the chart', (tester) async {
+    final backend = setUpBackend();
+    backend.user['createdAt'] = DateTime.now().subtract(const Duration(days: 5)).toUtc().toIso8601String();
+    final signUp = backend.today.subtract(const Duration(days: 5));
+    backend.sales.removeWhere((x) => FakeBackend.parseDay(x['saleDate'] as String).isBefore(signUp));
+    await pumpApp(tester, desktopWidth, backend: backend);
+    final vm = Provider.of<DashboardViewModel>(tester.element(find.byKey(const Key('dashboard-hero'))), listen: false);
+    expect(vm.chartPoints, hasLength(6));
+  });
+
+  testWidgets('sales entered for days before registration still show on the chart', (tester) async {
+    final backend = setUpBackend();
+    backend.user['createdAt'] = DateTime.now().toUtc().toIso8601String();
+    final threeDaysAgo = backend.today.subtract(const Duration(days: 3));
+    backend.sales.removeWhere((x) => FakeBackend.parseDay(x['saleDate'] as String).isBefore(threeDaysAgo));
+    await pumpApp(tester, desktopWidth, backend: backend);
+    final vm = Provider.of<DashboardViewModel>(tester.element(find.byKey(const Key('dashboard-hero'))), listen: false);
+    // From the first sale (3 days ago) to today — the days the month's total is made of.
+    expect(vm.chartPoints.first.date, threeDaysAgo);
+    expect(vm.chartPoints, hasLength(4));
+    expect(vm.chartPoints.first.revenue, greaterThan(0));
   });
 }

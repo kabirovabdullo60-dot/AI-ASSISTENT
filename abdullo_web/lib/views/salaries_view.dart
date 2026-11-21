@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../core/l10n/l10n.dart';
-import '../core/constants/api_constants.dart';
 import '../core/navigation/app_section.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -61,11 +60,7 @@ class SalariesView extends StatelessWidget {
         final page = vm.pageItems(rows);
         final month = '${formatMonth(vm.month)} ${vm.month.year}';
         return PageBody(
-          eyebrow: [
-            tr.payrollEyebrow,
-            tr.fiscalYear('${vm.month.year}'),
-            tr.ledger(ApiConstants.payroll.toUpperCase()),
-          ],
+          eyebrow: [tr.payrollEyebrow, tr.fiscalYear('${vm.month.year}')],
           title: tr.payrollTitle,
           subtitle: tr.payrollSubtitle,
           actions: [
@@ -82,49 +77,38 @@ class SalariesView extends StatelessWidget {
             ),
           ],
           children: [
-            LayoutBuilder(
-              builder: (context, c) => CardGrid(
-                columns: c.maxWidth >= 900 ? 4 : 2,
-                children: [
-                  KpiCard(
-                    title: tr.totalMonthlyPayroll,
-                    value: cur.amount(vm.totalPayroll),
-                    unit: cur.code,
-                    icon: Icons.account_balance_outlined,
-                    badge: month,
-                    badgeTone: BadgeTone.info,
-                    caption: tr.allocatedBudget,
-                  ),
-                  KpiCard(
-                    title: tr.totalDisbursed,
-                    value: cur.amount(vm.disbursedTotal),
-                    unit: cur.code,
-                    icon: Icons.check_circle_outline,
-                    badge: tr.pctDisbursed((vm.disbursedRatio * 100).toStringAsFixed(1)),
-                    badgeIcon: Icons.trending_up,
-                    caption: tr.settled,
-                  ),
-                  KpiCard(
-                    title: tr.totalOutstanding,
-                    value: cur.amount(vm.pendingTotal),
-                    unit: cur.code,
-                    icon: Icons.pending_actions_outlined,
-                    badge: tr.pctBalance(((1 - vm.disbursedRatio) * 100).toStringAsFixed(1)),
-                    badgeTone: BadgeTone.warning,
-                    badgeDot: true,
-                    caption: tr.pendingClearance,
-                    highlight: true,
-                  ),
-                  KpiCard(
-                    title: tr.staffDistribution,
-                    value: tr.nEmployees(vm.items.length),
-                    icon: Icons.badge_outlined,
-                    badge: tr.nBranches(vm.branchCount),
-                    badgeTone: BadgeTone.info,
-                    caption: tr.activeContracts,
-                  ),
-                ],
-              ),
+            KpiStrip(
+              children: [
+                KpiCard(
+                  title: tr.totalMonthlyPayroll,
+                  value: cur.amount(vm.totalPayroll),
+                  unit: cur.code,
+                  icon: Icons.account_balance_outlined,
+                  badge: month,
+                  badgeTone: BadgeTone.info,
+                  caption: tr.allocatedBudget,
+                ),
+                KpiCard(
+                  title: tr.totalDisbursed,
+                  value: cur.amount(vm.disbursedTotal),
+                  unit: cur.code,
+                  icon: Icons.check_circle_outline,
+                  badge: tr.pctDisbursed((vm.disbursedRatio * 100).toStringAsFixed(1)),
+                  badgeIcon: Icons.trending_up,
+                  caption: tr.settled,
+                ),
+                KpiCard(
+                  title: tr.totalOutstanding,
+                  value: cur.amount(vm.pendingTotal),
+                  unit: cur.code,
+                  icon: Icons.pending_actions_outlined,
+                  badge: tr.pctBalance(((1 - vm.disbursedRatio) * 100).toStringAsFixed(1)),
+                  badgeTone: BadgeTone.warning,
+                  badgeDot: true,
+                  caption: tr.pendingClearance,
+                  highlight: true,
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             _Filters(vm: vm),
@@ -139,7 +123,7 @@ class SalariesView extends StatelessWidget {
                       columns: [
                         tr.colEmployee,
                         tr.colAssignedStore,
-                        tr.colTenure,
+                        tr.colWorkedDays, // `workedDays` = days employed in this month
                         tr.colMonthlySalary,
                         tr.colDisbursed,
                         tr.colRemaining,
@@ -196,7 +180,7 @@ class SalariesView extends StatelessWidget {
           ),
           TextSpan(
             text: ' ${cur.code}',
-            style: const TextStyle(fontSize: 10.5, color: AppColors.muted),
+            style: TextStyle(fontSize: 10.5, color: AppColors.muted),
           ),
         ],
       ),
@@ -224,7 +208,7 @@ class SalariesView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(p.employeeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-              Text(p.role, style: const TextStyle(fontSize: 11.5, color: AppColors.muted)),
+              Text(p.role, style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
             ],
           ),
         ],
@@ -232,20 +216,21 @@ class SalariesView extends StatelessWidget {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.location_on_outlined, size: 14, color: AppColors.muted),
+          Icon(Icons.location_on_outlined, size: 14, color: AppColors.muted),
           const SizedBox(width: 4),
           Text(p.storeName),
         ],
       ),
       StatusBadge(context.l10n.workedDays(p.workedDays), tone: BadgeTone.info),
       money(p.salary),
-      money(p.disbursed, color: p.status == PayStatus.paid ? AppColors.green : null),
-      money(p.remaining, color: p.remaining > 0 ? AppColors.red : AppColors.muted),
+      money(p.disbursed),
+      money(p.remaining, color: p.remaining > 0 ? AppColors.ink : AppColors.muted),
       StatusBadge(context.l10n.payStatus(p.status), tone: tone, dot: true),
       p.remaining > 0 && !vm.isFutureMonth
-          ? FilledButton.icon(
+          // An outlined button in every row that needs paying (a filled one per row is a stripe of blocks).
+          ? OutlinedButton.icon(
               key: Key('pay-${p.id}'),
-              style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
+              style: OutlinedButton.styleFrom(visualDensity: VisualDensity.compact),
               onPressed: vm.payingId == null ? () => SalaryPaymentDialog.show(context, payroll: p) : null,
               icon: const Icon(Icons.payments_outlined, size: 16),
               label: Text(context.l10n.recordPayment),
@@ -296,7 +281,7 @@ class _Filters extends StatelessWidget {
                         onPressed: vm.previousMonth,
                         icon: const Icon(Icons.chevron_left),
                       ),
-                      const Icon(Icons.calendar_month_outlined, size: 16, color: AppColors.orange),
+                      Icon(Icons.calendar_month_outlined, size: 16, color: AppColors.orange),
                       const SizedBox(width: 6),
                       Text(
                         formatMonthYear(vm.month),
@@ -361,14 +346,9 @@ class _BudgetCard extends StatelessWidget {
     final tr = context.l10n;
     final rows = vm.budgetByStore;
     final max = rows.isEmpty ? 1.0 : rows.first.total;
-    const colors = [AppColors.navy, AppColors.orange, Color(0xFF4B5675), Color(0xFFB8C0D6)];
-    final now = DateTime.now();
+    final colors = [AppColors.navy, AppColors.orange, Color(0xFF4B5675), Color(0xFFB8C0D6)];
     return SectionCard(
       title: tr.budgetTitle,
-      badge: StatusBadge(
-        vm.pendingTotal == 0 ? tr.balanced : tr.openBalance,
-        tone: vm.pendingTotal == 0 ? BadgeTone.positive : BadgeTone.warning,
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -402,18 +382,6 @@ class _BudgetCard extends StatelessWidget {
                 ],
               ),
             ),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(
-                child: Text(tr.erpSynced, style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
-              ),
-              Text(
-                '${formatDay(now)}, ${formatTime(now)}',
-                style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
         ],
       ),
     );
@@ -433,7 +401,7 @@ class _DisbursementsCard extends StatelessWidget {
       title: tr.recentDisbursements,
       subtitle: tr.disbursementsSubtitle,
       trailing: TextButton(
-        style: TextButton.styleFrom(foregroundColor: AppColors.orange),
+        style: TextButton.styleFrom(foregroundColor: AppColors.accentText),
         onPressed: () => context.read<HomeViewModel>().select(AppSection.dashboard),
         child: Text(tr.viewFullAudit, style: TextStyle(fontWeight: FontWeight.w600)),
       ),
@@ -473,7 +441,7 @@ class _DisbursementsCard extends StatelessWidget {
                                 Text(
                                   '${tr.payStatus(d.status)} • ${formatMonthYear(DateTime(d.year, d.month))}${(d.note ?? '').isEmpty ? '' : ' • ${d.note}'}',
                                   maxLines: 2,
-                                  style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                  style: TextStyle(fontSize: 11, color: AppColors.muted),
                                 ),
                               ],
                             ),
@@ -488,7 +456,7 @@ class _DisbursementsCard extends StatelessWidget {
                               ),
                               Text(
                                 formatRelativeDay(d.paymentDate),
-                                style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                style: TextStyle(fontSize: 11, color: AppColors.muted),
                               ),
                             ],
                           ),
@@ -498,18 +466,6 @@ class _DisbursementsCard extends StatelessWidget {
                 ],
               ),
             ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(10)),
-            child: Row(
-              children: [
-                Icon(Icons.shield_outlined, color: AppColors.orange),
-                SizedBox(width: 10),
-                Expanded(child: Text(tr.bankNote, style: TextStyle(fontSize: 12.5))),
-              ],
-            ),
-          ),
         ],
       ),
     );

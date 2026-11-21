@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -16,13 +15,13 @@ import '../widgets/app_table.dart';
 import '../widgets/async_content.dart';
 import '../widgets/card_grid.dart';
 import '../widgets/dropdown_chip.dart';
-import '../widgets/icon_box.dart';
 import '../widgets/kpi_card.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
 import '../widgets/status_badge.dart';
 import 'store_detail_sheet.dart';
 import 'store_form_dialog.dart';
+import '../core/motion/app_dialog.dart';
 
 /// "Store Management" — /api/stores + sales reports.
 class StoresView extends StatelessWidget {
@@ -73,44 +72,41 @@ class StoresView extends StatelessWidget {
             ),
           ],
           children: [
-            LayoutBuilder(
-              builder: (context, c) => CardGrid(
-                columns: c.maxWidth >= 900 ? 4 : 2,
-                children: [
-                  KpiCard(
-                    title: tr.networkScope,
-                    value: tr.nLocations(vm.stores.length),
-                    icon: Icons.apartment_outlined,
-                    badge: tr.opRatio((vm.operatingRatio * 100).round()),
-                    caption: tr.activeInactive(vm.activeCount, vm.inactiveCount),
-                  ),
-                  KpiCard(
-                    title: tr.fleetVelocity,
-                    value: cur.amount(vm.todayTotal),
-                    unit: cur.code,
-                    icon: Icons.payments_outlined,
-                    badge: vm.todayChange == null ? null : formatPercent(vm.todayChange!),
-                    badgeTone: (vm.todayChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
-                    caption: tr.allBranchesToday,
-                  ),
-                  KpiCard(
-                    title: tr.totalMonthlyRevenue,
-                    value: cur.amount(vm.monthTotal),
-                    unit: cur.code,
-                    icon: Icons.insights_outlined,
-                    badge: vm.monthChange == null ? null : formatPercent(vm.monthChange!),
-                    badgeTone: (vm.monthChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
-                    caption: tr.vsLastMonth,
-                  ),
-                  KpiCard(
-                    title: tr.allocatedWorkforce,
-                    value: tr.nActive(vm.workforce),
-                    icon: Icons.badge_outlined,
-                    badge: tr.acrossBranches(vm.staffedBranches),
-                    badgeTone: BadgeTone.info,
-                  ),
-                ],
-              ),
+            KpiStrip(
+              children: [
+                KpiCard(
+                  title: tr.networkScope,
+                  value: tr.nLocations(vm.stores.length),
+                  icon: Icons.apartment_outlined,
+                  badge: tr.opRatio((vm.operatingRatio * 100).round()),
+                  caption: tr.activeInactive(vm.activeCount, vm.inactiveCount),
+                ),
+                KpiCard(
+                  title: tr.fleetVelocity,
+                  value: cur.amount(vm.todayTotal),
+                  unit: cur.code,
+                  icon: Icons.payments_outlined,
+                  badge: vm.todayChange == null ? null : formatPercent(vm.todayChange!),
+                  badgeTone: (vm.todayChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
+                  caption: tr.allBranchesToday,
+                ),
+                KpiCard(
+                  title: tr.totalMonthlyRevenue,
+                  value: cur.amount(vm.monthTotal),
+                  unit: cur.code,
+                  icon: Icons.insights_outlined,
+                  badge: vm.monthChange == null ? null : formatPercent(vm.monthChange!),
+                  badgeTone: (vm.monthChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
+                  caption: vm.monthChange == null ? null : tr.vsLastMonth,
+                ),
+                KpiCard(
+                  title: tr.allocatedWorkforce,
+                  value: '${vm.workforce}',
+                  icon: Icons.badge_outlined,
+                  badge: tr.acrossBranches(vm.staffedBranches),
+                  badgeTone: BadgeTone.info,
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             _FilterBar(vm: vm),
@@ -126,6 +122,7 @@ class StoresView extends StatelessWidget {
               LayoutBuilder(
                 builder: (context, c) => CardGrid(
                   key: const Key('stores-grid'),
+                  equalHeight: true,
                   columns: c.maxWidth >= 1000 ? 3 : (c.maxWidth >= 620 ? 2 : 1),
                   spacing: 16,
                   children: [for (final s in list) _StoreCard(store: s, stats: vm.statsOf(s), currency: cur)],
@@ -165,21 +162,7 @@ class StoresView extends StatelessWidget {
                 ),
               ),
             const SizedBox(height: 16),
-            LayoutBuilder(
-              builder: (context, c) {
-                final share = _ShareCard(vm: vm, currency: cur);
-                final recent = _RecentCard(stores: vm.recentlyUpdated);
-                if (c.maxWidth < 1000) return Column(children: [share, const SizedBox(height: 16), recent]);
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 3, child: share),
-                    const SizedBox(width: 16),
-                    Expanded(flex: 2, child: recent),
-                  ],
-                );
-              },
-            ),
+            _ShareCard(vm: vm, currency: cur),
           ],
         );
       },
@@ -271,7 +254,7 @@ class _ViewToggle extends StatelessWidget {
       visualDensity: VisualDensity.compact,
       isSelected: grid == value,
       style: IconButton.styleFrom(
-        backgroundColor: grid == value ? AppColors.navy : AppColors.surfaceSoft,
+        backgroundColor: grid == value ? AppColors.teal : AppColors.surfaceSoft,
         foregroundColor: grid == value ? Colors.white : AppColors.muted,
       ),
       onPressed: () => onChanged(value),
@@ -305,7 +288,7 @@ class _StoreActions extends StatelessWidget {
 
   Future<void> _delete(BuildContext context) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.deleteStoreTitle),
@@ -335,30 +318,40 @@ class _StoreActions extends StatelessWidget {
       mainAxisSize: showAnalytics ? MainAxisSize.max : MainAxisSize.min,
       children: [
         if (showAnalytics) ...[
-          TextButton(
-            key: Key('analytics-${store.id}'),
-            style: TextButton.styleFrom(
-              foregroundColor: store.isActive ? AppColors.orange : AppColors.muted,
-              padding: EdgeInsets.zero,
+          // Flexible: on narrow cards the label shortens (…) instead of pushing the icons out.
+          Flexible(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                key: Key('analytics-${store.id}'),
+                style: TextButton.styleFrom(
+                  foregroundColor: store.isActive ? AppColors.accentText : AppColors.muted,
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () => StoreDetailSheet.show(context, store.id),
+                child: Text(
+                  tr.viewAnalytics,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
             ),
-            onPressed: () => StoreDetailSheet.show(context, store.id),
-            child: Text(tr.viewAnalytics, style: const TextStyle(fontWeight: FontWeight.w600)),
           ),
-          const Spacer(),
         ],
         IconButton(
           key: Key('edit-${store.id}'),
           tooltip: tr.edit,
           visualDensity: VisualDensity.compact,
           onPressed: () => StoreFormDialog.show(context, store: store),
-          icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
+          icon: Icon(Icons.edit_outlined, size: 18, color: AppColors.muted),
         ),
         IconButton(
           key: Key('delete-${store.id}'),
           tooltip: tr.delete,
           visualDensity: VisualDensity.compact,
           onPressed: () => _delete(context),
-          icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
+          icon: Icon(Icons.delete_outline, size: 18, color: AppColors.muted),
         ),
       ],
     );
@@ -380,7 +373,7 @@ class _StoreCard extends StatelessWidget {
     Widget figure(String label, String value, String sub, Color subColor) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+        Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
         const SizedBox(height: 2),
         FittedBox(
           fit: BoxFit.scaleDown,
@@ -402,7 +395,7 @@ class _StoreCard extends StatelessWidget {
         children: [
           Icon(icon, size: 15, color: AppColors.muted),
           const SizedBox(width: 6),
-          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -421,11 +414,10 @@ class _StoreCard extends StatelessWidget {
       key: Key('store-card-${s.id}'),
       clipBehavior: Clip.antiAlias,
       child: Container(
-        decoration: first
-            ? const BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.orange, width: 3)),
-              )
-            : null,
+        // Every card has the 3px top line (only the leader's is colored), so all contents line up.
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: first ? AppColors.orange : Colors.transparent, width: 3)),
+        ),
         padding: const EdgeInsets.fromLTRB(16, 14, 8, 6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,7 +435,7 @@ class _StoreCard extends StatelessWidget {
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, height: 1.25),
                     ),
                   ),
-                  if (first) const Icon(Icons.workspace_premium_outlined, size: 18, color: AppColors.orange),
+                  if (first) Icon(Icons.workspace_premium_outlined, size: 18, color: AppColors.orange),
                   const SizedBox(width: 6),
                   _StatusBadge(store: s),
                 ],
@@ -452,14 +444,14 @@ class _StoreCard extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                const Icon(Icons.location_on_outlined, size: 13, color: AppColors.muted),
+                Icon(Icons.location_on_outlined, size: 13, color: AppColors.muted),
                 const SizedBox(width: 3),
                 Expanded(
                   child: Text(
                     s.address ?? '—',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted),
                   ),
                 ),
               ],
@@ -475,8 +467,9 @@ class _StoreCard extends StatelessWidget {
                     child: figure(
                       tr.kpiTodaySales,
                       currency.format(stats.today),
-                      s.isActive ? tr.active : tr.offline,
-                      s.isActive ? AppColors.green : AppColors.muted,
+                      // The status badge already says "Active"; only an offline store needs a note.
+                      s.isActive ? '' : tr.offline,
+                      AppColors.muted,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -489,7 +482,7 @@ class _StoreCard extends StatelessWidget {
                           : stats.monthChange == null
                           ? tr.shareValue((stats.share * 100).toStringAsFixed(0))
                           : '${formatPercent(stats.monthChange!)} · ${tr.vsLastMonth}',
-                      first ? AppColors.orange : AppColors.green,
+                      AppColors.muted,
                     ),
                   ),
                 ],
@@ -505,6 +498,8 @@ class _StoreCard extends StatelessWidget {
                 ],
               ),
             ),
+            // Cards in a row are equally tall; actions sit at the bottom of each.
+            const Spacer(),
             const Divider(height: 20),
             _StoreActions(store: s, showAnalytics: true),
           ],
@@ -527,14 +522,6 @@ class _ShareCard extends StatelessWidget {
     return SectionCard(
       title: tr.salesShare,
       subtitle: tr.storeComparisonTitle,
-      trailing: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(6)),
-        child: Text(
-          '${tr.endpoint}:\n${ApiConstants.reportStoreComparison}',
-          style: const TextStyle(fontSize: 10.5, fontFamily: 'monospace', color: AppColors.navy),
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -570,59 +557,8 @@ class _ShareCard extends StatelessWidget {
                       color: i == 0
                           ? AppColors.orange
                           : i == 1
-                          ? AppColors.navy
+                          ? AppColors.strong
                           : AppColors.barGray,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          Text(
-            tr.registersSynced(vm.activeCount),
-            style: const TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RecentCard extends StatelessWidget {
-  const _RecentCard({required this.stores});
-
-  final List<StoreModel> stores;
-
-  @override
-  Widget build(BuildContext context) {
-    final tr = context.l10n;
-    return SectionCard(
-      title: tr.recentlyUpdated,
-      trailing: const Icon(Icons.history, color: AppColors.navy),
-      child: Column(
-        children: [
-          if (stores.isEmpty) Text(tr.noOperations),
-          for (final s in stores)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                children: [
-                  IconBox(
-                    Icons.storefront_outlined,
-                    size: 28,
-                    color: s.isActive ? AppColors.green : AppColors.muted,
-                    background: s.isActive ? AppColors.greenSoft : AppColors.surfaceSoft,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(s.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                        Text(
-                          tr.updatedOn(s.updatedAt == null ? '—' : formatTimeAgo(s.updatedAt!)),
-                          style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
-                        ),
-                      ],
                     ),
                   ),
                 ],

@@ -409,7 +409,7 @@ abstract class AppLocalizations {
   /// No description provided for @liveAudit.
   ///
   /// In en, this message translates to:
-  /// **'LIVE AUDIT'**
+  /// **'Live audit'**
   String get liveAudit;
 
   /// No description provided for @overviewSubtitle.
@@ -655,7 +655,7 @@ abstract class AppLocalizations {
   /// No description provided for @liveFeed.
   ///
   /// In en, this message translates to:
-  /// **'LIVE FEED'**
+  /// **'Live feed'**
   String get liveFeed;
 
   /// No description provided for @activitySubtitle.
@@ -787,7 +787,7 @@ abstract class AppLocalizations {
   /// No description provided for @salesEyebrow.
   ///
   /// In en, this message translates to:
-  /// **'FINANCIAL OPERATIONS · TAJIKISTAN ZONE'**
+  /// **'Financial operations · tajikistan zone'**
   String get salesEyebrow;
 
   /// No description provided for @salesTitle.
@@ -805,13 +805,13 @@ abstract class AppLocalizations {
   /// No description provided for @totalToday.
   ///
   /// In en, this message translates to:
-  /// **'TOTAL TODAY'**
+  /// **'Total today'**
   String get totalToday;
 
   /// No description provided for @totalThisMonth.
   ///
   /// In en, this message translates to:
-  /// **'TOTAL THIS MONTH'**
+  /// **'Total this month'**
   String get totalThisMonth;
 
   /// No description provided for @successPrefix.
@@ -865,7 +865,7 @@ abstract class AppLocalizations {
   /// No description provided for @activeFilterVolume.
   ///
   /// In en, this message translates to:
-  /// **'ACTIVE FILTER VOLUME'**
+  /// **'Active filter volume'**
   String get activeFilterVolume;
 
   /// No description provided for @filteredTotal.
@@ -889,31 +889,31 @@ abstract class AppLocalizations {
   /// No description provided for @colDateTime.
   ///
   /// In en, this message translates to:
-  /// **'DATE & TIME'**
+  /// **'Date & time'**
   String get colDateTime;
 
   /// No description provided for @colStoreName.
   ///
   /// In en, this message translates to:
-  /// **'STORE NAME'**
+  /// **'Store name'**
   String get colStoreName;
 
   /// No description provided for @colSalesAmount.
   ///
   /// In en, this message translates to:
-  /// **'SALES AMOUNT'**
+  /// **'Sales amount'**
   String get colSalesAmount;
 
   /// No description provided for @colRegisteredBy.
   ///
   /// In en, this message translates to:
-  /// **'REGISTERED BY'**
+  /// **'Registered by'**
   String get colRegisteredBy;
 
   /// No description provided for @colNotesMethod.
   ///
   /// In en, this message translates to:
-  /// **'NOTES / METHOD'**
+  /// **'Notes / method'**
   String get colNotesMethod;
 
   /// No description provided for @noEntries.
@@ -1081,13 +1081,13 @@ abstract class AppLocalizations {
   /// No description provided for @storesEyebrow1.
   ///
   /// In en, this message translates to:
-  /// **'ENTERPRISE FLEET'**
+  /// **'Enterprise fleet'**
   String get storesEyebrow1;
 
   /// No description provided for @storesEyebrow2.
   ///
   /// In en, this message translates to:
-  /// **'STORE DIRECTORY'**
+  /// **'Store directory'**
   String get storesEyebrow2;
 
   /// No description provided for @storesTitle.
@@ -1123,7 +1123,7 @@ abstract class AppLocalizations {
   /// No description provided for @nLocations.
   ///
   /// In en, this message translates to:
-  /// **'{count} Locations'**
+  /// **'{count, plural, =1{1 store} other{{count} stores}}'**
   String nLocations(int count);
 
   /// No description provided for @opRatio.
@@ -1165,7 +1165,7 @@ abstract class AppLocalizations {
   /// No description provided for @allocatedWorkforce.
   ///
   /// In en, this message translates to:
-  /// **'Allocated Workforce'**
+  /// **'Active staff'**
   String get allocatedWorkforce;
 
   /// No description provided for @acrossBranches.
@@ -1309,7 +1309,7 @@ abstract class AppLocalizations {
   /// No description provided for @nEmployees.
   ///
   /// In en, this message translates to:
-  /// **'{count} employees'**
+  /// **'{count, plural, =1{1 employee} other{{count} employees}}'**
   String nEmployees(int count);
 
   /// No description provided for @regionalTitle.
@@ -1549,7 +1549,7 @@ abstract class AppLocalizations {
   /// No description provided for @payrollEyebrow.
   ///
   /// In en, this message translates to:
-  /// **'ENTERPRISE PORTAL'**
+  /// **'Enterprise portal'**
   String get payrollEyebrow;
 
   /// No description provided for @fiscalYear.
@@ -1657,49 +1657,49 @@ abstract class AppLocalizations {
   /// No description provided for @colEmployee.
   ///
   /// In en, this message translates to:
-  /// **'EMPLOYEE & POSITION'**
+  /// **'Employee & position'**
   String get colEmployee;
 
   /// No description provided for @colAssignedStore.
   ///
   /// In en, this message translates to:
-  /// **'ASSIGNED STORE'**
+  /// **'Assigned store'**
   String get colAssignedStore;
 
   /// No description provided for @colTenure.
   ///
   /// In en, this message translates to:
-  /// **'TENURE'**
+  /// **'Tenure'**
   String get colTenure;
 
   /// No description provided for @colMonthlySalary.
   ///
   /// In en, this message translates to:
-  /// **'MONTHLY SALARY'**
+  /// **'Monthly salary'**
   String get colMonthlySalary;
 
   /// No description provided for @colDisbursed.
   ///
   /// In en, this message translates to:
-  /// **'DISBURSED'**
+  /// **'Disbursed'**
   String get colDisbursed;
 
   /// No description provided for @colRemaining.
   ///
   /// In en, this message translates to:
-  /// **'REMAINING'**
+  /// **'Remaining'**
   String get colRemaining;
 
   /// No description provided for @colStatus.
   ///
   /// In en, this message translates to:
-  /// **'STATUS'**
+  /// **'Status'**
   String get colStatus;
 
   /// No description provided for @colActions.
   ///
   /// In en, this message translates to:
-  /// **'ACTIONS'**
+  /// **'Actions'**
   String get colActions;
 
   /// No description provided for @noPayrollFor.
@@ -2101,7 +2101,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantIntro.
   ///
   /// In en, this message translates to:
-  /// **'Sales, stores, staff, salaries or marketing — ask in Tajik, Russian or English.'**
+  /// **'Ask about sales, stores, staff, salaries or marketing in Tajik, Russian or English.'**
   String get assistantIntro;
 
   /// No description provided for @newChat.
@@ -2869,7 +2869,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantNote.
   ///
   /// In en, this message translates to:
-  /// **'Answers use your real numbers. A full AI model can be connected when the backend adds it.'**
+  /// **'Answers come from your real numbers, worked out by the AI on the server.'**
   String get assistantNote;
 
   /// No description provided for @staffInStore.
@@ -3129,6 +3129,396 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Targets saved'**
   String get targetsSaved;
+
+  /// No description provided for @assistantThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking…'**
+  String get assistantThinking;
+
+  /// No description provided for @loginHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Every store, sale and salary in one calm place.'**
+  String get loginHeadline;
+
+  /// No description provided for @loginHeroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the assistant about your numbers. It answers in Tajik, Russian or English.'**
+  String get loginHeroBody;
+
+  /// No description provided for @assistantLiveData.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses your real numbers'**
+  String get assistantLiveData;
+
+  /// No description provided for @askSales.
+  ///
+  /// In en, this message translates to:
+  /// **'How much did I sell today?'**
+  String get askSales;
+
+  /// No description provided for @askStores.
+  ///
+  /// In en, this message translates to:
+  /// **'Which store sells best this month?'**
+  String get askStores;
+
+  /// No description provided for @askSalaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Who is still waiting for salary?'**
+  String get askSalaries;
+
+  /// No description provided for @askMarketing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ideas to bring in more customers'**
+  String get askMarketing;
+
+  /// No description provided for @themeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get themeLabel;
+
+  /// No description provided for @greeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {name}'**
+  String greeting(String name);
+
+  /// No description provided for @greetingNoName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello'**
+  String get greetingNoName;
+
+  /// No description provided for @errSplitMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash and card must add up to the sale amount.'**
+  String get errSplitMismatch;
+
+  /// No description provided for @clearDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear date'**
+  String get clearDate;
+
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// No description provided for @hidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePassword;
+
+  /// No description provided for @voiceSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak'**
+  String get voiceSpeak;
+
+  /// No description provided for @voiceStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop listening'**
+  String get voiceStop;
+
+  /// No description provided for @voiceListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening…'**
+  String get voiceListening;
+
+  /// No description provided for @voiceOpened.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened: {section}'**
+  String voiceOpened(String section);
+
+  /// No description provided for @voiceRepliesOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Read answers aloud: on'**
+  String get voiceRepliesOn;
+
+  /// No description provided for @voiceRepliesOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Read answers aloud: off'**
+  String get voiceRepliesOff;
+
+  /// No description provided for @voiceStopSpeaking.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop reading'**
+  String get voiceStopSpeaking;
+
+  /// No description provided for @voiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the mic and say: “Open sales”, “New chat” or any question.'**
+  String get voiceHint;
+
+  /// No description provided for @voiceDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone access is blocked. Allow it in the browser address bar.'**
+  String get voiceDenied;
+
+  /// No description provided for @voiceNoSpeech.
+  ///
+  /// In en, this message translates to:
+  /// **'I didn\'t hear anything. Try again.'**
+  String get voiceNoSpeech;
+
+  /// No description provided for @voiceNoMic.
+  ///
+  /// In en, this message translates to:
+  /// **'No microphone found.'**
+  String get voiceNoMic;
+
+  /// No description provided for @voiceUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This browser can\'t listen. Use Chrome or Edge.'**
+  String get voiceUnsupported;
+
+  /// No description provided for @voiceNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice recognition needs the internet.'**
+  String get voiceNetwork;
+
+  /// No description provided for @voiceError.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice input failed. Try again.'**
+  String get voiceError;
+
+  /// No description provided for @chatHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get chatHistory;
+
+  /// No description provided for @chatHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved chats yet. Ask a question — the chat is saved here.'**
+  String get chatHistoryEmpty;
+
+  /// No description provided for @deleteChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete chat'**
+  String get deleteChat;
+
+  /// No description provided for @deleteChatConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this chat? It cannot be restored.'**
+  String get deleteChatConfirm;
+
+  /// No description provided for @chatMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 message} other{{count} messages}}'**
+  String chatMessages(int count);
+
+  /// No description provided for @hideHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide history'**
+  String get hideHistory;
+
+  /// No description provided for @showHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Show history'**
+  String get showHistory;
+
+  /// No description provided for @collapseMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse menu'**
+  String get collapseMenu;
+
+  /// No description provided for @expandMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand menu'**
+  String get expandMenu;
+
+  /// No description provided for @actionConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get actionConfirm;
+
+  /// No description provided for @actionDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get actionDone;
+
+  /// No description provided for @actionCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get actionCancelled;
+
+  /// No description provided for @actionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired — ask again'**
+  String get actionExpired;
+
+  /// No description provided for @actionWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs your confirmation'**
+  String get actionWaiting;
+
+  /// No description provided for @actionOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {section}'**
+  String actionOpen(String section);
+
+  /// No description provided for @actionDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get actionDetails;
+
+  /// No description provided for @assistantSlow.
+  ///
+  /// In en, this message translates to:
+  /// **'Working on it… this can take up to 30 seconds.'**
+  String get assistantSlow;
+
+  /// No description provided for @errActionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This action no longer exists.'**
+  String get errActionNotFound;
+
+  /// No description provided for @errActionHandled.
+  ///
+  /// In en, this message translates to:
+  /// **'This action was already handled.'**
+  String get errActionHandled;
+
+  /// No description provided for @assistantBusyWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many questions. Ask again in {seconds} s.'**
+  String assistantBusyWait(int seconds);
+
+  /// No description provided for @assistantUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The assistant is not available right now. Try again later.'**
+  String get assistantUnavailable;
+
+  /// No description provided for @actionAskAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the assistant again'**
+  String get actionAskAgain;
+
+  /// No description provided for @actionCancelledAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled — ask the assistant again'**
+  String get actionCancelledAsk;
+
+  /// No description provided for @actionEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get actionEdit;
+
+  /// No description provided for @actionRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm again'**
+  String get actionRetry;
+
+  /// No description provided for @actionEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct before confirming'**
+  String get actionEditTitle;
+
+  /// No description provided for @actionSaveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and confirm'**
+  String get actionSaveConfirm;
+
+  /// No description provided for @actionSureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get actionSureTitle;
+
+  /// No description provided for @actionSureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will be deleted:\n{summary}'**
+  String actionSureBody(String summary);
+
+  /// No description provided for @colWorkedDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days this month'**
+  String get colWorkedDays;
+
+  /// No description provided for @vsLastWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'vs last week'**
+  String get vsLastWeek;
+
+  /// No description provided for @overviewFinding.
+  ///
+  /// In en, this message translates to:
+  /// **'Today {today} from {count} sales · {unpaid} of salaries still to pay this month'**
+  String overviewFinding(String today, int count, String unpaid);
+
+  /// No description provided for @overviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overviewTitle;
+
+  /// No description provided for @storesActiveShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Stores open'**
+  String get storesActiveShort;
+
+  /// No description provided for @staffActiveShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Staff at work'**
+  String get staffActiveShort;
+
+  /// No description provided for @navAssistantShort.
+  ///
+  /// In en, this message translates to:
+  /// **'AI'**
+  String get navAssistantShort;
 }
 
 class _AppLocalizationsDelegate

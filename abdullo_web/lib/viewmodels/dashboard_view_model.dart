@@ -14,7 +14,12 @@ import 'base_view_model.dart';
 enum ChartRange { weekly, monthly }
 
 class DashboardViewModel extends BaseViewModel {
-  DashboardViewModel(this._reports, this._sales, this._payroll, this._activityLog, this._targets);
+  DashboardViewModel(this._reports, this._sales, this._payroll, this._activityLog, this._targets, {DateTime? since})
+    : _since = since == null ? null : DateTime(since.year, since.month, since.day);
+
+  /// Registration day of the account: a new business sees its chart start on that day,
+  /// not 24 empty days earlier.
+  final DateTime? _since;
 
   static const chartDays = 24;
 
@@ -134,21 +139,31 @@ class DashboardViewModel extends BaseViewModel {
     ]..sort((a, b) => b.time.compareTo(a.time));
   }
 
-  /// Last [chartDays] days; falls back to this month's report if the backend limits the range.
+  /// Last [chartDays] days. Empty days before the registration day are left out (a new
+  /// business does not start with a month of zeros), but a day before it that has sales stays:
+  /// sales entered for earlier dates are counted in the month's total, so the chart shows them
+  /// too. Falls back to this month's report if the backend limits the range.
   Future<List<ChartPointModel>> _loadChart(DateTime today, SalesReportModel month) async {
-    final start = today.subtract(const Duration(days: chartDays - 1));
+    final windowStart = today.subtract(const Duration(days: chartDays - 1));
     SalesReportModel report;
     try {
-      report = await _reports.weeklySales(startDate: start, endDate: today);
+      report = await _reports.weeklySales(startDate: windowStart, endDate: today);
     } on ApiException {
       report = month;
     }
     final byDate = {for (final d in report.byDay) dateOnly(d.date): d};
-    final from = report == month ? DateTime(today.year, today.month) : start;
-    return [
+    final from = report == month ? DateTime(today.year, today.month) : windowStart;
+    final days = [
       for (var d = from; !d.isAfter(today); d = DateTime(d.year, d.month, d.day + 1))
         ChartPointModel(date: d, revenue: byDate[d]?.totalAmount ?? 0, count: byDate[d]?.salesCount ?? 0),
     ];
+    final since = _since;
+    if (since == null || !since.isAfter(from) || since.isAfter(today)) return days;
+    // First day to show: the first day with a sale, or the registration day, whichever is earlier.
+    final firstSale = days.indexWhere((p) => p.revenue > 0 || p.count > 0);
+    final signUp = days.indexWhere((p) => !p.date.isBefore(since));
+    final start = firstSale < 0 ? signUp : (signUp < 0 ? firstSale : (firstSale < signUp ? firstSale : signUp));
+    return start <= 0 ? days : days.sublist(start);
   }
 
   /// Business-wide targets → PUT /api/targets (only the ones given), then reload.

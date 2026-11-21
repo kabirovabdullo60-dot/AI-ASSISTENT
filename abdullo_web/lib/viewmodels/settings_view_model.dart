@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 
 import '../core/l10n/app_language.dart';
 import '../core/network/api_client.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_palette.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
 import '../services/exchange_rate_service.dart';
@@ -20,9 +22,25 @@ class SettingsViewModel extends ChangeNotifier {
   late AppLanguage _language;
 
   Currency get currency => _currency;
+
+  /// The look (Ledger light / Graphite dark). Saved in the browser.
+  AppPalette get palette => AppColors.palette;
+
+  void setPalette(AppPalette p) {
+    if (p == AppColors.palette) return;
+    AppColors.use(p);
+    _prefs.savePalette(p.name);
+    notifyListeners();
+  }
+
   AppLanguage get language => _language;
 
   Future<void> load() async {
+    final savedPalette = await _prefs.loadPalette();
+    if (savedPalette != null && AppPalette.fromName(savedPalette) != AppColors.palette) {
+      AppColors.use(AppPalette.fromName(savedPalette));
+      notifyListeners();
+    }
     final saved = await _prefs.loadLanguage();
     if (saved != null && saved != _language.name) {
       _apply(AppLanguage.fromCode(saved));

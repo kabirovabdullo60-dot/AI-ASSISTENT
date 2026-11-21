@@ -2,6 +2,7 @@ import '../core/constants/api_constants.dart';
 import '../core/network/api_client.dart';
 import '../core/utils/format.dart';
 import '../core/utils/json.dart';
+import '../models/assistant_action_model.dart';
 import '../models/chat_message_model.dart';
 import '../models/dashboard_model.dart';
 import '../models/sales_report_model.dart';
@@ -21,7 +22,13 @@ class AssistantService {
   static const maxChars = 2000;
 
   /// Throws [ApiException] — e.g. `429 RATE_LIMITED` (10 questions a minute, 200 a day).
-  Future<ChatMessageModel> sendMessage(List<ChatMessageModel> history, {String language = 'en'}) async {
+  /// [conversationId] continues a saved chat; null starts a new one. The reply carries the
+  /// chat's id (null only for the offline answer, which is not saved).
+  Future<({ChatMessageModel reply, String? conversationId})> sendMessage(
+    List<ChatMessageModel> history, {
+    String language = 'en',
+    String? conversationId,
+  }) async {
     final messages = [
       for (final m in history.length > maxMessages ? history.sublist(history.length - maxMessages) : history)
         if (m.text.trim().isNotEmpty)
@@ -31,18 +38,42 @@ class AssistantService {
       final json = asJsonMap(
         await _api.post(
           ApiConstants.assistantChat,
-          {'language': language, 'messages': messages},
+          {'language': language, 'messages': messages, 'conversationId': ?conversationId},
           true,
           ApiConstants.assistantTimeout,
         ),
       );
-      return ChatMessageModel(role: ChatRole.assistant, text: asString(json['text']), time: asDate(json['time']));
+      return (
+        reply: ChatMessageModel(
+          role: ChatRole.assistant,
+          text: asString(json['text']),
+          time: asDate(json['time']),
+          actions: [
+            for (final a in (json['actions'] as List? ?? const []))
+              if (a is Map<String, dynamic>) AssistantActionModel.fromJson(a),
+          ],
+        ),
+        conversationId: json['conversationId'] as String?,
+      );
     } on ApiException catch (e) {
       // AI down or too slow → answer from the reports instead.
       if (e.statusCode != 503 && e.code != 'ASSISTANT_UNAVAILABLE' && e.code != 'NETWORK_ERROR') rethrow;
-      return _localReply(history, language);
+      return (reply: await _localReply(history, language), conversationId: conversationId);
     }
   }
+
+  /// Runs a proposed change. [params] = the user's corrections (optional).
+  /// Throws [ApiException]: ACTION_NOT_FOUND, ACTION_EXPIRED, ACTION_ALREADY_HANDLED.
+  Future<AssistantActionModel> confirmAction(String id, {Map<String, dynamic>? params}) async =>
+      AssistantActionModel.fromJson(
+        asJsonMap(await _api.post('${ApiConstants.assistantActions}/$id/confirm', {'params': ?params})),
+      );
+
+  Future<AssistantActionModel> cancelAction(String id) async =>
+      AssistantActionModel.fromJson(asJsonMap(await _api.post('${ApiConstants.assistantActions}/$id/cancel')));
+
+  Future<AssistantActionModel> getAction(String id) async =>
+      AssistantActionModel.fromJson(asJsonMap(await _api.get('${ApiConstants.assistantActions}/$id')));
 
   Future<ChatMessageModel> _localReply(List<ChatMessageModel> history, String language) async {
     final last = history.lastWhere((m) => m.isUser, orElse: () => history.last);

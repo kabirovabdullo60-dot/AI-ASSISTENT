@@ -10,6 +10,7 @@ import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/employees_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
+import '../core/motion/app_dialog.dart';
 
 /// Add / edit an employee → POST /api/employees or PUT /api/employees/{id}.
 class EmployeeFormDialog extends StatefulWidget {
@@ -17,7 +18,7 @@ class EmployeeFormDialog extends StatefulWidget {
 
   final EmployeeModel? employee;
 
-  static Future<void> show(BuildContext context, {EmployeeModel? employee}) => showDialog<void>(
+  static Future<void> show(BuildContext context, {EmployeeModel? employee}) => showAppDialog<void>(
     context: context,
     builder: (_) => EmployeeFormDialog(employee: employee),
   );
@@ -110,7 +111,11 @@ class _EmployeeFormDialogState extends State<EmployeeFormDialog> {
         decoration: InputDecoration(
           labelText: label,
           suffixIcon: clearable && value != null
-              ? IconButton(icon: const Icon(Icons.clear, size: 18), onPressed: () => setState(() => onChanged(null)))
+              ? IconButton(
+                  tooltip: tr.clearDate,
+                  icon: const Icon(Icons.clear, size: 18),
+                  onPressed: () => setState(() => onChanged(null)),
+                )
               : const Icon(Icons.calendar_today_outlined, size: 18),
         ),
         child: Text(value == null ? '—' : formatNumericDate(value)),

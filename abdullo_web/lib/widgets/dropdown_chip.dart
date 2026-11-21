@@ -38,17 +38,17 @@ class DropdownChip<T> extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (icon != null) ...[Icon(icon, size: 16, color: AppColors.navy), const SizedBox(width: 6)],
+            if (icon != null) ...[Icon(icon, size: 16, color: AppColors.ink), const SizedBox(width: 6)],
             Flexible(
               child: Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.ink),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.ink),
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.muted),
+            Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.muted),
           ],
         ),
       ),

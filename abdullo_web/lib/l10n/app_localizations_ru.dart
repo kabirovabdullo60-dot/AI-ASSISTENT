@@ -173,7 +173,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get businessOverview => 'Обзор бизнеса';
 
   @override
-  String get liveAudit => 'LIVE-АУДИТ';
+  String get liveAudit => 'Live-аудит';
 
   @override
   String get overviewSubtitle =>
@@ -327,7 +327,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recentActivity => 'Последние события';
 
   @override
-  String get liveFeed => 'ЛЕНТА';
+  String get liveFeed => 'Лента';
 
   @override
   String get activitySubtitle =>
@@ -397,7 +397,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get demoBackend => 'Демо-данные — сервер ещё не подключён';
 
   @override
-  String get salesEyebrow => 'ФИНАНСОВЫЕ ОПЕРАЦИИ · ТАДЖИКИСТАН';
+  String get salesEyebrow => 'Финансовые операции · таджикистан';
 
   @override
   String get salesTitle => 'Продажи и ежедневные записи';
@@ -407,10 +407,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Записывайте дневной оборот магазинов в сомони (TJS) и следите за операциями в реальном времени.';
 
   @override
-  String get totalToday => 'ИТОГО СЕГОДНЯ';
+  String get totalToday => 'Итого сегодня';
 
   @override
-  String get totalThisMonth => 'ИТОГО ЗА МЕСЯЦ';
+  String get totalThisMonth => 'Итого за месяц';
 
   @override
   String get successPrefix => 'Успешно: ';
@@ -441,7 +441,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get activeFilterVolume => 'ОБЪЁМ ПО ФИЛЬТРУ';
+  String get activeFilterVolume => 'Объём по фильтру';
 
   @override
   String get filteredTotal => 'Итого по фильтру: ';
@@ -457,19 +457,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get colDateTime => 'ДАТА И ВРЕМЯ';
+  String get colDateTime => 'Дата и время';
 
   @override
-  String get colStoreName => 'МАГАЗИН';
+  String get colStoreName => 'Магазин';
 
   @override
-  String get colSalesAmount => 'СУММА ПРОДАЖ';
+  String get colSalesAmount => 'Сумма продаж';
 
   @override
-  String get colRegisteredBy => 'ЗАПИСАЛ';
+  String get colRegisteredBy => 'Записал';
 
   @override
-  String get colNotesMethod => 'ЗАМЕТКИ / СПОСОБ';
+  String get colNotesMethod => 'Заметки / способ';
 
   @override
   String get noEntries => 'Нет записей по фильтру';
@@ -559,10 +559,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get storesEyebrow1 => 'СЕТЬ МАГАЗИНОВ';
+  String get storesEyebrow1 => 'Сеть магазинов';
 
   @override
-  String get storesEyebrow2 => 'СПРАВОЧНИК';
+  String get storesEyebrow2 => 'Справочник';
 
   @override
   String get storesTitle => 'Управление магазинами';
@@ -582,7 +582,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String nLocations(int count) {
-    return '$count точек';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count магазина',
+      many: '$count магазинов',
+      few: '$count магазина',
+      one: '$count магазин',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -608,7 +616,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get vsLastMonth => 'к прошлому месяцу';
 
   @override
-  String get allocatedWorkforce => 'Распределённый персонал';
+  String get allocatedWorkforce => 'Активные сотрудники';
 
   @override
   String acrossBranches(int count) {
@@ -841,7 +849,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noSalesYet => 'Продаж пока нет';
 
   @override
-  String get payrollEyebrow => 'КОРПОРАТИВНЫЙ ПОРТАЛ';
+  String get payrollEyebrow => 'Корпоративный портал';
 
   @override
   String fiscalYear(String year) {
@@ -906,28 +914,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get activeContracts => '100% действующих договоров';
 
   @override
-  String get colEmployee => 'СОТРУДНИК И ДОЛЖНОСТЬ';
+  String get colEmployee => 'Сотрудник и должность';
 
   @override
-  String get colAssignedStore => 'МАГАЗИН';
+  String get colAssignedStore => 'Магазин';
 
   @override
-  String get colTenure => 'СТАЖ';
+  String get colTenure => 'Стаж';
 
   @override
-  String get colMonthlySalary => 'ОКЛАД';
+  String get colMonthlySalary => 'Оклад';
 
   @override
-  String get colDisbursed => 'ВЫПЛАЧЕНО';
+  String get colDisbursed => 'Выплачено';
 
   @override
-  String get colRemaining => 'ОСТАТОК';
+  String get colRemaining => 'Остаток';
 
   @override
-  String get colStatus => 'СТАТУС';
+  String get colStatus => 'Статус';
 
   @override
-  String get colActions => 'ДЕЙСТВИЯ';
+  String get colActions => 'Действия';
 
   @override
   String noPayrollFor(String month) {
@@ -1158,7 +1166,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get assistantIntro =>
-      'Продажи, магазины, персонал, зарплаты или маркетинг — спрашивайте на таджикском, русском или английском.';
+      'Спрашивайте о продажах, магазинах, сотрудниках, зарплатах или маркетинге по-таджикски, по-русски или по-английски.';
 
   @override
   String get newChat => 'Новый чат';
@@ -1591,7 +1599,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get assistantNote =>
-      'Ответы строятся на ваших реальных данных. Полноценный ИИ подключим, когда он появится на сервере.';
+      'Ответы строятся на ваших реальных цифрах, их считает ИИ на сервере.';
 
   @override
   String get staffInStore => 'Сотрудники';
@@ -1729,4 +1737,229 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get targetsSaved => 'Цели сохранены';
+
+  @override
+  String get assistantThinking => 'Думаю…';
+
+  @override
+  String get loginHeadline => 'Все магазины, продажи и зарплаты в одном месте.';
+
+  @override
+  String get loginHeroBody =>
+      'Спросите ассистента о своих цифрах. Он отвечает по-таджикски, по-русски или по-английски.';
+
+  @override
+  String get assistantLiveData => 'На ваших реальных данных';
+
+  @override
+  String get askSales => 'Сколько я продал сегодня?';
+
+  @override
+  String get askStores => 'Какой магазин лучше продаёт в этом месяце?';
+
+  @override
+  String get askSalaries => 'Кто ещё ждёт зарплату?';
+
+  @override
+  String get askMarketing => 'Идеи, как привлечь больше клиентов';
+
+  @override
+  String get themeLabel => 'Тема';
+
+  @override
+  String greeting(String name) {
+    return 'Здравствуйте, $name';
+  }
+
+  @override
+  String get greetingNoName => 'Здравствуйте';
+
+  @override
+  String get errSplitMismatch =>
+      'Наличные и карта вместе должны равняться сумме продажи.';
+
+  @override
+  String get clearDate => 'Очистить дату';
+
+  @override
+  String get showPassword => 'Показать пароль';
+
+  @override
+  String get hidePassword => 'Скрыть пароль';
+
+  @override
+  String get voiceSpeak => 'Сказать голосом';
+
+  @override
+  String get voiceStop => 'Остановить';
+
+  @override
+  String get voiceListening => 'Слушаю…';
+
+  @override
+  String voiceOpened(String section) {
+    return 'Открыто: $section';
+  }
+
+  @override
+  String get voiceRepliesOn => 'Озвучивать ответы: вкл';
+
+  @override
+  String get voiceRepliesOff => 'Озвучивать ответы: выкл';
+
+  @override
+  String get voiceStopSpeaking => 'Остановить чтение';
+
+  @override
+  String get voiceHint =>
+      'Нажмите на микрофон и скажите: «Открой продажи», «Новый чат» или любой вопрос.';
+
+  @override
+  String get voiceDenied =>
+      'Доступ к микрофону запрещён. Разрешите его в адресной строке браузера.';
+
+  @override
+  String get voiceNoSpeech => 'Ничего не слышно. Попробуйте ещё раз.';
+
+  @override
+  String get voiceNoMic => 'Микрофон не найден.';
+
+  @override
+  String get voiceUnsupported =>
+      'Этот браузер не распознаёт речь. Откройте Chrome или Edge.';
+
+  @override
+  String get voiceNetwork => 'Для распознавания речи нужен интернет.';
+
+  @override
+  String get voiceError => 'Голосовой ввод не сработал. Попробуйте ещё раз.';
+
+  @override
+  String get chatHistory => 'История';
+
+  @override
+  String get chatHistoryEmpty =>
+      'Сохранённых чатов пока нет. Задайте вопрос — чат сохранится здесь.';
+
+  @override
+  String get deleteChat => 'Удалить чат';
+
+  @override
+  String get deleteChatConfirm =>
+      'Удалить этот чат? Его нельзя будет восстановить.';
+
+  @override
+  String chatMessages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count сообщения',
+      many: '$count сообщений',
+      few: '$count сообщения',
+      one: '1 сообщение',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hideHistory => 'Скрыть историю';
+
+  @override
+  String get showHistory => 'Показать историю';
+
+  @override
+  String get collapseMenu => 'Свернуть меню';
+
+  @override
+  String get expandMenu => 'Развернуть меню';
+
+  @override
+  String get actionConfirm => 'Подтвердить';
+
+  @override
+  String get actionDone => 'Выполнено';
+
+  @override
+  String get actionCancelled => 'Отменено';
+
+  @override
+  String get actionExpired => 'Срок истёк — спросите ещё раз';
+
+  @override
+  String get actionWaiting => 'Нужно ваше подтверждение';
+
+  @override
+  String actionOpen(String section) {
+    return 'Открыть: $section';
+  }
+
+  @override
+  String get actionDetails => 'Подробнее';
+
+  @override
+  String get assistantSlow => 'Работаю… это может занять до 30 секунд.';
+
+  @override
+  String get errActionNotFound => 'Это действие больше не существует.';
+
+  @override
+  String get errActionHandled => 'Это действие уже обработано.';
+
+  @override
+  String assistantBusyWait(int seconds) {
+    return 'Слишком много вопросов. Спросите снова через $seconds с.';
+  }
+
+  @override
+  String get assistantUnavailable =>
+      'Ассистент сейчас недоступен. Попробуйте позже.';
+
+  @override
+  String get actionAskAgain => 'Спросите ассистента ещё раз';
+
+  @override
+  String get actionCancelledAsk => 'Отменено — спросите ассистента ещё раз';
+
+  @override
+  String get actionEdit => 'Изменить';
+
+  @override
+  String get actionRetry => 'Подтвердить снова';
+
+  @override
+  String get actionEditTitle => 'Исправьте перед подтверждением';
+
+  @override
+  String get actionSaveConfirm => 'Сохранить и подтвердить';
+
+  @override
+  String get actionSureTitle => 'Вы уверены?';
+
+  @override
+  String actionSureBody(String summary) {
+    return 'Будет удалено:\n$summary';
+  }
+
+  @override
+  String get colWorkedDays => 'Дней в месяце';
+
+  @override
+  String get vsLastWeek => 'к прошлой неделе';
+
+  @override
+  String overviewFinding(String today, int count, String unpaid) {
+    return 'Сегодня $today, продаж: $count · зарплат к выплате в этом месяце: $unpaid';
+  }
+
+  @override
+  String get overviewTitle => 'Обзор';
+
+  @override
+  String get storesActiveShort => 'Работающие магазины';
+
+  @override
+  String get staffActiveShort => 'Сотрудники в штате';
+
+  @override
+  String get navAssistantShort => 'ИИ';
 }

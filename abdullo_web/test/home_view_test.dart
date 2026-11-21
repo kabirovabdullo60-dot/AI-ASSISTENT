@@ -18,10 +18,11 @@ void main() {
     expect(tester.widget<AppSidebar>(find.byType(AppSidebar)).extended, isFalse);
   });
 
-  testWidgets('desktop (1400px): extended sidebar + API status', (tester) async {
+  testWidgets('desktop (1400px): extended sidebar, search in the top bar, no greeting', (tester) async {
     await pumpApp(tester, desktopWidth);
     expect(tester.widget<AppSidebar>(find.byType(AppSidebar)).extended, isTrue);
-    expect(find.textContaining('API connected'), findsOneWidget);
+    expect(find.byKey(const Key('global-search')), findsOneWidget);
+    expect(find.textContaining('Hello'), findsNothing);
   });
 
   for (final width in [mobileWidth, desktopWidth]) {

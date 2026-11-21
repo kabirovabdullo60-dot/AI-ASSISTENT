@@ -46,7 +46,7 @@ class _SparklinePainter extends CustomPainter {
     canvas.drawPath(
       line,
       Paint()
-        ..color = AppColors.navy
+        ..color = AppColors.strong
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.8,
     );

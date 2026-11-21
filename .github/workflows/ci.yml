@@ -1,0 +1,50 @@
+# Checks every push and pull request: the web (abdullo_web) and the app (subhon_app) must both
+# pass `flutter analyze` and `flutter test`, and the web must build. A red check = do not merge.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, abdullo-web, subhon-app]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Web (abdullo_web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: abdullo_web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.8   # the version the team uses locally (Dart 3.12)
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze --no-fatal-infos
+      - run: flutter test
+      - run: flutter build web
+
+  app:
+    name: App (subhon_app)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: subhon_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.8
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze --no-fatal-infos
+      - run: flutter test

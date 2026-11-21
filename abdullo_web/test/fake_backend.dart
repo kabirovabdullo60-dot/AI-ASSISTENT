@@ -24,6 +24,86 @@ class FakeBackend {
   /// Answer of POST /api/assistant/chat. Null → `503 ASSISTANT_UNAVAILABLE` (AI not configured).
   String? assistantReply;
 
+  /// `AssistantActionOut` rows the next chat answer proposes (then kept in [actions] by id).
+  List<Map<String, dynamic>> nextActions = [];
+
+  /// Saved chats (`ConversationOut` + `deleted`); messages hold the same action maps as [actions],
+  /// so a reopened chat shows each action's current status.
+  final conversations = <String, Map<String, dynamic>>{};
+
+  static String _title(String text) {
+    final t = text.trim().replaceAll(RegExp(r'\s+'), ' ');
+    return t.length <= 80 ? t : '${t.substring(0, 79)}…';
+  }
+
+  Map<String, dynamic> _summary(Map<String, dynamic> c) {
+    final messages = c['messages'] as List;
+    final last = messages.isEmpty ? '' : (messages.last as Map)['text'] as String;
+    return {
+      'id': c['id'],
+      'title': c['title'],
+      'messageCount': messages.length,
+      'lastMessage': last.length > 120 ? last.substring(0, 120) : last,
+      'createdAt': c['createdAt'],
+      'updatedAt': c['updatedAt'],
+    };
+  }
+
+  Map<String, dynamic> _newConversation(List messages, {String? title}) {
+    final now = DateTime.now().toUtc().toIso8601String();
+    final firstUser = messages.cast<Map>().firstWhere((m) => m['role'] == 'user', orElse: () => messages.first as Map);
+    final c = {
+      'id': '00000000-0000-0000-0000-${(_n++).toString().padLeft(12, '0')}',
+      'title': title ?? _title(firstUser['text'] as String),
+      'createdAt': now,
+      'updatedAt': now,
+      'messages': [
+        for (final m in messages)
+          {
+            'role': (m as Map)['role'],
+            'text': m['text'],
+            'time': m['time'] ?? now,
+            'actions': <Map<String, dynamic>>[],
+          },
+      ],
+      'deleted': false,
+    };
+    conversations[c['id'] as String] = c;
+    return c;
+  }
+
+  /// Body `params` of the last confirm (the user's corrections), or null.
+  Map<String, dynamic>? lastConfirmParams;
+
+  /// Seconds sent as `meta.retryAfter` with `429 RATE_LIMITED`.
+  int retryAfter = 42;
+
+  /// Every proposed action by id (POST /api/assistant/actions/{id}/confirm|cancel, GET).
+  final actions = <String, Map<String, dynamic>>{};
+
+  /// Builds an `AssistantActionOut` in PROPOSED state.
+  Map<String, dynamic> proposeAction(
+    String type,
+    Map<String, dynamic> params, {
+    String? summary,
+    bool expired = false,
+  }) {
+    final now = DateTime.now().toUtc();
+    return {
+      'id': _id('act'),
+      'type': type,
+      'status': 'PROPOSED',
+      'summary': summary ?? '$type ${params['name'] ?? ''}'.trim(),
+      'danger': type.startsWith('DELETE_'),
+      'params': params,
+      'result': null,
+      'error': null,
+      'createdAt': now.toIso8601String(),
+      'expiresAt': (expired ? now.subtract(const Duration(minutes: 1)) : now.add(const Duration(minutes: 30)))
+          .toIso8601String(),
+    };
+  }
+
   /// When true, POST /api/assistant/chat answers `429 RATE_LIMITED`.
   bool assistantRateLimited = false;
 
@@ -35,6 +115,9 @@ class FakeBackend {
 
   /// Business-wide sales targets set with PUT /api/targets: `{'WEEK': '5000.00'}`.
   final targets = <String, String>{};
+
+  /// Delay before every answer (to see loading states in tests). Zero = instant.
+  Duration latency = Duration.zero;
 
   /// GET /api/settings/exchange-rates.
   String usdRate = '10.95';
@@ -360,6 +443,7 @@ class FakeBackend {
 
   // ---------- router ----------
   Future<http.Response> _handle(http.Request r) async {
+    if (latency > Duration.zero) await Future<void>.delayed(latency);
     final path = r.url.path;
     final q = r.url.queryParameters;
     final m = r.method;
@@ -896,9 +980,133 @@ class FakeBackend {
       if (messages is! List || messages.isEmpty || !['en', 'ru', 'tg'].contains(b['language'])) {
         return _error(422, 'VALIDATION_ERROR');
       }
-      if (assistantRateLimited) return _error(429, 'RATE_LIMITED');
+      if (assistantRateLimited) {
+        return http.Response(
+          jsonEncode({
+            'error': {
+              'code': 'RATE_LIMITED',
+              'message': 'Too many requests.',
+              'details': [],
+              'meta': {'retryAfter': retryAfter},
+              'requestId': 'req-1',
+            },
+          }),
+          429,
+          headers: {'content-type': 'application/json', 'retry-after': '$retryAfter'},
+        );
+      }
+      final id = b['conversationId'] as String?;
+      final existing = id == null ? null : conversations[id];
+      if (id != null && (existing == null || existing['deleted'] == true)) {
+        return _error(404, 'CONVERSATION_NOT_FOUND');
+      }
       if (assistantReply == null) return _error(503, 'ASSISTANT_UNAVAILABLE');
-      return _json({'role': 'assistant', 'text': assistantReply, 'time': DateTime.now().toUtc().toIso8601String()});
+      final proposed = nextActions;
+      nextActions = [];
+      for (final a in proposed) {
+        actions[a['id'] as String] = a;
+      }
+      final now = DateTime.now().toUtc().toIso8601String();
+      final reply = {'role': 'assistant', 'text': assistantReply, 'time': now, 'actions': proposed};
+      // New chat: all sent messages are saved; continued chat: only the new question.
+      final c = existing ?? _newConversation(messages);
+      final saved = c['messages'] as List;
+      if (existing != null) {
+        saved.add({
+          ...(messages.last as Map).cast<String, dynamic>(),
+          'time': now,
+          'actions': <Map<String, dynamic>>[],
+        });
+      }
+      saved.add(reply);
+      if (saved.length > 200) saved.removeRange(0, saved.length - 200);
+      c['updatedAt'] = now;
+      return _json({...reply, 'conversationId': c['id']});
+    }
+
+    if (path == '/api/assistant/conversations' && m == 'GET') {
+      final page = int.tryParse(q['page'] ?? '1') ?? 1;
+      final limit = int.tryParse(q['limit'] ?? '20') ?? 20;
+      final all = conversations.values.where((c) => c['deleted'] != true).toList()
+        ..sort((a, b) => (b['updatedAt'] as String).compareTo(a['updatedAt'] as String));
+      final items = all.skip((page - 1) * limit).take(limit).map(_summary).toList();
+      return _json({
+        'items': items,
+        'total': all.length,
+        'page': page,
+        'limit': limit,
+        'pages': (all.length / limit).ceil(),
+      });
+    }
+    if (path == '/api/assistant/conversations' && m == 'POST') {
+      final b = body();
+      final messages = b['messages'];
+      if (messages is! List || messages.isEmpty || messages.length > 200) return _error(422, 'VALIDATION_ERROR');
+      final c = _newConversation(messages, title: b['title'] as String?);
+      return _json({..._summary(c), 'messages': c['messages']}, 201);
+    }
+    final convMatch = RegExp(r'^/api/assistant/conversations/([^/]+)$').firstMatch(path);
+    if (convMatch != null) {
+      final c = conversations[convMatch.group(1)];
+      if (c == null || c['deleted'] == true) return _error(404, 'CONVERSATION_NOT_FOUND');
+      if (m == 'GET') return _json({..._summary(c), 'messages': c['messages']});
+      if (m == 'PATCH') {
+        c['title'] = _title(body()['title'] as String);
+        return _json(_summary(c));
+      }
+      if (m == 'DELETE') {
+        c['deleted'] = true;
+        return http.Response('', 204);
+      }
+    }
+
+    final actionMatch = RegExp(r'^/api/assistant/actions/([^/]+)(/confirm|/cancel)?$').firstMatch(path);
+    if (actionMatch != null) {
+      final a = actions[actionMatch.group(1)];
+      if (a == null) return _error(404, 'ACTION_NOT_FOUND');
+      final op = actionMatch.group(2);
+      if (op == null && m == 'GET') return _json(a);
+      if (a['status'] == 'PROPOSED' && DateTime.parse(a['expiresAt'] as String).isBefore(DateTime.now())) {
+        a['status'] = 'EXPIRED';
+        return _error(409, 'ACTION_EXPIRED');
+      }
+      if (op == '/cancel' && m == 'POST') {
+        if (a['status'] == 'CANCELLED') return _json(a);
+        if (a['status'] != 'PROPOSED') return _error(409, 'ACTION_ALREADY_HANDLED');
+        a['status'] = 'CANCELLED';
+        return _json(a);
+      }
+      if (op == '/confirm' && m == 'POST') {
+        if (a['status'] == 'DONE') return _json(a);
+        // A FAILED action may be confirmed again (with corrected params).
+        if (a['status'] != 'PROPOSED' && a['status'] != 'FAILED') return _error(409, 'ACTION_ALREADY_HANDLED');
+        a['error'] = null;
+        final corrections = body()['params'] as Map<String, dynamic>?;
+        lastConfirmParams = corrections;
+        final params = {...a['params'] as Map<String, dynamic>, ...?corrections};
+        if (a['type'] == 'CREATE_STORE') {
+          if (stores.any((s) => s['deletedAt'] == null && s['name'] == params['name'])) {
+            a['status'] = 'FAILED';
+            a['error'] = {'code': 'STORE_NAME_TAKEN', 'message': 'Taken.'};
+            return _json(a);
+          }
+          final now = DateTime.now().toUtc().toIso8601String();
+          final store = {
+            'id': _id('s'),
+            ...params,
+            'status': params['status'] ?? 'ACTIVE',
+            'createdAt': now,
+            'updatedAt': now,
+            'deletedAt': null,
+          };
+          stores.add(store);
+          a['result'] = store;
+        } else if (a['type'] == 'DELETE_STORE') {
+          _store(params['id'] as String)?['deletedAt'] = DateTime.now().toUtc().toIso8601String();
+        }
+        a['status'] = 'DONE';
+        return _json(a);
+      }
     }
 
     return _error(404, 'NOT_FOUND');

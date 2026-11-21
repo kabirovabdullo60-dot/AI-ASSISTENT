@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'error_retry.dart';
+import 'motion/skeleton.dart';
 import '../core/l10n/l10n.dart';
 
 /// Spinner while the first load runs, error + retry if it fails, otherwise the page.
@@ -25,6 +26,6 @@ class AsyncContent extends StatelessWidget {
     if (error != null) {
       return ErrorRetry(message: error == 'NETWORK_ERROR' ? tr.errNetwork : tr.loadError, onRetry: onRetry);
     }
-    return const Center(child: CircularProgressIndicator());
+    return const PageSkeleton();
   }
 }

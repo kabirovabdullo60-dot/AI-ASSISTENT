@@ -9,6 +9,7 @@ import '../models/payroll_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/payroll_view_model.dart';
 import '../widgets/status_badge.dart';
+import '../core/motion/app_dialog.dart';
 
 /// All months and payments of one employee — GET /api/payroll/employee/{id}.
 /// A payment can be cancelled here (DELETE /api/payroll/{id}).
@@ -17,7 +18,7 @@ class PayrollHistoryDialog extends StatefulWidget {
 
   final PayrollModel payroll;
 
-  static Future<void> show(BuildContext context, PayrollModel payroll) => showDialog<void>(
+  static Future<void> show(BuildContext context, PayrollModel payroll) => showAppDialog<void>(
     context: context,
     builder: (_) => PayrollHistoryDialog(payroll: payroll),
   );
@@ -33,7 +34,7 @@ class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
 
   Future<void> _cancel(PaymentModel p) async {
     final tr = context.l10n;
-    final ok = await showDialog<bool>(
+    final ok = await showAppDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(tr.cancelPaymentTitle),
@@ -88,7 +89,7 @@ class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
                       '${formatAmount(h.totalPaid)} TJS',
                       '${formatAmount(h.totalRemaining)} TJS',
                     ),
-                    style: const TextStyle(color: AppColors.muted),
+                    style: TextStyle(color: AppColors.muted),
                   ),
                   const SizedBox(height: 12),
                   Text(tr.payments, style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -96,7 +97,7 @@ class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
                   for (final p in h.payments)
                     ListTile(
                       contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.account_balance_outlined, color: AppColors.green),
+                      leading: Icon(Icons.account_balance_outlined, color: AppColors.green),
                       title: Text(
                         '+${formatAmount(p.amount)} TJS',
                         style: const TextStyle(fontWeight: FontWeight.w700),
@@ -108,7 +109,7 @@ class _PayrollHistoryDialogState extends State<PayrollHistoryDialog> {
                       trailing: IconButton(
                         key: Key('cancel-payment-${p.id}'),
                         tooltip: tr.cancelPayment,
-                        icon: const Icon(Icons.undo, color: AppColors.red),
+                        icon: Icon(Icons.undo, color: AppColors.red),
                         onPressed: () => _cancel(p),
                       ),
                     ),
