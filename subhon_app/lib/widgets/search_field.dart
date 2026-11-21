@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'app_text_field.dart';
 
@@ -39,6 +40,8 @@ class _SearchFieldState extends State<SearchField> {
       hint: widget.hint,
       prefixIcon: Icons.search_rounded,
       textInputAction: TextInputAction.search,
+      // The API accepts at most 100 characters in a search.
+      inputFormatters: [LengthLimitingTextInputFormatter(100)],
       onChanged: widget.onChanged,
       onSubmitted: widget.onChanged,
       suffix: _text.text.isEmpty

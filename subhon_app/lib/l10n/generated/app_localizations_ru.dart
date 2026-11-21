@@ -450,7 +450,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get employeeDeleteTitle => 'Удалить сотрудника?';
 
   @override
-  String get employeeDeleteMessage => 'История зарплат сохранится.';
+  String get employeeDeleteMessage =>
+      'Ему больше ничего не будет причитаться: невыплаченная зарплата перестанет считаться. Выплаты останутся в истории. Если человек уволился, лучше поставьте статус «Не работает» — тогда долг до дня увольнения сохранится.';
 
   @override
   String get payrollPaid => 'Выплачено';
@@ -522,10 +523,10 @@ class AppLocalizationsRu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count дня работы',
-      many: '$count дней работы',
-      few: '$count дня работы',
-      one: '$count день работы',
+      other: 'В этом месяце: $count дня',
+      many: 'В этом месяце: $count дней',
+      few: 'В этом месяце: $count дня',
+      one: 'В этом месяце: $count день',
     );
     return '$_temp0';
   }
@@ -535,10 +536,10 @@ class AppLocalizationsRu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count месяца',
-      many: '$count месяцев',
-      few: '$count месяца',
-      one: '$count месяц',
+      other: 'Стаж: $count месяца',
+      many: 'Стаж: $count месяцев',
+      few: 'Стаж: $count месяца',
+      one: 'Стаж: $count месяц',
     );
     return '$_temp0';
   }

@@ -176,7 +176,7 @@
   "employeeSaved": "Employee saved",
   "employeeDeleted": "Employee deleted. Their salary history stays.",
   "employeeDeleteTitle": "Delete the employee?",
-  "employeeDeleteMessage": "The salary history is kept.",
+  "employeeDeleteMessage": "Nothing more will be owed to them: unpaid salary stops counting. Payments made stay in the history. If the person left the job, set the status to “Inactive” instead — they stay owed up to the last day.",
   "payrollPaid": "Paid",
   "payrollPartial": "Partly paid",
   "payrollUnpaid": "Not paid",
@@ -239,7 +239,7 @@
       }
     }
   },
-  "payrollWorkedDays": "{count, plural, one{{count} day worked} other{{count} days worked}}",
+  "payrollWorkedDays": "{count, plural, one{Worked {count} day this month} other{Worked {count} days this month}}",
   "@payrollWorkedDays": {
     "placeholders": {
       "count": {
@@ -247,7 +247,7 @@
       }
     }
   },
-  "payrollMonthsWorked": "{count, plural, one{{count} month} other{{count} months}}",
+  "payrollMonthsWorked": "{count, plural, one{Tenure: {count} month} other{Tenure: {count} months}}",
   "@payrollMonthsWorked": {
     "placeholders": {
       "count": {

@@ -447,7 +447,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get employeeDeleteTitle => 'Delete the employee?';
 
   @override
-  String get employeeDeleteMessage => 'The salary history is kept.';
+  String get employeeDeleteMessage =>
+      'Nothing more will be owed to them: unpaid salary stops counting. Payments made stay in the history. If the person left the job, set the status to “Inactive” instead — they stay owed up to the last day.';
 
   @override
   String get payrollPaid => 'Paid';
@@ -519,8 +520,8 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count days worked',
-      one: '$count day worked',
+      other: 'Worked $count days this month',
+      one: 'Worked $count day this month',
     );
     return '$_temp0';
   }
@@ -530,8 +531,8 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count months',
-      one: '$count month',
+      other: 'Tenure: $count months',
+      one: 'Tenure: $count month',
     );
     return '$_temp0';
   }

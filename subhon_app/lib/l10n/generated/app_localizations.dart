@@ -931,7 +931,7 @@ abstract class AppLocalizations {
   /// No description provided for @employeeDeleteMessage.
   ///
   /// In en, this message translates to:
-  /// **'The salary history is kept.'**
+  /// **'Nothing more will be owed to them: unpaid salary stops counting. Payments made stay in the history. If the person left the job, set the status to “Inactive” instead — they stay owed up to the last day.'**
   String get employeeDeleteMessage;
 
   /// No description provided for @payrollPaid.
@@ -1045,13 +1045,13 @@ abstract class AppLocalizations {
   /// No description provided for @payrollWorkedDays.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{{count} day worked} other{{count} days worked}}'**
+  /// **'{count, plural, one{Worked {count} day this month} other{Worked {count} days this month}}'**
   String payrollWorkedDays(int count);
 
   /// No description provided for @payrollMonthsWorked.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{{count} month} other{{count} months}}'**
+  /// **'{count, plural, one{Tenure: {count} month} other{Tenure: {count} months}}'**
   String payrollMonthsWorked(int count);
 
   /// No description provided for @paymentTitle.

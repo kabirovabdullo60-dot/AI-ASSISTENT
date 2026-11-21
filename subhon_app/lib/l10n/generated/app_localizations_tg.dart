@@ -450,7 +450,7 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get employeeDeleteMessage =>
-      'Таърихи музди меҳнат нигоҳ дошта мешавад.';
+      'Ба ӯ дигар чизе ҳисоб намешавад: маоши пардохтнашуда дигар ҳисоб намешавад. Пардохтҳо дар таърих мемонанд. Агар шахс аз кор рафта бошад, беҳтар ҳолати «Ғайрифаъол»-ро гузоред — он гоҳ қарз то рӯзи рафтан мемонад.';
 
   @override
   String get payrollPaid => 'Пардохт шуд';
@@ -522,7 +522,7 @@ class AppLocalizationsTg extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count рӯзи корӣ',
+      other: 'Дар ин моҳ: $count рӯз',
     );
     return '$_temp0';
   }
@@ -532,7 +532,7 @@ class AppLocalizationsTg extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count моҳ',
+      other: 'Собиқа: $count моҳ',
     );
     return '$_temp0';
   }
