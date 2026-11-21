@@ -180,18 +180,21 @@ class _PersonalHomeViewState extends State<PersonalHomeView> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Material(
-                                color: p.primary,
-                                shape: const CircleBorder(),
-                                clipBehavior: Clip.antiAlias,
-                                child: InkWell(
-                                  onTap: () =>
-                                      MoneyAccountsView.openForm(context),
-                                  child: SizedBox.square(
-                                    dimension: 46,
-                                    child: Icon(
-                                      Icons.add_rounded,
-                                      color: p.onPrimary,
+                              Tooltip(
+                                message: l10n.phAddAccount,
+                                child: Material(
+                                  color: p.primary,
+                                  shape: const CircleBorder(),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: InkWell(
+                                    onTap: () =>
+                                        MoneyAccountsView.openForm(context),
+                                    child: SizedBox.square(
+                                      dimension: 46,
+                                      child: Icon(
+                                        Icons.add_rounded,
+                                        color: p.onPrimary,
+                                      ),
                                     ),
                                   ),
                                 ),

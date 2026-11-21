@@ -391,18 +391,21 @@ class _StoresStrip extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Material(
-                        color: p.primary,
-                        shape: const CircleBorder(),
-                        clipBehavior: Clip.antiAlias,
-                        child: InkWell(
-                          onTap: () => _open(context, const StoreFormView()),
-                          child: SizedBox.square(
-                            dimension: 46,
-                            child: Icon(
-                              Icons.add_rounded,
-                              color: p.onPrimary,
-                              size: 24,
+                      Tooltip(
+                        message: l10n.homeAddStore,
+                        child: Material(
+                          color: p.primary,
+                          shape: const CircleBorder(),
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () => _open(context, const StoreFormView()),
+                            child: SizedBox.square(
+                              dimension: 46,
+                              child: Icon(
+                                Icons.add_rounded,
+                                color: p.onPrimary,
+                                size: 24,
+                              ),
                             ),
                           ),
                         ),
