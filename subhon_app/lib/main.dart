@@ -9,7 +9,6 @@ import 'core/network/api_client.dart';
 import 'core/storage/app_lock_storage.dart';
 import 'core/storage/chat_history_storage.dart';
 import 'core/storage/debt_storage.dart';
-import 'core/storage/intro_storage.dart';
 import 'services/device_file_pick_service.dart';
 import 'services/device_reminder_service.dart';
 import 'services/file_pick_service.dart';
@@ -58,8 +57,8 @@ import 'widgets/intro_overlay.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
-  final intro = await const IntroStorage().firstLaunch();
-  runApp(MobileApp(showIntro: intro));
+  // The intro (eyes and "ИИ-бухгалтер") plays on every launch.
+  runApp(const MobileApp(showIntro: true));
 }
 
 /// The app root: services (one [ApiClient] for all), the session and the
@@ -117,7 +116,7 @@ class MobileApp extends StatefulWidget {
   /// The personal accountant's data; tests pass one in memory.
   final PersonalFinanceStorage? personal;
 
-  /// The launch intro plays only the first time the app is opened.
+  /// The launch intro (eyes, "ИИ-бухгалтер"); tests leave it off.
   final bool showIntro;
 
   /// Payment and debt reminders on the phone; tests pass a fake.
