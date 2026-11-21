@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/theme/app_colors.dart';
+import '../l10n/l10n.dart';
 import '../viewmodels/session_view_model.dart';
+import '../widgets/app_message_view.dart';
 import '../widgets/ofar_logo.dart';
 import 'auth_view.dart';
 import 'shell_view.dart';
@@ -36,6 +38,19 @@ class _SessionGateViewState extends State<SessionGateView> {
         body: const Center(child: OfarLogo(size: 88)),
       ),
       SessionStatus.signedOut => const AuthView(),
+      SessionStatus.offline => Scaffold(
+        body: SafeArea(
+          child: AppMessageView(
+            icon: Icons.wifi_off_rounded,
+            iconColor: context.palette.warning,
+            iconBackground: context.palette.warningLight,
+            title: context.l10n.sessionOfflineTitle,
+            message: context.l10n.sessionOfflineMessage,
+            actionLabel: context.l10n.commonRetry,
+            onAction: context.read<SessionViewModel>().restore,
+          ),
+        ),
+      ),
       SessionStatus.signedIn => const ShellView(),
     };
   }

@@ -1272,5 +1272,8 @@
   "pfCatDebtIn": "Borrowed",
   "pfCatDebtBack": "Debt returned",
   "debtAccount": "Write to account",
-  "debtNoAccount": "Don't write"
+  "debtNoAccount": "Don't write",
+  "sessionOfflineTitle": "No connection to the server",
+  "sessionOfflineMessage": "You are still signed in. Check the internet and try again.",
+  "sessionTooOld": "For safety, please sign in again (once a week)."
 }

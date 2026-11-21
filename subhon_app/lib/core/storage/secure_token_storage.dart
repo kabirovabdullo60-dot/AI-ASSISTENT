@@ -14,6 +14,7 @@ class SecureTokenStorage implements TokenStorage {
   );
   static const _accessKey = 'ofar.auth.access_token';
   static const _refreshKey = 'ofar.auth.refresh_token';
+  static const _signedInKey = 'ofar.auth.signed_in_at';
 
   final FlutterSecureStorage _storage;
 
@@ -36,5 +37,16 @@ class SecureTokenStorage implements TokenStorage {
   Future<void> clear() async {
     await _storage.delete(key: _accessKey);
     await _storage.delete(key: _refreshKey);
+    await _storage.delete(key: _signedInKey);
   }
+
+  @override
+  Future<DateTime?> readSignedInAt() async {
+    final value = await _storage.read(key: _signedInKey);
+    return value == null ? null : DateTime.tryParse(value);
+  }
+
+  @override
+  Future<void> saveSignedInAt(DateTime time) =>
+      _storage.write(key: _signedInKey, value: time.toUtc().toIso8601String());
 }

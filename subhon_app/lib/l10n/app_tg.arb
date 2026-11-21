@@ -712,5 +712,8 @@
   "pfCatDebtIn": "Қарз гирифтам",
   "pfCatDebtBack": "Қарзро баргардонданд",
   "debtAccount": "Ба ҳисоб сабт кардан",
-  "debtNoAccount": "Сабт накардан"
+  "debtNoAccount": "Сабт накардан",
+  "sessionOfflineTitle": "Пайваст бо сервер нест",
+  "sessionOfflineMessage": "Шумо ҳоло ҳам дар ҳисоб ҳастед. Интернетро санҷед ва боз кӯшиш кунед.",
+  "sessionTooOld": "Барои бехатарӣ боз ворид шавед (ҳафтае як бор)."
 }

@@ -66,7 +66,20 @@ class _DebtFormViewState extends State<DebtFormView> {
     if (picked != null) setState(() => _due = picked);
   }
 
+  /// A second tap while saving is ignored (no double records).
+  bool _busy = false;
+
   Future<void> _save() async {
+    if (_busy) return;
+    _busy = true;
+    try {
+      await _saveNow();
+    } finally {
+      _busy = false;
+    }
+  }
+
+  Future<void> _saveNow() async {
     if (!(_form.currentState?.validate() ?? false)) return;
     final vm = context.read<DebtsViewModel>();
     final navigator = Navigator.of(context);

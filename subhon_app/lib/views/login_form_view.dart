@@ -129,6 +129,13 @@ class _LoginFormViewState extends State<LoginFormView> {
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
+        if (session.sessionTooOld && session.error == null) ...[
+          AppInlineMessage(
+            type: InlineMessageType.info,
+            message: l10n.sessionTooOld,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+        ],
         if (session.error != null) ...[
           AppInlineMessage(
             type: InlineMessageType.error,

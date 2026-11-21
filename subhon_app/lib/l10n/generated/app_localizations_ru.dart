@@ -2396,4 +2396,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get debtNoAccount => 'Не записывать';
+
+  @override
+  String get sessionOfflineTitle => 'Нет связи с сервером';
+
+  @override
+  String get sessionOfflineMessage =>
+      'Вы по-прежнему в аккаунте. Проверьте интернет и попробуйте снова.';
+
+  @override
+  String get sessionTooOld => 'Для безопасности войдите снова (раз в неделю).';
 }

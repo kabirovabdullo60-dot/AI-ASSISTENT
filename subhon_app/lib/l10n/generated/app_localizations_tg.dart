@@ -2381,4 +2381,14 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get debtNoAccount => 'Сабт накардан';
+
+  @override
+  String get sessionOfflineTitle => 'Пайваст бо сервер нест';
+
+  @override
+  String get sessionOfflineMessage =>
+      'Шумо ҳоло ҳам дар ҳисоб ҳастед. Интернетро санҷед ва боз кӯшиш кунед.';
+
+  @override
+  String get sessionTooOld => 'Барои бехатарӣ боз ворид шавед (ҳафтае як бор).';
 }

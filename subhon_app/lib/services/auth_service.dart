@@ -8,10 +8,16 @@ import '../models/register_request_model.dart';
 /// `Auth` (API.md): register, log in, current user, log out. Both tokens
 /// are saved on the device after register / login.
 class AuthService {
-  AuthService(this._api, this._tokens);
+  AuthService(this._api, this._tokens, {DateTime Function()? clock})
+    : _clock = clock ?? DateTime.now;
 
   final ApiClient _api;
   final TokenStorage _tokens;
+  final DateTime Function() _clock;
+
+  /// The app asks for the login again this long after it (the server
+  /// allows 30 days; the web does the same).
+  static const sessionLength = Duration(days: 7);
 
   Future<ProfileModel> login(LoginRequestModel request) async => _signedIn(
     await _api.post('/api/auth/login', body: request.toJson(), auth: false),
@@ -32,7 +38,19 @@ class AuthService {
       accessToken: auth.accessToken,
       refreshToken: auth.refreshToken,
     );
+    await _tokens.saveSignedInAt(_clock());
     return auth.user;
+  }
+
+  /// The saved session is older than [sessionLength] (a session saved
+  /// before this rule gets today as its start).
+  Future<bool> isSessionTooOld() async {
+    final at = await _tokens.readSignedInAt();
+    if (at == null) {
+      await _tokens.saveSignedInAt(_clock());
+      return false;
+    }
+    return _clock().difference(at) > sessionLength;
   }
 
   /// Whether a session was saved on this device.

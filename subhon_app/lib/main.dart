@@ -82,6 +82,7 @@ class MobileApp extends StatefulWidget {
     this.showIntro = false,
     this.reminders,
     this.filePick,
+    this.sessionRetryDelay = const Duration(seconds: 1),
     super.key,
   });
 
@@ -124,6 +125,9 @@ class MobileApp extends StatefulWidget {
 
   /// Picking a backup file; tests pass a fake.
   final FilePickService? filePick;
+
+  /// Between the start-up attempts to reach the server; tests pass zero.
+  final Duration sessionRetryDelay;
 
   @override
   State<MobileApp> createState() => _MobileAppState();
@@ -190,7 +194,9 @@ class _MobileAppState extends State<MobileApp> {
         create: (_) => widget.voice ?? DeviceVoiceService(),
       ),
       ChangeNotifierProvider(
-        create: (_) => SessionViewModel(_auth, _api)..restore(),
+        create: (_) =>
+            SessionViewModel(_auth, _api, retryDelay: widget.sessionRetryDelay)
+              ..restore(),
       ),
       ChangeNotifierProvider(
         create: (_) => AppLockViewModel(

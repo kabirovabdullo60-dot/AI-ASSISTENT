@@ -712,5 +712,8 @@
   "pfCatDebtIn": "Взял в долг",
   "pfCatDebtBack": "Вернули долг",
   "debtAccount": "Записать в счёт",
-  "debtNoAccount": "Не записывать"
+  "debtNoAccount": "Не записывать",
+  "sessionOfflineTitle": "Нет связи с сервером",
+  "sessionOfflineMessage": "Вы по-прежнему в аккаунте. Проверьте интернет и попробуйте снова.",
+  "sessionTooOld": "Для безопасности войдите снова (раз в неделю)."
 }

@@ -151,7 +151,20 @@ class _AccountSheetState extends State<_AccountSheet> {
     super.dispose();
   }
 
+  /// A second tap while saving is ignored (no double records).
+  bool _busy = false;
+
   Future<void> _save() async {
+    if (_busy) return;
+    _busy = true;
+    try {
+      await _saveNow();
+    } finally {
+      _busy = false;
+    }
+  }
+
+  Future<void> _saveNow() async {
     if (!(_form.currentState?.validate() ?? false)) return;
     final vm = context.read<PersonalFinanceViewModel>();
     final navigator = Navigator.of(context);

@@ -4377,6 +4377,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Don\'t write'**
   String get debtNoAccount;
+
+  /// No description provided for @sessionOfflineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection to the server'**
+  String get sessionOfflineTitle;
+
+  /// No description provided for @sessionOfflineMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You are still signed in. Check the internet and try again.'**
+  String get sessionOfflineMessage;
+
+  /// No description provided for @sessionTooOld.
+  ///
+  /// In en, this message translates to:
+  /// **'For safety, please sign in again (once a week).'**
+  String get sessionTooOld;
 }
 
 class _AppLocalizationsDelegate

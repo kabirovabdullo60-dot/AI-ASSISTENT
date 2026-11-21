@@ -92,7 +92,20 @@ class _QuickEntryViewState extends State<QuickEntryView> {
     }
   }
 
+  /// A second tap while saving is ignored (no double records).
+  bool _busy = false;
+
   Future<void> _write() async {
+    if (_busy) return;
+    _busy = true;
+    try {
+      await _writeNow();
+    } finally {
+      _busy = false;
+    }
+  }
+
+  Future<void> _writeNow() async {
     final entry = _entry;
     final vm = context.read<PersonalFinanceViewModel>();
     final account = entry?.accountId ?? vm.accounts.firstOrNull?.id;

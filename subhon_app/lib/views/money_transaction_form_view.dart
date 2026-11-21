@@ -107,7 +107,20 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
     setState(() => to ? _toAccount = picked : _account = picked);
   }
 
+  /// A second tap while saving is ignored (no double records).
+  bool _busy = false;
+
   Future<void> _save(PersonalFinanceViewModel vm) async {
+    if (_busy) return;
+    _busy = true;
+    try {
+      await _saveNow(vm);
+    } finally {
+      _busy = false;
+    }
+  }
+
+  Future<void> _saveNow(PersonalFinanceViewModel vm) async {
     final l10n = context.l10n;
     final valid = _form.currentState?.validate() ?? false;
     final needsCategory = _kind != MoneyTransactionKind.transfer;

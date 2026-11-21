@@ -39,7 +39,20 @@ class _SavingsGoalFormViewState extends State<SavingsGoalFormView> {
     super.dispose();
   }
 
+  /// A second tap while saving is ignored (no double records).
+  bool _busy = false;
+
   Future<void> _save(PersonalFinanceViewModel vm) async {
+    if (_busy) return;
+    _busy = true;
+    try {
+      await _saveNow(vm);
+    } finally {
+      _busy = false;
+    }
+  }
+
+  Future<void> _saveNow(PersonalFinanceViewModel vm) async {
     if (!(_form.currentState?.validate() ?? false)) return;
     final navigator = Navigator.of(context);
     final feedback = AppSnackbar.of(context);

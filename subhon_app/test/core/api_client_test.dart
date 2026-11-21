@@ -234,4 +234,63 @@ void main() {
     expect(body, contains('name="file"'));
     expect(body, contains('filename="me.jpg"'));
   });
+
+  test('tokens refreshed elsewhere meanwhile: the new ones are used, the '
+      'old refresh token is never sent', () async {
+    var profileCalls = 0;
+    backend.on('GET', '/api/profile', (request) {
+      profileCalls++;
+      if (profileCalls == 1) {
+        // Another screen refreshes while this call is on its way.
+        tokens.accessToken = 'fresh';
+        tokens.refreshToken = 'r-fresh';
+        return FakeBackend.error(401, 'AUTH_TOKEN_EXPIRED', 'expired');
+      }
+      expect(request.headers['Authorization'], 'Bearer fresh');
+      return FakeBackend.respond({'ok': true});
+    });
+    expect(await api.get('/api/profile'), {'ok': true});
+    expect(backend.calls('POST', '/api/auth/refresh'), isEmpty);
+    expect(tokens.refreshToken, 'r-fresh');
+    expect(expired, 0);
+  });
+
+  test('no connection during the refresh: the tokens stay, the person is '
+      'not signed out', () async {
+    backend.on(
+      'GET',
+      '/api/profile',
+      (_) => FakeBackend.error(401, 'AUTH_TOKEN_EXPIRED', 'expired'),
+    );
+    backend.on(
+      'POST',
+      '/api/auth/refresh',
+      (_) => throw http.ClientException('offline'),
+    );
+    await expectLater(
+      api.get('/api/profile'),
+      throwsA(
+        isA<ApiException>().having((e) => e.code, 'code', 'NETWORK_ERROR'),
+      ),
+    );
+    expect(tokens.accessToken, 'old');
+    expect(tokens.refreshToken, 'r-old');
+    expect(expired, 0);
+  });
+
+  test('a server error (5xx) during the refresh keeps the tokens', () async {
+    backend.on(
+      'GET',
+      '/api/profile',
+      (_) => FakeBackend.error(401, 'AUTH_TOKEN_EXPIRED', 'expired'),
+    );
+    backend.on(
+      'POST',
+      '/api/auth/refresh',
+      (_) => FakeBackend.error(503, 'SERVICE_UNAVAILABLE', 'down'),
+    );
+    await expectLater(api.get('/api/profile'), throwsA(isA<ApiException>()));
+    expect(tokens.refreshToken, 'r-old');
+    expect(expired, 0);
+  });
 }

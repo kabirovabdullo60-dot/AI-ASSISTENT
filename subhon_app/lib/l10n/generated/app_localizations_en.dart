@@ -2389,4 +2389,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get debtNoAccount => 'Don\'t write';
+
+  @override
+  String get sessionOfflineTitle => 'No connection to the server';
+
+  @override
+  String get sessionOfflineMessage =>
+      'You are still signed in. Check the internet and try again.';
+
+  @override
+  String get sessionTooOld => 'For safety, please sign in again (once a week).';
 }

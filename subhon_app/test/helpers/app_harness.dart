@@ -88,6 +88,7 @@ Future<void> pumpApp(
       personal: personal ?? MemoryPersonalFinanceStorage(),
       reminders: reminders ?? FakeReminderService(),
       filePick: filePick ?? FakeFilePickService(),
+      sessionRetryDelay: Duration.zero,
     ),
   );
   await tester.pumpAndSettle();

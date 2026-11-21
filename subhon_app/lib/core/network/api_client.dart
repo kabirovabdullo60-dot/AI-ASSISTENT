@@ -18,8 +18,13 @@ export 'api_exception.dart';
 /// * On `401 AUTH_TOKEN_EXPIRED` refreshes the tokens **once**, saves
 ///   **both** new tokens and retries the call. Calls that fail at the same
 ///   time share one refresh request (a refresh token works only once).
-/// * Any other 401 on a protected call — or a failed refresh — clears the
-///   tokens and calls [onSessionExpired] (the app shows the login screen).
+/// * Before refreshing, the saved tokens are read again: when they changed
+///   meanwhile, they are used instead (an old refresh token must never be
+///   sent twice — the server would end the whole session).
+/// * Any other 401 on a protected call, or a refresh the server refuses
+///   (401 / 403), clears the tokens and calls [onSessionExpired]. A network
+///   error or a 5xx during the refresh keeps them: the person stays signed
+///   in and can try again.
 /// * Errors become [ApiException] with the backend `error.code`; network
 ///   failures become `NETWORK_ERROR`.
 class ApiClient {
@@ -102,13 +107,17 @@ class ApiClient {
       }.nullIfEmpty,
     );
     var token = auth ? await tokens.readAccessToken() : null;
+    final refreshBefore = auth ? await tokens.readRefreshToken() : null;
     var response = await _request(method, uri, token, body, file, timeout);
     if (auth && response.statusCode == 401) {
       final code = _errorCode(response);
       if (code == _expired) {
         final current = await tokens.readAccessToken();
-        if (current != null && current != token) {
-          // Another call has refreshed meanwhile: just use the new token.
+        final currentRefresh = await tokens.readRefreshToken();
+        if ((current != null && current != token) ||
+            (currentRefresh != null && currentRefresh != refreshBefore)) {
+          // Refreshed meanwhile (another call, another screen): use the new
+          // tokens — calling /refresh with the old one would end the session.
           token = current;
         } else {
           await _refreshOnce();
