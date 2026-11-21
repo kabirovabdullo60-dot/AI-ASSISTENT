@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../models/statement_model.dart';
 import 'generated/app_localizations.dart';
 import 'statement_text.dart';
+import 'tajik_dates.dart';
 
 /// The statement as an Excel workbook (.xlsx): its name and period on top,
 /// the table with headers, then the totals. Dates are real dates and
@@ -15,7 +16,9 @@ Uint8List statementToExcel(StatementModel s, AppLocalizations l10n) {
   final sheetName = excel.getDefaultSheet() ?? 'Sheet1';
   final sheet = excel[sheetName];
   final dateLocale = l10n.localeName == 'tg' ? 'ru' : l10n.localeName;
-  String day(DateTime d) => DateFormat.yMd(dateLocale).format(d);
+  String day(DateTime d) => l10n.localeName == 'tg'
+      ? TajikDates.shortDate(d)
+      : DateFormat.yMd(dateLocale).format(d);
 
   final bold = CellStyle(bold: true);
   void put(int row, int col, CellValue value, {CellStyle? style}) {

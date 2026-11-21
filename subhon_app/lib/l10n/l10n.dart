@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../core/utils/money.dart';
 import 'generated/app_localizations.dart';
+import 'tajik_dates.dart';
 
 export 'generated/app_localizations.dart';
 
@@ -53,30 +54,39 @@ extension L10nContext on BuildContext {
   }
 
   /// `18 ноября 2026`.
-  String formatDate(DateTime date) =>
-      DateFormat.yMMMMd(_dateLocale).format(date);
+  String formatDate(DateTime date) => _tajik
+      ? TajikDates.date(date)
+      : DateFormat.yMMMMd(_language).format(date);
 
   /// `18.11.2026`.
-  String formatShortDate(DateTime date) =>
-      DateFormat.yMd(_dateLocale).format(date);
+  String formatShortDate(DateTime date) => _tajik
+      ? TajikDates.shortDate(date)
+      : DateFormat.yMd(_language).format(date);
 
   /// `18.11.2026, 14:05` (local time).
-  String formatDateTime(DateTime time) =>
-      DateFormat.yMd(_dateLocale).add_Hm().format(time);
+  String formatDateTime(DateTime time) => _tajik
+      ? TajikDates.dateTime(time)
+      : DateFormat.yMd(_language).add_Hm().format(time);
 
   /// `5 октября, понедельник` (a day header in the history).
-  String formatDayHeader(DateTime date) =>
-      DateFormat('d MMMM, EEEE', _dateLocale).format(date);
+  String formatDayHeader(DateTime date) => _tajik
+      ? TajikDates.dayHeader(date)
+      : DateFormat('d MMMM, EEEE', _language).format(date);
 
   /// `ноябрь` (the month alone, as in "Расходы за ноябрь").
-  String monthName(DateTime date) => DateFormat.LLLL(_dateLocale).format(date);
+  String monthName(DateTime date) => _tajik
+      ? TajikDates.month(date.month)
+      : DateFormat.LLLL(_language).format(date);
 
   /// `Ноябрь 2026`.
   String monthYear(int month, int year) {
-    final text = DateFormat.yMMMM(_dateLocale).format(DateTime(year, month));
+    if (_tajik) return TajikDates.monthYear(month, year);
+    final text = DateFormat.yMMMM(_language).format(DateTime(year, month));
     return text[0].toUpperCase() + text.substring(1);
   }
 
-  /// intl has no Tajik date data: dates use the Russian forms.
-  String get _dateLocale => _language == 'tg' ? 'ru' : _language;
+  /// intl has no Tajik data: dates are made by [TajikDates], numbers use
+  /// the Russian format (the same separators).
+  bool get _tajik => _language == 'tg';
+  String get _dateLocale => _tajik ? 'ru' : _language;
 }
