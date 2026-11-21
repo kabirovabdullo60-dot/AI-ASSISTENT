@@ -738,5 +738,9 @@
   "chatMessages": "Паёмҳо: {count}",
   "chatMore": "Боз нишон додан",
   "chatWaitSeconds": "Саволҳо зиёданд. Навбатӣ — пас аз {seconds} с.",
-  "chatOptions": "Амалҳо бо чат"
+  "chatOptions": "Амалҳо бо чат",
+  "pfOtherExpenseWhat": "Ба чӣ харҷ кардед?",
+  "pfOtherExpenseHint": "Таъмири телефон, мӯйсаргирӣ…",
+  "pfOtherIncomeWhat": "Ин чӣ даромад аст?",
+  "pfOtherIncomeHint": "Велосипедро фурӯхтам, бурд…"
 }

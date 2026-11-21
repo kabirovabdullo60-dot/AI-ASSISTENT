@@ -4533,6 +4533,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat options'**
   String get chatOptions;
+
+  /// No description provided for @pfOtherExpenseWhat.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you spend on?'**
+  String get pfOtherExpenseWhat;
+
+  /// No description provided for @pfOtherExpenseHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone repair, a haircut…'**
+  String get pfOtherExpenseHint;
+
+  /// No description provided for @pfOtherIncomeWhat.
+  ///
+  /// In en, this message translates to:
+  /// **'What is this income?'**
+  String get pfOtherIncomeWhat;
+
+  /// No description provided for @pfOtherIncomeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold a bike, won a prize…'**
+  String get pfOtherIncomeHint;
 }
 
 class _AppLocalizationsDelegate

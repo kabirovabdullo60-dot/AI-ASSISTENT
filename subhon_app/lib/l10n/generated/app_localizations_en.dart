@@ -2479,4 +2479,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatOptions => 'Chat options';
+
+  @override
+  String get pfOtherExpenseWhat => 'What did you spend on?';
+
+  @override
+  String get pfOtherExpenseHint => 'Phone repair, a haircut…';
+
+  @override
+  String get pfOtherIncomeWhat => 'What is this income?';
+
+  @override
+  String get pfOtherIncomeHint => 'Sold a bike, won a prize…';
 }

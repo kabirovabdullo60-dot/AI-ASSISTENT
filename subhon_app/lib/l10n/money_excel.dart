@@ -57,7 +57,9 @@ Uint8List operationsToExcel(
         MoneyTransactionKind.transfer => l10n.pfTransfer,
       }),
       TextCellValue(
-        t.category == null ? '' : moneyCategoryText(l10n, t.category!),
+        t.category == null
+            ? ''
+            : [moneyCategoryText(l10n, t.category!), ?t.label].join(': '),
       ),
       TextCellValue(from?.name ?? ''),
       TextCellValue(account(t.toAccountId)?.name ?? ''),

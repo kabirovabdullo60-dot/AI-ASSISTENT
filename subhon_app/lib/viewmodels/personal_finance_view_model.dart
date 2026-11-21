@@ -210,6 +210,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     String Function(MoneyCategory)? categoryText,
   ) {
     final words = [
+      t.label,
       t.note,
       account(t.accountId)?.name,
       account(t.toAccountId)?.name,
@@ -393,6 +394,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     String? note,
     String? recurringId,
     double? toAmount,
+    String? label,
   }) async {
     final t = MoneyTransactionModel(
       id: _id(),
@@ -406,6 +408,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
       note: _opt(note),
       recurringId: recurringId,
       toAmount: kind == MoneyTransactionKind.transfer ? toAmount : null,
+      label: _otherLabel(category, label),
     );
     await _save(_with(transactions: [..._data.transactions, t]));
     return t;
@@ -420,6 +423,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
     String? toAccountId,
     String? note,
     double? toAmount,
+    String? label,
   }) => _save(
     _with(
       transactions: [
@@ -443,6 +447,7 @@ class PersonalFinanceViewModel extends ChangeNotifier {
               toAmount: t.kind == MoneyTransactionKind.transfer
                   ? toAmount
                   : null,
+              label: _otherLabel(category, label),
             )
           else
             t,
@@ -659,6 +664,13 @@ class PersonalFinanceViewModel extends ChangeNotifier {
       ],
     ),
   );
+
+  /// "Другое" / "Другой доход" keep what it was; other categories don't.
+  static String? _otherLabel(MoneyCategory? category, String? label) =>
+      category == MoneyCategory.otherExpense ||
+          category == MoneyCategory.otherIncome
+      ? _opt(label)
+      : null;
 
   static String? _opt(String? text) =>
       text == null || text.trim().isEmpty ? null : text.trim();

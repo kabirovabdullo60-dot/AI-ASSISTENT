@@ -39,7 +39,8 @@ class MoneyTransactionTile extends StatelessWidget {
       _ when t.category != null => (
         moneyCategoryIcon(t.category!),
         t.kind == MoneyTransactionKind.income ? p.success : p.error,
-        moneyCategoryText(l10n, t.category!),
+        // "Другое": what the person wrote.
+        t.label ?? moneyCategoryText(l10n, t.category!),
       ),
       MoneyTransactionKind.income => (
         Icons.south_west_rounded,

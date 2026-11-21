@@ -133,4 +133,45 @@ void main() {
     expect(t.toAccountId, data.goals.single.accountId);
     expect(t.accountId, isNot(data.goals.single.accountId));
   });
+
+  // Narrow and wide (tall enough to show the whole form).
+  for (final size in const [Size(360, 1400), Size(430, 1400)]) {
+    testWidgets('"Другое": a box "На что потратили?" appears, is required, '
+        'and its text names the operation (${size.width.toInt()} px)', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(size);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final personal = await start(tester, store: false);
+      await tester.tap(find.byTooltip('Добавить'));
+      await tester.pumpAndSettle();
+      await tapText(tester, 'Расход');
+      expect(find.text('На что потратили?'), findsNothing);
+      await tester.enterText(fieldWithLabel('Сумма'), '80');
+      await tester.ensureVisible(find.text('Другое').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Другое').last);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('На что потратили?'));
+      await tester.pumpAndSettle();
+      expect(find.text('На что потратили?'), findsOneWidget);
+
+      await tapText(tester, 'Сохранить');
+      expect(personal.byUser.values.single.transactions, isEmpty);
+
+      await tester.ensureVisible(find.text('На что потратили?'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        fieldWithLabel('На что потратили?'),
+        'Ремонт телефона',
+      );
+      await tapText(tester, 'Сохранить');
+      final t = personal.byUser.values.single.transactions.single;
+      expect(t.category, MoneyCategory.otherExpense);
+      expect(t.label, 'Ремонт телефона');
+
+      await tapText(tester, 'Операции');
+      expect(find.text('Ремонт телефона'), findsOneWidget);
+    });
+  }
 }

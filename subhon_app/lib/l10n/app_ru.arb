@@ -738,5 +738,9 @@
   "chatMessages": "Сообщений: {count}",
   "chatMore": "Показать ещё",
   "chatWaitSeconds": "Слишком много вопросов. Следующий — через {seconds} с.",
-  "chatOptions": "Действия с чатом"
+  "chatOptions": "Действия с чатом",
+  "pfOtherExpenseWhat": "На что потратили?",
+  "pfOtherExpenseHint": "Ремонт телефона, стрижка…",
+  "pfOtherIncomeWhat": "Что это за доход?",
+  "pfOtherIncomeHint": "Продал велосипед, выигрыш…"
 }

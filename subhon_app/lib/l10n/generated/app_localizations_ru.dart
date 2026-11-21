@@ -2486,4 +2486,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get chatOptions => 'Действия с чатом';
+
+  @override
+  String get pfOtherExpenseWhat => 'На что потратили?';
+
+  @override
+  String get pfOtherExpenseHint => 'Ремонт телефона, стрижка…';
+
+  @override
+  String get pfOtherIncomeWhat => 'Что это за доход?';
+
+  @override
+  String get pfOtherIncomeHint => 'Продал велосипед, выигрыш…';
 }

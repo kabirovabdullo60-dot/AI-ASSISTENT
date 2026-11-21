@@ -48,6 +48,9 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
   late final _amount = TextEditingController(
     text: (widget.initial?.amount ?? widget.draft?.amount)?.toStringAsFixed(2),
   );
+
+  /// "Другое": what it was (required then).
+  late final _label = TextEditingController(text: widget.initial?.label);
   late final _received = TextEditingController(
     text: widget.initial?.toAmount?.toStringAsFixed(2),
   );
@@ -73,6 +76,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
   @override
   void dispose() {
     _amount.dispose();
+    _label.dispose();
     _received.dispose();
     _note.dispose();
     super.dispose();
@@ -158,6 +162,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
         toAccountId: _toAccount,
         note: _note.text,
         toAmount: received,
+        label: _label.text,
       );
     } else {
       await vm.updateTransaction(
@@ -169,6 +174,7 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
         toAccountId: _toAccount,
         note: _note.text,
         toAmount: received,
+        label: _label.text,
       );
     }
     feedback.showSuccess(l10n.pfSaved);
@@ -315,6 +321,23 @@ class _MoneyTransactionFormViewState extends State<MoneyTransactionFormView> {
                     ),
                 ],
               ),
+              // "Другое": a box to say what it was.
+              if (_category == MoneyCategory.otherExpense ||
+                  _category == MoneyCategory.otherIncome) ...[
+                const SizedBox(height: AppSpacing.md),
+                AppTextField(
+                  controller: _label,
+                  label: _category == MoneyCategory.otherIncome
+                      ? l10n.pfOtherIncomeWhat
+                      : l10n.pfOtherExpenseWhat,
+                  hint: _category == MoneyCategory.otherIncome
+                      ? l10n.pfOtherIncomeHint
+                      : l10n.pfOtherExpenseHint,
+                  autofocus: widget.initial?.label == null,
+                  maxLength: 60,
+                  validator: (v) => Validators.required(v, l10n),
+                ),
+              ],
               if (_categoryMissing)
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpacing.xs),

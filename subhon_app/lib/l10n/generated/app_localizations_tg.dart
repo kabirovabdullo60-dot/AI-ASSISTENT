@@ -2470,4 +2470,16 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get chatOptions => 'Амалҳо бо чат';
+
+  @override
+  String get pfOtherExpenseWhat => 'Ба чӣ харҷ кардед?';
+
+  @override
+  String get pfOtherExpenseHint => 'Таъмири телефон, мӯйсаргирӣ…';
+
+  @override
+  String get pfOtherIncomeWhat => 'Ин чӣ даромад аст?';
+
+  @override
+  String get pfOtherIncomeHint => 'Велосипедро фурӯхтам, бурд…';
 }

@@ -1326,5 +1326,9 @@
       }
     }
   },
-  "chatOptions": "Chat options"
+  "chatOptions": "Chat options",
+  "pfOtherExpenseWhat": "What did you spend on?",
+  "pfOtherExpenseHint": "Phone repair, a haircut…",
+  "pfOtherIncomeWhat": "What is this income?",
+  "pfOtherIncomeHint": "Sold a bike, won a prize…"
 }
