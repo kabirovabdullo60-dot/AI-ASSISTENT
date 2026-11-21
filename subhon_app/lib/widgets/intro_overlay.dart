@@ -63,14 +63,20 @@ class _IntroOverlayState extends State<IntroOverlay>
       _done = true;
       return;
     }
+    _clockMade = true;
     _clock.forward().whenComplete(() {
       if (mounted) setState(() => _done = true);
     });
   }
 
+  /// Made only when the intro plays (not with "reduce motion"): creating
+  /// it first in dispose() would look up an ancestor of a widget that is
+  /// already being removed.
+  bool _clockMade = false;
+
   @override
   void dispose() {
-    _clock.dispose();
+    if (_clockMade) _clock.dispose();
     super.dispose();
   }
 
