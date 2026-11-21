@@ -1,6 +1,6 @@
 # Business Management System — API for the Flutter apps
 
-> Generated from the live Swagger (`/openapi.json`) of Mehroj's backend (regenerated 2026-11-18). The web (Abdullo) is connected to every endpoint below.
+> Generated from the live Swagger (`/openapi.json`) of Mehroj's backend (regenerated 2026-11-21 with `python3 scripts/gen_api_md.py` — run it again after every backend deploy). The web (Abdullo) is connected to every endpoint below.
 > **Mobile app:** give this file to Claude and say: *"Connect the app to this API following API.md"*.
 
 - **Base URL:** `https://api-production-86caefb2.up.railway.app`
@@ -55,10 +55,22 @@
 | Salaries | `GET /api/payroll/monthly?month=&year=`, `POST /api/payroll`, `GET /api/payroll`, `GET /api/payroll/employee/{employeeId}`, `DELETE /api/payroll/{id}` |
 | Expenses & profit | `GET/POST /api/expenses`, `PUT/DELETE /api/expenses/{id}`, `GET /api/reports/profit` |
 | Reports | `GET /api/reports/store-comparison`, `GET /api/reports/payroll?year=`, `GET /api/reports/employees` |
-| AI assistant | `POST /api/assistant/chat` (`language` en / ru / tg, last 20 messages; `429 RATE_LIMITED`, `503 ASSISTANT_UNAVAILABLE`) |
+| AI assistant — chat | `POST /api/assistant/chat` (`language` en / ru / tg, `conversationId`, last 20 messages; `429 RATE_LIMITED`, `503 ASSISTANT_UNAVAILABLE`) |
+| AI assistant — history | `GET/POST /api/assistant/conversations`, `GET/PATCH/DELETE /api/assistant/conversations/{id}` |
+| AI assistant — actions | `POST /api/assistant/actions/{id}/confirm`, `POST /api/assistant/actions/{id}/cancel`, `GET /api/assistant/actions/{id}` |
 | Notifications (bell) | `GET /api/notifications`, `POST /api/notifications/read-all` |
 | Currency (USD) | `GET /api/settings/exchange-rates` |
 | Profile | `GET/PUT /api/profile`, `PATCH /api/profile/password`, `PATCH /api/profile/avatar` (multipart, field `file`) |
+
+### AI assistant — rules for the apps
+
+1. **Chat history lives on the server.** Send `conversationId` from the previous reply to continue a chat; without it a new conversation is saved. List with `GET /api/assistant/conversations?page=1&limit=20` (newest first), open one with `GET /api/assistant/conversations/{id}` (messages with their `actions` in their **current** status), rename with `PATCH`, delete with `DELETE` (then `404 CONVERSATION_NOT_FOUND`; if the open chat was deleted, send the next question without `conversationId`).
+2. **The assistant proposes, the user confirms.** A reply may carry `actions` (`AssistantActionOut`). Under that message show one card per action: its `summary` as is, Cancel / Confirm; `danger: true` → red Confirm and one extra "Are you sure?". Disable both buttons while the request runs.
+   - `POST /api/assistant/actions/{id}/confirm` (optional body `{"params": {…only the corrected fields}}`) → `DONE` (show ✓, reload the affected screens) or `FAILED` (show the translated `error.code`, allow Confirm again).
+   - `/cancel` → `CANCELLED`. `CANCELLED` / `EXPIRED` cards are greyed out: "ask the assistant again".
+   - `409 ACTION_ALREADY_HANDLED` → `GET /api/assistant/actions/{id}` and show the real status. `409 ACTION_EXPIRED` → greyed out. `404 ACTION_NOT_FOUND`.
+3. **Answer in the language the user writes in**, not the app's language: detect it from the question and send it as `language` — Tajik letters (ӣ ӯ ҳ ҷ қ ғ) or Tajik words in Cyrillic → `tg`; other Cyrillic → `ru`; Latin letters with Tajik words (`yak`, `magazin`, `ilova`, `kun`, `imruz`, `furush`…) → `tg`; other Latin → `en`; too short to tell (`ok`, `100`) → the app's language.
+4. **Slow answers:** 3–60 s. Show a typing indicator and use a client timeout of at least **70 s**. `429 RATE_LIMITED` → wait `error.meta.retryAfter` seconds (10 questions a minute, 200 a day). `503 ASSISTANT_UNAVAILABLE` → "try again later".
 
 ## Endpoints overview
 
@@ -118,6 +130,14 @@
 | 🔒 | `GET` | `/api/notifications` | My notifications |
 | 🔒 | `POST` | `/api/notifications/read-all` | Mark all notifications as read |
 | 🔒 | `POST` | `/api/assistant/chat` | Ask the AI business assistant |
+| 🔒 | `GET` | `/api/assistant/conversations` | List saved conversations |
+| 🔒 | `POST` | `/api/assistant/conversations` | Save a conversation (without asking the AI) |
+| 🔒 | `GET` | `/api/assistant/conversations/{id}` | Get a saved conversation |
+| 🔒 | `PATCH` | `/api/assistant/conversations/{id}` | Rename a conversation |
+| 🔒 | `DELETE` | `/api/assistant/conversations/{id}` | Delete a conversation (soft delete) |
+| 🔒 | `GET` | `/api/assistant/actions/{id}` | Get a proposed action |
+| 🔒 | `POST` | `/api/assistant/actions/{id}/confirm` | Confirm a proposed action (run it) |
+| 🔒 | `POST` | `/api/assistant/actions/{id}/cancel` | Cancel a proposed action |
 | 🔒 | `GET` | `/api/settings/exchange-rates` | Exchange rates |
 |  | `GET` | `/health/live` | The process is running |
 |  | `GET` | `/health/ready` | The database is reachable |
@@ -277,11 +297,11 @@ Deleted stores are hidden unless `includeDeleted=true`.
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
 | `status` | query | StoreStatus \| null |  | Only this status.  |
-| `search` | query | string \| null |  | Part of the name, address, city, region, type, opening hours or status note.  |
+| `search` | query | string \| null |  | Part of the name, address, city, region, type, opening hours or status note. maxLength=`100` |
 | `includeDeleted` | query | boolean |  |  default=`false` |
 | `sort` | query | string \| null |  | `name` (default), `createdAt`, `status`; `-` = descending.  |
-| `city` | query | string \| null |  | Only this city (case-insensitive).  |
-| `region` | query | string \| null |  | Only this region (case-insensitive).  |
+| `city` | query | string \| null |  | Only this city (case-insensitive). maxLength=`100` |
+| `region` | query | string \| null |  | Only this region (case-insensitive). maxLength=`100` |
 | `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
 | `limit` | query | integer |  | Items per page (max 100). minimum=`1`, maximum=`100`, default=`20` |
 
@@ -425,8 +445,8 @@ Same report as `GET /api/reports/monthly-sales`: one calendar month, compared wi
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
-| `month` | query | integer \| null |  | 1–12. Defaults to the current month.  |
-| `year` | query | integer \| null |  | Defaults to the current year.  |
+| `month` | query | integer \| null |  | 1–12. Defaults to the current month. minimum=`1`, maximum=`12` |
+| `year` | query | integer \| null |  | Defaults to the current year. minimum=`2000`, maximum=`2100` |
 
 Responses:
 - `200` Successful Response → **SalesReportOut**
@@ -534,7 +554,7 @@ Responses:
 |---|---|---|---|---|
 | `storeId` | query | string (uuid) \| null |  |   |
 | `status` | query | EmployeeStatus \| null |  | Only this status.  |
-| `search` | query | string \| null |  | Part of the name, position or phone.  |
+| `search` | query | string \| null |  | Part of the name, position or phone. maxLength=`100` |
 | `includeDeleted` | query | boolean |  |  default=`false` |
 | `sort` | query | string \| null |  | `fullName` (default), `position`, `hiredAt`, `monthlySalary`, `createdAt`; `-` = descending.  |
 | `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
@@ -554,7 +574,7 @@ Responses:
 |---|---|---|---|---|
 | `storeId` | path | string (uuid) | yes | The store ID.  |
 | `status` | query | EmployeeStatus \| null |  | Only this status.  |
-| `search` | query | string \| null |  | Part of the name, position or phone.  |
+| `search` | query | string \| null |  | Part of the name, position or phone. maxLength=`100` |
 | `includeDeleted` | query | boolean |  |  default=`false` |
 | `sort` | query | string \| null |  | `fullName` (default), `position`, `hiredAt`, `monthlySalary`, `createdAt`; `-` = descending.  |
 | `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
@@ -605,7 +625,7 @@ Responses:
 
 **Delete an employee (soft delete)**
 
-The employee is hidden and set to `INACTIVE`; `terminatedAt` becomes today if it was empty, so no more salary is due. Payroll history is kept and still shows in reports and in `GET /api/payroll/employee/{employeeId}`.
+The employee is hidden and set to `INACTIVE`; `terminatedAt` becomes today if it was empty. **Nothing more is owed**: in every salary figure (payroll, the dashboard's `salaryDueThisMonth` and `monthProfit`, profit, notifications) a deleted employee's due equals what was already paid to them, so unpaid salary stops counting and they can't be paid any more. Payments already made stay in reports and in `GET /api/payroll/employee/{employeeId}`. For someone who left the job, set `status: INACTIVE` instead: they stay owed up to `terminatedAt`.
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
@@ -629,6 +649,8 @@ Salary payments with automatic calculation: months worked, salary due per month,
 Records money paid to an employee for one month (`month` + `year`).
 
 The backend checks everything and calculates the balance:
+* the employee must not be deleted (`404 EMPLOYEE_NOT_FOUND`): a deleted employee is owed
+  nothing more;
 * the month can't be in the future, and the employee must have worked in it
   (from `hiredAt` to `terminatedAt`; the first and last month are prorated by days);
 * **partial payments** are fine: pay 1500 now and 1500 later;
@@ -659,8 +681,8 @@ Newest first. `totalAmount` is the sum of all matching payments.
 |---|---|---|---|---|
 | `employeeId` | query | string (uuid) \| null |  |   |
 | `storeId` | query | string (uuid) \| null |  | Only this store.  |
-| `month` | query | integer \| null |  |   |
-| `year` | query | integer \| null |  |   |
+| `month` | query | integer \| null |  |  minimum=`1`, maximum=`12` |
+| `year` | query | integer \| null |  |  minimum=`2000`, maximum=`2100` |
 | `startDate` | query | string (date) \| null |  | Payment date from (included).  |
 | `endDate` | query | string (date) \| null |  | Payment date to (included).  |
 | `sort` | query | string \| null |  | `paymentDate`, `amount`, `createdAt`; `-` = descending.  |
@@ -681,8 +703,8 @@ For one month: every employee who worked in it, with the salary due, paid and re
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
-| `month` | query | integer \| null |  |   |
-| `year` | query | integer \| null |  |   |
+| `month` | query | integer \| null |  |  minimum=`1`, maximum=`12` |
+| `year` | query | integer \| null |  |  minimum=`2000`, maximum=`2100` |
 | `storeId` | query | string (uuid) \| null |  | Only this store.  |
 
 Responses:
@@ -713,7 +735,7 @@ Responses:
 
 **Salary history of one employee**
 
-Hire date, months worked, salary history, every month with due / paid / remaining / status, and all payments. Works for deleted employees too.
+Hire date, months worked, salary history, every month with due / paid / remaining / status, and all payments. Works for deleted employees too: they list only the months with payments, and each month's due equals what was paid.
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
@@ -929,8 +951,8 @@ One calendar month, per store and in total, compared with the previous month, wi
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
-| `month` | query | integer \| null |  |   |
-| `year` | query | integer \| null |  |   |
+| `month` | query | integer \| null |  |  minimum=`1`, maximum=`12` |
+| `year` | query | integer \| null |  |  minimum=`2000`, maximum=`2100` |
 
 Responses:
 - `200` Successful Response → **SalesReportOut**
@@ -1002,7 +1024,7 @@ Per month: salary due, paid and remaining for all employees. Defaults to the cur
 
 | Param | In | Type | Required | Notes |
 |---|---|---|---|---|
-| `year` | query | integer \| null |  |   |
+| `year` | query | integer \| null |  |  minimum=`2000`, maximum=`2100` |
 
 Responses:
 - `200` Successful Response → **PayrollYearOut**
@@ -1088,7 +1110,7 @@ Responses:
 
 ## Assistant
 
-AI business assistant: answers questions about your own sales, stores, employees and payroll in English, Russian or Tajik, using the real figures of your business. Ёрдамчии зеҳни сунъӣ.
+AI business assistant: answers questions about your own sales, stores, employees and payroll in English, Russian or Tajik, using the real figures of your business. It can read all your data and **propose changes** (add a store, record a sale, pay a salary…) that run only when the user confirms them. Chats are saved on the server per user (`conversationId`), so they show up on every device. Ёрдамчии зеҳни сунъӣ.
 
 ### `POST /api/assistant/chat` 🔒
 
@@ -1114,15 +1136,207 @@ Data of other businesses is never used.
   or no key is configured: show a "try again later" message. An answer usually takes a few
   seconds, at most about 60.
 
+**Chat history** (optional `conversationId`; clients that don't send it work as before):
+* Without `conversationId` (or `null`), a new conversation is saved with **all** `messages`
+  and the answer. Its title is the first user message (spaces collapsed, at most
+  80 characters).
+* With `conversationId`, only the **last** message (the new question) and the answer are added
+  to that conversation. Still send the recent messages as before: they are what the model
+  reads.
+* The answer's `conversationId` is always set: send it with the next question.
+* A conversation keeps its last 200 messages; older ones are dropped.
+* Only a successful answer is saved: `422`, `429` and `503` save nothing. An unknown, deleted
+  or another user's `conversationId` is `404 CONVERSATION_NOT_FOUND`, checked before the model
+  is asked.
+
+**Doing things** ("Add a store Central Plaza, 45 Rudaki Ave", in `en`, `ru` or `tg`):
+* The assistant can **read** all data of your business with tools (one per `GET` endpoint,
+  with the same parameters and the same answers), up to 6 rounds per question.
+* It never changes data itself. A change comes back in `actions` as a **proposal**
+  (`status: PROPOSED`) with a `summary` in the question's language, the exact `params` of the
+  normal endpoint and `danger: true` for deletes. Show each with Confirm / Cancel and call
+  `POST /api/assistant/actions/{id}/confirm` or `/cancel`. A proposal can be confirmed for
+  30 minutes.
+* When a required value is missing or a name matches several records, it asks a question
+  instead. "Add 3 stores" gives 3 actions.
+* Clients that ignore `actions` keep working: the answer text tells the user what was
+  proposed. Auth (register, login, password) is never available to the assistant.
+
 Body (`application/json`): **ChatRequest**
 
 Responses:
 - `200` Successful Response → **ChatReplyOut**
 - `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
 - `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `CONVERSATION_NOT_FOUND` → **ErrorResponse**
 - `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
 - `429` Too many attempts: `RATE_LIMITED` → **ErrorResponse**
 - `503` Temporarily unavailable: `ASSISTANT_UNAVAILABLE` → **ErrorResponse**
+
+### `GET /api/assistant/conversations` 🔒
+
+**List saved conversations**
+
+The signed-in user's saved assistant chats, **most recently updated first**
+(`updatedAt` = when a message was last added). Each item has the title, `messageCount` and
+`lastMessage` (the first 120 characters of the newest message), so a
+chat list can be drawn without loading the messages. Deleted conversations are not listed.
+Other users never see your conversations.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `page` | query | integer |  | Page number, starting at 1. minimum=`1`, default=`1` |
+| `limit` | query | integer |  | Items per page (max 100). minimum=`1`, maximum=`100`, default=`20` |
+
+Responses:
+- `200` Successful Response → **Page_ConversationSummaryOut_**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `POST /api/assistant/conversations` 🔒
+
+**Save a conversation (without asking the AI)**
+
+Saves a chat the app already has, for example the chats kept in browser
+storage before history was saved on the server. **The AI is not called** and no question is
+counted against the limits.
+
+* `messages`: 1–200 messages, oldest first, each 1–2000
+  characters. Each `time` is kept (without a time zone it is read as business time); a message
+  without `time` gets the server's time.
+* `title` (optional, 1–80 characters). Default: the first user message, spaces
+  collapsed and shortened to 80 characters.
+
+Continue the chat with `POST /api/assistant/chat` and the returned `id` as `conversationId`.
+
+Body (`application/json`): **ConversationCreate**
+
+Responses:
+- `201` Successful Response → **ConversationOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `GET /api/assistant/conversations/{id}` 🔒
+
+**Get a saved conversation**
+
+The conversation with all its saved messages, **oldest first** (each with `role`, `text` and `time`). Another user's or a deleted conversation is `404 CONVERSATION_NOT_FOUND`.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The conversation ID.  |
+
+Responses:
+- `200` Successful Response → **ConversationOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `CONVERSATION_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `PATCH /api/assistant/conversations/{id}` 🔒
+
+**Rename a conversation**
+
+Sets the `title` (1–80 characters). `updatedAt` doesn't change, so the conversation keeps its place in the list.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The conversation ID.  |
+
+Body (`application/json`): **ConversationRename**
+
+Responses:
+- `200` Successful Response → **ConversationSummaryOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `CONVERSATION_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `DELETE /api/assistant/conversations/{id}` 🔒
+
+**Delete a conversation (soft delete)**
+
+The conversation disappears for the user: afterwards `GET`, `PATCH`, `DELETE` and `POST /api/assistant/chat` with this ID answer `404 CONVERSATION_NOT_FOUND`. It is kept in the database (`deletedAt`), like other deleted records.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The conversation ID.  |
+
+Responses:
+- `204` Successful Response
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `CONVERSATION_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `GET /api/assistant/actions/{id}` 🔒
+
+**Get a proposed action**
+
+A change the assistant proposed, with its current `status` (`PROPOSED`, `DONE`, `FAILED`, `CANCELLED`, `EXPIRED`). Another user's action is `404 ACTION_NOT_FOUND`.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The action ID.  |
+
+Responses:
+- `200` Successful Response → **AssistantActionOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `ACTION_NOT_FOUND` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `POST /api/assistant/actions/{id}/confirm` 🔒
+
+**Confirm a proposed action (run it)**
+
+Runs the change **exactly like the normal endpoint** (the same validation,
+activity log, notifications and soft-delete rules), in one transaction.
+
+* Optional body `{"params": {…}}`: fields the user corrected. They replace the proposed ones;
+  the others stay (`id` can't be changed). The params are validated again.
+* `200` with `status: DONE` and `result` (what the endpoint returns, e.g. a `StoreOut`;
+  `null` for deletes), or `200` with `status: FAILED` and `error` (`code` is the endpoint's own,
+  e.g. `VALIDATION_ERROR`, `STORE_NAME_TAKEN`, `SALE_DATE_IN_FUTURE`). A `FAILED` action can be
+  confirmed again with corrected `params`.
+* Confirming a `DONE` action returns it again; the change never runs twice, even for two
+  confirms at the same time.
+* `409 ACTION_ALREADY_HANDLED` after Cancel; `409 ACTION_EXPIRED` more than
+  30 minutes after the proposal (ask the assistant again).
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The action ID.  |
+
+Body (`application/json`): **ActionConfirm \| null**
+
+Responses:
+- `200` Successful Response → **AssistantActionOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `ACTION_NOT_FOUND` → **ErrorResponse**
+- `409` Conflicts with the current state: `ACTION_ALREADY_HANDLED`, `ACTION_EXPIRED` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
+
+### `POST /api/assistant/actions/{id}/cancel` 🔒
+
+**Cancel a proposed action**
+
+Nothing changes; the action becomes `CANCELLED` (cancelling it again returns it again). `409 ACTION_ALREADY_HANDLED` after Confirm, `409 ACTION_EXPIRED` when it expired.
+
+| Param | In | Type | Required | Notes |
+|---|---|---|---|---|
+| `id` | path | string (uuid) | yes | The action ID.  |
+
+Responses:
+- `200` Successful Response → **AssistantActionOut**
+- `401` Not authenticated or the token is not valid: `AUTH_REQUIRED`, `AUTH_TOKEN_EXPIRED`, `AUTH_TOKEN_INVALID`, `AUTH_SESSION_REVOKED` → **ErrorResponse**
+- `403` Authenticated but not allowed: `AUTH_ACCOUNT_DISABLED` → **ErrorResponse**
+- `404` Not found (records of another business are also reported as not found): `ACTION_NOT_FOUND` → **ErrorResponse**
+- `409` Conflicts with the current state: `ACTION_ALREADY_HANDLED`, `ACTION_EXPIRED` → **ErrorResponse**
+- `422` Validation or business-rule error: `VALIDATION_ERROR` → **ErrorResponse**
 
 ## Settings
 
@@ -1160,6 +1374,29 @@ Responses:
 
 ## Schemas
 
+### ActionConfirm
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `params` | object \| null |  | Optional corrections made by the user: the fields sent replace the proposed ones, the others stay. `id` can't be changed.  |
+
+### ActionErrorOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `code` | string | yes | The same code the normal endpoint returns, e.g. `VALIDATION_ERROR`, `STORE_NOT_FOUND`.  |
+| `message` | string | yes | For developers. Show a translated text based on `code`.  |
+
+### ActionStatus
+
+Enum: `PROPOSED`, `DONE`, `FAILED`, `CANCELLED`, `EXPIRED`
+
+### ActionType
+
+The changes the assistant can propose. Each one is a normal endpoint.
+
+Enum: `CREATE_STORE`, `UPDATE_STORE`, `DELETE_STORE`, `CREATE_SALE`, `UPDATE_SALE`, `DELETE_SALE`, `CREATE_EMPLOYEE`, `UPDATE_EMPLOYEE`, `DELETE_EMPLOYEE`, `CREATE_PAYROLL`, `DELETE_PAYROLL`, `CREATE_EXPENSE`, `UPDATE_EXPENSE`, `DELETE_EXPENSE`, `SET_TARGET`, `UPDATE_PROFILE`, `MARK_NOTIFICATIONS_READ`
+
 ### ActivityAction
 
 Enum: `CREATED`, `UPDATED`, `DELETED`, `STATUS_CHANGED`, `PAID`, `CANCELLED`
@@ -1178,7 +1415,7 @@ One change. Build the sentence in the app from `type` + `action` (translated).
 | `storeId` | string (uuid) \| null | yes |   |
 | `storeName` | string \| null | yes |   |
 | `employeeId` | string (uuid) \| null | yes | Set for EMPLOYEE and PAYROLL rows.  |
-| `amount` | string \| null | yes | The record's amount, signed by money direction: sales are positive (`"1250.50"`), salary payments negative (`"-3000.00"`), also when deleted or cancelled. `null` for stores, employees and the profile.  |
+| `amount` | string \| null | yes | The record's amount, signed by money direction: sales are positive (`"1250.50"`), salary payments negative (`"-3000.00"`), also when deleted or cancelled. `null` for stores, employees and the profile. pattern=`^-?\d+\.\d{2}$` |
 | `note` | string \| null | yes | The record's own note (sale description, payment note).  |
 | `changedFields` | string[] \| null | yes | For `UPDATED`: the fields that changed (camelCase), e.g. `["name"]`.  |
 | `status` | string \| null | yes | For `STATUS_CHANGED`: the new status (`ACTIVE` / `INACTIVE`).  |
@@ -1190,6 +1427,23 @@ One change. Build the sentence in the app from `type` + `action` (translated).
 ### ActivityType
 
 Enum: `STORE`, `SALE`, `EMPLOYEE`, `PAYROLL`, `PROFILE`
+
+### AssistantActionOut
+
+A change the assistant proposed. Nothing changes until the user confirms it.
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string (uuid) | yes |   |
+| `type` | ActionType | yes | Which change, e.g. `CREATE_STORE`.  |
+| `status` | ActionStatus | yes | `PROPOSED` (show Confirm / Cancel), `DONE`, `FAILED` (see `error`; can be confirmed again with corrected `params`), `CANCELLED`, `EXPIRED` (not confirmed within 30 minutes).  |
+| `summary` | string | yes | One sentence in the language of the question, made by the backend from `params`.  |
+| `danger` | boolean | yes | `true` for `DELETE_*`: show a red button.  |
+| `params` | object | yes | Exactly the JSON body of the normal endpoint, plus `id` for updates and deletes.  |
+| `result` | object \| null | yes | When `DONE`: what the normal endpoint returns (e.g. a `StoreOut`); `null` for deletes and otherwise.  |
+| `error` | ActionErrorOut \| null | yes | When `FAILED`, otherwise `null`.  |
+| `createdAt` | string (date-time) | yes | ISO 8601 UTC.  |
+| `expiresAt` | string (date-time) | yes | `createdAt` + 30 minutes, ISO 8601 UTC.  |
 
 ### AuthResponse
 
@@ -1228,7 +1482,7 @@ Enum: `STORE`, `SALE`, `EMPLOYEE`, `PAYROLL`, `PROFILE`
 |---|---|---|---|
 | `role` | string | yes | `user` (the person) or `assistant` (an earlier answer). one of `user`, `assistant` |
 | `text` | string | yes | 1–2000 characters. minLength=`1`, maxLength=`2000` |
-| `time` | string (date-time) \| null |  | When the message was written (ISO 8601). Optional, not used for answers.  |
+| `time` | string (date-time) \| null |  | When the message was written (ISO 8601). Optional and not used for answers. It is saved with the message in the chat history: without a time zone it is read as business time (Asia/Dushanbe); when absent, the server's time is used.  |
 
 ### ChatReplyOut
 
@@ -1237,13 +1491,61 @@ Enum: `STORE`, `SALE`, `EMPLOYEE`, `PAYROLL`, `PROFILE`
 | `role` | string |  |  default=`assistant`, const=`assistant` |
 | `text` | string | yes | The answer, plain text, at most 2000 characters, so it can be sent back in `messages` as it is.  |
 | `time` | string (date-time) | yes | When the answer was made, ISO 8601 UTC.  |
+| `conversationId` | string (uuid) | yes | The saved conversation this question and answer belong to. Send it as `conversationId` with the next question to continue the same chat.  |
+| `actions` | AssistantActionOut[] |  | Changes the assistant proposed in this answer (empty when it only answered). Show each with Confirm / Cancel; nothing changes until `POST /api/assistant/actions/{id}/confirm`.  |
 
 ### ChatRequest
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `language` | string | yes | Answer language: `en` English, `ru` Russian, `tg` Tajik (Cyrillic). one of `en`, `ru`, `tg` |
-| `messages` | ChatMessage[] | yes | The conversation, oldest first, ending with the user's new question. Only the last 20 messages are used. maxItems=`200`, minItems=`1` |
+| `messages` | ChatMessage[] | yes | The conversation, oldest first, ending with the user's new question. Only the last 20 messages are used. minItems=`1`, maxItems=`200` |
+| `conversationId` | string (uuid) \| null |  | The saved conversation to continue. Absent or `null`: a new conversation is saved with all `messages` and the answer. Given: only the last message (the new question) and the answer are added to it. Unknown, deleted or another user's ID: `404 CONVERSATION_NOT_FOUND`, before the model is asked.  |
+
+### ConversationCreate
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `title` | string \| null |  | Default: the first user message, shortened to 80 characters. minLength=`1`, maxLength=`80` |
+| `messages` | ChatMessage[] | yes | The chat, oldest first: 1–200 messages. minItems=`1`, maxItems=`200` |
+
+### ConversationMessageOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `role` | string | yes | `user` (the person) or `assistant` (an answer). one of `user`, `assistant` |
+| `text` | string | yes |   |
+| `time` | string (date-time) | yes | When the message was written, ISO 8601 UTC.  |
+| `actions` | AssistantActionOut[] |  | The changes proposed in this answer, with their current status (empty for user messages).  |
+
+### ConversationOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string (uuid) | yes |   |
+| `title` | string | yes |   |
+| `messageCount` | integer | yes | Saved messages (at most 200).  |
+| `lastMessage` | string | yes | The first 120 characters of the newest message.  |
+| `createdAt` | string (date-time) | yes | ISO 8601 UTC.  |
+| `updatedAt` | string (date-time) | yes | When a message was last added, ISO 8601 UTC. Lists are sorted by it, newest first; renaming doesn't change it.  |
+| `messages` | ConversationMessageOut[] | yes | Oldest first.  |
+
+### ConversationRename
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `title` | string | yes | 1–80 characters (spaces and line breaks collapse to one space). minLength=`1`, maxLength=`80` |
+
+### ConversationSummaryOut
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string (uuid) | yes |   |
+| `title` | string | yes |   |
+| `messageCount` | integer | yes | Saved messages (at most 200).  |
+| `lastMessage` | string | yes | The first 120 characters of the newest message.  |
+| `createdAt` | string (date-time) | yes | ISO 8601 UTC.  |
+| `updatedAt` | string (date-time) | yes | When a message was last added, ISO 8601 UTC. Lists are sorted by it, newest first; renaming doesn't change it.  |
 
 ### DashboardOut
 
@@ -1273,8 +1575,8 @@ Enum: `STORE`, `SALE`, `EMPLOYEE`, `PAYROLL`, `PROFILE`
 | `monthExpenses` | string |  | Expenses this month (`GET /api/expenses`). pattern=`^-?\d+\.\d{2}$`, default=`0.00` |
 | `monthProfit` | string |  | This month's sales - expenses - salary due (= `GET /api/reports/profit`). pattern=`^-?\d+\.\d{2}$`, default=`0.00` |
 | `monthMarginPercent` | number \| null |  | `monthProfit / monthSales` in %; `null` without sales.  |
-| `weekTarget` | string \| null |  | Business-wide weekly sales target (`PUT /api/targets`).  |
-| `monthTarget` | string \| null |  | Business-wide monthly sales target.  |
+| `weekTarget` | string \| null |  | Business-wide weekly sales target (`PUT /api/targets`). pattern=`^-?\d+\.\d{2}$` |
+| `monthTarget` | string \| null |  | Business-wide monthly sales target. pattern=`^-?\d+\.\d{2}$` |
 
 ### DaySalesOut
 
@@ -1323,7 +1625,7 @@ Enum: `STORE`, `SALE`, `EMPLOYEE`, `PAYROLL`, `PROFILE`
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `fullName` | string | yes |  minLength=`1`, maxLength=`150` |
-| `phone` | string \| null |  |   |
+| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
 | `position` | string | yes |  minLength=`1`, maxLength=`100` |
 | `storeId` | string (uuid) | yes |   |
 | `monthlySalary` | string | yes | Monthly salary in TJS. pattern=`^\d{1,12}(\.\d{1,2})?$` |
@@ -1373,11 +1675,11 @@ Enum: `ACTIVE`, `INACTIVE`
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `fullName` | string \| null |  |   |
-| `phone` | string \| null |  |   |
-| `position` | string \| null |  |   |
+| `fullName` | string \| null |  |  minLength=`1`, maxLength=`150` |
+| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
+| `position` | string \| null |  |  minLength=`1`, maxLength=`100` |
 | `storeId` | string (uuid) \| null |  |   |
-| `monthlySalary` | string \| null |  | A new salary applies from the current month on; past months keep the salary they had.  |
+| `monthlySalary` | string \| null |  | A new salary applies from the current month on; past months keep the salary they had. pattern=`^\d{1,12}(\.\d{1,2})?$` |
 | `hiredAt` | string (date) \| null |  | First working day, `YYYY-MM-DD`. Can't be in the future.  |
 | `terminatedAt` | string (date) \| null |  | Last working day, or `null` while employed. Salary stops being due after this day. Setting `status` to `INACTIVE` without it uses today.  |
 | `status` | EmployeeStatus \| null |  | `INACTIVE` → `ACTIVE` clears `terminatedAt` (unless you send it).  |
@@ -1464,7 +1766,7 @@ Enum: `RENT`, `UTILITIES`, `DELIVERY`, `SUPPLIES`, `MARKETING`, `TAXES`, `OTHER`
 | `category` | ExpenseCategory | yes |   |
 | `amount` | string | yes | Amount in TJS, greater than 0. Send a string like `"1250.50"` (a JSON number is also accepted). pattern=`^\d{1,12}(\.\d{1,2})?$` |
 | `expenseDate` | string (date) \| null |  | `YYYY-MM-DD`. Defaults to today. Can't be in the future.  |
-| `description` | string \| null |  |   |
+| `description` | string \| null |  |  maxLength=`500` |
 
 ### ExpenseOut
 
@@ -1499,9 +1801,9 @@ Enum: `RENT`, `UTILITIES`, `DELIVERY`, `SUPPLIES`, `MARKETING`, `TAXES`, `OTHER`
 |---|---|---|---|
 | `storeId` | string (uuid) \| null |  | The store the expense belongs to, or `null` for the whole business.  |
 | `category` | ExpenseCategory \| null |  |   |
-| `amount` | string \| null |  |   |
+| `amount` | string \| null |  |  pattern=`^\d{1,12}(\.\d{1,2})?$` |
 | `expenseDate` | string (date) \| null |  | `YYYY-MM-DD`. Defaults to today. Can't be in the future.  |
-| `description` | string \| null |  |   |
+| `description` | string \| null |  |  maxLength=`500` |
 
 ### HealthOut
 
@@ -1586,7 +1888,7 @@ Enum: `STORES`, `SALES`, `PAYROLL`
 | `kind` | NotificationKind | yes | `UNPAID_SALARIES`: employees with salary still to pay this month. `SALARY_OVERDUE`: unpaid salary of earlier months. `STORE_NO_SALES_TODAY`: an ACTIVE store without a sale today (one per store).  |
 | `severity` | Severity | yes |   |
 | `count` | integer | yes | UNPAID_SALARIES: employees; SALARY_OVERDUE: unpaid employee-months (2 employees × 3 months = 6); STORE_NO_SALES_TODAY: 1.  |
-| `amount` | string \| null | yes | Salary still to pay; `null` for stores.  |
+| `amount` | string \| null | yes | Salary still to pay; `null` for stores. pattern=`^-?\d+\.\d{2}$` |
 | `storeId` | string (uuid) \| null | yes |   |
 | `storeName` | string \| null | yes |   |
 | `link` | NotificationLink | yes | The app screen to open.  |
@@ -1606,6 +1908,16 @@ Enum: `STORES`, `SALES`, `PAYROLL`
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `items` | ActivityOut[] | yes |   |
+| `total` | integer | yes | Number of items matching the filters (all pages).  |
+| `page` | integer | yes |   |
+| `limit` | integer | yes |   |
+| `pages` | integer | yes | Total number of pages.  |
+
+### Page_ConversationSummaryOut_
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `items` | ConversationSummaryOut[] | yes |   |
 | `total` | integer | yes | Number of items matching the filters (all pages).  |
 | `page` | integer | yes |   |
 | `limit` | integer | yes |   |
@@ -1657,7 +1969,7 @@ Enum: `STORES`, `SALES`, `PAYROLL`
 | `month` | integer | yes | The month the salary is for. minimum=`1.0`, maximum=`12.0` |
 | `year` | integer | yes |  minimum=`2000.0`, maximum=`2100.0` |
 | `paymentDate` | string (date) \| null |  | When the money was paid, `YYYY-MM-DD`. Defaults to today.  |
-| `note` | string \| null |  |   |
+| `note` | string \| null |  |  maxLength=`500` |
 | `method` | SalaryPaymentMethod \| null |  | How it was paid: `BANK_TRANSFER` or `CASH` (optional).  |
 
 ### PaymentMethod
@@ -1789,10 +2101,10 @@ The employee's salary for the payment's month, after all payments so far.
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `fullName` | string \| null |  |   |
-| `email` | string (email) \| null |  |   |
-| `phone` | string \| null |  |   |
-| `businessName` | string \| null |  | Renames your business.  |
+| `fullName` | string \| null |  |  minLength=`1`, maxLength=`150` |
+| `email` | string (email) \| null |  |  maxLength=`320` |
+| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
+| `businessName` | string \| null |  | Renames your business. minLength=`1`, maxLength=`150` |
 
 ### ProfitOut
 
@@ -1831,8 +2143,8 @@ The employee's salary for the payment's month, after all payments so far.
 | `fullName` | string | yes |  minLength=`1`, maxLength=`150` |
 | `email` | string (email) | yes |  maxLength=`320` |
 | `password` | string | yes | 8–128 characters, not a commonly used password. minLength=`1`, maxLength=`128` |
-| `phone` | string \| null |  |   |
-| `businessName` | string \| null |  | Name of your business. Defaults to your full name.  |
+| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
+| `businessName` | string \| null |  | Name of your business. Defaults to your full name. minLength=`1`, maxLength=`150` |
 
 ### SalaryChangeOut
 
@@ -1853,11 +2165,11 @@ Enum: `BANK_TRANSFER`, `CASH`
 | `storeId` | string (uuid) | yes |   |
 | `amount` | string | yes | Amount in TJS, greater than 0. Send a string like `"1250.50"` (a JSON number is also accepted). pattern=`^\d{1,12}(\.\d{1,2})?$` |
 | `saleDate` | string (date) \| null |  | `YYYY-MM-DD`. Defaults to today. Can't be in the future.  |
-| `description` | string \| null |  |   |
+| `description` | string \| null |  |  maxLength=`500` |
 | `paymentMethod` | PaymentMethod \| null |  | `CASH`, `CARD`, `QR` or `MIXED` (optional).  |
-| `cashAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`).  |
-| `cardAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`).  |
-| `receiptNumber` | string \| null |  |   |
+| `cashAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`). pattern=`^\d{1,12}(\.\d{1,2})?$` |
+| `cardAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`). pattern=`^\d{1,12}(\.\d{1,2})?$` |
+| `receiptNumber` | string \| null |  |  maxLength=`50` |
 
 ### SaleOut
 
@@ -1870,8 +2182,8 @@ Enum: `BANK_TRANSFER`, `CASH`
 | `saleDate` | string (date) | yes |   |
 | `description` | string \| null | yes |   |
 | `paymentMethod` | PaymentMethod \| null |  |   |
-| `cashAmount` | string \| null |  |   |
-| `cardAmount` | string \| null |  |   |
+| `cashAmount` | string \| null |  |  pattern=`^-?\d+\.\d{2}$` |
+| `cardAmount` | string \| null |  |  pattern=`^-?\d+\.\d{2}$` |
 | `receiptNumber` | string \| null |  |   |
 | `registeredById` | string (uuid) \| null |  | The user who recorded the sale (set by the server).  |
 | `registeredByName` | string \| null |  |   |
@@ -1894,13 +2206,13 @@ Enum: `BANK_TRANSFER`, `CASH`
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `storeId` | string (uuid) \| null |  |   |
-| `amount` | string \| null |  | Changing `amount` without sending `cashAmount` / `cardAmount` clears a split that no longer adds up.  |
+| `amount` | string \| null |  | Changing `amount` without sending `cashAmount` / `cardAmount` clears a split that no longer adds up. pattern=`^\d{1,12}(\.\d{1,2})?$` |
 | `saleDate` | string (date) \| null |  |   |
-| `description` | string \| null |  |   |
+| `description` | string \| null |  |  maxLength=`500` |
 | `paymentMethod` | PaymentMethod \| null |  | `CASH`, `CARD`, `QR` or `MIXED` (optional).  |
-| `cashAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`).  |
-| `cardAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`).  |
-| `receiptNumber` | string \| null |  |   |
+| `cashAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`). pattern=`^\d{1,12}(\.\d{1,2})?$` |
+| `cardAmount` | string \| null |  | Optional split of a payment. When both `cashAmount` and `cardAmount` are given they must add up to `amount`, and neither may be larger than `amount` (`422 SALE_SPLIT_MISMATCH`). pattern=`^\d{1,12}(\.\d{1,2})?$` |
+| `receiptNumber` | string \| null |  |  maxLength=`50` |
 
 ### SalesReportOut
 
@@ -1968,16 +2280,16 @@ Enum: `INFO`, `WARNING`
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `name` | string | yes |  minLength=`1`, maxLength=`150` |
-| `address` | string \| null |  |   |
-| `phone` | string \| null |  |   |
-| `description` | string \| null |  |   |
+| `address` | string \| null |  |  maxLength=`255` |
+| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
+| `description` | string \| null |  |  maxLength=`1000` |
 | `status` | StoreStatus |  |  default=`ACTIVE` |
-| `city` | string \| null |  |   |
-| `region` | string \| null |  | Region, e.g. `Dushanbe`, `Sughd`, `Khatlon`, `GBAO`, `RRS`. Groups the store comparison.  |
-| `type` | string \| null |  | Store format, e.g. `Flagship`, `Supermarket`, `Kiosk`.  |
-| `counters` | integer \| null |  | Number of checkout counters, 0–999.  |
-| `openingHours` | string \| null |  |   |
-| `statusNote` | string \| null |  | Why the store has its status, e.g. `Renovation`.  |
+| `city` | string \| null |  |  maxLength=`100` |
+| `region` | string \| null |  | Region, e.g. `Dushanbe`, `Sughd`, `Khatlon`, `GBAO`, `RRS`. Groups the store comparison. maxLength=`100` |
+| `type` | string \| null |  | Store format, e.g. `Flagship`, `Supermarket`, `Kiosk`. maxLength=`50` |
+| `counters` | integer \| null |  | Number of checkout counters, 0–999. minimum=`0.0`, maximum=`999.0` |
+| `openingHours` | string \| null |  |  maxLength=`100` |
+| `statusNote` | string \| null |  | Why the store has its status, e.g. `Renovation`. maxLength=`255` |
 
 ### StoreOut
 
@@ -2035,17 +2347,17 @@ Enum: `ACTIVE`, `INACTIVE`
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `name` | string \| null |  |   |
-| `address` | string \| null |  |   |
-| `phone` | string \| null |  |   |
-| `description` | string \| null |  |   |
+| `name` | string \| null |  |  minLength=`1`, maxLength=`150` |
+| `address` | string \| null |  |  maxLength=`255` |
+| `phone` | string \| null |  |  pattern=`^\+?[0-9]{7,15}$` |
+| `description` | string \| null |  |  maxLength=`1000` |
 | `status` | StoreStatus \| null |  |   |
-| `city` | string \| null |  |   |
-| `region` | string \| null |  | Region, e.g. `Dushanbe`, `Sughd`, `Khatlon`, `GBAO`, `RRS`. Groups the store comparison.  |
-| `type` | string \| null |  | Store format, e.g. `Flagship`, `Supermarket`, `Kiosk`.  |
-| `counters` | integer \| null |  | Number of checkout counters, 0–999.  |
-| `openingHours` | string \| null |  |   |
-| `statusNote` | string \| null |  | Why the store has its status, e.g. `Renovation`.  |
+| `city` | string \| null |  |  maxLength=`100` |
+| `region` | string \| null |  | Region, e.g. `Dushanbe`, `Sughd`, `Khatlon`, `GBAO`, `RRS`. Groups the store comparison. maxLength=`100` |
+| `type` | string \| null |  | Store format, e.g. `Flagship`, `Supermarket`, `Kiosk`. maxLength=`50` |
+| `counters` | integer \| null |  | Number of checkout counters, 0–999. minimum=`0.0`, maximum=`999.0` |
+| `openingHours` | string \| null |  |  maxLength=`100` |
+| `statusNote` | string \| null |  | Why the store has its status, e.g. `Renovation`. maxLength=`255` |
 
 ### TargetOut
 
@@ -2104,11 +2416,15 @@ Enum: `OWNER`
 | 401 | `AUTH_TOKEN_EXPIRED` | The access token has expired. Refresh it and retry. |
 | 401 | `AUTH_TOKEN_INVALID` | The token is invalid. Please log in again. |
 | 403 | `AUTH_ACCOUNT_DISABLED` | This account has been disabled. |
+| 404 | `ACTION_NOT_FOUND` | Action not found. |
+| 404 | `CONVERSATION_NOT_FOUND` | Conversation not found. |
 | 404 | `EMPLOYEE_NOT_FOUND` | Employee not found. |
 | 404 | `EXPENSE_NOT_FOUND` | Expense not found. |
 | 404 | `PAYROLL_NOT_FOUND` | Payroll payment not found. |
 | 404 | `SALE_NOT_FOUND` | Sale not found. |
 | 404 | `STORE_NOT_FOUND` | Store not found. |
+| 409 | `ACTION_ALREADY_HANDLED` | This action has already been confirmed or cancelled. |
+| 409 | `ACTION_EXPIRED` | This action has expired. Ask the assistant again. |
 | 409 | `EMAIL_ALREADY_REGISTERED` | An account with this email already exists. |
 | 409 | `PAYROLL_ALREADY_PAID` | The salary for this month is already fully paid. |
 | 409 | `STORE_HAS_ACTIVE_EMPLOYEES` | The store still has active employees. Move or deactivate them first. |
@@ -2132,4 +2448,4 @@ Enum: `OWNER`
 | 503 | `ASSISTANT_UNAVAILABLE` | The AI assistant is temporarily unavailable. Try again later. |
 
 ---
-Questions about the API → Mehroj (backend). If something here differs from the live Swagger, the Swagger wins — regenerate this file.
+Questions about the API → Mehroj (backend). If something here differs from the live Swagger, the Swagger wins — regenerate this file with `python3 scripts/gen_api_md.py`.

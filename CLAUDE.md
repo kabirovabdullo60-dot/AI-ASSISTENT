@@ -37,6 +37,15 @@
 - A hook (`.claude/hooks/branch_guard.sh`) enforces this for Read, Glob, Grep, Bash, Edit and Write.
   Never try to get around it (other paths, symlinks, scripts, `cat`, `cp`, `find` ...).
 
+## Keep the project green (CI) — both projects
+- GitHub Actions (`.github/workflows/ci.yml`) runs on every push and pull request: `flutter analyze`
+  and `flutter test` for **abdullo_web** and **subhon_app**, and `flutter build web` for the web.
+- Before every commit run the same locally in your own folder. Never push or merge with a red check;
+  fix it in your folder (never in the other person's).
+- `main` changes only through a pull request that is green. No force pushes.
+- `API.md` is generated: after a backend deploy run `python3 scripts/gen_api_md.py` on `main` and
+  commit. Edit only its hand-written intro (before "## Endpoints overview").
+
 ## Backend API — connect every screen automatically
 - Mehroj's backend is live: `https://api-production-86caefb2.up.railway.app` (Swagger: `/docs`).
   The full contract — every endpoint, request/response field, error code and the auth flow — is in **`API.md`** at the repo root. Read it before touching data.
