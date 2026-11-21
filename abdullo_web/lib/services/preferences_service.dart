@@ -4,6 +4,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferencesService {
   static const _languageKey = 'language';
   static const _paletteKey = 'palette';
+  static const _sectionKey = 'section';
+
+  /// The open page, so a reload comes back to it.
+  Future<void> saveSection(String name) async {
+    try {
+      await (await SharedPreferences.getInstance()).setString(_sectionKey, name);
+    } catch (_) {}
+  }
+
+  Future<String?> loadSection() async {
+    try {
+      return (await SharedPreferences.getInstance()).getString(_sectionKey);
+    } catch (_) {
+      return null;
+    }
+  }
+
   static const _voiceRepliesKey = 'voiceReplies';
 
   /// Read assistant answers aloud after a spoken question (default on).

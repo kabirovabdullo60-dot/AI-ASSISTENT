@@ -9,7 +9,6 @@ import '../models/sale_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
 import '../viewmodels/stores_view_model.dart';
-import '../widgets/status_badge.dart';
 
 /// "New Daily Sales Record" → POST /api/sales; with [sale] it edits → PUT /api/sales/{id}.
 /// Used on the Sales page and in the Record Sale / Edit dialogs.
@@ -98,22 +97,13 @@ class _SaleEntryFormViewState extends State<SaleEntryFormView> {
               Expanded(
                 child: Text(
                   widget.sale == null ? tr.newDailySale : tr.editSale,
-                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
-              StatusBadge(tr.posTerminal, tone: BadgeTone.info),
             ],
           ),
           const SizedBox(height: 18),
-          Row(
-            children: [
-              Expanded(child: Text(tr.selectStore, style: label)),
-              Text(
-                tr.activeBranches(stores.activeCount),
-                style: TextStyle(fontSize: 11.5, color: AppColors.accentText, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
+          Text(tr.selectStore, style: label),
           const SizedBox(height: 6),
           if (options.isEmpty)
             Text(tr.selectStoreFirst, style: TextStyle(color: AppColors.red))

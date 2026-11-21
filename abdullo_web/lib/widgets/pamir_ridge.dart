@@ -6,7 +6,9 @@ import '../core/motion/motion.dart';
 
 /// Two sharp peaks for the logo tile.
 class RidgeMarkPainter extends CustomPainter {
-  const RidgeMarkPainter();
+  const RidgeMarkPainter({this.color = Colors.white});
+
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size s) {
@@ -19,7 +21,7 @@ class RidgeMarkPainter extends CustomPainter {
     canvas.drawPath(
       p,
       Paint()
-        ..color = Colors.white
+        ..color = color
         ..style = PaintingStyle.stroke
         ..strokeWidth = math.max(1.6, s.width * 0.11)
         ..strokeJoin = StrokeJoin.round
@@ -28,7 +30,7 @@ class RidgeMarkPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(RidgeMarkPainter old) => false;
+  bool shouldRepaint(RidgeMarkPainter old) => old.color != color;
 }
 
 /// Layered mountain ridgelines (Pamir) drawn as crisp vector lines, back ranges fainter.

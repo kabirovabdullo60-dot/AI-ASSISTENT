@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import 'core/constants/brand.dart';
 import 'core/l10n/l10n.dart';
+import 'core/navigation/app_section.dart';
 import 'core/network/api_client.dart';
 import 'core/network/token_storage.dart';
 import 'core/theme/app_palette.dart';
@@ -41,15 +43,27 @@ import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/splash_view.dart';
 
-void main() {
-  runApp(const WebApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // The page that was open before a reload (read before the first frame, so no flash of the dashboard).
+  final saved = await PreferencesService().loadSection();
+  runApp(WebApp(initialSection: AppSection.values.where((s) => s.name == saved).firstOrNull));
 }
 
 class WebApp extends StatefulWidget {
   /// [httpClient] can be replaced in tests with a fake backend.
-  const WebApp({super.key, this.httpClient, this.voice, this.splashDuration = const Duration(seconds: 5)});
+  const WebApp({
+    super.key,
+    this.httpClient,
+    this.voice,
+    this.initialSection,
+    this.splashDuration = const Duration(seconds: 5),
+  });
 
   final http.Client? httpClient;
+
+  /// The page to open after sign-in (the one open before the browser reloaded).
+  final AppSection? initialSection;
 
   /// Microphone + speech; tests pass a fake.
   final VoiceService? voice;
@@ -131,7 +145,7 @@ class _WebAppState extends State<WebApp> {
             // Global key: moving under the signed-in providers keeps the app (and the running splash)
             // alive instead of rebuilding it; a new palette still rebuilds it.
             key: _appKeyFor(palette),
-            title: context.select<AuthViewModel, String?>((a) => a.user?.businessName) ?? 'Apex Suite',
+            title: context.select<AuthViewModel, String?>((a) => a.user?.businessName) ?? AppBrand.name,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             locale: Locale(context.select<SettingsViewModel, String>((s) => s.language.name)),
@@ -150,7 +164,12 @@ class _WebAppState extends State<WebApp> {
           );
           // Data providers sit ABOVE MaterialApp so dialogs (which open on the root navigator) see them too.
           if (status != AuthStatus.signedIn) return app;
-          return _SignedIn(key: ValueKey(context.read<AuthViewModel>().user?.id), api: _api, child: app);
+          return _SignedIn(
+            key: ValueKey(context.read<AuthViewModel>().user?.id),
+            api: _api,
+            initialSection: widget.initialSection,
+            child: app,
+          );
         },
       ),
     );
@@ -159,9 +178,10 @@ class _WebAppState extends State<WebApp> {
 
 /// Data ViewModels live only while signed in, so logging out clears every page.
 class _SignedIn extends StatefulWidget {
-  const _SignedIn({super.key, required this.api, required this.child});
+  const _SignedIn({super.key, required this.api, required this.child, this.initialSection});
 
   final ApiClient api;
+  final AppSection? initialSection;
   final Widget child;
 
   @override
@@ -186,7 +206,12 @@ class _SignedInState extends State<_SignedIn> {
       providers: [
         Provider.value(value: sales),
         Provider.value(value: employees),
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(
+          create: (_) => HomeViewModel(
+            initial: widget.initialSection,
+            onSectionChanged: (s) => PreferencesService().saveSection(s.name),
+          ),
+        ),
         ChangeNotifierProvider(create: (_) => NotificationsViewModel(NotificationService(api))..load()),
         ChangeNotifierProvider(
           create: (_) => DashboardViewModel(

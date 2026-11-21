@@ -48,10 +48,11 @@ void main() {
       expect(find.text('The current password is incorrect.'), findsOneWidget);
     });
 
-    testWidgets('settings at $w lists the endpoints', (tester) async {
+    testWidgets('settings at $w holds the owner\'s choices, not developer endpoints', (tester) async {
       await pumpApp(tester, width);
       await openSection(tester, AppSection.settings);
-      await scrollTo(tester, find.text('/api/payroll/employee/{employeeId}'));
+      await scrollTo(tester, find.byKey(const Key('settings-palette-graphite')));
+      expect(find.textContaining('/api/'), findsNothing);
     });
   }
 }

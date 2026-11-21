@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/constants/brand.dart';
 import '../core/l10n/l10n.dart';
 import '../core/motion/motion.dart';
 import '../core/navigation/app_section.dart';
@@ -44,7 +45,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final home = context.watch<HomeViewModel>();
-    final brand = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? 'Apex Suite');
+    final brand = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? AppBrand.name);
     // Page switch: the new page fades in while rising 8px (old one fades out quickly).
     // Page switch: Material fade-through (package:animations) — the old page fades out
     // quickly, the new one fades in while settling from 0.92 scale. Reduced motion: instant.

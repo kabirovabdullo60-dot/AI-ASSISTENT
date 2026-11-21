@@ -10,14 +10,15 @@ import 'helpers.dart';
 void main() {
   tearDown(() => AppColors.use(AppPalette.ledger));
 
-  testWidgets('top-bar palette menu switches the look and remembers it', (tester) async {
+  testWidgets('Settings switches the look and remembers it', (tester) async {
     await pumpApp(tester, desktopWidth);
     expect(AppColors.palette, AppPalette.ledger);
     expect(Theme.of(tester.element(find.byType(Scaffold).first)).brightness, Brightness.light);
+    expect(find.byKey(const Key('palette-menu')), findsNothing); // one place for it: Settings
 
-    await tester.tap(find.byKey(const Key('palette-menu')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('palette-graphite')));
+    await openSection(tester, AppSection.settings);
+    await scrollTo(tester, find.byKey(const Key('settings-palette-graphite')));
+    await tester.tap(find.byKey(const Key('settings-palette-graphite')));
     await tester.pumpAndSettle();
     expect(AppColors.palette, AppPalette.graphite);
     expect(Theme.of(tester.element(find.byType(Scaffold).first)).brightness, Brightness.dark);

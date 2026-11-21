@@ -7,7 +7,6 @@ import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../core/utils/format.dart';
 import '../models/sale_model.dart';
-import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/home_view_model.dart';
 import '../viewmodels/sales_view_model.dart';
@@ -66,14 +65,12 @@ class SalesView extends StatelessWidget {
               );
               final right = _EntriesColumn(vm: vm, currency: cur);
               if (c.maxWidth < 1000) {
-                return Column(
-                  children: [form, const SizedBox(height: 16), const _ClerkCard(), const SizedBox(height: 16), right],
-                );
+                return Column(children: [form, const SizedBox(height: 16), right]);
               }
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 340, child: Column(children: [form, SizedBox(height: 16), _ClerkCard()])),
+                  SizedBox(width: 340, child: form),
                   const SizedBox(width: 16),
                   Expanded(child: right),
                 ],
@@ -179,42 +176,6 @@ class _SuccessBanner extends StatelessWidget {
   }
 }
 
-class _ClerkCard extends StatelessWidget {
-  const _ClerkCard();
-
-  @override
-  Widget build(BuildContext context) {
-    final tr = context.l10n;
-    final user = context.watch<AuthViewModel>().user;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            IconBox(Icons.verified_user_outlined, color: AppColors.blue, background: AppColors.blueSoft),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(tr.sessionClerk, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5)),
-                  Text(
-                    user == null ? '…' : '${user.fullName} · ${user.email}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 12.5, color: AppColors.muted),
-                  ),
-                ],
-              ),
-            ),
-            StatusBadge(tr.authorized, tone: BadgeTone.positive),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _EntriesColumn extends StatelessWidget {
   const _EntriesColumn({required this.vm, required this.currency});
 
@@ -283,7 +244,6 @@ class _EntriesColumn extends StatelessWidget {
     final query = context.select<HomeViewModel, String>((h) => h.query);
     final rows = vm.filtered(query);
     final change = vm.changeVsPrevious();
-    final minutes = DateTime.now().difference(vm.updatedAt).inMinutes;
     final week = vm.last7Days;
     var peak = 0;
     for (var i = 1; i < week.length; i++) {
@@ -348,23 +308,6 @@ class _EntriesColumn extends StatelessWidget {
                       onSelect: (i) => SalesRange.values[i] == SalesRange.custom
                           ? _pickRange(context)
                           : vm.setRange(SalesRange.values[i]),
-                    ),
-                    Text.rich(
-                      TextSpan(
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                        children: [
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Container(
-                              width: 7,
-                              height: 7,
-                              margin: const EdgeInsets.only(right: 6),
-                              decoration: BoxDecoration(color: AppColors.orange, shape: BoxShape.circle),
-                            ),
-                          ),
-                          TextSpan(text: minutes < 1 ? tr.updatedJustNow : tr.updatedMinutesAgo(minutes)),
-                        ],
-                      ),
                     ),
                   ],
                 ),

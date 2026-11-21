@@ -114,7 +114,6 @@ class _Header extends StatelessWidget {
                     spacing: 6,
                     runSpacing: 6,
                     children: [
-                      StatusBadge(user.role, tone: BadgeTone.info),
                       StatusBadge(user.businessName, tone: BadgeTone.warning, icon: Icons.storefront_outlined),
                     ],
                   ),

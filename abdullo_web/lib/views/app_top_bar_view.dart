@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 import '../core/l10n/app_language.dart';
 import '../core/l10n/l10n.dart';
 import '../core/navigation/app_section.dart';
-import '../core/theme/app_palette.dart';
-import '../widgets/palette_swatch.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/format.dart';
 import '../models/activity_model.dart';
@@ -39,7 +37,6 @@ class AppTopBarView extends StatelessWidget {
                 ),
                 VoiceMicButton(size: 36),
                 _LanguageButton(),
-                _PaletteButton(),
                 _NotificationsButton(),
                 _UserMenu(showName: false),
               ],
@@ -67,7 +64,6 @@ class AppTopBarView extends StatelessWidget {
             const SizedBox(width: 12),
             const VoiceMicButton(),
             const _LanguageButton(),
-            const _PaletteButton(),
             const _NotificationsButton(),
             const SizedBox(width: 6),
             _UserMenu(showName: constraints.maxWidth >= 1100),
@@ -126,43 +122,6 @@ class _SearchField extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(vertical: 9),
         fillColor: AppColors.card,
       ),
-    );
-  }
-}
-
-class _PaletteButton extends StatelessWidget {
-  const _PaletteButton();
-
-  @override
-  Widget build(BuildContext context) {
-    final settings = context.watch<SettingsViewModel>();
-    return PopupMenuButton<AppPalette>(
-      key: const Key('palette-menu'),
-      constraints: const BoxConstraints(minWidth: 240),
-      tooltip: context.l10n.themeLabel,
-      initialValue: settings.palette,
-      // Switch after the menu's close animation, so the old menu isn't torn down mid-flight.
-      onSelected: (p) => Future.delayed(const Duration(milliseconds: 260), () => settings.setPalette(p)),
-      icon: Icon(Icons.palette_outlined, color: AppColors.ink),
-      itemBuilder: (_) => [
-        for (final p in AppPalette.values)
-          PopupMenuItem(
-            value: p,
-            key: Key('palette-${p.name}'),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                PaletteDots(p),
-                const SizedBox(width: 10),
-                Flexible(child: Text(paletteName(p), maxLines: 1, overflow: TextOverflow.ellipsis)),
-                if (p == settings.palette) ...[
-                  const SizedBox(width: 8),
-                  Icon(Icons.check, size: 16, color: AppColors.teal),
-                ],
-              ],
-            ),
-          ),
-      ],
     );
   }
 }

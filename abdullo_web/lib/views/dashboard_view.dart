@@ -756,11 +756,6 @@ class _AiCard extends StatelessWidget {
       key: const Key('dashboard-ai'),
       title: tr.askAssistant,
       subtitle: tr.assistantLiveData,
-      trailing: TextButton(
-        key: const Key('hero-ask-ai'),
-        onPressed: () => context.read<HomeViewModel>().select(AppSection.assistant),
-        child: Text(tr.navAssistant),
-      ),
       child: Column(
         children: [
           question(const Key('ai-card-sales'), tr.askSales),

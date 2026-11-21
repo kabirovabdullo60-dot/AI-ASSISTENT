@@ -371,32 +371,6 @@ class _EmptyChat extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      FadeSlideIn(
-                        delay: Motion.staggerAt(2),
-                        child: Container(
-                          key: const Key('assistant-note'),
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(color: AppColors.goldSoft, borderRadius: BorderRadius.circular(20)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(color: AppColors.amber, shape: BoxShape.circle),
-                              ),
-                              const SizedBox(width: 7),
-                              Flexible(
-                                child: Text(
-                                  tr.assistantLiveData,
-                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.amber),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                       if (context.select<VoiceViewModel, bool>((v) => v.canListen)) ...[
                         const SizedBox(height: 10),
                         FadeSlideIn(

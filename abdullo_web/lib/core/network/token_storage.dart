@@ -4,6 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TokenStorage {
   static const _accessKey = 'accessToken';
   static const _refreshKey = 'refreshToken';
+  static const _startKey = 'sessionStartedAt';
+
+  /// How long a sign-in lasts on this browser before the login is asked again.
+  static const sessionLength = Duration(days: 7);
 
   String? _access;
   String? _refresh;
@@ -37,6 +41,35 @@ class TokenStorage {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_accessKey);
       await prefs.remove(_refreshKey);
+      await prefs.remove(_startKey);
     } catch (_) {}
+  }
+
+  /// The refresh token as saved right now, re-read from the browser: another tab of the web may
+  /// have rotated it since this tab loaded.
+  Future<String?> storedRefreshToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.reload();
+      return prefs.getString(_refreshKey);
+    } catch (_) {
+      return _refresh;
+    }
+  }
+
+  /// Marks the moment of signing in (login / register); refreshing the tokens keeps it.
+  Future<void> startSession([DateTime? at]) async {
+    try {
+      await (await SharedPreferences.getInstance()).setString(_startKey, (at ?? DateTime.now()).toIso8601String());
+    } catch (_) {}
+  }
+
+  /// When this browser signed in, or null for a session saved before this was recorded.
+  Future<DateTime?> sessionStartedAt() async {
+    try {
+      return DateTime.tryParse((await SharedPreferences.getInstance()).getString(_startKey) ?? '');
+    } catch (_) {
+      return null;
+    }
   }
 }

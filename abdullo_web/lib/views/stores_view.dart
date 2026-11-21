@@ -15,7 +15,6 @@ import '../widgets/app_table.dart';
 import '../widgets/async_content.dart';
 import '../widgets/card_grid.dart';
 import '../widgets/dropdown_chip.dart';
-import '../widgets/icon_box.dart';
 import '../widgets/kpi_card.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
@@ -163,21 +162,7 @@ class StoresView extends StatelessWidget {
                 ),
               ),
             const SizedBox(height: 16),
-            LayoutBuilder(
-              builder: (context, c) {
-                final share = _ShareCard(vm: vm, currency: cur);
-                final recent = _RecentCard(stores: vm.recentlyUpdated);
-                if (c.maxWidth < 1000) return Column(children: [share, const SizedBox(height: 16), recent]);
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 3, child: share),
-                    const SizedBox(width: 16),
-                    Expanded(flex: 2, child: recent),
-                  ],
-                );
-              },
-            ),
+            _ShareCard(vm: vm, currency: cur),
           ],
         );
       },
@@ -574,53 +559,6 @@ class _ShareCard extends StatelessWidget {
                           : i == 1
                           ? AppColors.strong
                           : AppColors.barGray,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RecentCard extends StatelessWidget {
-  const _RecentCard({required this.stores});
-
-  final List<StoreModel> stores;
-
-  @override
-  Widget build(BuildContext context) {
-    final tr = context.l10n;
-    return SectionCard(
-      title: tr.recentlyUpdated,
-      trailing: Icon(Icons.history, color: AppColors.ink),
-      child: Column(
-        children: [
-          if (stores.isEmpty) Text(tr.noOperations),
-          for (final s in stores)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                children: [
-                  IconBox(
-                    Icons.storefront_outlined,
-                    size: 28,
-                    color: s.isActive ? AppColors.green : AppColors.muted,
-                    background: s.isActive ? AppColors.greenSoft : AppColors.surfaceSoft,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(s.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                        Text(
-                          tr.updatedOn(s.updatedAt == null ? '—' : formatTimeAgo(s.updatedAt!)),
-                          style: TextStyle(fontSize: 11.5, color: AppColors.muted),
-                        ),
-                      ],
                     ),
                   ),
                 ],

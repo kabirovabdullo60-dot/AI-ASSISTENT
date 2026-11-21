@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../core/network/api_exception.dart';
+import '../core/utils/language_detect.dart';
 import '../models/assistant_action_model.dart';
 import '../models/chat_message_model.dart';
 import '../models/conversation_model.dart';
@@ -59,10 +60,13 @@ class AssistantViewModel extends ChangeNotifier {
   int? get retryAfter => _retryAfter;
   int? _retryAfter;
 
-  /// [language] = 'en' / 'ru' / 'tg' — the assistant answers in it.
+  /// The assistant answers in the language the question is written in (Russian, English, or
+  /// Tajik in Cyrillic or Latin letters); [language] (the site's) is used only when the
+  /// question is too short to tell.
   Future<void> send(String text, {String language = 'en'}) async {
     final question = text.trim();
     if (question.isEmpty || _isSending) return;
+    language = detectMessageLanguage(question) ?? language;
 
     _messages.add(ChatMessageModel(role: ChatRole.user, text: question, time: DateTime.now()));
     _isSending = true;

@@ -1,5 +1,6 @@
 import '../core/constants/api_constants.dart';
 import '../core/network/api_client.dart';
+import '../core/network/token_storage.dart';
 import '../core/utils/json.dart';
 import '../models/profile_model.dart';
 
@@ -36,6 +37,7 @@ class AuthService {
 
   Future<ProfileModel> _saveSession(Map<String, dynamic> json) async {
     await _api.tokens.save(asString(json['accessToken']), asString(json['refreshToken']));
+    await _api.tokens.startSession();
     return ProfileModel.fromJson(asJsonMap(json['user']));
   }
 
@@ -43,6 +45,14 @@ class AuthService {
   Future<ProfileModel?> restore() async {
     await _api.tokens.load();
     if (!_api.tokens.hasSession) return null;
+    // A sign-in lasts [TokenStorage.sessionLength] on this browser; then the login is asked again.
+    final started = await _api.tokens.sessionStartedAt();
+    if (started == null) {
+      await _api.tokens.startSession(); // a session saved before this rule: count from now
+    } else if (DateTime.now().difference(started) > TokenStorage.sessionLength) {
+      await logout();
+      return null;
+    }
     try {
       return ProfileModel.fromJson(asJsonMap(await _api.get(ApiConstants.me)));
     } on ApiException catch (e) {

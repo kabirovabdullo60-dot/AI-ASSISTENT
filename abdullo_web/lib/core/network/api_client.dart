@@ -115,20 +115,32 @@ class ApiClient {
   /// POST /api/auth/refresh once (concurrent callers share the same request).
   Future<bool> refreshTokens() => _refreshing ??= _doRefresh().whenComplete(() => _refreshing = null);
 
+  /// true = new tokens; false = the server refused (the session is over).
+  /// Throws a NETWORK_ERROR [ApiException] when the server could not be reached: the session
+  /// may still be fine, so the tokens are kept and nobody is logged out.
   Future<bool> _doRefresh() async {
+    // Another tab may have rotated the tokens already. Using our old refresh token again would
+    // make the server end the whole session (AUTH_SESSION_REVOKED), so take theirs instead.
+    final stored = await tokens.storedRefreshToken();
+    if (stored != null && stored != tokens.refreshToken) {
+      await tokens.load();
+      return true;
+    }
     final refresh = tokens.refreshToken;
     if (refresh == null) return false;
+    final http.Response res;
     try {
-      final res = await _client
+      res = await _client
           .post(_uri(ApiConstants.refresh, null), headers: _headers(false), body: jsonEncode({'refreshToken': refresh}))
           .timeout(ApiConstants.timeout);
-      if (res.statusCode != 200) return false;
-      final json = jsonDecode(utf8.decode(res.bodyBytes)) as Map<String, dynamic>;
-      await tokens.save('${json['accessToken']}', '${json['refreshToken']}');
-      return true;
-    } catch (_) {
-      return false;
+    } catch (e) {
+      throw ApiException.network(e);
     }
+    if (res.statusCode >= 500) throw ApiException.fromBody(res.statusCode, utf8.decode(res.bodyBytes));
+    if (res.statusCode != 200) return false;
+    final json = jsonDecode(utf8.decode(res.bodyBytes)) as Map<String, dynamic>;
+    await tokens.save('${json['accessToken']}', '${json['refreshToken']}');
+    return true;
   }
 
   dynamic _handle(http.Response res) {

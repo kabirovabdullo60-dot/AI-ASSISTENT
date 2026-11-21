@@ -108,14 +108,6 @@ class SalariesView extends StatelessWidget {
                   caption: tr.pendingClearance,
                   highlight: true,
                 ),
-                KpiCard(
-                  title: tr.staffDistribution,
-                  value: tr.nEmployees(vm.items.length),
-                  icon: Icons.badge_outlined,
-                  badge: tr.nBranches(vm.branchCount),
-                  badgeTone: BadgeTone.info,
-                  caption: tr.activeContracts,
-                ),
               ],
             ),
             const SizedBox(height: 16),
@@ -357,10 +349,6 @@ class _BudgetCard extends StatelessWidget {
     final colors = [AppColors.navy, AppColors.orange, Color(0xFF4B5675), Color(0xFFB8C0D6)];
     return SectionCard(
       title: tr.budgetTitle,
-      badge: StatusBadge(
-        vm.pendingTotal == 0 ? tr.balanced : tr.openBalance,
-        tone: vm.pendingTotal == 0 ? BadgeTone.positive : BadgeTone.warning,
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

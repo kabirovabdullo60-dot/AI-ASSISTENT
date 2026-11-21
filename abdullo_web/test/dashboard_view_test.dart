@@ -82,6 +82,7 @@ void main() {
   testWidgets('a business registered today: the chart starts today, not 24 days back', (tester) async {
     final backend = setUpBackend();
     backend.user['createdAt'] = DateTime.now().toUtc().toIso8601String();
+    backend.sales.removeWhere((x) => x['saleDate'] != FakeBackend.day(backend.today));
     await pumpApp(tester, desktopWidth, backend: backend);
     final vm = Provider.of<DashboardViewModel>(tester.element(find.byKey(const Key('dashboard-hero'))), listen: false);
     expect(vm.chartPoints, hasLength(1));
@@ -92,8 +93,23 @@ void main() {
   testWidgets('a business registered 5 days ago gets 6 days on the chart', (tester) async {
     final backend = setUpBackend();
     backend.user['createdAt'] = DateTime.now().subtract(const Duration(days: 5)).toUtc().toIso8601String();
+    final signUp = backend.today.subtract(const Duration(days: 5));
+    backend.sales.removeWhere((x) => FakeBackend.parseDay(x['saleDate'] as String).isBefore(signUp));
     await pumpApp(tester, desktopWidth, backend: backend);
     final vm = Provider.of<DashboardViewModel>(tester.element(find.byKey(const Key('dashboard-hero'))), listen: false);
     expect(vm.chartPoints, hasLength(6));
+  });
+
+  testWidgets('sales entered for days before registration still show on the chart', (tester) async {
+    final backend = setUpBackend();
+    backend.user['createdAt'] = DateTime.now().toUtc().toIso8601String();
+    final threeDaysAgo = backend.today.subtract(const Duration(days: 3));
+    backend.sales.removeWhere((x) => FakeBackend.parseDay(x['saleDate'] as String).isBefore(threeDaysAgo));
+    await pumpApp(tester, desktopWidth, backend: backend);
+    final vm = Provider.of<DashboardViewModel>(tester.element(find.byKey(const Key('dashboard-hero'))), listen: false);
+    // From the first sale (3 days ago) to today — the days the month's total is made of.
+    expect(vm.chartPoints.first.date, threeDaysAgo);
+    expect(vm.chartPoints, hasLength(4));
+    expect(vm.chartPoints.first.revenue, greaterThan(0));
   });
 }
