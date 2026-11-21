@@ -57,7 +57,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryAgain => 'Try again';
 
   @override
-  String get loadError => 'Could not load data. Check the connection and try again.';
+  String get loadError =>
+      'Could not load data. Check the connection and try again.';
 
   @override
   String get nothingFound => 'Nothing found';
@@ -175,7 +176,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get liveAudit => 'Live audit';
 
   @override
-  String get overviewSubtitle => 'Real-time consolidated performance across all retail branches and capital flows';
+  String get overviewSubtitle =>
+      'Real-time consolidated performance across all retail branches and capital flows';
 
   @override
   String get recordSale => 'Record Sale';
@@ -251,7 +253,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get revenueTitle => 'Revenue & Cashflow Analytics';
 
   @override
-  String get revenueSubtitle => 'Daily gross revenue trajectory across the current operational month';
+  String get revenueSubtitle =>
+      'Daily gross revenue trajectory across the current operational month';
 
   @override
   String get weekly => 'Weekly';
@@ -328,7 +331,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get liveFeed => 'Live feed';
 
   @override
-  String get activitySubtitle => 'Real-time financial audits, POS register closures, and staff deployments';
+  String get activitySubtitle =>
+      'Real-time financial audits, POS register closures, and staff deployments';
 
   @override
   String get demoFeed => 'Demo feed';
@@ -382,7 +386,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actCancelled => 'cancelled';
 
   @override
-  String get assistantBusy => 'Too many questions. Wait a minute and ask again.';
+  String get assistantBusy =>
+      'Too many questions. Wait a minute and ask again.';
 
   @override
   String connectedTo(String endpoints) {
@@ -538,7 +543,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get optional => '(optional)';
 
   @override
-  String get notesHint => 'e.g. End of day cash & POS terminal reconciliation, promo event';
+  String get notesHint =>
+      'e.g. End of day cash & POS terminal reconciliation, promo event';
 
   @override
   String get saveSaleRecord => 'Save Sale Record';
@@ -578,7 +584,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nLocations(int count) {
-    return '$count Locations';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count stores',
+      one: '1 store',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -604,7 +616,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vsLastMonth => 'vs last month';
 
   @override
-  String get allocatedWorkforce => 'Allocated Workforce';
+  String get allocatedWorkforce => 'Active staff';
 
   @override
   String acrossBranches(int count) {
@@ -693,7 +705,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nEmployees(int count) {
-    return '$count employees';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count employees',
+      one: '1 employee',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -709,7 +727,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String branchesCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count Branches', one: '1 Branch');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Branches',
+      one: '1 Branch',
+    );
     return '$_temp0';
   }
 
@@ -980,7 +1003,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String tenure(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count mos', one: '1 mo');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mos',
+      one: '1 mo',
+    );
     return '$_temp0';
   }
 
@@ -1008,7 +1036,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentDisbursements => 'Recent Payroll Disbursements';
 
   @override
-  String get disbursementsSubtitle => 'Real-time payment audit log across retail branches';
+  String get disbursementsSubtitle =>
+      'Real-time payment audit log across retail branches';
 
   @override
   String get viewFullAudit => 'View Full Audit →';
@@ -1017,7 +1046,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noPaymentsMonth => 'No payments recorded this month';
 
   @override
-  String get bankNote => 'All bank settlements follow National Bank standard formats and are signed via TLS.';
+  String get bankNote =>
+      'All bank settlements follow National Bank standard formats and are signed via TLS.';
 
   @override
   String ledgerCopied(String month) {
@@ -1065,7 +1095,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get paidBeforeRecords => 'Paid before the records in this app (no separate payments listed).';
+  String get paidBeforeRecords =>
+      'Paid before the records in this app (no separate payments listed).';
 
   @override
   String get employeesSubtitle => 'Staff across all stores and shifts';
@@ -1121,7 +1152,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signOut => 'Sign out';
 
   @override
-  String get signOutNote => 'Sign in / sign out will work once the backend login is ready.';
+  String get signOutNote =>
+      'Sign in / sign out will work once the backend login is ready.';
 
   @override
   String get business => 'Business';
@@ -1139,13 +1171,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoData => 'Demo data';
 
   @override
-  String get demoNote => 'The web shows demo data until the endpoints below are connected.';
+  String get demoNote =>
+      'The web shows demo data until the endpoints below are connected.';
 
   @override
   String get askAssistant => 'Ask your business assistant';
 
   @override
-  String get assistantIntro => 'Ask about sales, stores, staff, salaries or marketing in Tajik, Russian or English.';
+  String get assistantIntro =>
+      'Ask about sales, stores, staff, salaries or marketing in Tajik, Russian or English.';
 
   @override
   String get newChat => 'New chat';
@@ -1157,7 +1191,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get send => 'Send';
 
   @override
-  String get assistantError => 'The assistant did not answer. Please try again.';
+  String get assistantError =>
+      'The assistant did not answer. Please try again.';
 
   @override
   String get suggestSales => 'Sales today';
@@ -1188,13 +1223,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginTitle => 'Welcome back';
 
   @override
-  String get loginSubtitle => 'Sign in to manage your stores, sales and payroll.';
+  String get loginSubtitle =>
+      'Sign in to manage your stores, sales and payroll.';
 
   @override
   String get registerTitle => 'Create your business account';
 
   @override
-  String get registerSubtitle => 'One account = one business. You can add stores and staff after signing up.';
+  String get registerSubtitle =>
+      'One account = one business. You can add stores and staff after signing up.';
 
   @override
   String get emailLabel => 'Email';
@@ -1262,10 +1299,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errValidationShort => 'Please check the fields.';
 
   @override
-  String get errNetwork => 'No connection to the server. Check the internet and try again.';
+  String get errNetwork =>
+      'No connection to the server. Check the internet and try again.';
 
   @override
-  String get errRateLimited => 'Too many requests. Wait a moment and try again.';
+  String get errRateLimited =>
+      'Too many requests. Wait a moment and try again.';
 
   @override
   String get errServer => 'Server error. Try again later.';
@@ -1274,13 +1313,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errStoreNameTaken => 'A store with this name already exists.';
 
   @override
-  String get errStoreHasEmployees => 'The store still has active employees. Move or deactivate them first.';
+  String get errStoreHasEmployees =>
+      'The store still has active employees. Move or deactivate them first.';
 
   @override
-  String get errAlreadyPaid => 'The salary for this month is already fully paid.';
+  String get errAlreadyPaid =>
+      'The salary for this month is already fully paid.';
 
   @override
-  String get errExceedsRemaining => 'The amount is larger than what remains for this month.';
+  String get errExceedsRemaining =>
+      'The amount is larger than what remains for this month.';
 
   @override
   String get errNotEmployed => 'The employee did not work in this month.';
@@ -1571,7 +1613,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get assistantNote => 'Answers come from your real numbers, worked out by the AI on the server.';
+  String get assistantNote =>
+      'Answers come from your real numbers, worked out by the AI on the server.';
 
   @override
   String get staffInStore => 'Staff';
@@ -1607,7 +1650,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navExpenses => 'Expenses';
 
   @override
-  String get expensesSubtitle => 'Rent, utilities, delivery and other costs, and the profit that is left';
+  String get expensesSubtitle =>
+      'Rent, utilities, delivery and other costs, and the profit that is left';
 
   @override
   String get addExpense => 'Add expense';
@@ -1646,7 +1690,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteExpenseTitle => 'Delete this expense?';
 
   @override
-  String get deleteExpenseBody => 'It will no longer count in the profit report.';
+  String get deleteExpenseBody =>
+      'It will no longer count in the profit report.';
 
   @override
   String get noExpenses => 'No expenses yet';
@@ -1715,7 +1760,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginHeadline => 'Every store, sale and salary in one calm place.';
 
   @override
-  String get loginHeroBody => 'Ask the assistant about your numbers. It answers in Tajik, Russian or English.';
+  String get loginHeroBody =>
+      'Ask the assistant about your numbers. It answers in Tajik, Russian or English.';
 
   @override
   String get assistantLiveData => 'Uses your real numbers';
@@ -1744,7 +1790,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get greetingNoName => 'Hello';
 
   @override
-  String get errSplitMismatch => 'Cash and card must add up to the sale amount.';
+  String get errSplitMismatch =>
+      'Cash and card must add up to the sale amount.';
 
   @override
   String get clearDate => 'Clear date';
@@ -1754,4 +1801,177 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hidePassword => 'Hide password';
+
+  @override
+  String get voiceSpeak => 'Speak';
+
+  @override
+  String get voiceStop => 'Stop listening';
+
+  @override
+  String get voiceListening => 'Listening…';
+
+  @override
+  String voiceOpened(String section) {
+    return 'Opened: $section';
+  }
+
+  @override
+  String get voiceRepliesOn => 'Read answers aloud: on';
+
+  @override
+  String get voiceRepliesOff => 'Read answers aloud: off';
+
+  @override
+  String get voiceStopSpeaking => 'Stop reading';
+
+  @override
+  String get voiceHint =>
+      'Tap the mic and say: “Open sales”, “New chat” or any question.';
+
+  @override
+  String get voiceDenied =>
+      'Microphone access is blocked. Allow it in the browser address bar.';
+
+  @override
+  String get voiceNoSpeech => 'I didn\'t hear anything. Try again.';
+
+  @override
+  String get voiceNoMic => 'No microphone found.';
+
+  @override
+  String get voiceUnsupported =>
+      'This browser can\'t listen. Use Chrome or Edge.';
+
+  @override
+  String get voiceNetwork => 'Voice recognition needs the internet.';
+
+  @override
+  String get voiceError => 'Voice input failed. Try again.';
+
+  @override
+  String get chatHistory => 'History';
+
+  @override
+  String get chatHistoryEmpty =>
+      'No saved chats yet. Ask a question — the chat is saved here.';
+
+  @override
+  String get deleteChat => 'Delete chat';
+
+  @override
+  String get deleteChatConfirm => 'Delete this chat? It cannot be restored.';
+
+  @override
+  String chatMessages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count messages',
+      one: '1 message',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hideHistory => 'Hide history';
+
+  @override
+  String get showHistory => 'Show history';
+
+  @override
+  String get collapseMenu => 'Collapse menu';
+
+  @override
+  String get expandMenu => 'Expand menu';
+
+  @override
+  String get actionConfirm => 'Confirm';
+
+  @override
+  String get actionDone => 'Done';
+
+  @override
+  String get actionCancelled => 'Cancelled';
+
+  @override
+  String get actionExpired => 'Expired — ask again';
+
+  @override
+  String get actionWaiting => 'Needs your confirmation';
+
+  @override
+  String actionOpen(String section) {
+    return 'Open $section';
+  }
+
+  @override
+  String get actionDetails => 'Details';
+
+  @override
+  String get assistantSlow => 'Working on it… this can take up to 30 seconds.';
+
+  @override
+  String get errActionNotFound => 'This action no longer exists.';
+
+  @override
+  String get errActionHandled => 'This action was already handled.';
+
+  @override
+  String assistantBusyWait(int seconds) {
+    return 'Too many questions. Ask again in $seconds s.';
+  }
+
+  @override
+  String get assistantUnavailable =>
+      'The assistant is not available right now. Try again later.';
+
+  @override
+  String get actionAskAgain => 'Ask the assistant again';
+
+  @override
+  String get actionCancelledAsk => 'Cancelled — ask the assistant again';
+
+  @override
+  String get actionEdit => 'Edit';
+
+  @override
+  String get actionRetry => 'Confirm again';
+
+  @override
+  String get actionEditTitle => 'Correct before confirming';
+
+  @override
+  String get actionSaveConfirm => 'Save and confirm';
+
+  @override
+  String get actionSureTitle => 'Are you sure?';
+
+  @override
+  String actionSureBody(String summary) {
+    return 'This will be deleted:\n$summary';
+  }
+
+  @override
+  String get colWorkedDays => 'Days this month';
+
+  @override
+  String get vsLastWeek => 'vs last week';
+
+  @override
+  String overviewFinding(String today, int count, String unpaid) {
+    return 'Today $today from $count sales · $unpaid of salaries still to pay this month';
+  }
+
+  @override
+  String get overviewTitle => 'Overview';
+
+  @override
+  String get storesActiveShort => 'Stores open';
+
+  @override
+  String get staffActiveShort => 'Staff at work';
+
+  @override
+  String get navAssistantShort => 'AI';
 }

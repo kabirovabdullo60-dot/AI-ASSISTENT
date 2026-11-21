@@ -6,9 +6,8 @@ import '../core/theme/app_palette.dart';
 
 /// Display name of a palette (brand names, the same in every language).
 String paletteName(AppPalette p) => switch (p) {
-  AppPalette.aurora => 'Midnight Aurora',
-  AppPalette.zinc => 'Zinc',
-  AppPalette.emerald => 'Emerald',
+  AppPalette.ledger => 'Ledger',
+  AppPalette.graphite => 'Graphite',
 };
 
 /// Three dots: the palette's background, accent and second accent.

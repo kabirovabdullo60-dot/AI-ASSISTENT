@@ -9,7 +9,7 @@ void main() {
     testWidgets('stores at ${width.toInt()}px: KPIs, cards, search', (tester) async {
       await pumpApp(tester, width);
       await openSection(tester, AppSection.stores);
-      expect(find.text('3 Locations'), findsOneWidget);
+      expect(find.text('3 stores'), findsOneWidget);
       await tester.enterText(find.byKey(const Key('store-search')), 'somoni');
       await tester.pumpAndSettle();
       await scrollTo(tester, find.byKey(const Key('store-card-s2')));
@@ -41,7 +41,7 @@ void main() {
     await tester.enterText(find.byKey(const Key('store-phone')), '+992 90 555 11 22');
     await tester.tap(find.byKey(const Key('store-save')));
     await tester.pumpAndSettle();
-    expect(find.text('4 Locations'), findsOneWidget);
+    expect(find.text('4 stores'), findsOneWidget);
     expect(backend.stores.last['phone'], '+992905551122');
 
     await scrollTo(tester, find.byKey(const Key('edit-s2')));

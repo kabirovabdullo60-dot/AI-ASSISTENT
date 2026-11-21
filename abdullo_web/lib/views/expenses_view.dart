@@ -63,7 +63,7 @@ class ExpensesView extends StatelessWidget {
       builder: (_) {
         final list = vm.filtered(query);
         final p = vm.profit;
-        final profitColor = (p?.grossProfit ?? 0) >= 0 ? AppColors.green : AppColors.red;
+        final profitColor = (p?.grossProfit ?? 0) >= 0 ? AppColors.muted : AppColors.red;
         return PageBody(
           title: tr.navExpenses,
           subtitle: tr.expensesSubtitle,
@@ -138,10 +138,7 @@ class ExpensesView extends StatelessWidget {
                       Text(tr.expenseCategory(e.category), style: const TextStyle(fontWeight: FontWeight.w600)),
                       Text(e.storeName ?? tr.wholeBusiness),
                       Text(e.description ?? '—', style: TextStyle(color: AppColors.muted)),
-                      Text(
-                        '-${cur.format(e.amount)}',
-                        style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.red),
-                      ),
+                      Text('-${cur.format(e.amount)}', style: const TextStyle(fontWeight: FontWeight.w600)),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -201,7 +198,7 @@ class ExpensesView extends StatelessWidget {
                           cur.format(s.profit),
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: s.profit >= 0 ? AppColors.green : AppColors.red,
+                            color: s.profit >= 0 ? AppColors.ink : AppColors.red,
                           ),
                         ),
                       ],

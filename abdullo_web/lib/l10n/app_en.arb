@@ -387,7 +387,7 @@
   "exportDirectory": "Export Directory",
   "addNewStore": "Add New Store",
   "networkScope": "Network Scope",
-  "nLocations": "{count} Locations",
+  "nLocations": "{count, plural, =1{1 store} other{{count} stores}}",
   "@nLocations": {
     "placeholders": {
       "count": {
@@ -418,7 +418,7 @@
   "allBranchesToday": "all branches today",
   "totalMonthlyRevenue": "Total Monthly Revenue",
   "vsLastMonth": "vs last month",
-  "allocatedWorkforce": "Allocated Workforce",
+  "allocatedWorkforce": "Active staff",
   "acrossBranches": "Across {count} branches",
   "@acrossBranches": {
     "placeholders": {
@@ -501,7 +501,7 @@
   "topEarner": "Top Earner (#1)",
   "staffHeadcount": "Staff Headcount",
   "reassigned": "0 (reassigned)",
-  "nEmployees": "{count} employees",
+  "nEmployees": "{count, plural, =1{1 employee} other{{count} employees}}",
   "@nEmployees": {
     "placeholders": {
       "count": {
@@ -1216,5 +1216,103 @@
   "errSplitMismatch": "Cash and card must add up to the sale amount.",
   "clearDate": "Clear date",
   "showPassword": "Show password",
-  "hidePassword": "Hide password"
+  "hidePassword": "Hide password",
+  "voiceSpeak": "Speak",
+  "voiceStop": "Stop listening",
+  "voiceListening": "Listening…",
+  "voiceOpened": "Opened: {section}",
+  "voiceRepliesOn": "Read answers aloud: on",
+  "voiceRepliesOff": "Read answers aloud: off",
+  "voiceStopSpeaking": "Stop reading",
+  "voiceHint": "Tap the mic and say: “Open sales”, “New chat” or any question.",
+  "voiceDenied": "Microphone access is blocked. Allow it in the browser address bar.",
+  "voiceNoSpeech": "I didn't hear anything. Try again.",
+  "voiceNoMic": "No microphone found.",
+  "voiceUnsupported": "This browser can't listen. Use Chrome or Edge.",
+  "voiceNetwork": "Voice recognition needs the internet.",
+  "voiceError": "Voice input failed. Try again.",
+  "@voiceOpened": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  },
+  "chatHistory": "History",
+  "chatHistoryEmpty": "No saved chats yet. Ask a question — the chat is saved here.",
+  "deleteChat": "Delete chat",
+  "deleteChatConfirm": "Delete this chat? It cannot be restored.",
+  "chatMessages": "{count, plural, =1{1 message} other{{count} messages}}",
+  "@chatMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hideHistory": "Hide history",
+  "showHistory": "Show history",
+  "collapseMenu": "Collapse menu",
+  "expandMenu": "Expand menu",
+  "actionConfirm": "Confirm",
+  "actionDone": "Done",
+  "actionCancelled": "Cancelled",
+  "actionExpired": "Expired — ask again",
+  "actionWaiting": "Needs your confirmation",
+  "actionOpen": "Open {section}",
+  "actionDetails": "Details",
+  "assistantSlow": "Working on it… this can take up to 30 seconds.",
+  "errActionNotFound": "This action no longer exists.",
+  "errActionHandled": "This action was already handled.",
+  "@actionOpen": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  },
+  "assistantBusyWait": "Too many questions. Ask again in {seconds} s.",
+  "assistantUnavailable": "The assistant is not available right now. Try again later.",
+  "actionAskAgain": "Ask the assistant again",
+  "actionCancelledAsk": "Cancelled — ask the assistant again",
+  "actionEdit": "Edit",
+  "actionRetry": "Confirm again",
+  "actionEditTitle": "Correct before confirming",
+  "actionSaveConfirm": "Save and confirm",
+  "actionSureTitle": "Are you sure?",
+  "actionSureBody": "This will be deleted:\n{summary}",
+  "@assistantBusyWait": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@actionSureBody": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "colWorkedDays": "Days this month",
+  "vsLastWeek": "vs last week",
+  "overviewFinding": "Today {today} from {count} sales · {unpaid} of salaries still to pay this month",
+  "overviewTitle": "Overview",
+  "storesActiveShort": "Stores open",
+  "staffActiveShort": "Staff at work",
+  "@overviewFinding": {
+    "placeholders": {
+      "today": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "unpaid": {
+        "type": "String"
+      }
+    }
+  },
+  "navAssistantShort": "AI"
 }

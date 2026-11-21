@@ -6,7 +6,7 @@ class ApiConstants {
   static const String docsUrl = '$baseUrl/docs';
   static const Duration timeout = Duration(seconds: 25);
 
-  /// POST /api/assistant/chat answers in a few seconds, at most about 60.
+  /// POST /api/assistant/chat answers in a few seconds, at most about 60 (10–30 s when it uses tools).
   static const Duration assistantTimeout = Duration(seconds: 75);
 
   // auth
@@ -66,6 +66,8 @@ class ApiConstants {
   static const String notifications = '/api/notifications';
   static const String notificationsReadAll = '/api/notifications/read-all';
   static const String assistantChat = '/api/assistant/chat';
+  static const String assistantActions = '/api/assistant/actions';
+  static const String assistantConversations = '/api/assistant/conversations';
   static const String exchangeRates = '/api/settings/exchange-rates';
 
   // health (no auth)
@@ -101,6 +103,8 @@ class ApiConstants {
     ('POST', notificationsReadAll, 'Mark notifications read'),
     ('GET', exchangeRates, 'Exchange rates'),
     ('POST', assistantChat, 'AI assistant'),
+    ('GET/POST', '$assistantActions/{id} · /confirm · /cancel', 'AI assistant actions'),
+    ('GET/POST/PATCH/DELETE', assistantConversations, 'AI chat history'),
     ('GET', healthReady, 'Server health'),
   ];
 

@@ -63,7 +63,8 @@ import 'app_localizations_tg.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,7 +72,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -83,15 +85,20 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('ru'), Locale('tg')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('ru'),
+    Locale('tg'),
+  ];
 
   /// No description provided for @navDashboard.
   ///
@@ -1116,7 +1123,7 @@ abstract class AppLocalizations {
   /// No description provided for @nLocations.
   ///
   /// In en, this message translates to:
-  /// **'{count} Locations'**
+  /// **'{count, plural, =1{1 store} other{{count} stores}}'**
   String nLocations(int count);
 
   /// No description provided for @opRatio.
@@ -1158,7 +1165,7 @@ abstract class AppLocalizations {
   /// No description provided for @allocatedWorkforce.
   ///
   /// In en, this message translates to:
-  /// **'Allocated Workforce'**
+  /// **'Active staff'**
   String get allocatedWorkforce;
 
   /// No description provided for @acrossBranches.
@@ -1302,7 +1309,7 @@ abstract class AppLocalizations {
   /// No description provided for @nEmployees.
   ///
   /// In en, this message translates to:
-  /// **'{count} employees'**
+  /// **'{count, plural, =1{1 employee} other{{count} employees}}'**
   String nEmployees(int count);
 
   /// No description provided for @regionalTitle.
@@ -3212,9 +3219,310 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide password'**
   String get hidePassword;
+
+  /// No description provided for @voiceSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak'**
+  String get voiceSpeak;
+
+  /// No description provided for @voiceStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop listening'**
+  String get voiceStop;
+
+  /// No description provided for @voiceListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening…'**
+  String get voiceListening;
+
+  /// No description provided for @voiceOpened.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened: {section}'**
+  String voiceOpened(String section);
+
+  /// No description provided for @voiceRepliesOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Read answers aloud: on'**
+  String get voiceRepliesOn;
+
+  /// No description provided for @voiceRepliesOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Read answers aloud: off'**
+  String get voiceRepliesOff;
+
+  /// No description provided for @voiceStopSpeaking.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop reading'**
+  String get voiceStopSpeaking;
+
+  /// No description provided for @voiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the mic and say: “Open sales”, “New chat” or any question.'**
+  String get voiceHint;
+
+  /// No description provided for @voiceDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone access is blocked. Allow it in the browser address bar.'**
+  String get voiceDenied;
+
+  /// No description provided for @voiceNoSpeech.
+  ///
+  /// In en, this message translates to:
+  /// **'I didn\'t hear anything. Try again.'**
+  String get voiceNoSpeech;
+
+  /// No description provided for @voiceNoMic.
+  ///
+  /// In en, this message translates to:
+  /// **'No microphone found.'**
+  String get voiceNoMic;
+
+  /// No description provided for @voiceUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This browser can\'t listen. Use Chrome or Edge.'**
+  String get voiceUnsupported;
+
+  /// No description provided for @voiceNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice recognition needs the internet.'**
+  String get voiceNetwork;
+
+  /// No description provided for @voiceError.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice input failed. Try again.'**
+  String get voiceError;
+
+  /// No description provided for @chatHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get chatHistory;
+
+  /// No description provided for @chatHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved chats yet. Ask a question — the chat is saved here.'**
+  String get chatHistoryEmpty;
+
+  /// No description provided for @deleteChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete chat'**
+  String get deleteChat;
+
+  /// No description provided for @deleteChatConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this chat? It cannot be restored.'**
+  String get deleteChatConfirm;
+
+  /// No description provided for @chatMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 message} other{{count} messages}}'**
+  String chatMessages(int count);
+
+  /// No description provided for @hideHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide history'**
+  String get hideHistory;
+
+  /// No description provided for @showHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Show history'**
+  String get showHistory;
+
+  /// No description provided for @collapseMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse menu'**
+  String get collapseMenu;
+
+  /// No description provided for @expandMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand menu'**
+  String get expandMenu;
+
+  /// No description provided for @actionConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get actionConfirm;
+
+  /// No description provided for @actionDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get actionDone;
+
+  /// No description provided for @actionCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get actionCancelled;
+
+  /// No description provided for @actionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired — ask again'**
+  String get actionExpired;
+
+  /// No description provided for @actionWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs your confirmation'**
+  String get actionWaiting;
+
+  /// No description provided for @actionOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {section}'**
+  String actionOpen(String section);
+
+  /// No description provided for @actionDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get actionDetails;
+
+  /// No description provided for @assistantSlow.
+  ///
+  /// In en, this message translates to:
+  /// **'Working on it… this can take up to 30 seconds.'**
+  String get assistantSlow;
+
+  /// No description provided for @errActionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This action no longer exists.'**
+  String get errActionNotFound;
+
+  /// No description provided for @errActionHandled.
+  ///
+  /// In en, this message translates to:
+  /// **'This action was already handled.'**
+  String get errActionHandled;
+
+  /// No description provided for @assistantBusyWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many questions. Ask again in {seconds} s.'**
+  String assistantBusyWait(int seconds);
+
+  /// No description provided for @assistantUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The assistant is not available right now. Try again later.'**
+  String get assistantUnavailable;
+
+  /// No description provided for @actionAskAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the assistant again'**
+  String get actionAskAgain;
+
+  /// No description provided for @actionCancelledAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled — ask the assistant again'**
+  String get actionCancelledAsk;
+
+  /// No description provided for @actionEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get actionEdit;
+
+  /// No description provided for @actionRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm again'**
+  String get actionRetry;
+
+  /// No description provided for @actionEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct before confirming'**
+  String get actionEditTitle;
+
+  /// No description provided for @actionSaveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and confirm'**
+  String get actionSaveConfirm;
+
+  /// No description provided for @actionSureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get actionSureTitle;
+
+  /// No description provided for @actionSureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will be deleted:\n{summary}'**
+  String actionSureBody(String summary);
+
+  /// No description provided for @colWorkedDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days this month'**
+  String get colWorkedDays;
+
+  /// No description provided for @vsLastWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'vs last week'**
+  String get vsLastWeek;
+
+  /// No description provided for @overviewFinding.
+  ///
+  /// In en, this message translates to:
+  /// **'Today {today} from {count} sales · {unpaid} of salaries still to pay this month'**
+  String overviewFinding(String today, int count, String unpaid);
+
+  /// No description provided for @overviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overviewTitle;
+
+  /// No description provided for @storesActiveShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Stores open'**
+  String get storesActiveShort;
+
+  /// No description provided for @staffActiveShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Staff at work'**
+  String get staffActiveShort;
+
+  /// No description provided for @navAssistantShort.
+  ///
+  /// In en, this message translates to:
+  /// **'AI'**
+  String get navAssistantShort;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -3223,7 +3531,8 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'ru', 'tg'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'ru', 'tg'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

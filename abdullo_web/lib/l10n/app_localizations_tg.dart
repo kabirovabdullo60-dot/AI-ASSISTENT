@@ -57,7 +57,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get tryAgain => 'Аз нав кӯшиш кунед';
 
   @override
-  String get loadError => 'Маълумот бор нашуд. Пайвастро санҷед ва аз нав кӯшиш кунед.';
+  String get loadError =>
+      'Маълумот бор нашуд. Пайвастро санҷед ва аз нав кӯшиш кунед.';
 
   @override
   String get nothingFound => 'Ҳеҷ чиз ёфт нашуд';
@@ -175,7 +176,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get liveAudit => 'Аудити зинда';
 
   @override
-  String get overviewSubtitle => 'Нишондиҳандаҳои умумии ҳамаи филиалҳо ва гардиши пул дар вақти воқеӣ';
+  String get overviewSubtitle =>
+      'Нишондиҳандаҳои умумии ҳамаи филиалҳо ва гардиши пул дар вақти воқеӣ';
 
   @override
   String get recordSale => 'Сабти фурӯш';
@@ -328,7 +330,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get liveFeed => 'Лентаи зинда';
 
   @override
-  String get activitySubtitle => 'Санҷишҳои молиявӣ, бастани кассаҳо ва ҷойгиркунии кормандон';
+  String get activitySubtitle =>
+      'Санҷишҳои молиявӣ, бастани кассаҳо ва ҷойгиркунии кормандон';
 
   @override
   String get demoFeed => 'Лентаи намунавӣ';
@@ -382,7 +385,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get actCancelled => 'бекор карда шуд';
 
   @override
-  String get assistantBusy => 'Саволҳо хеле зиёданд. Як дақиқа сабр карда, боз пурсед.';
+  String get assistantBusy =>
+      'Саволҳо хеле зиёданд. Як дақиқа сабр карда, боз пурсед.';
 
   @override
   String connectedTo(String endpoints) {
@@ -564,7 +568,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get storesTitle => 'Идоракунии мағозаҳо';
 
   @override
-  String get storesSubtitle => 'Филиалҳоро идора кунед, даромад ва ҳолати мағозаҳоро дар минтақаҳо пайгирӣ намоед.';
+  String get storesSubtitle =>
+      'Филиалҳоро идора кунед, даромад ва ҳолати мағозаҳоро дар минтақаҳо пайгирӣ намоед.';
 
   @override
   String get exportDirectory => 'Содироти рӯйхат';
@@ -577,7 +582,7 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String nLocations(int count) {
-    return '$count нуқта';
+    return '$count мағоза';
   }
 
   @override
@@ -603,7 +608,7 @@ class AppLocalizationsTg extends AppLocalizations {
   String get vsLastMonth => 'нисбат ба моҳи гузашта';
 
   @override
-  String get allocatedWorkforce => 'Кормандони тақсимшуда';
+  String get allocatedWorkforce => 'Кормандони фаъол';
 
   @override
   String acrossBranches(int count) {
@@ -1014,7 +1019,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get noPaymentsMonth => 'Дар ин моҳ пардохт сабт нашудааст';
 
   @override
-  String get bankNote => 'Ҳамаи интиқолҳои бонкӣ ба стандартҳои Бонки миллӣ мувофиқанд ва бо TLS ҳифз шудаанд.';
+  String get bankNote =>
+      'Ҳамаи интиқолҳои бонкӣ ба стандартҳои Бонки миллӣ мувофиқанд ва бо TLS ҳифз шудаанд.';
 
   @override
   String ledgerCopied(String month) {
@@ -1118,7 +1124,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get signOut => 'Баромадан';
 
   @override
-  String get signOutNote => 'Воридшавӣ ва баромадан пас аз омода шудани авторизатсия дар сервер кор мекунанд.';
+  String get signOutNote =>
+      'Воридшавӣ ва баромадан пас аз омода шудани авторизатсия дар сервер кор мекунанд.';
 
   @override
   String get business => 'Тиҷорат';
@@ -1136,7 +1143,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get demoData => 'Маълумоти намунавӣ';
 
   @override
-  String get demoNote => 'То пайваст шудани эндпоинтҳои зерин сайт маълумоти намунавӣ нишон медиҳад.';
+  String get demoNote =>
+      'То пайваст шудани эндпоинтҳои зерин сайт маълумоти намунавӣ нишон медиҳад.';
 
   @override
   String get askAssistant => 'Аз ёрдамчии тиҷоратӣ пурсед';
@@ -1186,13 +1194,15 @@ class AppLocalizationsTg extends AppLocalizations {
   String get loginTitle => 'Хуш омадед';
 
   @override
-  String get loginSubtitle => 'Барои идоракунии мағозаҳо, фурӯш ва музд ворид шавед.';
+  String get loginSubtitle =>
+      'Барои идоракунии мағозаҳо, фурӯш ва музд ворид шавед.';
 
   @override
   String get registerTitle => 'Аккаунти тиҷоратӣ созед';
 
   @override
-  String get registerSubtitle => 'Як аккаунт = як тиҷорат. Мағоза ва кормандонро пас аз сабт илова мекунед.';
+  String get registerSubtitle =>
+      'Як аккаунт = як тиҷорат. Мағоза ва кормандонро пас аз сабт илова мекунед.';
 
   @override
   String get emailLabel => 'Почтаи электронӣ';
@@ -1237,7 +1247,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get errAccountDisabled => 'Ин аккаунт хомӯш карда шудааст.';
 
   @override
-  String get errAccountLocked => 'Кӯшишҳои нодуруст зиёд шуданд. Баъдтар кӯшиш кунед.';
+  String get errAccountLocked =>
+      'Кӯшишҳои нодуруст зиёд шуданд. Баъдтар кӯшиш кунед.';
 
   @override
   String get errSessionEnded => 'Сессия ба охир расид. Аз нав ворид шавед.';
@@ -1260,7 +1271,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get errValidationShort => 'Майдонҳоро санҷед.';
 
   @override
-  String get errNetwork => 'Бо сервер пайвастшавӣ нест. Интернетро санҷед ва аз нав кӯшиш кунед.';
+  String get errNetwork =>
+      'Бо сервер пайвастшавӣ нест. Интернетро санҷед ва аз нав кӯшиш кунед.';
 
   @override
   String get errRateLimited => 'Дархостҳо зиёданд. Каме сабр кунед.';
@@ -1272,7 +1284,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get errStoreNameTaken => 'Мағоза бо ин ном аллакай ҳаст.';
 
   @override
-  String get errStoreHasEmployees => 'Дар мағоза кормандони фаъол ҳастанд. Аввал онҳоро интиқол диҳед ё хомӯш кунед.';
+  String get errStoreHasEmployees =>
+      'Дар мағоза кормандони фаъол ҳастанд. Аввал онҳоро интиқол диҳед ё хомӯш кунед.';
 
   @override
   String get errAlreadyPaid => 'Музди ин моҳ аллакай пурра пардохт шудааст.';
@@ -1287,7 +1300,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get errFutureDate => 'Сана наметавонад дар оянда бошад.';
 
   @override
-  String get errFuturePeriod => 'Музди моҳи ояндаро пардохт кардан мумкин нест.';
+  String get errFuturePeriod =>
+      'Музди моҳи ояндаро пардохт кардан мумкин нест.';
 
   @override
   String get errEmploymentDates => 'Санаҳои кор нодурустанд.';
@@ -1569,7 +1583,8 @@ class AppLocalizationsTg extends AppLocalizations {
   }
 
   @override
-  String get assistantNote => 'Ҷавобҳо аз рақамҳои воқеии шумо сохта мешаванд, онҳоро AI дар сервер ҳисоб мекунад.';
+  String get assistantNote =>
+      'Ҷавобҳо аз рақамҳои воқеии шумо сохта мешаванд, онҳоро AI дар сервер ҳисоб мекунад.';
 
   @override
   String get staffInStore => 'Кормандон';
@@ -1605,7 +1620,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get navExpenses => 'Хароҷот';
 
   @override
-  String get expensesSubtitle => 'Иҷора, коммуналӣ, расонидан ва дигар хароҷот — ва фоидае, ки мемонад';
+  String get expensesSubtitle =>
+      'Иҷора, коммуналӣ, расонидан ва дигар хароҷот — ва фоидае, ки мемонад';
 
   @override
   String get addExpense => 'Илова кардани хароҷот';
@@ -1644,7 +1660,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get deleteExpenseTitle => 'Ин хароҷот нест карда шавад?';
 
   @override
-  String get deleteExpenseBody => 'Он дигар дар ҳисоботи фоида ҳисоб намешавад.';
+  String get deleteExpenseBody =>
+      'Он дигар дар ҳисоботи фоида ҳисоб намешавад.';
 
   @override
   String get noExpenses => 'Ҳоло хароҷот нест';
@@ -1710,10 +1727,12 @@ class AppLocalizationsTg extends AppLocalizations {
   String get assistantThinking => 'Фикр мекунам…';
 
   @override
-  String get loginHeadline => 'Ҳамаи мағозаҳо, фурӯш ва музди меҳнат дар як ҷо.';
+  String get loginHeadline =>
+      'Ҳамаи мағозаҳо, фурӯш ва музди меҳнат дар як ҷо.';
 
   @override
-  String get loginHeroBody => 'Аз ёрдамчӣ дар бораи рақамҳои худ пурсед. Ӯ бо тоҷикӣ, русӣ ё англисӣ ҷавоб медиҳад.';
+  String get loginHeroBody =>
+      'Аз ёрдамчӣ дар бораи рақамҳои худ пурсед. Ӯ бо тоҷикӣ, русӣ ё англисӣ ҷавоб медиҳад.';
 
   @override
   String get assistantLiveData => 'Аз рақамҳои воқеии шумо';
@@ -1742,7 +1761,8 @@ class AppLocalizationsTg extends AppLocalizations {
   String get greetingNoName => 'Салом';
 
   @override
-  String get errSplitMismatch => 'Нақд ва корт якҷоя бояд ба маблағи фурӯш баробар бошанд.';
+  String get errSplitMismatch =>
+      'Нақд ва корт якҷоя бояд ба маблағи фурӯш баробар бошанд.';
 
   @override
   String get clearDate => 'Тоза кардани сана';
@@ -1752,4 +1772,173 @@ class AppLocalizationsTg extends AppLocalizations {
 
   @override
   String get hidePassword => 'Пинҳон кардани парол';
+
+  @override
+  String get voiceSpeak => 'Бо овоз гуфтан';
+
+  @override
+  String get voiceStop => 'Қатъ кардан';
+
+  @override
+  String get voiceListening => 'Гӯш мекунам…';
+
+  @override
+  String voiceOpened(String section) {
+    return 'Кушода шуд: $section';
+  }
+
+  @override
+  String get voiceRepliesOn => 'Ҷавобҳоро бо овоз хондан: фаъол';
+
+  @override
+  String get voiceRepliesOff => 'Ҷавобҳоро бо овоз хондан: хомӯш';
+
+  @override
+  String get voiceStopSpeaking => 'Хонданро қатъ кардан';
+
+  @override
+  String get voiceHint =>
+      'Микрофонро пахш кунед ва гӯед: «Фурӯшро кушо», «Чати нав» ё ягон савол.';
+
+  @override
+  String get voiceDenied =>
+      'Дастрасӣ ба микрофон баста аст. Онро дар сатри суроғаи браузер иҷозат диҳед.';
+
+  @override
+  String get voiceNoSpeech => 'Ман чизе нашунидам. Боз кӯшиш кунед.';
+
+  @override
+  String get voiceNoMic => 'Микрофон ёфт нашуд.';
+
+  @override
+  String get voiceUnsupported =>
+      'Ин браузер овозро намефаҳмад. Chrome ё Edge-ро истифода баред.';
+
+  @override
+  String get voiceNetwork => 'Барои фаҳмидани овоз интернет лозим аст.';
+
+  @override
+  String get voiceError => 'Вуруди овозӣ кор накард. Боз кӯшиш кунед.';
+
+  @override
+  String get chatHistory => 'Таърих';
+
+  @override
+  String get chatHistoryEmpty =>
+      'Ҳоло чатҳои захирашуда нестанд. Савол диҳед — чат дар ин ҷо захира мешавад.';
+
+  @override
+  String get deleteChat => 'Нест кардани чат';
+
+  @override
+  String get deleteChatConfirm =>
+      'Ин чатро нест кунем? Онро баргардондан намешавад.';
+
+  @override
+  String chatMessages(int count) {
+    return '$count паём';
+  }
+
+  @override
+  String get hideHistory => 'Пинҳон кардани таърих';
+
+  @override
+  String get showHistory => 'Нишон додани таърих';
+
+  @override
+  String get collapseMenu => 'Хурд кардани меню';
+
+  @override
+  String get expandMenu => 'Калон кардани меню';
+
+  @override
+  String get actionConfirm => 'Тасдиқ';
+
+  @override
+  String get actionDone => 'Иҷро шуд';
+
+  @override
+  String get actionCancelled => 'Бекор шуд';
+
+  @override
+  String get actionExpired => 'Мӯҳлат гузашт — боз пурсед';
+
+  @override
+  String get actionWaiting => 'Тасдиқи шумо лозим аст';
+
+  @override
+  String actionOpen(String section) {
+    return 'Кушодан: $section';
+  }
+
+  @override
+  String get actionDetails => 'Тафсилот';
+
+  @override
+  String get assistantSlow =>
+      'Кор карда истодаам… ин то 30 сония вақт мегирад.';
+
+  @override
+  String get errActionNotFound => 'Ин амал дигар вуҷуд надорад.';
+
+  @override
+  String get errActionHandled => 'Ин амал аллакай иҷро ё бекор шудааст.';
+
+  @override
+  String assistantBusyWait(int seconds) {
+    return 'Саволҳо зиёд шуданд. Баъди $seconds сония боз пурсед.';
+  }
+
+  @override
+  String get assistantUnavailable =>
+      'Ёрдамчӣ ҳоло дастрас нест. Баъдтар кӯшиш кунед.';
+
+  @override
+  String get actionAskAgain => 'Аз ёрдамчӣ боз пурсед';
+
+  @override
+  String get actionCancelledAsk => 'Бекор шуд — аз ёрдамчӣ боз пурсед';
+
+  @override
+  String get actionEdit => 'Тағйир додан';
+
+  @override
+  String get actionRetry => 'Боз тасдиқ';
+
+  @override
+  String get actionEditTitle => 'Пеш аз тасдиқ ислоҳ кунед';
+
+  @override
+  String get actionSaveConfirm => 'Захира ва тасдиқ';
+
+  @override
+  String get actionSureTitle => 'Боварӣ доред?';
+
+  @override
+  String actionSureBody(String summary) {
+    return 'Ин нест карда мешавад:\n$summary';
+  }
+
+  @override
+  String get colWorkedDays => 'Рӯзҳо дар моҳ';
+
+  @override
+  String get vsLastWeek => 'нисбат ба ҳафтаи гузашта';
+
+  @override
+  String overviewFinding(String today, int count, String unpaid) {
+    return 'Имрӯз $today, фурӯш: $count · музди пардохтнашудаи ин моҳ: $unpaid';
+  }
+
+  @override
+  String get overviewTitle => 'Шарҳ';
+
+  @override
+  String get storesActiveShort => 'Мағозаҳои фаъол';
+
+  @override
+  String get staffActiveShort => 'Кормандони фаъол';
+
+  @override
+  String get navAssistantShort => 'AI';
 }

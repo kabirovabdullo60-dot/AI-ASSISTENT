@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import 'core/constants/brand.dart';
 import 'core/l10n/l10n.dart';
+import 'core/navigation/app_section.dart';
 import 'core/network/api_client.dart';
 import 'core/network/token_storage.dart';
 import 'core/theme/app_palette.dart';
@@ -12,6 +14,7 @@ import 'core/theme/app_theme.dart';
 import 'services/activity_service.dart';
 import 'services/assistant_service.dart';
 import 'services/auth_service.dart';
+import 'services/chat_history_service.dart';
 import 'services/employee_service.dart';
 import 'services/expense_service.dart';
 import 'services/notification_service.dart';
@@ -22,6 +25,7 @@ import 'services/reports_service.dart';
 import 'services/sales_service.dart';
 import 'services/store_service.dart';
 import 'services/target_service.dart';
+import 'services/voice_service.dart';
 import 'viewmodels/assistant_view_model.dart';
 import 'viewmodels/auth_view_model.dart';
 import 'viewmodels/dashboard_view_model.dart';
@@ -34,19 +38,35 @@ import 'viewmodels/reports_view_model.dart';
 import 'viewmodels/sales_view_model.dart';
 import 'viewmodels/settings_view_model.dart';
 import 'viewmodels/stores_view_model.dart';
+import 'viewmodels/voice_view_model.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/splash_view.dart';
 
-void main() {
-  runApp(const WebApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // The page that was open before a reload (read before the first frame, so no flash of the dashboard).
+  final saved = await PreferencesService().loadSection();
+  runApp(WebApp(initialSection: AppSection.values.where((s) => s.name == saved).firstOrNull));
 }
 
 class WebApp extends StatefulWidget {
   /// [httpClient] can be replaced in tests with a fake backend.
-  const WebApp({super.key, this.httpClient, this.splashDuration = const Duration(seconds: 5)});
+  const WebApp({
+    super.key,
+    this.httpClient,
+    this.voice,
+    this.initialSection,
+    this.splashDuration = const Duration(seconds: 5),
+  });
 
   final http.Client? httpClient;
+
+  /// The page to open after sign-in (the one open before the browser reloaded).
+  final AppSection? initialSection;
+
+  /// Microphone + speech; tests pass a fake.
+  final VoiceService? voice;
 
   /// The splash stays at least this long on every visit (its animation plays in full),
   /// and longer if the session check is still running. Tests pass [Duration.zero].
@@ -101,6 +121,7 @@ class _WebAppState extends State<WebApp> {
     return MultiProvider(
       providers: [
         Provider.value(value: _api),
+        Provider<VoiceService>(create: (_) => widget.voice ?? VoiceService(), lazy: false),
         Provider(create: (_) => ReportsService(_api)),
         ChangeNotifierProvider.value(value: _auth),
         ChangeNotifierProvider(
@@ -124,7 +145,7 @@ class _WebAppState extends State<WebApp> {
             // Global key: moving under the signed-in providers keeps the app (and the running splash)
             // alive instead of rebuilding it; a new palette still rebuilds it.
             key: _appKeyFor(palette),
-            title: context.select<AuthViewModel, String?>((a) => a.user?.businessName) ?? 'Apex Suite',
+            title: context.select<AuthViewModel, String?>((a) => a.user?.businessName) ?? AppBrand.name,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             locale: Locale(context.select<SettingsViewModel, String>((s) => s.language.name)),
@@ -143,7 +164,12 @@ class _WebAppState extends State<WebApp> {
           );
           // Data providers sit ABOVE MaterialApp so dialogs (which open on the root navigator) see them too.
           if (status != AuthStatus.signedIn) return app;
-          return _SignedIn(key: ValueKey(context.read<AuthViewModel>().user?.id), api: _api, child: app);
+          return _SignedIn(
+            key: ValueKey(context.read<AuthViewModel>().user?.id),
+            api: _api,
+            initialSection: widget.initialSection,
+            child: app,
+          );
         },
       ),
     );
@@ -152,9 +178,10 @@ class _WebAppState extends State<WebApp> {
 
 /// Data ViewModels live only while signed in, so logging out clears every page.
 class _SignedIn extends StatefulWidget {
-  const _SignedIn({super.key, required this.api, required this.child});
+  const _SignedIn({super.key, required this.api, required this.child, this.initialSection});
 
   final ApiClient api;
+  final AppSection? initialSection;
   final Widget child;
 
   @override
@@ -179,7 +206,12 @@ class _SignedInState extends State<_SignedIn> {
       providers: [
         Provider.value(value: sales),
         Provider.value(value: employees),
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(
+          create: (_) => HomeViewModel(
+            initial: widget.initialSection,
+            onSectionChanged: (s) => PreferencesService().saveSection(s.name),
+          ),
+        ),
         ChangeNotifierProvider(create: (_) => NotificationsViewModel(NotificationService(api))..load()),
         ChangeNotifierProvider(
           create: (_) => DashboardViewModel(
@@ -197,7 +229,45 @@ class _SignedInState extends State<_SignedIn> {
         ChangeNotifierProvider(create: (_) => PayrollViewModel(payroll)..load()),
         ChangeNotifierProvider(create: (_) => ExpensesViewModel(ExpenseService(api), reports)..load()),
         ChangeNotifierProvider(create: (_) => ReportsViewModel(reports)..load()),
-        ChangeNotifierProvider(create: (_) => AssistantViewModel(AssistantService(api, reports))),
+        ChangeNotifierProvider(
+          create: (c) => AssistantViewModel(
+            AssistantService(api, reports),
+            history: ChatHistoryService(api, userId: context.read<AuthViewModel>().user?.id ?? 'me'),
+            // A confirmed AI action changed data → reload the pages that show it.
+            onDataChanged: (action) {
+              final reload = <Future<void> Function()>[
+                c.read<DashboardViewModel>().load,
+                c.read<ReportsViewModel>().load,
+                c.read<NotificationsViewModel>().load,
+                ...switch (action.subject) {
+                  'STORE' => [c.read<StoresViewModel>().load],
+                  'SALE' => [c.read<SalesViewModel>().load, c.read<StoresViewModel>().load],
+                  'EMPLOYEE' => [
+                    c.read<EmployeesViewModel>().load,
+                    c.read<StoresViewModel>().load,
+                    c.read<PayrollViewModel>().load,
+                  ],
+                  'PAYROLL' => [c.read<PayrollViewModel>().load, c.read<EmployeesViewModel>().load],
+                  'EXPENSE' => [c.read<ExpensesViewModel>().load],
+                  'PROFILE' => [c.read<AuthViewModel>().refreshProfile],
+                  _ => <Future<void> Function()>[],
+                },
+              ];
+              for (final load in reload) {
+                load();
+              }
+            },
+          ),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (c) => VoiceViewModel(
+            c.read<VoiceService>(),
+            c.read<HomeViewModel>(),
+            c.read<AssistantViewModel>(),
+            PreferencesService(),
+          ),
+        ),
       ],
       child: widget.child,
     );

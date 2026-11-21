@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -16,7 +15,6 @@ import '../widgets/app_table.dart';
 import '../widgets/async_content.dart';
 import '../widgets/card_grid.dart';
 import '../widgets/dropdown_chip.dart';
-import '../widgets/icon_box.dart';
 import '../widgets/kpi_card.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
@@ -74,44 +72,41 @@ class StoresView extends StatelessWidget {
             ),
           ],
           children: [
-            LayoutBuilder(
-              builder: (context, c) => CardGrid(
-                columns: c.maxWidth >= 900 ? 4 : 2,
-                children: [
-                  KpiCard(
-                    title: tr.networkScope,
-                    value: tr.nLocations(vm.stores.length),
-                    icon: Icons.apartment_outlined,
-                    badge: tr.opRatio((vm.operatingRatio * 100).round()),
-                    caption: tr.activeInactive(vm.activeCount, vm.inactiveCount),
-                  ),
-                  KpiCard(
-                    title: tr.fleetVelocity,
-                    value: cur.amount(vm.todayTotal),
-                    unit: cur.code,
-                    icon: Icons.payments_outlined,
-                    badge: vm.todayChange == null ? null : formatPercent(vm.todayChange!),
-                    badgeTone: (vm.todayChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
-                    caption: tr.allBranchesToday,
-                  ),
-                  KpiCard(
-                    title: tr.totalMonthlyRevenue,
-                    value: cur.amount(vm.monthTotal),
-                    unit: cur.code,
-                    icon: Icons.insights_outlined,
-                    badge: vm.monthChange == null ? null : formatPercent(vm.monthChange!),
-                    badgeTone: (vm.monthChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
-                    caption: tr.vsLastMonth,
-                  ),
-                  KpiCard(
-                    title: tr.allocatedWorkforce,
-                    value: tr.nActive(vm.workforce),
-                    icon: Icons.badge_outlined,
-                    badge: tr.acrossBranches(vm.staffedBranches),
-                    badgeTone: BadgeTone.info,
-                  ),
-                ],
-              ),
+            KpiStrip(
+              children: [
+                KpiCard(
+                  title: tr.networkScope,
+                  value: tr.nLocations(vm.stores.length),
+                  icon: Icons.apartment_outlined,
+                  badge: tr.opRatio((vm.operatingRatio * 100).round()),
+                  caption: tr.activeInactive(vm.activeCount, vm.inactiveCount),
+                ),
+                KpiCard(
+                  title: tr.fleetVelocity,
+                  value: cur.amount(vm.todayTotal),
+                  unit: cur.code,
+                  icon: Icons.payments_outlined,
+                  badge: vm.todayChange == null ? null : formatPercent(vm.todayChange!),
+                  badgeTone: (vm.todayChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
+                  caption: tr.allBranchesToday,
+                ),
+                KpiCard(
+                  title: tr.totalMonthlyRevenue,
+                  value: cur.amount(vm.monthTotal),
+                  unit: cur.code,
+                  icon: Icons.insights_outlined,
+                  badge: vm.monthChange == null ? null : formatPercent(vm.monthChange!),
+                  badgeTone: (vm.monthChange ?? 0) >= 0 ? BadgeTone.positive : BadgeTone.negative,
+                  caption: vm.monthChange == null ? null : tr.vsLastMonth,
+                ),
+                KpiCard(
+                  title: tr.allocatedWorkforce,
+                  value: '${vm.workforce}',
+                  icon: Icons.badge_outlined,
+                  badge: tr.acrossBranches(vm.staffedBranches),
+                  badgeTone: BadgeTone.info,
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             _FilterBar(vm: vm),
@@ -127,6 +122,7 @@ class StoresView extends StatelessWidget {
               LayoutBuilder(
                 builder: (context, c) => CardGrid(
                   key: const Key('stores-grid'),
+                  equalHeight: true,
                   columns: c.maxWidth >= 1000 ? 3 : (c.maxWidth >= 620 ? 2 : 1),
                   spacing: 16,
                   children: [for (final s in list) _StoreCard(store: s, stats: vm.statsOf(s), currency: cur)],
@@ -166,21 +162,7 @@ class StoresView extends StatelessWidget {
                 ),
               ),
             const SizedBox(height: 16),
-            LayoutBuilder(
-              builder: (context, c) {
-                final share = _ShareCard(vm: vm, currency: cur);
-                final recent = _RecentCard(stores: vm.recentlyUpdated);
-                if (c.maxWidth < 1000) return Column(children: [share, const SizedBox(height: 16), recent]);
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 3, child: share),
-                    const SizedBox(width: 16),
-                    Expanded(flex: 2, child: recent),
-                  ],
-                );
-              },
-            ),
+            _ShareCard(vm: vm, currency: cur),
           ],
         );
       },
@@ -432,11 +414,10 @@ class _StoreCard extends StatelessWidget {
       key: Key('store-card-${s.id}'),
       clipBehavior: Clip.antiAlias,
       child: Container(
-        decoration: first
-            ? BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.orange, width: 3)),
-              )
-            : null,
+        // Every card has the 3px top line (only the leader's is colored), so all contents line up.
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: first ? AppColors.orange : Colors.transparent, width: 3)),
+        ),
         padding: const EdgeInsets.fromLTRB(16, 14, 8, 6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -486,8 +467,9 @@ class _StoreCard extends StatelessWidget {
                     child: figure(
                       tr.kpiTodaySales,
                       currency.format(stats.today),
-                      s.isActive ? tr.active : tr.offline,
-                      s.isActive ? AppColors.green : AppColors.muted,
+                      // The status badge already says "Active"; only an offline store needs a note.
+                      s.isActive ? '' : tr.offline,
+                      AppColors.muted,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -500,7 +482,7 @@ class _StoreCard extends StatelessWidget {
                           : stats.monthChange == null
                           ? tr.shareValue((stats.share * 100).toStringAsFixed(0))
                           : '${formatPercent(stats.monthChange!)} · ${tr.vsLastMonth}',
-                      first ? AppColors.orange : AppColors.green,
+                      AppColors.muted,
                     ),
                   ),
                 ],
@@ -516,6 +498,8 @@ class _StoreCard extends StatelessWidget {
                 ],
               ),
             ),
+            // Cards in a row are equally tall; actions sit at the bottom of each.
+            const Spacer(),
             const Divider(height: 20),
             _StoreActions(store: s, showAnalytics: true),
           ],
@@ -538,14 +522,6 @@ class _ShareCard extends StatelessWidget {
     return SectionCard(
       title: tr.salesShare,
       subtitle: tr.storeComparisonTitle,
-      trailing: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: BoxDecoration(color: AppColors.blueSoft, borderRadius: BorderRadius.circular(6)),
-        child: Text(
-          '${tr.endpoint}:\n${ApiConstants.reportStoreComparison}',
-          style: TextStyle(fontSize: 10.5, color: AppColors.ink),
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -583,57 +559,6 @@ class _ShareCard extends StatelessWidget {
                           : i == 1
                           ? AppColors.strong
                           : AppColors.barGray,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          Text(
-            tr.registersSynced(vm.activeCount),
-            style: TextStyle(fontSize: 11.5, color: AppColors.green, fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RecentCard extends StatelessWidget {
-  const _RecentCard({required this.stores});
-
-  final List<StoreModel> stores;
-
-  @override
-  Widget build(BuildContext context) {
-    final tr = context.l10n;
-    return SectionCard(
-      title: tr.recentlyUpdated,
-      trailing: Icon(Icons.history, color: AppColors.ink),
-      child: Column(
-        children: [
-          if (stores.isEmpty) Text(tr.noOperations),
-          for (final s in stores)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                children: [
-                  IconBox(
-                    Icons.storefront_outlined,
-                    size: 28,
-                    color: s.isActive ? AppColors.green : AppColors.muted,
-                    background: s.isActive ? AppColors.greenSoft : AppColors.surfaceSoft,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(s.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                        Text(
-                          tr.updatedOn(s.updatedAt == null ? '—' : formatTimeAgo(s.updatedAt!)),
-                          style: TextStyle(fontSize: 11.5, color: AppColors.muted),
-                        ),
-                      ],
                     ),
                   ),
                 ],

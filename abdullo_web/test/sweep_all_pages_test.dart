@@ -47,12 +47,12 @@ void main() {
     }
   }
 
-  // The two light looks at phone and desktop width.
-  for (final palette in [AppPalette.zinc, AppPalette.emerald]) {
+  // Both looks (light ledger, dark graphite) at phone and desktop width.
+  for (final palette in AppPalette.values) {
     for (final width in [400.0, 1440.0]) {
       testWidgets('all pages in ${palette.name} at ${width.toInt()}px', (tester) async {
         AppColors.use(palette);
-        addTearDown(() => AppColors.use(AppPalette.aurora));
+        addTearDown(() => AppColors.use(AppPalette.ledger));
         await pumpApp(tester, width, height: 900);
         for (final s in AppSection.values) {
           await openSection(tester, s);

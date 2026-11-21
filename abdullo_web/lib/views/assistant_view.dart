@@ -1,19 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/l10n/l10n.dart';
+import '../core/motion/app_dialog.dart';
 import '../core/motion/motion.dart';
 import '../core/theme/app_colors.dart';
 import '../viewmodels/assistant_view_model.dart';
+import '../viewmodels/home_view_model.dart';
+import '../models/chat_message_model.dart';
+import '../viewmodels/voice_view_model.dart';
+import '../widgets/assistant_action_card.dart';
 import '../widgets/chat_bubble.dart';
+import '../widgets/chat_history_list.dart';
 import '../widgets/motion/ai_orb.dart';
-import '../widgets/motion/aurora.dart';
 import '../widgets/motion/border_beam.dart';
 import '../widgets/motion/gradient_text.dart';
 import '../widgets/motion/fade_slide_in.dart';
 import '../widgets/motion/pressable.dart';
 import '../widgets/motion/typing_indicator.dart';
-import '../widgets/pamir_ridge.dart';
+import '../widgets/voice_mic_button.dart';
 
 /// AI assistant — POST /api/assistant/chat (answers in the selected language).
 class AssistantView extends StatefulWidget {
@@ -27,6 +34,9 @@ class _AssistantViewState extends State<AssistantView> {
   final _input = TextEditingController();
   final _scroll = ScrollController();
   int _shownCount = 0;
+
+  /// Wide page: the history panel on the right is open (hide/show with its top button).
+  bool _historyOpen = true;
 
   /// Messages from this index on arrived while the page is open → they animate in.
   int? _freshFrom;
@@ -64,7 +74,7 @@ class _AssistantViewState extends State<AssistantView> {
     final itemCount = messages.length + (vm.isSending ? 1 : 0);
     _scrollToBottomIfNew(itemCount);
 
-    return Center(
+    Widget chat(bool showHistoryButton) => Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: _chatWidth + 40),
         child: LayoutBuilder(
@@ -82,13 +92,14 @@ class _AssistantViewState extends State<AssistantView> {
                           padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
                           itemCount: itemCount,
                           itemBuilder: (context, i) => i < messages.length
-                              ? ChatBubble(
+                              ? _MessageWithActions(
                                   key: ValueKey('m$i'),
+                                  vm: vm,
                                   message: messages[i],
                                   maxWidth: constraints.maxWidth,
                                   fresh: i >= _freshFrom! && i >= messages.length - 2,
                                 )
-                              : TypingIndicator(label: tr.assistantThinking),
+                              : _Thinking(label: tr.assistantThinking, slowLabel: tr.assistantSlow),
                         ),
                 ),
               ),
@@ -110,10 +121,14 @@ class _AssistantViewState extends State<AssistantView> {
                               Icon(Icons.error_outline, size: 18, color: AppColors.red),
                               const SizedBox(width: 8),
                               Expanded(
-                                child: Text(
-                                  vm.rateLimited ? tr.assistantBusy : tr.assistantError,
-                                  style: TextStyle(color: AppColors.red, fontSize: 13),
-                                ),
+                                child: Text(switch (vm.error) {
+                                  'RATE_LIMITED' when vm.retryAfter != null => tr.assistantBusyWait(vm.retryAfter!),
+                                  'RATE_LIMITED' => tr.assistantBusy,
+                                  'ASSISTANT_UNAVAILABLE' => tr.assistantUnavailable,
+                                  'NETWORK_ERROR' => tr.assistantError,
+                                  final code? => tr.error(code),
+                                  null => '',
+                                }, style: TextStyle(color: AppColors.red, fontSize: 13)),
                               ),
                             ],
                           ),
@@ -129,6 +144,7 @@ class _AssistantViewState extends State<AssistantView> {
                   canClear: messages.isNotEmpty && !vm.isSending,
                   onSend: () => _send(vm),
                   onClear: vm.clear,
+                  onHistory: showHistoryButton ? () => _openHistorySheet(vm) : null,
                 ),
               ),
             ],
@@ -136,8 +152,162 @@ class _AssistantViewState extends State<AssistantView> {
         ),
       ),
     );
+
+    // Wide page: history panel on the right, full height, with a hide button at its top.
+    // Hiding slides it out to the right while it fades, and the chat widens with it;
+    // then a small history button fades in at the top-right corner. Narrow: a sheet.
+    return LayoutBuilder(
+      builder: (context, page) {
+        if (page.maxWidth < _historyPanelMinWidth) return chat(true);
+        final duration = Motion.reduced(context) ? Duration.zero : const Duration(milliseconds: 300);
+        final open = _historyOpen;
+        return Stack(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: chat(false)),
+                AnimatedContainer(
+                  key: const Key('history-slot'),
+                  duration: duration,
+                  curve: Motion.easeInOut,
+                  width: open ? _historyPanelWidth + 12 : 0,
+                  child: ClipRect(
+                    child: OverflowBox(
+                      alignment: Alignment.centerLeft,
+                      minWidth: _historyPanelWidth + 12,
+                      maxWidth: _historyPanelWidth + 12,
+                      child: AnimatedSlide(
+                        duration: duration,
+                        curve: Motion.easeInOut,
+                        offset: open ? Offset.zero : const Offset(0.25, 0),
+                        child: AnimatedOpacity(
+                          duration: duration,
+                          curve: Motion.easeOut,
+                          opacity: open ? 1 : 0,
+                          child: IgnorePointer(
+                            ignoring: !open,
+                            child: Container(
+                              key: const Key('history-panel'),
+                              margin: const EdgeInsets.fromLTRB(0, 12, 12, 12),
+                              padding: const EdgeInsets.only(top: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.card,
+                                borderRadius: BorderRadius.circular(18),
+                                border: Border.all(color: AppColors.border),
+                              ),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: _history(vm, onHide: () => setState(() => _historyOpen = false)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 12,
+              right: 12,
+              child: IgnorePointer(
+                ignoring: open,
+                child: AnimatedOpacity(
+                  // Waits for the panel to leave before appearing; leaves at once when it opens.
+                  duration: open ? Motion.fast : duration,
+                  curve: open ? Curves.linear : const Interval(0.5, 1, curve: Curves.easeOut),
+                  opacity: open ? 0 : 1,
+                  child: AnimatedScale(
+                    duration: duration,
+                    curve: Motion.easeOut,
+                    scale: open ? 0.85 : 1,
+                    child: Material(
+                      color: AppColors.card,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(color: AppColors.border),
+                      ),
+                      child: IconButton(
+                        key: const Key('history-show'),
+                        tooltip: context.l10n.showHistory,
+                        onPressed: () => setState(() => _historyOpen = true),
+                        icon: Icon(Icons.history, color: AppColors.muted),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _history(AssistantViewModel vm, {VoidCallback? onPicked, VoidCallback? onHide}) => ChatHistoryList(
+    onHide: onHide,
+    conversations: vm.conversations,
+    currentId: vm.currentId,
+    enabled: !vm.isSending,
+    onOpen: (id) async {
+      onPicked?.call();
+      _freshFrom = 1 << 30; // nothing loaded animates…
+      await vm.open(id);
+      // Loaded messages appear at once; only new ones animate in.
+      if (mounted) setState(() => _freshFrom = null);
+    },
+    onDelete: (id) => _confirmDelete(vm, id),
+    onNewChat: () {
+      vm.clear();
+      onPicked?.call();
+    },
+  );
+
+  void _openHistorySheet(AssistantViewModel vm) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.75),
+      builder: (sheet) => SafeArea(
+        // Rebuilds when a chat is deleted while the sheet is open.
+        child: ListenableBuilder(
+          listenable: vm,
+          builder: (_, _) => _history(vm, onPicked: () => Navigator.of(sheet).pop()),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _confirmDelete(AssistantViewModel vm, String id) async {
+    final tr = context.l10n;
+    final ok = await showAppDialog<bool>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: Text(tr.deleteChat),
+        content: Text(tr.deleteChatConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialog).pop(false), child: Text(tr.cancel)),
+          FilledButton(
+            key: const Key('history-delete-confirm'),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.red),
+            onPressed: () => Navigator.of(dialog).pop(true),
+            child: Text(tr.delete),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) await vm.delete(id);
   }
 }
+
+/// Page width from which the history sits beside the chat instead of in a sheet.
+const double _historyPanelMinWidth = 900;
+
+/// Width of the history panel on the right.
+const double _historyPanelWidth = 280;
 
 /// Empty chat: orb + one line of intro + a "live data" pill, then four example questions
 /// in a 2×2 grid (one column on phones). Faint Pamir ridgelines sit at the bottom.
@@ -160,16 +330,6 @@ class _EmptyChat extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, viewport) => Stack(
         children: [
-          const Positioned.fill(child: AuroraBackground()),
-          // Ridges only where there is room — on phones they would sit behind the cards.
-          if (viewport.maxWidth >= 600 && viewport.maxHeight >= 640)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: 150,
-              child: IgnorePointer(child: PamirRidges(color: AppColors.teal.withValues(alpha: 0.45))),
-            ),
           SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             child: ConstrainedBox(
@@ -211,32 +371,27 @@ class _EmptyChat extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      FadeSlideIn(
-                        delay: Motion.staggerAt(2),
-                        child: Container(
-                          key: const Key('assistant-note'),
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(color: AppColors.goldSoft, borderRadius: BorderRadius.circular(20)),
+                      if (context.select<VoiceViewModel, bool>((v) => v.canListen)) ...[
+                        const SizedBox(height: 10),
+                        FadeSlideIn(
+                          delay: Motion.staggerAt(3),
                           child: Row(
+                            key: const Key('voice-hint'),
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(color: AppColors.amber, shape: BoxShape.circle),
-                              ),
-                              const SizedBox(width: 7),
+                              Icon(Icons.mic_none_rounded, size: 16, color: AppColors.muted),
+                              const SizedBox(width: 6),
                               Flexible(
                                 child: Text(
-                                  tr.assistantLiveData,
-                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.amber),
+                                  tr.voiceHint,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 12.5, color: AppColors.muted),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
+                      ],
                       const SizedBox(height: 28),
                       LayoutBuilder(
                         builder: (context, c) {
@@ -309,12 +464,7 @@ class _SuggestionCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Row(
                 children: [
-                  Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(color: AppColors.tealSoft, borderRadius: BorderRadius.circular(10)),
-                    child: Icon(icon, size: 19, color: AppColors.teal),
-                  ),
+                  Icon(icon, size: 18, color: AppColors.muted),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -357,6 +507,7 @@ class _InputBar extends StatelessWidget {
     required this.canClear,
     required this.onSend,
     required this.onClear,
+    this.onHistory,
   });
 
   final TextEditingController controller;
@@ -365,6 +516,9 @@ class _InputBar extends StatelessWidget {
   final bool canClear;
   final VoidCallback onSend;
   final VoidCallback onClear;
+
+  /// Null when the history panel is already on screen.
+  final VoidCallback? onHistory;
 
   @override
   Widget build(BuildContext context) {
@@ -388,10 +542,19 @@ class _InputBar extends StatelessWidget {
           child: Row(
             children: [
               IconButton(
+                key: const Key('chat-new'),
                 tooltip: tr.newChat,
                 onPressed: canClear ? onClear : null,
                 icon: Icon(Icons.add_comment_outlined, color: AppColors.muted),
               ),
+              if (onHistory != null)
+                IconButton(
+                  key: const Key('chat-history'),
+                  tooltip: tr.chatHistory,
+                  onPressed: enabled ? onHistory : null,
+                  icon: Icon(Icons.history, color: AppColors.muted),
+                ),
+              const _SpeakRepliesButton(),
               Expanded(
                 child: TextField(
                   key: const Key('chat-input'),
@@ -412,7 +575,8 @@ class _InputBar extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 6),
+              const VoiceMicButton(size: 40, filled: true),
+              const SizedBox(width: 2),
               Pressable(
                 lift: false,
                 radius: 22,
@@ -456,4 +620,130 @@ class _InputBar extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Speaker toggle: read answers to spoken questions aloud. While an answer is being read,
+/// it stops the reading instead.
+class _SpeakRepliesButton extends StatelessWidget {
+  const _SpeakRepliesButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = context.watch<VoiceViewModel>();
+    if (!vm.canSpeak || !vm.canListen) return const SizedBox.shrink();
+    final tr = context.l10n;
+    final (IconData icon, String tip, VoidCallback onTap) = vm.isSpeaking
+        ? (Icons.stop_circle_outlined, tr.voiceStopSpeaking, vm.stopSpeaking)
+        : vm.speakReplies
+        ? (Icons.volume_up_outlined, tr.voiceRepliesOn, vm.toggleSpeakReplies)
+        : (Icons.volume_off_outlined, tr.voiceRepliesOff, vm.toggleSpeakReplies);
+    return IconButton(
+      key: const Key('voice-replies'),
+      tooltip: tip,
+      onPressed: onTap,
+      icon: Icon(icon, color: vm.isSpeaking || vm.speakReplies ? AppColors.teal : AppColors.muted),
+    );
+  }
+}
+
+/// An answer plus the changes it proposes (each with Confirm / Cancel), lined up under the bubble.
+class _MessageWithActions extends StatelessWidget {
+  const _MessageWithActions({
+    super.key,
+    required this.vm,
+    required this.message,
+    required this.maxWidth,
+    required this.fresh,
+  });
+
+  final AssistantViewModel vm;
+  final ChatMessageModel message;
+  final double maxWidth;
+  final bool fresh;
+
+  @override
+  Widget build(BuildContext context) {
+    final bubble = ChatBubble(message: message, maxWidth: maxWidth, fresh: fresh);
+    if (message.actions.isEmpty) return bubble;
+    final card = Padding(
+      // Under the bubble, past the orb (30) + gap (10).
+      padding: const EdgeInsets.only(left: 40, bottom: 6),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 560),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final a in message.actions)
+              AssistantActionCard(
+                action: a,
+                busy: vm.isActionBusy(a.id),
+                requestError: vm.actionError(a.id),
+                onConfirm: (params) => vm.confirmAction(a.id, params: params),
+                onCancel: () => vm.cancelAction(a.id),
+                onOpen: context.read<HomeViewModel>().select,
+              ),
+          ],
+        ),
+      ),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        bubble,
+        fresh ? FadeSlideIn(delay: Motion.staggerAt(4), offset: const Offset(0, 8), child: card) : card,
+      ],
+    );
+  }
+}
+
+/// "Thinking…" dots; after a few seconds a note that answers which use tools can take up to 30 s.
+class _Thinking extends StatefulWidget {
+  const _Thinking({required this.label, required this.slowLabel});
+
+  final String label;
+  final String slowLabel;
+
+  @override
+  State<_Thinking> createState() => _ThinkingState();
+}
+
+class _ThinkingState extends State<_Thinking> {
+  bool _slow = false;
+  late final Timer _timer = Timer(const Duration(seconds: 6), () {
+    if (mounted) setState(() => _slow = true);
+  });
+
+  @override
+  void initState() {
+    super.initState();
+    _timer;
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      TypingIndicator(label: widget.label),
+      AnimatedSize(
+        duration: Motion.base,
+        curve: Motion.easeOut,
+        child: _slow
+            ? FadeSlideIn(
+                offset: const Offset(0, 4),
+                child: Padding(
+                  key: const Key('assistant-slow'),
+                  padding: const EdgeInsets.only(left: 40, top: 2, bottom: 6),
+                  child: Text(widget.slowLabel, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                ),
+              )
+            : const SizedBox(width: double.infinity),
+      ),
+    ],
+  );
 }

@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/app_language.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_palette.dart';
 import '../widgets/palette_swatch.dart';
 import '../core/navigation/app_section.dart';
-import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
 import '../viewmodels/auth_view_model.dart';
-import '../viewmodels/dashboard_view_model.dart';
 import '../viewmodels/home_view_model.dart';
 import '../viewmodels/settings_view_model.dart';
 import '../widgets/page_body.dart';
 import '../widgets/section_card.dart';
-import '../widgets/status_badge.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -25,7 +21,6 @@ class SettingsView extends StatelessWidget {
     final tr = context.l10n;
     final vm = context.watch<SettingsViewModel>();
     final business = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? '');
-    final online = context.select<DashboardViewModel, bool?>((d) => d.apiOnline);
 
     return PageBody(
       title: tr.navSettings,
@@ -85,52 +80,6 @@ class SettingsView extends StatelessWidget {
                             PaletteCard(palette: p, selected: vm.palette == p, onTap: () => vm.setPalette(p)),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SectionCard(
-                  title: tr.backendConnection,
-                  badge: online == null
-                      ? null
-                      : StatusBadge(
-                          online ? tr.apiOnline : tr.apiOffline,
-                          tone: online ? BadgeTone.positive : BadgeTone.negative,
-                          dot: true,
-                        ),
-                  subtitle: '${tr.apiServer}: ${ApiConstants.baseUrl}\n${tr.openDocs}: ${ApiConstants.docsUrl}',
-                  child: Column(
-                    children: [
-                      for (final (method, path, purpose) in ApiConstants.endpointList)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 104,
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: StatusBadge(
-                                    method,
-                                    tone: method == 'GET' ? BadgeTone.info : BadgeTone.warning,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(child: Text(path, style: const TextStyle(fontSize: 12))),
-                              const SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  purpose,
-                                  textAlign: TextAlign.right,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: 12, color: AppColors.muted),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                     ],
                   ),
                 ),

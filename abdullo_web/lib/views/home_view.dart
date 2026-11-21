@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/constants/brand.dart';
 import '../core/l10n/l10n.dart';
 import '../core/motion/motion.dart';
 import '../core/navigation/app_section.dart';
@@ -11,6 +12,7 @@ import '../viewmodels/auth_view_model.dart';
 import '../widgets/app_sidebar.dart';
 import '../widgets/brand_mark.dart';
 import '../widgets/responsive_layout.dart';
+import '../widgets/voice_status_pill.dart';
 import 'app_top_bar_view.dart';
 import 'assistant_view.dart';
 import 'dashboard_view.dart';
@@ -43,7 +45,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final home = context.watch<HomeViewModel>();
-    final brand = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? 'Apex Suite');
+    final brand = context.select<AuthViewModel, String>((a) => a.user?.businessName ?? AppBrand.name);
     // Page switch: the new page fades in while rising 8px (old one fades out quickly).
     // Page switch: Material fade-through (package:animations) — the old page fades out
     // quickly, the new one fades in while settling from 0.92 scale. Reduced motion: instant.
@@ -61,7 +63,13 @@ class HomeView extends StatelessWidget {
     Widget wide(bool extended) => Scaffold(
       body: Row(
         children: [
-          AppSidebar(selected: home.section, onSelect: home.select, extended: extended, brandName: brand),
+          AppSidebar(
+            selected: home.section,
+            onSelect: home.select,
+            extended: extended && !home.sidebarCollapsed,
+            brandName: brand,
+            onToggle: extended ? home.toggleSidebar : null,
+          ),
           Expanded(
             child: Column(
               children: [
@@ -74,7 +82,7 @@ class HomeView extends StatelessWidget {
       ),
     );
 
-    return ResponsiveLayout(
+    final layout = ResponsiveLayout(
       mobile: (_) => Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.background,
@@ -105,6 +113,19 @@ class HomeView extends StatelessWidget {
       ),
       tablet: (_) => wide(false),
       desktop: (_) => wide(true),
+    );
+
+    // Voice pill floats over every page, just under the top edge.
+    return Stack(
+      children: [
+        Positioned.fill(child: layout),
+        const Positioned(
+          left: 0,
+          right: 0,
+          top: 12,
+          child: SafeArea(bottom: false, child: Center(child: VoiceStatusPill())),
+        ),
+      ],
     );
   }
 }
@@ -148,21 +169,17 @@ class _MobileNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final tr = context.l10n;
     final index = AppSection.mobileBar.indexOf(section);
-    // A floating pill above the page edge instead of a bar glued to the bottom.
+    // A plain bar on the bottom edge with one hairline above it (no floating pill, no shadow).
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+        padding: EdgeInsets.zero,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            border: AppColors.isDark ? Border.all(color: AppColors.border) : null,
-            boxShadow: [
-              BoxShadow(color: AppColors.navy.withValues(alpha: 0.16), blurRadius: 24, offset: const Offset(0, 8)),
-            ],
+            border: Border(top: BorderSide(color: AppColors.border)),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.zero,
             child: NavigationBar(
               height: 66,
               selectedIndex: index < 0 ? _moreIndex : index,
@@ -170,7 +187,11 @@ class _MobileNavBar extends StatelessWidget {
               onDestinationSelected: (i) => i == _moreIndex ? _openMore(context) : onSelect(AppSection.mobileBar[i]),
               destinations: [
                 for (final s in AppSection.mobileBar)
-                  NavigationDestination(icon: Icon(s.icon), selectedIcon: Icon(s.selectedIcon), label: tr.section(s)),
+                  NavigationDestination(
+                    icon: Icon(s.icon),
+                    selectedIcon: Icon(s.selectedIcon),
+                    label: s == AppSection.assistant ? tr.navAssistantShort : tr.section(s),
+                  ),
                 NavigationDestination(icon: Icon(Icons.more_horiz), label: tr.navMore),
               ],
             ),

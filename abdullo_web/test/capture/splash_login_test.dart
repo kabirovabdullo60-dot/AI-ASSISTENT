@@ -14,7 +14,7 @@ import '../helpers.dart';
 
 const _capture = bool.fromEnvironment('CAPTURE');
 const _out = String.fromEnvironment('OUT', defaultValue: 'build/screens');
-const _paletteName = String.fromEnvironment('PALETTE', defaultValue: 'aurora');
+const _paletteName = String.fromEnvironment('PALETTE', defaultValue: 'ledger');
 const _photos = [
   'assets/images/money_stack.jpg',
   'assets/images/cosmetics_shop.jpg',

@@ -3,7 +3,7 @@ import 'dart:convert';
 /// Error from the backend: `{"error": {"code": "...", "message": "...", "details": [...]}}`.
 /// Views switch on [code] (stable) and show their own translated text.
 class ApiException implements Exception {
-  ApiException(this.statusCode, this.code, this.message, {this.details = const []});
+  ApiException(this.statusCode, this.code, this.message, {this.details = const [], this.retryAfter});
 
   factory ApiException.fromBody(int statusCode, String body) {
     try {
@@ -18,6 +18,7 @@ class ApiException implements Exception {
             for (final d in (err['details'] as List? ?? const []))
               if (d is Map) Map<String, dynamic>.from(d),
           ],
+          retryAfter: err['meta'] is Map ? (err['meta']['retryAfter'] as num?)?.toInt() : null,
         );
       }
     } catch (_) {}
@@ -30,6 +31,9 @@ class ApiException implements Exception {
   final int statusCode;
   final String code;
   final String message;
+
+  /// `429 RATE_LIMITED`: seconds to wait before asking again (`meta.retryAfter`).
+  final int? retryAfter;
 
   /// Validation problems: `{location, field, code, message}`.
   final List<Map<String, dynamic>> details;

@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/constants/api_constants.dart';
 import '../core/l10n/l10n.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/currency.dart';
@@ -259,7 +258,6 @@ class _Content extends StatelessWidget {
               const SizedBox(height: 6),
               param(tr.phoneLine, store.phone ?? '—'),
               param(tr.staffAllocation, tr.activeCrew(vm.staff.where((e) => e.isActive).length)),
-              param(tr.apiSync, 'GET ${ApiConstants.store(store.id)}', color: AppColors.green),
               param(tr.statusLabel, tr.storeStatus(store)),
               if (store.createdAt != null) param(tr.createdLabel, formatDate(store.createdAt!)),
               if ((store.description ?? '').isNotEmpty) param(tr.description, store.description!),
